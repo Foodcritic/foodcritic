@@ -25,6 +25,8 @@ module FoodCritic
                          'Check whether you are running with chef server before using server-specific features'
                        when 'FC004' then
                          'Use a service resource to start and stop services'
+                       when 'FC005' then
+                         'Avoid repetition of resource declarations'
                      end
 
       if opt[:expect_warning]

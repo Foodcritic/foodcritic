@@ -64,3 +64,19 @@ rule "FC004", "Use a service resource to start and stop services" do
     matches
   end
 end
+
+rule "FC005", "Avoid repetition of resource declarations" do
+  description "Where you have a lot of resources that vary in only a single attribute wrap them in a loop for brevity."
+  recipe do |ast|
+    matches = []
+    # do all of the attributes for all resources of a given type match apart aside from one?
+    resource_attributes_by_type(ast).each do |type, resource_atts|
+        sorted_atts = resource_atts.map{|atts| atts.to_a.sort{|x,y| x.first.to_s <=> y.first.to_s }}
+        if sorted_atts.all?{|att| (att - sorted_atts.inject{|atts,att| atts & att}).length == 1}
+          first_resource = ast(:@ident, find_resources(ast, type).first).first[2]
+          matches << {:matched => type, :line => first_resource[0], :column => first_resource[1]}
+        end
+    end
+    matches
+  end
+end

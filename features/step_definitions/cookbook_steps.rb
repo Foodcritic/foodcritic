@@ -151,3 +151,64 @@ Given /^a cookbook recipe that uses execute to list a directory$/ do
     end
   }.strip
 end
+
+Given /^a cookbook recipe that declares multiple resources varying only in the package name$/ do
+  write_recipe %Q{
+    package "erlang-base" do
+      action :install
+    end
+    package "erlang-corba" do
+      action :install
+    end
+    package "erlang-crypto" do
+      action :install
+    end
+    package "rabbitmq-server" do
+      action :install
+    end
+  }.strip
+end
+
+Given /^a cookbook recipe that declares multiple resources with more variation$/ do
+  write_recipe %Q{
+    package "erlang-base" do
+      action :install
+    end
+    package "erlang-corba" do
+      action :install
+    end
+    package "erlang-crypto" do
+      version '13.b.3'
+      action :install
+    end
+    package "rabbitmq-server" do
+      action :install
+    end
+  }.strip
+end
+
+Given /^a cookbook recipe that declares multiple package resources mixed with other resources$/ do
+  write_recipe %Q{
+    package "erlang-base" do
+      action :install
+    end
+    package "erlang-corba" do
+      action :install
+    end
+    service "apache" do
+      supports :restart => true, :reload => true
+      action :enable
+    end
+    package "erlang-crypto" do
+      action :install
+    end
+    template "/tmp/somefile" do
+      mode "0644"
+      source "somefile.erb"
+      not_if "test -f /etc/passwd"
+    end
+    package "rabbitmq-server" do
+      action :install
+    end
+  }.strip
+end
