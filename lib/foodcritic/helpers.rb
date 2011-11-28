@@ -27,7 +27,8 @@ module FoodCritic
       end
     end
 
-    # Find Chef resources of the specified type
+    # Find Chef resources of the specified type.
+    # TODO: Include blockless resources
     #
     # @param [Array] ast The AST of the cookbook recipe to check
     # @param [String] type The type of resource to look for
@@ -37,10 +38,17 @@ module FoodCritic
       end
     end
 
+    # Retrieve the name attribute associated with the specified resource.
+    #
+    # @param [Array] resource The resource AST to lookup the name attribute under
+    def resource_name(resource)
+      ast(:@tstring_content, resource[1]).flatten[1]
+    end
+
     # Retrieve a single-valued attribute from the specified resource.
     #
-    # @param name The attribute name
-    # @param resource The resource AST to lookup the attribute under
+    # @param [String] name The attribute name
+    # @param [Array] resource The resource AST to lookup the attribute under
     # @return [String] The attribute value for the specified attribute
     def resource_attribute(name, resource)
       cmd = self.ast(:command, self.ast(:do_block, resource))

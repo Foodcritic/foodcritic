@@ -135,6 +135,14 @@ Given /^a cookbook recipe that uses execute to (sleep and then )?start a service
   }.strip
 end
 
+Given /^a cookbok recipe that uses execute with a name attribute to start a service$/ do
+  write_recipe %Q{
+    execute "/etc/init.d/foo start" do
+      cwd "/tmp"
+    end
+  }.strip
+end
+
 Given /^a cookbook recipe that uses execute to list a directory$/ do
   write_recipe %Q{
     execute "nothing-to-see-here" do
