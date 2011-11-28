@@ -1,6 +1,6 @@
 source "http://rubygems.org"
 
-gem 'foodcritic'
+gem 'foodcritic', :path => '.'
 
 group :test do
   gem 'aruba', '~> 0.4.7'
