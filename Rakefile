@@ -8,8 +8,6 @@ task :default => [:install, :features]
 Bundler.setup
 Bundler::GemHelper.install_tasks
 
-Cucumber::Rake::Task.new(:features) do |t|
-  t.cucumber_opts = "features --format pretty"
-end
+Cucumber::Rake::Task.new(:features)
 
 YARD::Rake::YardocTask.new
