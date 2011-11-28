@@ -19,6 +19,8 @@ module FoodCritic
   # The collected warnings (if any) raised against a cookbook tree.
   class Review
 
+    attr_reader :warnings
+
     # Create a new review
     #
     # @param [Array] warnings The warnings raised in this review
