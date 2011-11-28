@@ -1,0 +1,3 @@
+#!/usr/bin/env ruby
+require 'foodcritic'
+puts FoodCritic::Linter.new.check(ARGV[0])
