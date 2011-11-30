@@ -11,7 +11,7 @@ module FoodCritic
     def ast(type, node)
       result = []
       result = [node] if node.first == type
-      node.each { |node| result += ast(type, node) if node.respond_to?(:each) }
+      node.each { |n| result += ast(type, n) if n.respond_to?(:each) }
       result
     end
 
@@ -20,10 +20,10 @@ module FoodCritic
     # @param [Array] ast The AST of the cookbook recipe to check.
     # @return [Boolean] True if there is a test for Chef::Config[:solo] in the recipe
     def checks_for_chef_solo?(ast)
-      arefs = self.ast(:aref, ast)
+      arefs = ast(:aref, ast)
       arefs.any? do |aref|
-        self.ast(:@const, aref).map { |const| const[1] } == ['Chef', 'Config'] and
-            self.ast(:@ident, self.ast(:symbol, aref)).map { |sym| sym.drop(1).first }.include? 'solo'
+        ast(:@const, aref).map { |const| const[1] } == ['Chef', 'Config'] and
+            ast(:@ident, ast(:symbol, aref)).map { |sym| sym.drop(1).first }.include? 'solo'
       end
     end
 
@@ -33,14 +33,14 @@ module FoodCritic
     # @param [Array] ast The AST of the cookbook recipe to check
     # @param [String] type The type of resource to look for (or nil for all resources)
     def find_resources(ast, type = nil)
-      self.ast(:method_add_block, ast).find_all do |resource|
+      ast(:method_add_block, ast).find_all do |resource|
         resource[1][0] == :command and resource[1][1][0] == :@ident and (type.nil? || resource[1][1][1] == type)
       end
     end
 
     # Return the type, e.g. 'package' for a given resource
     #
-    # @param [Array] The resource AST
+    # @param [Array] resource The resource AST
     # @return [String] The type of resource
     def resource_type(resource)
       resource[1][1][1]
@@ -59,9 +59,9 @@ module FoodCritic
     # @param [Array] resource The resource AST to lookup the attribute under
     # @return [String] The attribute value for the specified attribute
     def resource_attribute(name, resource)
-      cmd = self.ast(:command, self.ast(:do_block, resource))
+      cmd = ast(:command, ast(:do_block, resource))
       atts = cmd.find_all { |att| ast(:@ident, att).flatten.drop(1).first == name }
-      value = self.ast(:@tstring_content, atts).flatten.drop(1)
+      value = ast(:@tstring_content, atts).flatten.drop(1)
       unless value.empty?
         return value.first
       end

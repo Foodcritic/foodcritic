@@ -29,7 +29,7 @@ When /^I check the cookbook$/ do
 end
 
 Then /^the (?:[a-z ]+) warning ([0-9]+) should be displayed( against the attributes file)?$/ do |code, atts|
-  expect_warning("FC#{code}", atts.nil? ? {} : {:file => 'attributes/default.rb'})
+  expect_warning("FC#{code}", atts.nil? ? {} : {:file => 'cookbooks/example/attributes/default.rb'})
 end
 
 Then /^the node access warning 001 should be displayed for each match$/ do

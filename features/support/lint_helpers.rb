@@ -15,7 +15,7 @@ module FoodCritic
     end
 
     def expect_warning(code, options={})
-      opt = {:line => 1, :expect_warning => true, :file => 'recipes/default.rb'}.merge!(options)
+      opt = {:line => 1, :expect_warning => true, :file => 'cookbooks/example/recipes/default.rb'}.merge!(options)
       warning_text = case code
                        when 'FC001' then
                          'Use symbols in preference to strings to access node attributes'

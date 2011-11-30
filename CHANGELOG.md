@@ -1,3 +1,3 @@
-## 0.1.0 (27th November, 2011)
+## 0.1.0 (30th November, 2011)
 
 Initial version.

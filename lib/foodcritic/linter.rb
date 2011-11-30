@@ -20,7 +20,7 @@ module FoodCritic
         ast = Ripper::SexpBuilder.new(IO.read(file)).parse
         @rules.each do |rule|
           rule.recipe.yield(ast).each do |match|
-            warnings << Warning.new(rule, match.merge({:filename => file.gsub(/^#{Regexp.escape(ARGV[0])}/, '')}))
+            warnings << Warning.new(rule, match.merge({:filename => file}))
           end
         end
       end
@@ -40,7 +40,7 @@ module FoodCritic
     # @return [Array] The files underneath the provided directory to be processed.
     def files_to_process(dir)
       return [dir] unless File.directory? dir
-      Dir.glob(File.join(dir, '{attributes,recipes}/*.rb'))
+      Dir.glob(File.join(dir, '{attributes,recipes}/*.rb')) + Dir.glob(File.join(dir, '*/{attributes,recipes}/*.rb'))
     end
 
   end

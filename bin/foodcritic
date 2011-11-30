@@ -1,4 +1,8 @@
 #!/usr/bin/env ruby
 require 'foodcritic'
+unless ARGV.length == 1 and Dir.exists?(ARGV[0])
+  STDERR.puts 'foodcritic [cookbook_path]'
+  exit 1
+end
 review = FoodCritic::Linter.new.check(ARGV[0])
 puts review unless review.warnings.empty?

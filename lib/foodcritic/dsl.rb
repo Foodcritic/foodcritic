@@ -18,14 +18,14 @@ module FoodCritic
 
     # Set the rule description
     #
-    # @param [String] Set the rule description.
+    # @param [String] description Set the rule description.
     def description(description)
       rules.last.description = description
     end
 
     # Define a matcher that will be passed the AST with this method.
     #
-    # @param [block] Your implemented matcher that returns a match Hash.
+    # @param [block] block Your implemented matcher that returns a match Hash.
     def recipe(&block)
       rules.last.recipe = block
     end
