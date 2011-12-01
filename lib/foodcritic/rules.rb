@@ -2,12 +2,12 @@ rule "FC002", "Avoid string interpolation where not required" do
   description "When setting a resource value avoid string interpolation where not required."
   recipe do |ast|
     matches = []
-    self.ast(:string_literal, ast).each do |literal|
-      embed_expr = self.ast(:string_embexpr, literal)
+    ast(:string_literal, ast).each do |literal|
+      embed_expr = ast(:string_embexpr, literal)
       if embed_expr.size == 1
         literal[1].reject! { |expr| expr == embed_expr.first }
-        if self.ast(:@tstring_content, literal).empty?
-          self.ast(:@ident, embed_expr).map { |ident| ident.flatten.drop(1) }.each do |ident|
+        if ast(:@tstring_content, literal).empty?
+          ast(:@ident, embed_expr).map { |ident| ident.flatten.drop(1) }.each do |ident|
             matches << {:matched => ident[0], :line => ident[1], :column => ident[2]}
           end
         end
@@ -21,7 +21,7 @@ rule "FC003", "Check whether you are running with chef server before using serve
   description "Ideally your cookbooks should be usable without requiring chef server."
   recipe do |ast|
     matches = []
-    function_calls = self.ast(:@ident, self.ast(:fcall, ast)).map { |fcall| fcall.drop(1).flatten }
+    function_calls = ast(:@ident, ast(:fcall, ast)).map { |fcall| fcall.drop(1).flatten }
     searches = function_calls.find_all { |fcall| fcall.first == 'search' }
     unless searches.empty? || checks_for_chef_solo?(ast)
       searches.each { |s| matches << {:matched => s[0], :line => s[1], :column => s[2]} }
