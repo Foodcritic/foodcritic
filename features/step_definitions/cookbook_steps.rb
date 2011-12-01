@@ -6,15 +6,6 @@ Then /^the (?:[a-z ]+) warning ([0-9]+) should be displayed( against the attribu
   expect_warning("FC#{code}", atts.nil? ? {} : {:file => 'cookbooks/example/attributes/default.rb'})
 end
 
-Then /^the node access warning 001 should be displayed for each match$/ do
-  expect_warning('FC001', :line => 1)
-  expect_warning('FC001', :line => 2)
-end
-
-Then /^the node access warning 001 should be displayed twice for the same line$/ do
-  expect_warning('FC001', :line => 1, :num_occurrences => 2)
-end
-
 Then /^the (?:[a-z ]+) warning ([0-9]+) should not be displayed$/ do |code|
   expect_no_warning("FC#{code}")
 end
