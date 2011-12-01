@@ -1,22 +1,3 @@
-rule "FC001", "Use symbols in preference to strings to access node attributes" do
-  description "When accessing node attributes you should use a symbol for a key rather than a string literal."
-  recipe do |ast|
-    matches = []
-    attribute_refs = %w{node default override set normal}
-    aref_fields = self.ast(:aref, ast) + self.ast(:aref_field, ast)
-    aref_fields.each do |field|
-      is_node_aref = attribute_refs.include? self.ast(:@ident, field).flatten.drop(1).first
-      if is_node_aref
-        literal_strings = self.ast(:@tstring_content, field)
-        literal_strings.each do |str|
-          matches << {:matched => str[1], :line => str[2].first, :column => str[2].last}
-        end
-      end
-    end
-    matches
-  end
-end
-
 rule "FC002", "Avoid string interpolation where not required" do
   description "When setting a resource value avoid string interpolation where not required."
   recipe do |ast|
