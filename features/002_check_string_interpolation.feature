@@ -24,7 +24,12 @@ Feature: Check String Interpolation
     When I check the cookbook
     Then the string interpolation warning 002 should not be displayed
 
-  Scenario: Resource name literal and expression
-    Given a cookbook with a single recipe that creates a directory resource with an interpolated literal and expression
+  Scenario: Resource name literal and interpolated
+    Given a cookbook with a single recipe that creates a directory resource with a literal and interpolated variable
+    When I check the cookbook
+    Then the string interpolation warning 002 should not be displayed
+
+  Scenario: Resource name interpolated and literal
+    Given a cookbook with a single recipe that creates a directory resource with an interpolated variable and a literal
     When I check the cookbook
     Then the string interpolation warning 002 should not be displayed

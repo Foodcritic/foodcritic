@@ -10,6 +10,8 @@ Gem::Specification.new do |s|
   s.homepage = 'http://acrmp.github.com/foodcritic'
   s.license = 'MIT'
   s.executables << 'foodcritic'
+  s.add_dependency('nokogiri', '~> 1.5.0')
+  s.add_dependency('xml-simple', '~> 1.1.1')
   s.files = Dir['lib/**/*.rb']
   s.required_ruby_version = '>= 1.9.3'
 end

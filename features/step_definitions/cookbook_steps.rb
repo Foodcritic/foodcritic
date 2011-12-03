@@ -54,9 +54,20 @@ Given /^a cookbook with a single recipe that creates a directory resource with a
   }.strip
 end
 
-Given /^a cookbook with a single recipe that creates a directory resource with an interpolated literal and expression$/ do
+Given /^a cookbook with a single recipe that creates a directory resource with an interpolated variable and a literal$/ do
   write_recipe %q{
     directory "#{node[:base_dir]}/sub_dir" do
+      owner "root"
+      group "root"
+      mode "0755"
+      action :create
+    end
+  }.strip
+end
+
+Given /^a cookbook with a single recipe that creates a directory resource with a literal and interpolated variable$/ do
+  write_recipe %q{
+    directory "base_dir/#{node[:sub_dir]}" do
       owner "root"
       group "root"
       mode "0755"
