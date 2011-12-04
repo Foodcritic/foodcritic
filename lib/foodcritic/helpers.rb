@@ -1,3 +1,6 @@
+require 'nokogiri'
+require 'xmlsimple'
+
 module FoodCritic
 
   # Helper methods that form part of the Rules DSL.
@@ -100,6 +103,77 @@ module FoodCritic
       end
       result
     end
+
+    # Retrieve the recipes that are included within the given recipe AST.
+    #
+    # @param [Nokogiri::XML::Node] ast The recipe AST
+    # @return [Hash] include_recipe nodes keyed by included recipe name
+    def included_recipes(ast)
+      # we only support literal strings, ignoring sub-expressions
+      included = ast.xpath(%q{//command[ident/@value = 'include_recipe' and count(descendant::string_embexpr) = 0]/
+        descendant::tstring_content})
+      Hash[included.map{|recipe|recipe['value']}.zip(included)]
+    end
+
+    # The name of the cookbook containing the specified file.
+    #
+    # @param [String] file The file in the cookbook
+    # @return [String] The name of the containing cookbook
+    def cookbook_name(file)
+      File.basename(File.absolute_path(File.join(File.dirname(file), '..')))
+    end
+
+    # The dependencies declared in cookbook metadata.
+    #
+    # @param [Nokogiri::XML::Node] ast The metadata rb AST
+    # @return [Array] List of cookbooks depended on
+    def declared_dependencies(ast)
+      deps = ast.xpath("//command[ident/@value='depends']/descendant::args_add/descendant::tstring_content")
+      # handle quoted word arrays
+      var_ref = ast.xpath("//command[ident/@value='depends']/descendant::var_ref/ident")
+      deps += ast.xpath(%Q{//block_var/params/ident#{var_ref.first['value']}/ancestor::method_add_block/
+          call/descendant::tstring_content}) unless var_ref.empty?
+      deps.map{|dep| dep['value']}
+    end
+
+    # If the provided node is the line / column information.
+    #
+    # @param [Nokogiri::XML::Node] node A node within the AST
+    # @return [Boolean] True if this node holds the position data
+    def position_node?(node)
+      node.respond_to?(:length) and node.length == 2 and node.respond_to?(:all?) and node.all?{|child| child.respond_to?(:to_i)}
+    end
+
+    # Recurse the nested arrays provided by Ripper to create an intermediate Hash for ease of searching.
+    #
+    # @param [Nokogiri::XML::Node] node The AST
+    # @return [Hash] The friendlier Hash.
+    def ast_to_hash(node)
+      result = {}
+      if node.respond_to?(:each)
+        node.drop(1).each do |child|
+          if position_node?(child)
+            result[:pos] = {:line => child.first, :column => child[1]}
+          else
+            if child.respond_to?(:first)
+              result[child.first.to_s.gsub(/[^a-z_]/, '')] = ast_to_hash(child)
+            else
+              result[:value] = child  unless child.nil?
+            end
+          end
+        end
+      end
+      result
+    end
+
+    # Read the AST for the given Ruby file
+    #
+    # @param [String] file The file to read
+    # @return [Nokogiri::XML::Node] The recipe AST
+    def read_file(file)
+      Nokogiri::XML(XmlSimple.xml_out(ast_to_hash(Ripper::SexpBuilder.new(IO.read(file)).parse)))
+    end
+
   end
 
 end

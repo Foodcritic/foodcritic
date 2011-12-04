@@ -6,6 +6,10 @@ module FoodCritic
       write_file 'cookbooks/example/recipes/default.rb', content
     end
 
+    def write_metadata(content)
+      write_file 'cookbooks/example/metadata.rb', content
+    end
+
     def run_lint
       run_simple(unescape('foodcritic cookbooks/example/'), false)
     end
@@ -23,6 +27,8 @@ module FoodCritic
                          'Avoid repetition of resource declarations'
                        when 'FC006' then
                          'Mode should be quoted or fully specified when setting file permissions'
+                       when 'FC007' then
+                         'Ensure recipe dependencies are reflected in cookbook metadata'
                      end
 
       if opt[:expect_warning]

@@ -217,3 +217,91 @@ Then /^the service resource warning 006 should be (valid|invalid)$/ do |valid|
     expect_warning('FC006')
   end
 end
+
+Given /^a cookbook recipe that includes an undeclared recipe dependency( unscoped)?$/ do |unscoped|
+  write_recipe %Q{
+    include_recipe 'foo#{unscoped.nil? ? '::default' : ''}'
+  }.strip
+  write_metadata %q{
+    version "1.9.0"
+    depends "dogs", "> 1.0"
+  }.strip
+end
+
+Given /^a cookbook recipe that includes a recipe name from an expression$/ do
+  # deliberately not evaluated
+  write_recipe %q{
+    include_recipe "foo::#{node['foo']['fighter']}"
+  }.strip
+  write_metadata %q{
+    depends "foo"
+  }.strip
+end
+
+Given /^a cookbook recipe that includes a declared recipe dependency( unscoped)?$/ do |unscoped|
+  write_recipe %Q{
+    include_recipe 'foo#{unscoped.nil? ? '::default' : ''}'
+  }.strip
+  write_metadata %q{
+    version "1.9.0"
+    depends "foo"
+  }.strip
+end
+
+Given /^a cookbook recipe that includes several declared recipe dependencies - (brace|block)$/ do |brace_or_block|
+  write_recipe %q{
+    include_recipe "foo::default"
+    include_recipe "bar::default"
+    include_recipe "baz::default"
+  }.strip
+  if brace_or_block == 'brace'
+    write_metadata %q{
+      %w{foo bar baz}.each{|cookbook| depends cookbook}
+    }.strip
+  else
+    write_metadata %q{
+      %w{foo bar baz}.each do |cb|
+        depends cb
+      end
+    }.strip
+  end
+end
+
+Given /^a cookbook recipe that includes both declared and undeclared recipe dependencies$/ do
+  write_recipe %q{
+    include_recipe "foo::default"
+    include_recipe "bar::default"
+    file "/tmp/something" do
+      action :delete
+    end
+    include_recipe "baz::default"
+  }.strip
+  write_metadata %q{
+    ['foo', 'bar'].each{|cbk| depends cbk}
+  }.strip
+end
+
+Then /^the undeclared dependency warning 007 should be displayed only for the undeclared dependencies$/ do
+  expect_warning("FC007", :line => 1, :expect_warning => false)
+  expect_warning("FC007", :line => 2, :expect_warning => false)
+  expect_warning("FC007", :line => 6, :expect_warning => true)
+end
+
+Given /^a cookbook recipe that includes a local recipe$/ do
+  write_recipe %q{
+    include_recipe 'example::server'
+  }.strip
+  write_metadata %q{
+    name 'example'
+  }.strip
+end
+
+Given /^a cookbook that does not have defined metadata$/ do
+  write_recipe %q{
+    include_recipe "foo::default"
+  }.strip
+end
+
+Then /^no error should have occurred$/ do
+  assert_exit_status(0)
+end

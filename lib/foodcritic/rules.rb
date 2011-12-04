@@ -45,3 +45,16 @@ rule "FC006", "Mode should be quoted or fully specified when setting file permis
       ancestor::method_add_block}).map{|resource| match(resource)}
   end
 end
+
+rule "FC007", "Ensure recipe dependencies are reflected in cookbook metadata" do
+  description "You are including a recipe that is not in the current cookbook and not defined as a dependency in your cookbook metadata."
+  recipe do |ast,filename|
+    metadata_path = File.join(File.dirname(filename), '..', 'metadata.rb')
+    next unless File.exists? metadata_path
+    undeclared = included_recipes(ast).keys.map{|recipe|recipe.split('::').first} - [cookbook_name(filename)] -
+        declared_dependencies(read_file(metadata_path))
+    included_recipes(ast).map do |recipe, resource|
+      match(resource) if undeclared.include?(recipe) || undeclared.any?{|u| recipe.start_with?("#{u}::")}
+    end.compact
+  end
+end
