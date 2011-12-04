@@ -188,3 +188,32 @@ Given /^a cookbook recipe that declares multiple package resources mixed with ot
     end
   }.strip
 end
+
+Given /^a ([a-z_])+ resource declared with the mode (.*)$/ do |resource,mode|
+  source_att = resource == 'template' ? 'source "foo.erb"' : ''
+  write_recipe %Q{
+    #{resource} "/tmp/something" do
+      #{source_att}
+      owner "root"
+      group "root"
+      mode #{mode}
+      action :create
+    end
+  }.strip
+end
+
+Given /^a file resource declared without a mode$/ do
+  write_recipe %q{
+    file "/tmp/something" do
+      action :delete
+    end
+  }.strip
+end
+
+Then /^the service resource warning 006 should be (valid|invalid)$/ do |valid|
+  if valid == 'valid'
+    expect_no_warning('FC006')
+  else
+    expect_warning('FC006')
+  end
+end

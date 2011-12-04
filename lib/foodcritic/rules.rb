@@ -37,3 +37,11 @@ rule "FC005", "Avoid repetition of resource declarations" do
     matches
   end
 end
+
+rule "FC006", "Mode should be quoted or fully specified when setting file permissions" do
+  description "Not quoting mode when setting permissions can lead to incorrect permissions being set."
+  recipe do |ast|
+    ast.xpath(%q{//ident[@value='mode']/parent::command/descendant::int[string-length(@value) < 4]/
+      ancestor::method_add_block}).map{|resource| match(resource)}
+  end
+end

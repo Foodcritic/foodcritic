@@ -21,6 +21,8 @@ module FoodCritic
                          'Use a service resource to start and stop services'
                        when 'FC005' then
                          'Avoid repetition of resource declarations'
+                       when 'FC006' then
+                         'Mode should be quoted or fully specified when setting file permissions'
                      end
 
       if opt[:expect_warning]
