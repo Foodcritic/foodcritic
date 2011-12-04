@@ -1,3 +1,11 @@
+## 0.3.0 (4th December, 2011)
+
+Features:
+
+  - Significantly slower! But now you can write rules using [xpath or css selectors](http://nokogiri.org/).
+  - FC006: File mode rule added.
+  - FC007: Undeclared recipe dependencies rule added.
+
 ## 0.2.0 (1st December, 2011)
 
 Bugfixes:
