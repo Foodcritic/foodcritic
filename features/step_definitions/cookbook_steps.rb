@@ -210,7 +210,7 @@ Given /^a file resource declared without a mode$/ do
   }.strip
 end
 
-Then /^the service resource warning 006 should be (valid|invalid)$/ do |valid|
+Then /^the file mode warning 006 should be (valid|invalid)$/ do |valid|
   if valid == 'valid'
     expect_no_warning('FC006')
   else
