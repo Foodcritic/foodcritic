@@ -111,7 +111,7 @@ Given /^a cookbook recipe that uses execute to (sleep and then )?start a service
   }.strip
 end
 
-Given /^a cookbok recipe that uses execute with a name attribute to start a service$/ do
+Given /^a cookbook recipe that uses execute with a name attribute to start a service$/ do
   write_recipe %Q{
     execute "/etc/init.d/foo start" do
       cwd "/tmp"
