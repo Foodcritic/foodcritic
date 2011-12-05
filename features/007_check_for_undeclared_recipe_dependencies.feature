@@ -7,12 +7,12 @@ Feature: Check for undeclared recipe dependencies
   Scenario: Cookbook includes undeclared recipe dependency
     Given a cookbook recipe that includes an undeclared recipe dependency
     When I check the cookbook
-    Then the undeclared dependency warning 007 should be displayed
+    Then the undeclared dependency warning 007 should be displayed against the metadata file
 
   Scenario: Cookbook includes undeclared recipe dependency unscoped
     Given a cookbook recipe that includes an undeclared recipe dependency unscoped
     When I check the cookbook
-    Then the undeclared dependency warning 007 should be displayed
+    Then the undeclared dependency warning 007 should be displayed against the metadata file
 
   Scenario: Cookbook includes recipe via expression
     Given a cookbook recipe that includes a recipe name from an expression

@@ -49,12 +49,12 @@ end
 rule "FC007", "Ensure recipe dependencies are reflected in cookbook metadata" do
   description "You are including a recipe that is not in the current cookbook and not defined as a dependency in your cookbook metadata."
   recipe do |ast,filename|
-    metadata_path = File.join(File.dirname(filename), '..', 'metadata.rb')
+    metadata_path = Pathname.new(File.join(File.dirname(filename), '..', 'metadata.rb')).cleanpath
     next unless File.exists? metadata_path
     undeclared = included_recipes(ast).keys.map{|recipe|recipe.split('::').first} - [cookbook_name(filename)] -
         declared_dependencies(read_file(metadata_path))
     included_recipes(ast).map do |recipe, resource|
-      match(resource) if undeclared.include?(recipe) || undeclared.any?{|u| recipe.start_with?("#{u}::")}
+      match(resource).merge(:filename => metadata_path) if undeclared.include?(recipe) || undeclared.any?{|u| recipe.start_with?("#{u}::")}
     end.compact
   end
 end
@@ -62,11 +62,13 @@ end
 rule "FC008", "Generated cookbook metadata needs updating" do
   description "The cookbook metadata for this cookbook is boilerplate output from knife generate cookbook and needs updating with the real details of your cookbook."
   recipe do |ast,filename|
-    metadata_path = File.join(File.dirname(filename), '..', 'metadata.rb')
+    metadata_path = Pathname.new(File.join(File.dirname(filename), '..', 'metadata.rb')).cleanpath
     next unless File.exists? metadata_path
     md = read_file(metadata_path)
     {'maintainer' => 'YOUR_COMPANY_NAME', 'maintainer_email' => 'YOUR_EMAIL'}.map do |field,value|
-      md.xpath(%Q{//command[ident/@value='#{field}']/descendant::tstring_content[@value='#{value}']}).map{|m| match(m)}
+      md.xpath(%Q{//command[ident/@value='#{field}']/descendant::tstring_content[@value='#{value}']}).map do |m|
+        match(m).merge(:filename => metadata_path)
+      end
     end.flatten
   end
 end

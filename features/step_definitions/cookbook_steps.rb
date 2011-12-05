@@ -2,8 +2,8 @@ When /^I check the cookbook$/ do
   run_lint
 end
 
-Then /^the (?:[a-z ]+) warning ([0-9]+) should be displayed( against the attributes file)?$/ do |code, atts|
-  expect_warning("FC#{code}", atts.nil? ? {} : {:file => 'cookbooks/example/attributes/default.rb'})
+Then /^the (?:[a-z ]+) warning ([0-9]+) should be displayed(?: against the (metadata) file)?$/ do |code, file|
+  expect_warning("FC#{code}", file.nil? ? {} : {:file => 'cookbooks/example/metadata.rb'})
 end
 
 Then /^the (?:[a-z ]+) warning ([0-9]+) should not be displayed$/ do |code|
@@ -282,9 +282,9 @@ Given /^a cookbook recipe that includes both declared and undeclared recipe depe
 end
 
 Then /^the undeclared dependency warning 007 should be displayed only for the undeclared dependencies$/ do
-  expect_warning("FC007", :line => 1, :expect_warning => false)
-  expect_warning("FC007", :line => 2, :expect_warning => false)
-  expect_warning("FC007", :line => 6, :expect_warning => true)
+  expect_warning("FC007", :file => 'cookbooks/example/metadata.rb', :line => 1, :expect_warning => false)
+  expect_warning("FC007", :file => 'cookbooks/example/metadata.rb', :line => 2, :expect_warning => false)
+  expect_warning("FC007", :file => 'cookbooks/example/metadata.rb', :line => 6, :expect_warning => true)
 end
 
 Given /^a cookbook recipe that includes a local recipe$/ do
@@ -355,6 +355,6 @@ Then /^the boilerplate metadata warning 008 should warn on lines (.*)$/ do |line
   if lines_to_warn.strip == ''
     expect_no_warning('FC008')
   else
-    lines_to_warn.split(',').each{|line| expect_warning('FC008', :line => line)}
+    lines_to_warn.split(',').each{|line| expect_warning('FC008', :line => line, :file => 'cookbooks/example/metadata.rb')}
   end
 end

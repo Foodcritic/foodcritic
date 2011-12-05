@@ -1,3 +1,5 @@
+require 'pathname'
+
 module FoodCritic
 
   # The DSL methods exposed for defining rules.

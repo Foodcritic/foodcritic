@@ -21,8 +21,8 @@ module FoodCritic
       files_to_process(cookbook_path).each do |file|
         ast = read_file(file)
         @rules.each do |rule|
-          matches = rule.recipe.yield(ast, File.expand_path(file))
-          matches.each{|match| warnings << Warning.new(rule, match.merge({:filename => file}))} unless matches.nil?
+          matches = rule.recipe.yield(ast, file)
+          matches.each{|match| warnings << Warning.new(rule, {:filename => file}.merge(match))} unless matches.nil?
         end
       end
       Review.new(warnings)
