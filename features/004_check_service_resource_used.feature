@@ -30,6 +30,6 @@ Feature: Check for service commands within execute resources
     Then the service resource warning 004 should not be displayed
 
   Scenario: Execute resource using name attribute
-    Given a cookbok recipe that uses execute with a name attribute to start a service
+    Given a cookbook recipe that uses execute with a name attribute to start a service
      When I check the cookbook
     Then the service resource warning 004 should be displayed
