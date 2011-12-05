@@ -12,7 +12,7 @@ module FoodCritic
     # @return [Hash] Hash with the matched node name and position with the recipe
     def match(node)
       pos = node.xpath('descendant::pos').first
-      {:matched => node.name, :line => pos['line'], :column => pos['column']}
+      {:matched => node.respond_to?(:name) ? node.name : '', :line => pos['line'], :column => pos['column']}
     end
 
     # Does the specified recipe check for Chef Solo?

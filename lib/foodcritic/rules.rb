@@ -58,3 +58,15 @@ rule "FC007", "Ensure recipe dependencies are reflected in cookbook metadata" do
     end.compact
   end
 end
+
+rule "FC008", "Generated cookbook metadata needs updating" do
+  description "The cookbook metadata for this cookbook is boilerplate output from knife generate cookbook and needs updating with the real details of your cookbook."
+  recipe do |ast,filename|
+    metadata_path = File.join(File.dirname(filename), '..', 'metadata.rb')
+    next unless File.exists? metadata_path
+    md = read_file(metadata_path)
+    {'maintainer' => 'YOUR_COMPANY_NAME', 'maintainer_email' => 'YOUR_EMAIL'}.map do |field,value|
+      md.xpath(%Q{//command[ident/@value='#{field}']/descendant::tstring_content[@value='#{value}']}).map{|m| match(m)}
+    end.flatten
+  end
+end

@@ -29,6 +29,8 @@ module FoodCritic
                          'Mode should be quoted or fully specified when setting file permissions'
                        when 'FC007' then
                          'Ensure recipe dependencies are reflected in cookbook metadata'
+                       when 'FC008' then
+                         'Generated cookbook metadata needs updating'
                      end
 
       if opt[:expect_warning]
