@@ -55,7 +55,7 @@ end
 Then when you run foodcritic against the example recipe you will see the tree that represents the recipe as passed to
 your rule.
 
-### stdout
+__stdout__
 
     $ foodcritic example
 
@@ -93,7 +93,7 @@ You can use Nokogiri's great support for XPath or CSS selectors to match against
 So if you wanted to get all `tstring_content` nodes that contained the word 'Chef' like our log statement above you
 could do something like the following within the recipe block:
 
-### rules.rb
+__rules.rb__
 
 ```ruby
 recipe do |ast|
@@ -104,7 +104,7 @@ end
 
 And the output will be something like:
 
-### stdout
+__stdout__
 
 ```xml
 <tstring_content value="Chef is the business">
@@ -115,7 +115,7 @@ And the output will be something like:
 This node contains a `pos` child node that defines its location within the recipe. Now lets finish our rule by adding
 the matched node to the list of matches, which ensures the user will see a warning.
 
-### rules.rb
+__rules.rb__
 
 ```ruby
 rule "FC123", "Short description shown to the user" do
@@ -126,7 +126,7 @@ rule "FC123", "Short description shown to the user" do
 end
 ```
 
-### stdout
+__stdout__
 
     $ foodcritic example
     FC123: Short description shown to the user: example/recipes/default.rb:1
