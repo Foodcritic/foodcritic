@@ -38,3 +38,8 @@ Feature: Check for unrecognised resource attributes
     Given a recipe that declares multiple resources of the same type of which one has a bad attribute
     When I check the cookbook
     Then the unrecognised attribute warning 009 should be displayed against the correct resource
+
+  Scenario: Resource with conditional attributes
+    Given a recipe that declares a resource with recognised attributes and a conditional execution ruby block
+     When I check the cookbook
+     Then the unrecognised attribute warning 009 should not be displayed

@@ -424,3 +424,18 @@ end
 Then /^the unrecognised attribute warning 009 should be displayed against the correct resource$/ do
   expect_warning('FC009', :line => 7)
 end
+
+Given /^a recipe that declares a resource with recognised attributes and a conditional execution ruby block$/ do
+  write_recipe %q{
+    file "/tmp/something" do
+      owner "root"
+      group "root"
+      mode "0755"
+      not_if do
+        require 'foo'
+        Foo.bar?(filename)
+      end
+      action :create
+    end
+  }.strip
+end

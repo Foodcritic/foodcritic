@@ -71,7 +71,7 @@ module FoodCritic
     # @return [Hash] The resource attributes
     def resource_attributes(resource)
       atts = {:name => resource_name(resource)}
-      resource.xpath('do_block/descendant::command').each do |att|
+      resource.xpath('do_block/descendant::command[count(ancestor::do_block) = 1]').each do |att|
         if att.xpath('descendant::symbol').empty?
           att_value = att.xpath('string(descendant::tstring_content/@value)')
         else

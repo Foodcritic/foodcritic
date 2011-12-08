@@ -78,8 +78,7 @@ rule "FC009", "Resource attribute not recognised" do
   recipe do |ast|
     matches = []
     resource_attributes_by_type(ast).each do |type,resources|
-      # TODO: ignore ruby_blocks for now as we don't cope with the nested blocks properly
-      if type != 'ruby_block' and Chef::Resource.const_defined?(convert_to_class_name(type))
+      if Chef::Resource.const_defined?(convert_to_class_name(type))
         allowed_atts = Chef::Resource.const_get(convert_to_class_name(type)).public_instance_methods(true)
         resources.each do |resource|
           invalid_atts = resource.keys.map{|att|att.to_sym} - allowed_atts
