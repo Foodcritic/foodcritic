@@ -358,3 +358,69 @@ Then /^the boilerplate metadata warning 008 should warn on lines (.*)$/ do |line
     lines_to_warn.split(',').each{|line| expect_warning('FC008', :line => line, :file => 'cookbooks/example/metadata.rb')}
   end
 end
+
+Given /^a recipe that declares a ([^ ]+) resource with these attributes: (.*)$/ do |type,attributes|
+  write_recipe %Q{
+    #{type} "resource-name" do
+      #{attributes.split(',').join(" 'foo'\n")} 'bar'
+    end
+  }.strip
+end
+
+Given /^a recipe that declares a resource with standard attributes$/ do
+  write_recipe %q{
+    file "/tmp/something" do
+      owner "root"
+      group "root"
+      mode "0755"
+      action :create
+    end
+  }.strip
+end
+
+Given /^a recipe that declares a user-defined resource$/ do
+  write_recipe %q{
+    apple "golden-delicious" do
+      colour "yellow"
+      action :consume
+    end
+  }.strip
+end
+
+Given /^a recipe that declares a resource with only a name attribute$/ do
+  write_recipe %q{
+    package 'foo'
+  }.strip
+end
+
+Then /^the unrecognised attribute warning 009 should be (true|false)$/ do |shown|
+  if shown == 'true'
+    expect_warning('FC009')
+  else
+    expect_no_warning('FC009')
+  end
+end
+
+Given /^a recipe that declares multiple resources of the same type of which one has a bad attribute$/ do
+  write_recipe %q{
+    file "/tmp/something" do
+      owner "root"
+      group "root"
+      mode "0755"
+      action :create
+    end
+    file "/tmp/something" do
+      user "root"
+      group "root"
+      mode "0755"
+      action :create
+    end
+    package "foo" do
+      action :install
+    end
+  }.strip
+end
+
+Then /^the unrecognised attribute warning 009 should be displayed against the correct resource$/ do
+  expect_warning('FC009', :line => 7)
+end

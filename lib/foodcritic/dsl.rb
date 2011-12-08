@@ -6,6 +6,7 @@ module FoodCritic
   class RuleDsl
     attr_reader :rules
     include Helpers
+    include Chef::Mixin::ConvertToClassName
 
     # Define a new rule
     #

@@ -72,3 +72,23 @@ rule "FC008", "Generated cookbook metadata needs updating" do
     end.flatten
   end
 end
+
+rule "FC009", "Resource attribute not recognised" do
+  description "You appear to be using an unrecognised attribute on a standard Chef resource. Please check for typos."
+  recipe do |ast|
+    matches = []
+    resource_attributes_by_type(ast).each do |type,resources|
+      # TODO: ignore ruby_blocks for now as we don't cope with the nested blocks properly
+      if type != 'ruby_block' and Chef::Resource.const_defined?(convert_to_class_name(type))
+        allowed_atts = Chef::Resource.const_get(convert_to_class_name(type)).public_instance_methods(true)
+        resources.each do |resource|
+          invalid_atts = resource.keys.map{|att|att.to_sym} - allowed_atts
+          unless invalid_atts.empty?
+            matches << match(find_resources(ast, type).find{|res|resource_attributes(res).include?(invalid_atts.first.to_s)})
+          end
+        end
+      end
+    end
+    matches
+  end
+end

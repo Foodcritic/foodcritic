@@ -31,6 +31,8 @@ module FoodCritic
                          'Ensure recipe dependencies are reflected in cookbook metadata'
                        when 'FC008' then
                          'Generated cookbook metadata needs updating'
+                       when 'FC009' then
+                         'Resource attribute not recognised'
                      end
 
       if opt[:expect_warning]
