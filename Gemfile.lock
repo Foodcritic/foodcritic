@@ -4,7 +4,6 @@ PATH
     foodcritic (0.3.0)
       chef (~> 0.10.4)
       nokogiri (~> 1.5.0)
-      xml-simple (~> 1.1.1)
 
 GEM
   remote: http://rubygems.org/
@@ -97,7 +96,6 @@ GEM
       polyglot
       polyglot (>= 0.3.1)
     uuidtools (2.1.2)
-    xml-simple (1.1.1)
     yajl-ruby (1.1.0)
     yard (0.7.4)
 

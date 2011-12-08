@@ -1,5 +1,4 @@
 require 'nokogiri'
-require 'xmlsimple'
 
 module FoodCritic
 
@@ -144,26 +143,35 @@ module FoodCritic
       node.respond_to?(:length) and node.length == 2 and node.respond_to?(:all?) and node.all?{|child| child.respond_to?(:to_i)}
     end
 
-    # Recurse the nested arrays provided by Ripper to create an intermediate Hash for ease of searching.
+    # Recurse the nested arrays provided by Ripper to create a tree we can more easily apply expressions to.
     #
-    # @param [Nokogiri::XML::Node] node The AST
-    # @return [Hash] The friendlier Hash.
-    def ast_to_hash(node)
-      result = {}
+    # @param [Hash] node The AST
+    # @param [Nokogiri::XML::Document] doc The document being constructed
+    # @param [Nokogiri::XML::Node] xml_node The current node
+    # @return [Nokogiri::XML::Node] The XML representation
+    def build_xml(node, doc = nil, xml_node=nil)
+      if doc.nil?
+        doc = Nokogiri::XML('<opt></opt>')
+        xml_node = doc.root
+      end
       if node.respond_to?(:each)
         node.drop(1).each do |child|
           if position_node?(child)
-            result[:pos] = {:line => child.first, :column => child[1]}
+            pos = Nokogiri::XML::Node.new("pos", doc)
+            pos['line'] = child.first.to_s
+            pos['column'] = child[1].to_s
+            xml_node.add_child(pos)
           else
             if child.respond_to?(:first)
-              result[child.first.to_s.gsub(/[^a-z_]/, '')] = ast_to_hash(child)
+              n = Nokogiri::XML::Node.new(child.first.to_s.gsub(/[^a-z_]/, ''), doc)
+              xml_node.add_child(build_xml(child, doc, n))
             else
-              result[:value] = child  unless child.nil?
+              xml_node['value'] = child.to_s unless child.nil?
             end
           end
         end
       end
-      result
+      xml_node
     end
 
     # Read the AST for the given Ruby file
@@ -171,7 +179,7 @@ module FoodCritic
     # @param [String] file The file to read
     # @return [Nokogiri::XML::Node] The recipe AST
     def read_file(file)
-      Nokogiri::XML(XmlSimple.xml_out(ast_to_hash(Ripper::SexpBuilder.new(IO.read(file)).parse)))
+      build_xml(Ripper::SexpBuilder.new(IO.read(file)).parse)
     end
 
   end

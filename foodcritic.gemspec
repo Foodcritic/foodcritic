@@ -12,7 +12,6 @@ Gem::Specification.new do |s|
   s.executables << 'foodcritic'
   s.add_dependency('chef', '~> 0.10.4')
   s.add_dependency('nokogiri', '~> 1.5.0')
-  s.add_dependency('xml-simple', '~> 1.1.1')
   s.files = Dir['lib/**/*.rb']
   s.required_ruby_version = '>= 1.9.3'
 end
