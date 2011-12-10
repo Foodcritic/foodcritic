@@ -40,6 +40,8 @@
             <li><a href="#getting-started">Getting started</a></li>
             <li><a href="#why">Why?</a></li>
             <li><a href="#rules">Built-in rules</a></li>
+            <li><a href="#faq">Frequently Asked Questions</a></li>
+            <li><a href="#writing-a-new-rule">Writing a new rule</a></li>
           </ul>
           <h5>Project</h5>
           <ul>
@@ -68,8 +70,8 @@
           <pre>
 $ rvm use 1.9.3
 $ gem install foodcritic
-$ foodcritic cookbooks
-          </pre>
+$ foodcritic cookbooks</pre>
+          <a href="#getting-started" class="btn large primary">Become a Chef snob</a>
         </div>
         <div class="row">
           <div class="span6">
@@ -88,6 +90,19 @@ $ foodcritic cookbooks
             <p>The reference list of rules that come with foodcritic and what they mean.</p>
             <p><a class="btn" href="#rules">View details &raquo;</a></p>
           </div>
+        </div>
+        <hr>
+        <div class="row">
+          <div class="span6">
+            <h2>FAQ</h2>
+            <p>Answers to Frequently Asked Questions.</p>
+            <p><a class="btn" href="#faq">View details &raquo;</a></p>
+          </div>
+          <div class="span5">
+            <h2>Writing a new rule</h2>
+             <p>You can extend foodcritic with rules you define yourself. Pull requests are welcomed!</p>
+            <p><a class="btn" href="#writing-a-new-rule">View details &raquo;</a></p>
+         </div>
         </div>
 
         <hr>
@@ -123,7 +138,7 @@ foodcritic [cookbook_path]
       <p>Foodcritic has two goals:</p>
         <ul>
         <li>To make it easier to flag problems in your Chef cookbooks that will cause Chef to blow up when you attempt to converge. This is about faster feedback. If you automate checks for common problems you can save a lot of time.</li>
-        <li>To encourage discussion within the Chef community on the approaches people use to write cookbooks. Opscode have avoided being overly prescriptive which by and large I think is a good thing. Having a set of rules to base discussion on helps drive out what we as a community think is good style.</li>
+        <li>To encourage discussion within the Chef community on the more subjective stuff - what does a good cookbook look like? Opscode have avoided being overly prescriptive which by and large I think is a good thing. Having a set of rules to base discussion on helps drive out what we as a community think is good style.</li>
         </ul>
 	<hr>
       <h1 id="rules">Built-in Rules</h1>
@@ -344,6 +359,146 @@ file "/tmp/something" do
   action :create
 end
 </pre>
+        <hr />
+
+      <h2 id="faq">Frequently Asked Questions</h2>
+
+        <h3 id="faq-spurious-warnings">When I run it against my cookbooks there are warnings that I'm not interested in. How can I avoid
+        these being shown?</h3>
+        <p>We are planning to add support for grouping rules together with policies so you can tailor foodcritic to match against your local style.
+There is no built-in support for policies at the moment - right now <code>grep -v</code> is your friend.</p>
+
+        <h3 id="faq-ci">I'd like to include foodcritic in my Continuous Integration setup. How do I go about doing that?</h3>
+        <p>You should be able to incorporate foodcritic into your build like any other command following the instructions for building a "free-style software project" here:<br />
+        <a href="https://wiki.jenkins-ci.org/display/JENKINS/Building+a+software+project">https://wiki.jenkins-ci.org/display/JENKINS/Building+a+software+project</a>
+        </p>
+        <p>See also this blog post about <code>rvm-shell</code> which ensures you have the right version of Ruby loaded when trying to build with foodcritic:<br/>
+        <a href="http://blog.ninjahideout.com/posts/rvm-improved-support-for-hudson">http://blog.ninjahideout.com/posts/rvm-improved-support-for-hudson</a></p>
+        <p><span class="label notice">Note</span> Foodcritic doesn't currently set the exit code which is annoying - we'll change this soon.</p>
+        <p>You may want to consider using <strong>pennyworth</strong> which wraps up a number of tools useful for infrastructure as code in a convenient bundle:<br />
+        <a href="https://github.com/heavywater/pennyworth">https://github.com/heavywater/pennyworth</a></p>
+
+        <hr />
+
+      <h2 id="writing-a-new-rule">Writing a new rule</h2>
+
+      <p>
+          The rules are defined in a simple DSL here:<br />
+          <a href="https://github.com/acrmp/foodcritic/blob/master/lib/foodcritic/rules.rb">https://github.com/acrmp/foodcritic/blob/master/lib/foodcritic/rules.rb</a>
+      </p>
+
+      <h3>The recipe block</h3>
+        <p>
+            Each rule has a recipe block that defines the matching logic for the rule. The block accepts a
+            <a href="http://nokogiri.org/">Nokogiri</a> document that contains the Ripper parsed representation of your
+            recipe. You can see what this looks like by calling <code>to_xml</code> on the AST document.
+        </p>
+
+        <p>
+            So given a recipe that contains a single log resource:
+        </p>
+        <strong>examples/recipes/default.rb</strong>
+<pre class="prettyprint">
+log "Chef is the business"
+</pre>
+
+<p>And a rule that does nothing except print the AST document to stdout:</p>
+
+<strong>rules.rb</strong>
+
+<pre class="prettyprint">
+rule "FC123", "Short description shown to the user" do
+  description "A longer description with more information."
+  recipe do |ast|
+    puts ast.to_xml
+  end
+end
+</pre>
+
+<p>Then when you run foodcritic against the example recipe you will see the tree that represents the recipe as passed to
+your rule.</p>
+
+<strong>stdout</strong>
+
+<pre>
+$ foodcritic example
+</pre>
+
+<pre class="prettyprint">
+&lt;?xml version="1.0"?&gt;
+&lt;opt&gt;
+  &lt;stmts_add&gt;
+    &lt;stmts_new/&gt;
+    &lt;command&gt;
+      &lt;ident value="log"&gt;
+        &lt;pos line="1" column="0"/&gt;
+      &lt;/ident&gt;
+      &lt;args_add_block value="false"&gt;
+        &lt;args_add&gt;
+          &lt;args_new/&gt;
+          &lt;string_literal&gt;
+            &lt;string_add&gt;
+              &lt;string_content/&gt;
+              &lt;tstring_content value="Chef is the business"&gt;
+                &lt;pos line="1" column="5"/&gt;
+              &lt;/tstring_content&gt;
+            &lt;/string_add&gt;
+          &lt;/string_literal&gt;
+        &lt;/args_add&gt;
+      &lt;/args_add_block&gt;
+    &lt;/command&gt;
+  &lt;/stmts_add&gt;
+&lt;/opt&gt;
+</pre>
+
+<h3>Matching within the recipe block</h3>
+
+<p>You can use Nokogiri's great support for XPath or CSS selectors to match against statements within the tree.</p>
+
+<p>So if you wanted to get all <code>tstring_content</code> nodes that contained the word 'Chef' like our log statement above you
+could do something like the following within the recipe block:</p>
+
+<strong>rules.rb</strong>
+
+<pre class="prettyprint">
+recipe do |ast|
+  puts ast.xpath("//tstring_content[contains(@value, 'Chef')]").to_xml
+  []
+end
+</pre>
+
+<p>And the output will be something like:</p>
+
+<strong>stdout</strong>
+
+<pre class="prettyprint">
+&lt;tstring_content value="Chef is the business"&gt;
+  &lt;pos line="1" column="5"/&gt;
+&lt;/tstring_content&gt;
+</pre>
+
+<p>This node contains a `pos` child node that defines its location within the recipe. Now lets finish our rule by adding
+the matched node to the list of matches, which ensures the user will see a warning.</p>
+
+<strong>rules.rb</strong>
+
+<pre class="prettyprint">
+rule "FC123", "Short description shown to the user" do
+  description "A longer description with more information."
+  recipe do |ast|
+    ast.xpath("//tstring_content[contains(@value, 'Chef')]").map{|resource| match(resource)}
+  end
+end
+</pre>
+
+<strong>stdout</strong>
+
+<pre>
+$ foodcritic example
+FC123: Short description shown to the user: example/recipes/default.rb:1
+</pre>
+
+<p>That's it - have fun. Thanks!</p>
 
       </div>
     </div>
