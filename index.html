@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Foodcritic</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+    <!--[if lt IE 9]>
+      <script type="text/javascript" src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le styles -->
+    <link href="bootstrap.css" rel="stylesheet">
+    <link href="prettify.css" type="text/css" rel="stylesheet" />
+    <script type="text/javascript" src="prettify.js"></script>
+    <style type="text/css">
+      body {
+        padding-top: 60px;
+      }
+    </style>
+  </head>
+
+  <body onload="prettyPrint()">
+    <div class="topbar">
+      <div class="topbar-inner">
+        <div class="container-fluid">
+          <a class="brand" href="#">Foodcritic</a>
+          <p class="pull-right">A lint tool for your Opscode Chef cookbooks.</p>
+
+        </div>
+      </div>
+    </div>
+    <div class="container-fluid">
+      <div class="sidebar">
+        <div class="well">
+          <h5>Documentation</h5>
+          <ul>
+            <li><a href="#getting-started">Getting started</a></li>
+            <li><a href="#why">Why?</a></li>
+            <li><a href="#rules">Built-in rules</a></li>
+          </ul>
+          <h5>Project</h5>
+          <ul>
+            <li><a href="https://github.com/acrmp/foodcritic">Code</a></li>
+            <li><a href="http://travis-ci.org/acrmp/foodcritic">Travis CI</a></li>
+            <li><a href="https://github.com/acrmp/foodcritic/issues?sort=created&direction=desc&state=open">Issues</a></li>
+            <li><a href="https://raw.github.com/acrmp/foodcritic/master/LICENSE">License</a></li>
+          </ul>
+          <h5>Rules</h5>
+          <ul>
+<li><a href="#FC002">FC002: Avoid string interpolation where not required</a></li>
+<li><a href="#FC003">FC003: Check whether you are running with chef server before using server-specific features</a></li>
+<li><a href="#FC004">FC004: Use a service resource to start and stop services</a></li>
+<li><a href="#FC005">FC005: Avoid repetition of resource declarations</a></li>
+<li><a href="#FC006">FC006: Mode should be quoted or fully specified when setting file permissions</a></li>
+<li><a href="#FC007">FC007: Ensure recipe dependencies are reflected in cookbook metadata</a></li>
+<li><a href="#FC008">FC008: Generated cookbook metadata needs updating</a></li>
+<li><a href="#FC009">FC009: Resource attribute not recognised</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="content">
+        <div class="hero-unit">
+          <h1>Foodcritic</h1>
+          <p>A lint tool for your Opscode Chef cookbooks.</p>
+          <pre>
+$ rvm use 1.9.3
+$ gem install foodcritic
+$ foodcritic cookbooks
+          </pre>
+        </div>
+        <div class="row">
+          <div class="span6">
+            <h2>Getting started</h2>
+            <p>The important stuff: how to get up and running. Covers how to install and run foodcritic against your cookbook tree.</p>
+            <p><a class="btn" href="#getting-started">View details &raquo;</a></p>
+
+          </div>
+          <div class="span5">
+            <h2>Why?</h2>
+             <p>The rationale for using a lint tool on your cookbooks - why you should practice continuous inspection.</p>
+            <p><a class="btn" href="#why">View details &raquo;</a></p>
+         </div>
+          <div class="span5">
+            <h2>Built-in Rules</h2>
+            <p>The reference list of rules that come with foodcritic and what they mean.</p>
+            <p><a class="btn" href="#rules">View details &raquo;</a></p>
+          </div>
+        </div>
+
+        <hr>
+
+        <h1 id="getting-started">Getting started</h1>
+        <h2>Pre-requesites</h2>
+        <p>Foodcritic runs on Ruby (MRI) 1.9.3 which depending on your workstation setup may be a more recent version of Ruby than you have installed. The <a href="http://beginrescueend.com/">Ruby Version Manager (RVM)</a> is a popular choice for running multiple versions of ruby on the same workstation, so you can try foodcritic out without running the risk of damaging your main install.</p>
+        <h3>Installing RVM</h3>
+        <p>
+        RVM can be installed from the current development code on the projects GitHub - however if you are just getting started with RVM I would recommend installing the latest stable version with the <code>--latest</code> flag. The full instructions for installing RVM can be found here:<br />
+        <a href="http://beginrescueend.com/rvm/install/">http://beginrescueend.com/rvm/install/</a>
+        </p>
+        <h3>Installing Ruby 1.9.3</h3>
+        <p>
+          With RVM installed successfully you can now use it to install MRI 1.9.3:
+        </p>
+        <pre>
+$ rvm install ruby-1.9.3
+</pre>
+        <h2>Installing foodcritic</h2>
+        <p>Ok - now we can move on to installing foodcritic itself. Foodcritic is <a href="https://rubygems.org/gems/foodcritic">distributed as a Rubygem</a> - run the following commands to install it:</p>
+<pre>
+$ rvm use 1.9.3
+$ gem install foodcritic
+</pre>
+<p>Great - that's it. You should now find you have a <code>foodcritic</code> command on your <code>PATH</code>. Run foodcritic to see what arguments it supports:</p>
+<pre>$ foodcritic --help
+foodcritic [cookbook_path]
+</pre>
+	<p>Now for the fun part. Try running it against your favourite cookbook.
+	<hr>
+      <h1 id="why">Why?</h1>
+      <p>Foodcritic has two goals:</p>
+        <ul>
+        <li>To make it easier to flag problems in your Chef cookbooks that will cause Chef to blow up when you attempt to converge. This is about faster feedback. If you automate checks for common problems you can save a lot of time.</li>
+        <li>To encourage discussion within the Chef community on the approaches people use to write cookbooks. Opscode have avoided being overly prescriptive which by and large I think is a good thing. Having a set of rules to base discussion on helps drive out what we as a community think is good style.</li>
+        </ul>
+	<hr>
+      <h1 id="rules">Built-in Rules</h1>
+	<h2 id="FC002">FC002: Avoid string interpolation where not required</h2>
+        <p><span class="label">Style</span></p>
+        <p>
+        When you declare a resource in your recipes you frequently want to reference dynamic values such as node attributes. This warning will be shown if you are unnecessarily wrapping an attribute reference in a string.
+        </p>
+        <h3>Unnecessary string interpolation</h3>
+        <p>This example would match the FC002 rule because the <code>version</code> attribute has been unnecessarily quoted.</p>
+        <pre class="prettyprint">
+# Don't do this
+package "mysql-server" do
+  version "#{node['mysql']['version']}"
+  action :install
+end</pre>
+
+        <h3>Modified version</h3>
+        <p>This modified example would <strong>not</strong> match the FC002 rule:</p>
+        <pre class="prettyprint">
+package "mysql-server" do
+  version node['mysql']['version']
+  action :install
+end</pre>
+	<h2 id="FC003">FC003: Check whether you are running with chef server before using server-specific features</h2>
+        <p><span class="label warning">Portability</span></p>
+        <p>
+	  Chef Server extends the feature-set of a Chef deployment and is probably the most popular configuration. It is also possible to run the Chef client in a standalone mode with Chef Solo. Where your cookbooks make use of features that only exist in a Chef Server based setup you should check whether you are running in solo mode.<br />
+<a href="http://wiki.opscode.com/display/chef/Chef+Solo">http://wiki.opscode.com/display/chef/Chef+Solo</a>
+
+        </p>
+        <h3>Does not check for Chef Solo</h3>
+<p>
+  This example would match the FC003 rule because it does not check if it is running in Chef Solo before using search which is a server-specific feature:
+</p>
+<pre class="prettyprint">
+nodes = search(:node, "hostname:[* TO *] AND chef_environment:#{node.chef_environment}")
+</pre>
+<h3>Modified version</h3>
+<p>
+  This modified example would <strong>not</strong> match the FC003 rule:</p>
+<pre class="prettyprint">
+if Chef::Config[:solo]
+  Chef::Log.warn("This recipe uses search. Chef Solo does not support search.")
+else
+  nodes = search(:node, "hostname:[* TO *] AND chef_environment:#{node.chef_environment}")
+end
+</pre>
+
+	<h2 id="FC004">FC004: Use a service resource to start and stop services</h2>
+        <p><span class="label">Style</span></p>
+        <p>
+	  This warning is shown if you are starting or stopping a service using the Chef <code>execute</code> resource rather than the more idiomatic <code>service</code> resource. You can read more about the service resource here:<br />
+<a href="http://wiki.opscode.com/display/chef/Resources#Resources-Service">http://wiki.opscode.com/display/chef/Resources#Resources-Service</a>
+        </p>
+        <h3>Uses execute to control a service</h3>
+        <p>
+          This example would match the FC004 rule because it uses <code>execute</code> for service control. There is no reason to use <code>execute</code> because the <code>service</code> resource exposes the <code>start_command</code> attribute to give you full control over the command issued.
+        </p>
+<pre class="prettyprint">
+# Don't do this
+execute "start-tomcat" do
+  command "/etc/init.d/tomcat6 start"
+  action :run
+end
+</pre>
+	<h3>Modified version</h3>
+        <p>
+          This modified example would <strong>not</strong> match the FC004 rule:</p>
+<pre class="prettyprint">
+service "tomcat" do
+  action :start
+end
+</pre>
+
+<h2 id="FC005">FC005: Avoid repetition of resource declarations</h2>
+<p><span class="label">Style</span></p>
+<p>
+  When writing Chef recipes you have the full power of Ruby at your disposal. One of the cases where this is helpful is where you need to declare a large number of resources that only differ in a single attribute - the canonical example is installing a long list of packages.
+</p>
+<h3>Unnecessarily repetitive</h3>
+<p>
+    This example matches the FC005 rule because all the resources of type <code>package</code> differ only in a single attribute - the name of the package to be upgraded. This rule is very simple and looks only for resources that <strong>all</strong> differ in only a single attribute. For example - if only one of the packages specified the version then this rule would not match.
+</p>
+<pre class="prettyprint">
+# You could do this
+package "erlang-base" do
+  action :upgrade
+end
+package "erlang-corba" do
+  action :upgrade
+end
+package "erlang-crypto" do
+  action :upgrade
+end
+package "rabbitmq-server" do
+  action :upgrade
+end
+</pre>
+<h3>Modified version</h3>
+<p>This modified example would <strong>not</strong> match the FC005 rule. It takes advantage of the fact that Chef processes recipes in two distinct phases<br />
+<a href="http://wiki.opscode.com/display/chef/Anatomy+of+a+Chef+Run">http://wiki.opscode.com/display/chef/Anatomy+of+a+Chef+Run</a></p>
+<p>Don't worry about changing your recipe if it already does what you want - the amount of Ruby syntactic sugar to apply is very much a matter of personal taste.</p>
+<p>
+<pre class="prettyprint">
+# It's shorter to do this
+%w{erlang-base erlang-corba erlang-crypto rabbitmq-server}.each do |pkg|
+  package pkg do
+    action :upgrade
+  end
+end
+</pre>
+<h2 id="FC006">FC006: Mode should be quoted or fully specified when setting file permissions</h2>
+<p><span class="label important">Correctness</span></p>
+
+<p>When setting file or directory permissions via the <code>mode</code> attribute you need to either quote the octal number or ensure it is specified to <strong>at least four digits in length</strong>. Otherwise the permissions that are set after Ruby coerces the number may not match what you expect.</p>
+
+<h3>File mode won't be interpreted correctly</h3>
+<pre class="prettyprint">
+# Don't do this
+directory "/var/lib/foo" do
+  owner "root"
+  group "root"
+  mode 644
+  action :create
+end
+</pre>
+
+<h3>Modified versions</h3>        
+<p>These modified examples would <strong>not</strong> match the FC006 rule:</p>
+<pre class="prettyprint">
+# This is ok
+directory "/var/lib/foo" do
+  owner "root"
+  group "root"
+  mode "644"
+  action :create
+end
+</pre>
+<pre class="prettyprint">
+# And so is this
+directory "/var/lib/foo" do
+  owner "root"
+  group "root"
+  mode 0644
+  action :create
+end
+</pre>
+
+<h2 id="FC007">FC007: Ensure recipe dependencies are reflected in cookbook metadata</h2>
+<p><span class="label important">Correctness</span></p>
+<p>This warning is shown when you include a recipe that is not in the current cookbook and not defined as a dependency in your cookbook metadata. This is potentially a big problem because things will blow up if the necessary dependency cannot be found when Chef tries to converge your node. For more information refer to the Chef wiki metadata page:<br />
+<a href="http://wiki.opscode.com/display/chef/Metadata">http://wiki.opscode.com/display/chef/Metadata</a></p>
+<p>The fix is to declare the cookbook of the recipe you are including as a dependency in your <code>metadata.rb</code> file.
+<h3>Modified version</h3>
+<p>Assuming you have a recipe that had the following line:</p>
+
+<pre class="prettyprint">
+include_recipe "apache2::default"
+</pre>
+
+<p>Then to remove this warning you would add the <code>apache2</code> cookbook as a dependency to your own cookbook metadata in the <code>metadata.rb</code> file at the root of your cookbook.</p>
+
+<pre class="prettyprint">
+depends "apache2"
+</pre>
+
+<h2 id="FC008">FC008: Generated cookbook metadata needs updating</h2>
+<p><span class="label">Style</span></p>
+<p>This warning is shown if you used <code>knife cookbook create</code> to create a new cookbook and didn't override the maintainer and maintainer email. You need to set these to real values in <code>metadata.rb</code> or run knife again with the real values.<br />
+<a href="http://wiki.opscode.com/display/chef/Managing+Cookbooks+With+Knife#ManagingCookbooksWithKnife-create">http://wiki.opscode.com/display/chef/Managing+Cookbooks+With+Knife#ManagingCookbooksWithKnife-create</a></p>
+
+<h3>Maintainer metadata is boilerplate default</h3>
+<pre class="prettyprint">
+# Don't do this
+maintainer "YOUR_COMPANY_NAME"
+maintainer_email "YOUR_EMAIL"
+license "All rights reserved"
+description "Installs/Configures example"
+long_description IO.read(File.join(File.dirname(__FILE__), 'README.rdoc'))
+version "0.0.1"
+</pre>
+
+<h3>Modified version</h3>
+<pre class="prettyprint">
+maintainer "Example Ltd"
+maintainer_email "postmaster@example.com"
+license "All rights reserved"
+description "Installs/Configures example"
+long_description IO.read(File.join(File.dirname(__FILE__), 'README.rdoc'))
+version "0.0.1"
+</pre>
+
+<h2 id="FC009">FC009: Resource attribute not recognised</h2>
+<p><span class="label important">Correctness</span></p>
+<p>This warning is likely to mean that your recipe will fail to run when you attempt to converge. Your recipe may be syntactically valid Ruby, but the attribute you have attempted to set on a built-in Chef resource is not recognised. This is commonly a typo or you need to check the documentation to see what the attribute you are trying to set is called:<br />
+<a href="http://wiki.opscode.com/display/chef/Resources">http://wiki.opscode.com/display/chef/Resources</a></p>
+
+<h3>Resource with an unrecognised attribute</h3>
+<p>This example matches the FC009 rule because <code>user</code> is not a recognised attribute for the file resource.</p>
+<pre class="prettyprint">
+# Don't do this
+file "/tmp/something" do
+  user "root"
+  group "root"
+  mode "0755"
+  action :create
+end
+</pre>
+
+<h3>Modified version</h3>
+<p>Checking the documentation we can see the correct attribute is <code>owner</code>.
+<pre class="prettyprint">
+file "/tmp/something" do
+  owner "root"
+  group "root"
+  mode "0755"
+  action :create
+end
+</pre>
+
+      </div>
+    </div>
+  </body>
+</html>
