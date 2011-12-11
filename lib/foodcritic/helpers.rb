@@ -1,4 +1,5 @@
 require 'nokogiri'
+require 'chef/solr_query/query_transform'
 
 module FoodCritic
 
@@ -29,6 +30,29 @@ module FoodCritic
     # @return [Boolean] True if the recipe performs a search
     def searches(ast)
       ast.xpath("//fcall/ident[@value = 'search']")
+    end
+
+    # Searches performed by the specified recipe that are literal strings. Searches with a query formed from a
+    # subexpression will be ignored.
+    #
+    # @param [Nokogiri::XML::Node] ast The AST of the cookbook recipe to check.
+    # @return [Nokogiri::XML::Node] The matching nodes
+    def literal_searches(ast)
+      ast.xpath("//method_add_arg[fcall/ident/@value = 'search' and count(descendant::string_embexpr) = 0]/descendant::tstring_content")
+    end
+
+    # Is this a valid Lucene query?
+    #
+    # @param [String] query The query to check for syntax errors
+    # @return [Boolean] True if the query is well-formed
+    def valid_query?(query)
+      # Exceptions for flow control. Alternatively we could re-implement the parse method.
+      begin
+        Chef::SolrQuery::QueryTransform.parse(query)
+        true
+      rescue Chef::Exceptions::QueryParseError
+        false
+      end
     end
 
     # Find Chef resources of the specified type.

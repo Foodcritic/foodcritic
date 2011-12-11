@@ -33,6 +33,8 @@ module FoodCritic
                          'Generated cookbook metadata needs updating'
                        when 'FC009' then
                          'Resource attribute not recognised'
+                       when 'FC010' then
+                          'Invalid search syntax'
                      end
 
       if opt[:expect_warning]

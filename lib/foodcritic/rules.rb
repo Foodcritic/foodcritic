@@ -91,3 +91,11 @@ rule "FC009", "Resource attribute not recognised" do
     matches
   end
 end
+
+rule "FC010", "Invalid search syntax" do
+  description "The search expression in the recipe could not be parsed. Please check your syntax."
+  recipe do |ast|
+    # This only works for literal search strings
+    literal_searches(ast).reject{|search| valid_query?(search['value'])}.map{|search| match(search)}
+  end
+end
