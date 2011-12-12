@@ -1,4 +1,5 @@
 require 'ripper'
+require 'gherkin/tag_expression'
 
 module FoodCritic
 
@@ -15,14 +16,19 @@ module FoodCritic
     # Review the cookbooks at the provided path, identifying potential improvements.
     #
     # @param [String] cookbook_path The file path to an individual cookbook directory
+    # @param [Hash] options Options to apply to the linting
+    # @option options [Array] tags The tags to filter rules based on
     # @return [FoodCritic::Review] A review of your cookbooks, with any warnings issued.
-    def check(cookbook_path)
+    def check(cookbook_path, options)
       warnings = []
+      tag_expr = Gherkin::TagExpression.new(options[:tags])
       files_to_process(cookbook_path).each do |file|
         ast = read_file(file)
         @rules.each do |rule|
-          matches = rule.recipe.yield(ast, file)
-          matches.each{|match| warnings << Warning.new(rule, {:filename => file}.merge(match))} unless matches.nil?
+          if tag_expr.eval(rule.tags)
+            matches = rule.recipe.yield(ast, file)
+            matches.each{|match| warnings << Warning.new(rule, {:filename => file}.merge(match))} unless matches.nil?
+          end
         end
       end
       Review.new(warnings)

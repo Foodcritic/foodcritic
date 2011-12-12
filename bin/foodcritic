@@ -1,8 +1,19 @@
 #!/usr/bin/env ruby
 require 'foodcritic'
+require 'optparse'
+
+options = {}
+options[:tags] = []
+parser = OptionParser.new do |opts|
+  opts.banner = 'foodcritic [cookbook_path]'
+  opts.on("-t", "--tags TAGS", "Only check against rules with the specified tags.") {|t|options[:tags] << t}
+end
+parser.parse!
+
 unless ARGV.length == 1 and Dir.exists?(ARGV[0])
-  STDERR.puts 'foodcritic [cookbook_path]'
+  puts parser.help
   exit 1
 end
-review = FoodCritic::Linter.new.check(ARGV[0])
+
+review = FoodCritic::Linter.new.check(ARGV[0], options)
 puts review unless review.warnings.empty?

@@ -38,7 +38,7 @@ module FoodCritic
 
   # A rule to be matched against.
   class Rule
-    attr_accessor :code, :name, :description, :recipe
+    attr_accessor :code, :name, :description, :recipe, :tags
 
     # Create a new rule
     #
@@ -46,6 +46,7 @@ module FoodCritic
     # @param [String] name The short descriptive name of this rule presented to the end user.
     def initialize(code, name)
       @code, @name = code, name
+      @tags = [code]
     end
   end
 

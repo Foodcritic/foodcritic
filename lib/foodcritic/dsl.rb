@@ -19,6 +19,13 @@ module FoodCritic
       yield self
     end
 
+    # Add tags to the rule which can be used to filter the rules to be applied.
+    #
+    # @param [Array] tags The tags associated with this rule.
+    def tags(tags)
+      rules.last.tags += tags
+    end
+
     # Set the rule description
     #
     # @param [String] description Set the rule description.

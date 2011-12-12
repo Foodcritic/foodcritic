@@ -1,4 +1,5 @@
 rule "FC002", "Avoid string interpolation where not required" do
+  tags %w{style}
   description "When setting a resource value avoid string interpolation where not required."
   recipe do |ast|
     ast.xpath(%q{//string_literal[count(descendant::string_embexpr) = 1 and
@@ -7,6 +8,7 @@ rule "FC002", "Avoid string interpolation where not required" do
 end
 
 rule "FC003", "Check whether you are running with chef server before using server-specific features" do
+  tags %w{portability solo}
   description "Ideally your cookbooks should be usable without requiring chef server."
   recipe do |ast|
     checks_for_chef_solo?(ast) ? [] : searches(ast).map{|s| match(s)}
@@ -14,6 +16,7 @@ rule "FC003", "Check whether you are running with chef server before using serve
 end
 
 rule "FC004", "Use a service resource to start and stop services" do
+  tags %w{style}
   description "Avoid use of execute to control services - use the service resource instead."
   recipe do |ast|
     find_resources(ast, 'execute').find_all do |cmd|
@@ -24,6 +27,7 @@ rule "FC004", "Use a service resource to start and stop services" do
 end
 
 rule "FC005", "Avoid repetition of resource declarations" do
+  tags %w{style}
   description "Where you have a lot of resources that vary in only a single attribute wrap them in a loop for brevity."
   recipe do |ast|
     matches = []
@@ -39,6 +43,7 @@ rule "FC005", "Avoid repetition of resource declarations" do
 end
 
 rule "FC006", "Mode should be quoted or fully specified when setting file permissions" do
+  tags %w{correctness}
   description "Not quoting mode when setting permissions can lead to incorrect permissions being set."
   recipe do |ast|
     ast.xpath(%q{//ident[@value='mode']/parent::command/descendant::int[string-length(@value) < 4]/
@@ -47,6 +52,7 @@ rule "FC006", "Mode should be quoted or fully specified when setting file permis
 end
 
 rule "FC007", "Ensure recipe dependencies are reflected in cookbook metadata" do
+  tags %w{correctness metadata}
   description "You are including a recipe that is not in the current cookbook and not defined as a dependency in your cookbook metadata."
   recipe do |ast,filename|
     metadata_path = Pathname.new(File.join(File.dirname(filename), '..', 'metadata.rb')).cleanpath
@@ -60,6 +66,7 @@ rule "FC007", "Ensure recipe dependencies are reflected in cookbook metadata" do
 end
 
 rule "FC008", "Generated cookbook metadata needs updating" do
+  tags %w{style metadata}
   description "The cookbook metadata for this cookbook is boilerplate output from knife generate cookbook and needs updating with the real details of your cookbook."
   recipe do |ast,filename|
     metadata_path = Pathname.new(File.join(File.dirname(filename), '..', 'metadata.rb')).cleanpath
@@ -74,6 +81,7 @@ rule "FC008", "Generated cookbook metadata needs updating" do
 end
 
 rule "FC009", "Resource attribute not recognised" do
+  tags %w{correctness}
   description "You appear to be using an unrecognised attribute on a standard Chef resource. Please check for typos."
   recipe do |ast|
     matches = []
@@ -93,6 +101,7 @@ rule "FC009", "Resource attribute not recognised" do
 end
 
 rule "FC010", "Invalid search syntax" do
+  tags %w{correctness search}
   description "The search expression in the recipe could not be parsed. Please check your syntax."
   recipe do |ast|
     # This only works for literal search strings
