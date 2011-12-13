@@ -60,6 +60,7 @@
 <li><a href="#FC007">FC007: Ensure recipe dependencies are reflected in cookbook metadata</a></li>
 <li><a href="#FC008">FC008: Generated cookbook metadata needs updating</a></li>
 <li><a href="#FC009">FC009: Resource attribute not recognised</a></li>
+<li><a href="#FC010">FC010: Invalid search syntax</a></li>
           </ul>
         </div>
       </div>
@@ -359,6 +360,34 @@ file "/tmp/something" do
   action :create
 end
 </pre>
+
+<h2 id="FC010">FC010: Invalid search syntax</h2>
+<p><span class="label important">correctness</span> <span class="label">search</span></p>
+<p>The search syntax used is not recognised as valid Lucene search criteria. This is commonly because you have made a typo
+or are not escaping special characters in the query syntax.<br />
+<a href="http://wiki.opscode.com/display/chef/Search#Search-QuerySyntax">http://wiki.opscode.com/display/chef/Search#Search-QuerySyntax</a></p>
+
+<p>Note that this rule will not identify syntax errors in searches composed of subexpressions. It checks only for literal
+    search strings.</p>
+
+<h3>Unescaped search syntax</h3>
+<p>This example matches the FC010 rule because search metacharacters - in this case the square brackets - have not been
+    properly escaped.</p>
+<pre class="prettyprint">
+# Don't do this
+search(:node, 'run_list:recipe[foo::bar]') do |matching_node|
+  puts matching_node.to_s
+end
+</pre>
+
+<h3>Modified version</h3>
+<p>With the characters escaped this will no longer match the rule.</p>
+<pre class="prettyprint">
+search(:node, 'run_list:recipe\[foo\:\:bar\]') do |matching_node|
+  puts matching_node.to_s
+end
+</pre>
+
         <hr />
 
       <h2 id="faq">Frequently Asked Questions</h2>
