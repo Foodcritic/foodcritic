@@ -10,8 +10,8 @@ module FoodCritic
       write_file 'cookbooks/example/metadata.rb', content
     end
 
-    def run_lint
-      run_simple(unescape('foodcritic cookbooks/example/'), false)
+    def run_lint(cmd_args)
+      run_simple(unescape("foodcritic #{cmd_args} cookbooks/example/"), false)
     end
 
     def expect_warning(code, options={})
@@ -38,9 +38,9 @@ module FoodCritic
                      end
 
       if opt[:expect_warning]
-        assert_partial_output("#{code}: #{warning_text}: #{opt[:file]}:#{opt[:line]}\n", all_output)
+        assert_partial_output("#{code}: #{warning_text}: #{opt[:file]}:#{opt[:line]}#{"\n" if ! opt[:line].nil?}", all_output)
       else
-        assert_no_partial_output("#{code}: #{warning_text}: #{opt[:file]}:#{opt[:line]}\n", all_output)
+        assert_no_partial_output("#{code}: #{warning_text}: #{opt[:file]}:#{opt[:line]}#{"\n" if ! opt[:line].nil?}", all_output)
       end
     end
 

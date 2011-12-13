@@ -1,5 +1,5 @@
-When /^I check the cookbook$/ do
-  run_lint
+When /^I check the cookbook(?: specifying tags(.*))?$/ do |tags|
+  run_lint(tags)
 end
 
 Then /^the (?:[a-z ]+) warning ([0-9]+) should be displayed(?: against the (metadata) file)?$/ do |code, file|
@@ -462,4 +462,33 @@ Given /^a cookbook recipe that attempts to perform a search with a subexpression
       puts matching_node.to_s
     end
   }.strip
+end
+
+Given /^a cookbook that matches rules (.*)$/ do |rules|
+  recipe = ''
+  rules.split(',').each do |rule|
+    if rule == 'FC002'
+      recipe += %q{
+        directory "#{node['base_dir']}" do
+          action :create
+        end
+      }
+    elsif rule == 'FC003'
+      recipe += %Q{nodes = search(:node, "hostname:[* TO *]")\n}
+    elsif rule == 'FC004'
+      recipe += %q{
+        execute "stop-jetty" do
+          command "/etc/init.d/jetty6 stop"
+          action :run
+        end
+      }
+    end
+  end
+  write_recipe(recipe.strip)
+end
+
+Then /^the warnings shown should be (.*)$/ do |warnings|
+  warnings.split(',').each do |warning|
+    expect_warning(warning, :line => nil)
+  end
 end

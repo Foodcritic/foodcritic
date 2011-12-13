@@ -1,5 +1,5 @@
 rule "FC002", "Avoid string interpolation where not required" do
-  tags %w{style}
+  tags %w{style strings}
   description "When setting a resource value avoid string interpolation where not required."
   recipe do |ast|
     ast.xpath(%q{//string_literal[count(descendant::string_embexpr) = 1 and
@@ -16,7 +16,7 @@ rule "FC003", "Check whether you are running with chef server before using serve
 end
 
 rule "FC004", "Use a service resource to start and stop services" do
-  tags %w{style}
+  tags %w{style services}
   description "Avoid use of execute to control services - use the service resource instead."
   recipe do |ast|
     find_resources(ast, 'execute').find_all do |cmd|
@@ -43,7 +43,7 @@ rule "FC005", "Avoid repetition of resource declarations" do
 end
 
 rule "FC006", "Mode should be quoted or fully specified when setting file permissions" do
-  tags %w{correctness}
+  tags %w{correctness files}
   description "Not quoting mode when setting permissions can lead to incorrect permissions being set."
   recipe do |ast|
     ast.xpath(%q{//ident[@value='mode']/parent::command/descendant::int[string-length(@value) < 4]/

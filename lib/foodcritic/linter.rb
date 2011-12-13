@@ -24,11 +24,9 @@ module FoodCritic
       tag_expr = Gherkin::TagExpression.new(options[:tags])
       files_to_process(cookbook_path).each do |file|
         ast = read_file(file)
-        @rules.each do |rule|
-          if tag_expr.eval(rule.tags)
-            matches = rule.recipe.yield(ast, file)
-            matches.each{|match| warnings << Warning.new(rule, {:filename => file}.merge(match))} unless matches.nil?
-          end
+        @rules.select{|rule| tag_expr.eval(rule.tags)}.each do |rule|
+          matches = rule.recipe.yield(ast, file)
+          matches.each{|match| warnings << Warning.new(rule, {:filename => file}.merge(match))} unless matches.nil?
         end
       end
       Review.new(warnings)
