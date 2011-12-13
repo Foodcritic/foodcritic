@@ -1,3 +1,11 @@
+## 0.5.0 (13th December, 2011)
+
+Features:
+
+  - Added the ability to choose rules to apply via tags ([related issue](https://github.com/acrmp/foodcritic/issues/4)).
+    This uses the same syntax as [Cucumber tag expressions](https://github.com/cucumber/cucumber/wiki/tags).
+  - [FC010: Invalid search syntax](http://acrmp.github.com/foodcritic/#FC010) rule added.
+
 ## 0.4.0 (10th December, 2011)
 
 Features:
