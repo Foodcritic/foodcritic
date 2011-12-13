@@ -132,6 +132,7 @@ $ gem install foodcritic
 <p>Great - that's it. You should now find you have a <code>foodcritic</code> command on your <code>PATH</code>. Run foodcritic to see what arguments it supports:</p>
 <pre>$ foodcritic --help
 foodcritic [cookbook_path]
+    -t, --tags TAGS                  Only check against rules with the specified tags.
 </pre>
 	<p>Now for the fun part. Try running it against your favourite cookbook.
 	<hr>
@@ -144,7 +145,7 @@ foodcritic [cookbook_path]
 	<hr>
       <h1 id="rules">Built-in Rules</h1>
 	<h2 id="FC002">FC002: Avoid string interpolation where not required</h2>
-        <p><span class="label">Style</span></p>
+        <p><span class="label">style</span> <span class="label">strings</span></p>
         <p>
         When you declare a resource in your recipes you frequently want to reference dynamic values such as node attributes. This warning will be shown if you are unnecessarily wrapping an attribute reference in a string.
         </p>
@@ -165,7 +166,7 @@ package "mysql-server" do
   action :install
 end</pre>
 	<h2 id="FC003">FC003: Check whether you are running with chef server before using server-specific features</h2>
-        <p><span class="label warning">Portability</span></p>
+        <p><span class="label warning">portability</span> <span class="label">solo</span></p>
         <p>
 	  Chef Server extends the feature-set of a Chef deployment and is probably the most popular configuration. It is also possible to run the Chef client in a standalone mode with Chef Solo. Where your cookbooks make use of features that only exist in a Chef Server based setup you should check whether you are running in solo mode.<br />
 <a href="http://wiki.opscode.com/display/chef/Chef+Solo">http://wiki.opscode.com/display/chef/Chef+Solo</a>
@@ -190,7 +191,7 @@ end
 </pre>
 
 	<h2 id="FC004">FC004: Use a service resource to start and stop services</h2>
-        <p><span class="label">Style</span></p>
+        <p><span class="label">style</span> <span class="label">services</span></p>
         <p>
 	  This warning is shown if you are starting or stopping a service using the Chef <code>execute</code> resource rather than the more idiomatic <code>service</code> resource. You can read more about the service resource here:<br />
 <a href="http://wiki.opscode.com/display/chef/Resources#Resources-Service">http://wiki.opscode.com/display/chef/Resources#Resources-Service</a>
@@ -216,7 +217,7 @@ end
 </pre>
 
 <h2 id="FC005">FC005: Avoid repetition of resource declarations</h2>
-<p><span class="label">Style</span></p>
+<p><span class="label">style</span></p>
 <p>
   When writing Chef recipes you have the full power of Ruby at your disposal. One of the cases where this is helpful is where you need to declare a large number of resources that only differ in a single attribute - the canonical example is installing a long list of packages.
 </p>
@@ -253,7 +254,7 @@ end
 end
 </pre>
 <h2 id="FC006">FC006: Mode should be quoted or fully specified when setting file permissions</h2>
-<p><span class="label important">Correctness</span></p>
+<p><span class="label important">correctness</span> <span class="label">files</span></p>
 
 <p>When setting file or directory permissions via the <code>mode</code> attribute you need to either quote the octal number or ensure it is specified to <strong>at least four digits in length</strong>. Otherwise the permissions that are set after Ruby coerces the number may not match what you expect.</p>
 
@@ -290,7 +291,7 @@ end
 </pre>
 
 <h2 id="FC007">FC007: Ensure recipe dependencies are reflected in cookbook metadata</h2>
-<p><span class="label important">Correctness</span></p>
+<p><span class="label important">correctness</span> <span class="label">metadata</span></p>
 <p>This warning is shown when you include a recipe that is not in the current cookbook and not defined as a dependency in your cookbook metadata. This is potentially a big problem because things will blow up if the necessary dependency cannot be found when Chef tries to converge your node. For more information refer to the Chef wiki metadata page:<br />
 <a href="http://wiki.opscode.com/display/chef/Metadata">http://wiki.opscode.com/display/chef/Metadata</a></p>
 <p>The fix is to declare the cookbook of the recipe you are including as a dependency in your <code>metadata.rb</code> file.
@@ -308,7 +309,7 @@ depends "apache2"
 </pre>
 
 <h2 id="FC008">FC008: Generated cookbook metadata needs updating</h2>
-<p><span class="label">Style</span></p>
+<p><span class="label">style</span> <span class="label">metadata</span></p>
 <p>This warning is shown if you used <code>knife cookbook create</code> to create a new cookbook and didn't override the maintainer and maintainer email. You need to set these to real values in <code>metadata.rb</code> or run knife again with the real values.<br />
 <a href="http://wiki.opscode.com/display/chef/Managing+Cookbooks+With+Knife#ManagingCookbooksWithKnife-create">http://wiki.opscode.com/display/chef/Managing+Cookbooks+With+Knife#ManagingCookbooksWithKnife-create</a></p>
 
@@ -334,7 +335,7 @@ version "0.0.1"
 </pre>
 
 <h2 id="FC009">FC009: Resource attribute not recognised</h2>
-<p><span class="label important">Correctness</span></p>
+<p><span class="label important">correctness</span></p>
 <p>This warning is likely to mean that your recipe will fail to run when you attempt to converge. Your recipe may be syntactically valid Ruby, but the attribute you have attempted to set on a built-in Chef resource is not recognised. This is commonly a typo or you need to check the documentation to see what the attribute you are trying to set is called:<br />
 <a href="http://wiki.opscode.com/display/chef/Resources">http://wiki.opscode.com/display/chef/Resources</a></p>
 
@@ -394,8 +395,11 @@ end
 
         <h3 id="faq-spurious-warnings">When I run it against my cookbooks there are warnings that I'm not interested in. How can I avoid
         these being shown?</h3>
-        <p>We are planning to add support for grouping rules together with policies so you can tailor foodcritic to match against your local style.
-There is no built-in support for policies at the moment - right now <code>grep -v</code> is your friend.</p>
+        <p>You can include or exclude rules to apply using the <code>-- tags</code> argument to foodcritic. The tag expressions you can
+        specify follow the same syntax as that used in Cucumber - see the Cucumber wiki page below for details.<br /><a href="https://github.com/cucumber/cucumber/wiki/tags">https://github.com/cucumber/cucumber/wiki/tags</a></p>
+
+        <p>For example if you don't care about <span class="label">style</span> warnings you could run foodcritic like so:</p>
+        <pre>$ foodcritic --tags ~style cookbooks</pre>
 
         <h3 id="faq-ci">I'd like to include foodcritic in my Continuous Integration setup. How do I go about doing that?</h3>
         <p>You should be able to incorporate foodcritic into your build like any other command following the instructions for building a "free-style software project" here:<br />
