@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    foodcritic (0.5.0)
+    foodcritic (0.5.1)
       chef (~> 0.10.4)
       gherkin (~> 2.7.1)
       nokogiri (~> 1.5.0)

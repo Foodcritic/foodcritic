@@ -1,3 +1,9 @@
+## 0.5.1 (14th December, 2011)
+
+Features:
+
+  - Relaxed Ruby version constraint so we can run on 1.9.2 ([related issue](https://github.com/acrmp/foodcritic/issues/5)). Yay. Thanks @someara.
+
 ## 0.5.0 (13th December, 2011)
 
 Features:
