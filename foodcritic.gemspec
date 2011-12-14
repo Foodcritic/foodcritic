@@ -14,4 +14,5 @@ Gem::Specification.new do |s|
   s.add_dependency('gherkin', '~> 2.7.1')
   s.add_dependency('nokogiri', '~> 1.5.0')
   s.files = Dir['lib/**/*.rb']
+  s.required_ruby_version = '>= 1.9.2'
 end
