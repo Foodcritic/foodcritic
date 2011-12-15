@@ -1,3 +1,9 @@
+## 0.5.2 (15th December, 2011)
+
+Bugfixes:
+
+  - Fix JSON version range for compatibility with Bundler / Chef 0.10.6. ([related issue](https://github.com/acrmp/foodcritic/issues/6)). Thanks @dysinger.
+
 ## 0.5.1 (14th December, 2011)
 
 Features:

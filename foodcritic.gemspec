@@ -11,6 +11,7 @@ Gem::Specification.new do |s|
   s.license = 'MIT'
   s.executables << 'foodcritic'
   s.add_dependency('chef', '~> 0.10.4')
+  s.add_dependency("json", ">= 1.4.4", "<= 1.6.1")
   s.add_dependency('gherkin', '~> 2.7.1')
   s.add_dependency('nokogiri', '~> 1.5.0')
   s.files = Dir['lib/**/*.rb']

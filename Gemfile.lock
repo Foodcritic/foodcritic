@@ -1,9 +1,10 @@
 PATH
   remote: .
   specs:
-    foodcritic (0.5.1)
+    foodcritic (0.5.2)
       chef (~> 0.10.4)
       gherkin (~> 2.7.1)
+      json (>= 1.4.4, <= 1.6.1)
       nokogiri (~> 1.5.0)
 
 GEM
