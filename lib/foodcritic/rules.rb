@@ -21,7 +21,8 @@ rule "FC004", "Use a service resource to start and stop services" do
   recipe do |ast|
     find_resources(ast, 'execute').find_all do |cmd|
       cmd_str = (resource_attribute('command', cmd) || resource_name(cmd)).to_s
-      cmd_str.include?('/etc/init.d') || cmd_str.start_with?('service ') || cmd_str.start_with?('/sbin/service ')
+      cmd_str.include?('/etc/init.d') || cmd_str.start_with?('service ') || cmd_str.start_with?('/sbin/service ') ||
+          cmd_str.start_with?('start ') || cmd_str.start_with?('stop ') || cmd_str.start_with?('invoke-rc.d ')
     end.map{|cmd| match(cmd)}
   end
 end

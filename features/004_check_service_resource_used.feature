@@ -14,8 +14,18 @@ Feature: Check for service commands within execute resources
     When I check the cookbook
     Then the service resource warning 004 should be displayed
 
+  Scenario: Execute resource starting a service via upstart
+    Given a cookbook recipe that uses execute to start a service via upstart
+    When I check the cookbook
+    Then the service resource warning 004 should be displayed
+
+  Scenario: Execute resource starting a service via invoke-rc.d
+    Given a cookbook recipe that uses execute to start a service via invoke-rc.d
+    When I check the cookbook
+    Then the service resource warning 004 should be displayed
+
   Scenario: Execute resource starting a service via the full path to the service command
-    Given a cookbook recipe that uses execute to start a service via full path to the service command
+    Given a cookbook recipe that uses execute to start a service via the full path to the service command
     When I check the cookbook
     Then the service resource warning 004 should be displayed
 

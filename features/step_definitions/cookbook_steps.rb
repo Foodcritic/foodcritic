@@ -98,10 +98,14 @@ end
 
 Given /^a cookbook recipe that uses execute to (sleep and then )?start a service via (.*)$/ do |sleep, method|
   cmd = case
-          when method.include?('init.d')
+          when method == 'init.d'
             '/etc/init.d/foo start'
           when method.include?('full path')
             '/sbin/service foo start'
+          when method == 'invoke-rc.d'
+            'invoke-rc.d foo start'
+          when method == 'upstart'
+            'start foo'
           else
             'service foo start'
         end
