@@ -23,26 +23,30 @@ module FoodCritic
       warnings = []; last_dir = nil
       tag_expr = Gherkin::TagExpression.new(options[:tags])
       files_to_process(cookbook_path).each do |file|
-        current_dir = Pathname.new(File.join(File.dirname(file), '..')).cleanpath
+        cookbook_dir = Pathname.new(File.join(File.dirname(file), '..')).cleanpath
         ast = read_file(file)
         @rules.select{|rule| tag_expr.eval(rule.tags)}.each do |rule|
-          matches = []
-          if last_dir != current_dir and rule.cookbook.respond_to?(:yield)
-            cookbook_matches = rule.cookbook.yield(current_dir)
-            matches += cookbook_matches if cookbook_matches.respond_to?(:each)
-          end
-          if rule.recipe.respond_to?(:yield)
-            recipe_matches = rule.recipe.yield(ast, file)
-            matches += recipe_matches if recipe_matches.respond_to?(:each)
-          end
-          matches.each{|match| warnings << Warning.new(rule, {:filename => file}.merge(match))}
+          rule_matches = matches(rule.recipe, ast, file)
+          rule_matches += matches(rule.cookbook, cookbook_dir) if last_dir != cookbook_dir
+          rule_matches.each{|match| warnings << Warning.new(rule, {:filename => file}.merge(match))}
         end
-        last_dir = current_dir
+        last_dir = cookbook_dir
       end
       Review.new(warnings)
     end
 
     private
+
+    # Invoke the DSL method with the provided parameters.
+    #
+    # @param [Proc] match_method Proc to invoke
+    # @param params Parameters for the proc
+    # @return [Array] The returned matches
+    def matches(match_method, *params)
+      return [] unless match_method.respond_to?(:yield)
+      matches = match_method.yield(*params)
+      matches.respond_to?(:each) ? matches : []
+    end
 
     # Load the rules from the (fairly unnecessary) DSL.
     def load_rules
