@@ -2,7 +2,7 @@ When /^I check the cookbook(?: specifying tags(.*))?$/ do |tags|
   run_lint(tags)
 end
 
-Then /^the (?:[a-z ]+) warning ([0-9]+) should (not )?be displayed(?: against the (metadata|README.md|README.rdoc) file)?$/ do |code, no_display, file|
+Then /^the (?:[a-z \-]+) warning ([0-9]+) should (not )?be displayed(?: against the (metadata|README.md|README.rdoc) file)?$/ do |code, no_display, file|
   options = {}
   options[:expect_warning] = no_display != 'not '
 
@@ -521,5 +521,20 @@ Given /^a cookbook that has a README in RDoc format$/ do
     = DESCRIPTION:
 
     I used to be the preferred format but not any more (sniff).
+  }.strip
+end
+
+Given /^a cookbook that downloads a file to (.*)$/ do |path|
+  download_path =
+      case path
+        when '/tmp' then '/tmp/large-file.tar.gz'
+        when 'the Chef file cache' then '#{Chef::Config[:file_cache_path]}/large-file.tar.gz'
+        when 'a users home directory' then '/home/ernie/large-file.tar.gz'
+      end
+
+  write_recipe %Q{
+    remote_file "#{download_path}" do
+      source "http://www.example.org/large-file.tar.gz"
+    end
   }.strip
 end

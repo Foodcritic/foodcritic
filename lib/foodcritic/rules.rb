@@ -122,3 +122,13 @@ rule "FC012", "Use Markdown for README rather than RDoc" do
     [file_match(File.join(filename, 'README.rdoc'))] if File.exists?(File.join(filename, 'README.rdoc'))
   end
 end
+
+rule "FC013", "Use file_cache_path rather than hard-coding tmp paths" do
+  tags %w{style files}
+  recipe do |ast|
+    find_resources(ast, 'remote_file').find_all do |download|
+      path = (resource_attribute('path', download) || resource_name(download)).to_s
+      path.start_with?('/tmp/')
+    end.map{|download| match(download)}
+  end
+end

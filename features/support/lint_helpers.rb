@@ -39,6 +39,8 @@ module FoodCritic
                           'Missing README in markdown format'
                        when 'FC012' then
                           'Use Markdown for README rather than RDoc'
+                       when 'FC013' then
+                          'Use file_cache_path rather than hard-coding tmp paths'
                      end
 
       if opt[:expect_warning]
