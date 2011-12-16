@@ -2,12 +2,14 @@ When /^I check the cookbook(?: specifying tags(.*))?$/ do |tags|
   run_lint(tags)
 end
 
-Then /^the (?:[a-z ]+) warning ([0-9]+) should be displayed(?: against the (metadata) file)?$/ do |code, file|
-  expect_warning("FC#{code}", file.nil? ? {} : {:file => 'cookbooks/example/metadata.rb'})
-end
+Then /^the (?:[a-z ]+) warning ([0-9]+) should (not )?be displayed(?: against the (metadata|README.md|README.rdoc) file)?$/ do |code, no_display, file|
+  options = {}
+  options[:expect_warning] = no_display != 'not '
 
-Then /^the (?:[a-z ]+) warning ([0-9]+) should not be displayed$/ do |code|
-  expect_no_warning("FC#{code}")
+  file = 'metadata.rb' if file == 'metadata'
+  options[:file] = "cookbooks/example/#{file}" unless file.nil?
+
+  expect_warning("FC#{code}", options)
 end
 
 Given /^a cookbook with a single recipe that creates a directory resource with an interpolated name$/ do
@@ -491,4 +493,33 @@ Then /^the warnings shown should be (.*)$/ do |warnings|
   warnings.split(',').each do |warning|
     expect_warning(warning, :line => nil)
   end
+end
+
+Given /^a cookbook that does not have a README at all$/ do
+  write_recipe %q{
+    log "Use the source luke"
+  }.strip
+end
+
+Given /^a cookbook that has a README in markdown format$/ do
+  write_recipe %q{
+    log "Hello"
+  }.strip
+  write_file 'cookbooks/example/README.md', %q{
+    Description
+    ===========
+
+    Hi. This is markdown.
+  }.strip
+end
+
+Given /^a cookbook that has a README in RDoc format$/ do
+  write_recipe %q{
+    log "Hello"
+  }.strip
+  write_file 'cookbooks/example/README.rdoc', %q{
+    = DESCRIPTION:
+
+    I used to be the preferred format but not any more (sniff).
+  }.strip
 end

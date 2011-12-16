@@ -35,6 +35,10 @@ module FoodCritic
                          'Resource attribute not recognised'
                        when 'FC010' then
                           'Invalid search syntax'
+                       when 'FC011' then
+                          'Missing README in markdown format'
+                       when 'FC012' then
+                          'Use Markdown for README rather than RDoc'
                      end
 
       if opt[:expect_warning]

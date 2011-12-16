@@ -68,8 +68,8 @@ end
 rule "FC008", "Generated cookbook metadata needs updating" do
   tags %w{style metadata}
   description "The cookbook metadata for this cookbook is boilerplate output from knife generate cookbook and needs updating with the real details of your cookbook."
-  recipe do |ast,filename|
-    metadata_path = Pathname.new(File.join(File.dirname(filename), '..', 'metadata.rb')).cleanpath
+  cookbook do |filename|
+    metadata_path = Pathname.new(File.join(filename, 'metadata.rb')).cleanpath
     next unless File.exists? metadata_path
     md = read_file(metadata_path)
     {'maintainer' => 'YOUR_COMPANY_NAME', 'maintainer_email' => 'YOUR_EMAIL'}.map do |field,value|
@@ -106,5 +106,19 @@ rule "FC010", "Invalid search syntax" do
   recipe do |ast|
     # This only works for literal search strings
     literal_searches(ast).reject{|search| valid_query?(search['value'])}.map{|search| match(search)}
+  end
+end
+
+rule "FC011", "Missing README in markdown format" do
+  tags %w{style readme}
+  cookbook do |filename|
+    [file_match(File.join(filename, 'README.md'))] unless File.exists?(File.join(filename, 'README.md'))
+  end
+end
+
+rule "FC012", "Use Markdown for README rather than RDoc" do
+  tags %w{style readme}
+  cookbook do |filename|
+    [file_match(File.join(filename, 'README.rdoc'))] if File.exists?(File.join(filename, 'README.rdoc'))
   end
 end

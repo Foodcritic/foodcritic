@@ -15,6 +15,10 @@ module FoodCritic
       {:matched => node.respond_to?(:name) ? node.name : '', :line => pos['line'], :column => pos['column']}
     end
 
+    def file_match(file)
+      {:filename => file, :matched => file, :line => 1, :column => 1}
+    end
+
     # Does the specified recipe check for Chef Solo?
     #
     # @param [Nokogiri::XML::Node] ast The AST of the cookbook recipe to check.

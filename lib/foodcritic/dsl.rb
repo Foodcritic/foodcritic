@@ -40,6 +40,13 @@ module FoodCritic
       rules.last.recipe = block
     end
 
+    # Define a matcher that will be passed the AST with this method.
+    #
+    # @param [block] block Your implemented matcher that returns a match Hash.
+    def cookbook(&block)
+      rules.last.cookbook = block
+    end
+
     # Load the ruleset
     #
     # @param [String] filename The path to the ruleset to load
