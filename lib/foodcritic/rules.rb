@@ -1,3 +1,12 @@
+rule "FC001", "Use symbols in preference to strings to access node attributes" do
+  description "When accessing node attributes you should use a symbol for a key rather than a string literal."
+  recipe do |ast|
+    %w{node default override set normal}.map do |type|
+      ast.xpath("//*[self::aref_field or self::aref][vcall/ident/@value='#{type}']//tstring_content").map{|ar| match(ar)}
+    end.flatten
+  end
+end
+
 rule "FC002", "Avoid string interpolation where not required" do
   tags %w{style strings}
   description "When setting a resource value avoid string interpolation where not required."

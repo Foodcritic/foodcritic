@@ -6,6 +6,10 @@ module FoodCritic
       write_file 'cookbooks/example/recipes/default.rb', content
     end
 
+    def write_attributes(content)
+      write_file 'cookbooks/example/attributes/default.rb', content
+    end
+
     def write_metadata(content)
       write_file 'cookbooks/example/metadata.rb', content
     end
@@ -17,6 +21,8 @@ module FoodCritic
     def expect_warning(code, options={})
       opt = {:line => 1, :expect_warning => true, :file => 'cookbooks/example/recipes/default.rb'}.merge!(options)
       warning_text = case code
+                       when 'FC001' then
+                         'Use symbols in preference to strings to access node attributes'
                        when 'FC002' then
                          'Avoid string interpolation where not required'
                        when 'FC003' then

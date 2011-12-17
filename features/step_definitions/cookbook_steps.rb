@@ -1,15 +1,51 @@
+Given /^a cookbook with a single recipe that accesses node attributes via strings$/ do
+  write_recipe %q{node['foo'] = 'bar'}
+end
+
+Given /^a cookbook with a single recipe that accesses multiple node attributes via strings$/ do
+  write_recipe %q{node['foo'] = 'bar'
+node['testing'] = 'bar'
+  }
+end
+
+Given /^a cookbook with a single recipe that assigns node attributes accessed via strings to a local variable$/ do
+  write_recipe %q{baz = node['foo']}
+end
+
+Given /^a cookbook with a single recipe that accesses nested node attributes via strings$/ do
+  write_recipe %q{node['foo']['foo2'] = 'bar'}
+end
+
+Given /^a cookbook with a single recipe that accesses node attributes via symbols/ do
+  write_recipe %q{node[:foo] = 'bar'}
+end
+
+Given /^a cookbook that declares ([a-z]+) attributes via strings$/ do |attribute_type|
+  write_attributes %Q{#{attribute_type}["apache"]["dir"] = "/etc/apache2"}
+end
+
 When /^I check the cookbook(?: specifying tags(.*))?$/ do |tags|
   run_lint(tags)
 end
 
-Then /^the (?:[a-z \-]+) warning ([0-9]+) should (not )?be displayed(?: against the (metadata|README.md|README.rdoc) file)?$/ do |code, no_display, file|
+Then /^the (?:[a-z \-]+) warning ([0-9]+) should (not )?be displayed(?: against the (attributes|metadata|README.md|README.rdoc) file)?$/ do |code, no_display, file|
   options = {}
   options[:expect_warning] = no_display != 'not '
 
   file = 'metadata.rb' if file == 'metadata'
+  file = 'attributes/default.rb' if file == 'attributes'
   options[:file] = "cookbooks/example/#{file}" unless file.nil?
 
   expect_warning("FC#{code}", options)
+end
+
+Then /^the node access warning 001 should be displayed for each match$/ do
+  expect_warning('FC001', :line => 1)
+  expect_warning('FC001', :line => 2)
+end
+
+Then /^the node access warning 001 should be displayed twice for the same line$/ do
+  expect_warning('FC001', :line => 1, :num_occurrences => 2)
 end
 
 Given /^a cookbook with a single recipe that creates a directory resource with an interpolated name$/ do
