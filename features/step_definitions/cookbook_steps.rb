@@ -29,13 +29,14 @@ When /^I check the cookbook(?: specifying tags(.*))?$/ do |tags|
   run_lint(tags)
 end
 
-Then /^the (?:[a-z \-]+) warning ([0-9]+) should (not )?be displayed(?: against the (attributes|definition|metadata|README.md|README.rdoc) file)?$/ do |code, no_display, file|
+Then /^the (?:[a-zA-Z \-]+) warning ([0-9]+) should (not )?be displayed(?: against the (attributes|definition|metadata|provider|README.md|README.rdoc) file)?$/ do |code, no_display, file|
   options = {}
   options[:expect_warning] = no_display != 'not '
 
   file = 'metadata.rb' if file == 'metadata'
   file = 'attributes/default.rb' if file == 'attributes'
   file = 'definitions/apache_site.rb' if file == 'definition'
+  file = 'providers/site.rb' if file == 'provider'
   options[:file] = "cookbooks/example/#{file}" unless file.nil?
 
   expect_warning("FC#{code}", options)
@@ -668,4 +669,23 @@ Given /^a cookbook that does not contain a definition and has (no|a) definitions
   write_recipe %q{
     log "A defining characteristic of this cookbook is that it has no definitions"
   }.strip
+end
+
+Given /^a cookbook that contains a LWRP with (no|a) default action$/ do |has_default_action|
+  write_resource("site", %q{
+    actions :create
+    attribute :name, :kind_of => String, :name_attribute => true
+  }.strip)
+  default_action = %q{
+    def initialize(*args)
+      super
+      @action = :create
+    end
+  }.strip
+  write_provider("site", %Q{
+    action :create do
+      log "Here is where I would create a site"
+    end
+    #{default_action unless has_default_action == 'no'}
+  }.strip)
 end

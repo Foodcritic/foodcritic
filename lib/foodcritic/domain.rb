@@ -40,7 +40,7 @@ module FoodCritic
 
   # A rule to be matched against.
   class Rule
-    attr_accessor :code, :name, :description, :cookbook, :recipe, :tags
+    attr_accessor :code, :name, :description, :cookbook, :recipe, :provider, :tags
 
     # Create a new rule
     #

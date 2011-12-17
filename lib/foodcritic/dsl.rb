@@ -43,6 +43,13 @@ module FoodCritic
     # Define a matcher that will be passed the AST with this method.
     #
     # @param [block] block Your implemented matcher that returns a match Hash.
+    def provider(&block)
+      rules.last.provider = block
+    end
+
+    # Define a matcher that will be passed the cookbook path with this method.
+    #
+    # @param [block] block Your implemented matcher that returns a match Hash.
     def cookbook(&block)
       rules.last.cookbook = block
     end

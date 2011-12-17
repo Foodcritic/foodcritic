@@ -159,3 +159,10 @@ rule "FC015", "Consider converting definition to a LWRP" do
     Dir[File.join(dir, 'definitions', '*.rb')].reject{|entry| ['.', '..'].include? entry}.map{|entry| file_match(entry)}
   end
 end
+
+rule "FC016", "LWRP does not declare a default action" do
+  tags %w{style lwrp usability}
+  provider do |ast, filename|
+    ast.xpath("//def/bodystmt/descendant::assign/var_field/ivar/@value='@action'") ? [] : [file_match(filename)]
+  end
+end

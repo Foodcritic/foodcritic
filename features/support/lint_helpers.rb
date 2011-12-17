@@ -18,6 +18,14 @@ module FoodCritic
       write_file 'cookbooks/example/metadata.rb', content
     end
 
+    def write_resource(name, content)
+      write_file "cookbooks/example/resources/#{name}.rb", content
+    end
+
+    def write_provider(name, content)
+      write_file "cookbooks/example/providers/#{name}.rb", content
+    end
+
     def run_lint(cmd_args)
       run_simple(unescape("foodcritic #{cmd_args} cookbooks/example/"), false)
     end
@@ -55,6 +63,8 @@ module FoodCritic
                           'Consider extracting long ruby_block to library'
                        when 'FC015' then
                           'Consider converting definition to a LWRP'
+                       when "FC016" then
+                          'LWRP does not declare a default action'
                      end
 
       if opt[:expect_warning]
