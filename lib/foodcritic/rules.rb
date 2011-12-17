@@ -176,3 +176,12 @@ rule "FC017", "LWRP does not notify when updated" do
     end
   end
 end
+
+rule "FC018", "LWRP uses deprecated notification syntax" do
+  tags %w{style lwrp deprecated}
+  provider do |ast, filename|
+    ast.xpath("//assign/var_field/ivar[@value='@updated']").map{|class_var| match(class_var)} +
+    ast.xpath(%q{//assign/field/*[self::vcall or self::var_ref/ident/@value='new_resource']/../
+      ident[@value='updated']}).map{|assign| match(assign)}
+  end
+end

@@ -38,6 +38,7 @@ Then /^the (?:[a-zA-Z \-]+) warning ([0-9]+) should (not )?be displayed(?: again
   file = 'definitions/apache_site.rb' if file == 'definition'
   file = 'providers/site.rb' if file == 'provider'
   options[:file] = "cookbooks/example/#{file}" unless file.nil?
+  options[:line] = 3 if code == '018' and options[:expect_warning]
 
   expect_warning("FC#{code}", options)
 end
@@ -702,7 +703,7 @@ Given /^a cookbook that contains a LWRP that does not trigger notifications$/ do
   }.strip)
 end
 
-Given /^a cookbook that contains a LWRP with a single notification$/ do
+Given /^a cookbook that contains a LWRP (?:with a single notification|that uses the current notification syntax)$/ do
   write_resource("site", %q{
     actions :create
     attribute :name, :kind_of => String, :name_attribute => true
@@ -728,6 +729,19 @@ Given /^a cookbook that contains a LWRP with multiple notifications$/ do
     action :delete do
       log "Here is where I would delete a site"
       new_resource.updated_by_last_action(true)
+    end
+  }.strip)
+end
+
+Given /^a cookbook that contains a LWRP that uses the deprecated notification syntax(.*)$/ do |qualifier|
+  write_resource("site", %q{
+    actions :create
+    attribute :name, :kind_of => String, :name_attribute => true
+  }.strip)
+  write_provider("site", %Q{
+    action :create do
+      log "Here is where I would create a site"
+      #{qualifier.include?('class variable') ? '@updated = true' : 'new_resource.updated = true'}
     end
   }.strip)
 end

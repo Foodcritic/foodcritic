@@ -67,6 +67,8 @@ module FoodCritic
                           'LWRP does not declare a default action'
                        when 'FC017' then
                           'LWRP does not notify when updated'
+                       when "FC018" then
+                          'LWRP uses deprecated notification syntax'
                      end
 
       if opt[:expect_warning]
