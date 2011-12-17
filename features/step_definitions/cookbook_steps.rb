@@ -628,3 +628,25 @@ Given /^a cookbook that contains a (short|long) ruby block$/ do |length|
     }.strip
   end
 end
+
+Given /^a cookbook with a single recipe which accesses node attributes with symbols on lines 2 and 10$/ do
+  write_recipe %q{
+    # Here we access the node attributes via a symbol
+    foo = node[:foo]
+
+    directory "/tmp/foo" do
+      owner "root"
+      group "root"
+      action :create
+    end
+
+    bar = node[:bar]
+  }.strip
+end
+
+Then /^the node access warning 001 should warn on lines 2 and 10 in that order$/ do
+  expected_warnings = [2, 10].map do |line|
+    "FC001: Use strings in preference to symbols to access node attributes: cookbooks/example/recipes/default.rb:#{line}"
+  end
+  assert_partial_output(expected_warnings.join("\n"), all_output)
+end
