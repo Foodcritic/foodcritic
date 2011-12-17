@@ -3,7 +3,7 @@ rule "FC001", "Use strings in preference to symbols to access node attributes" d
   description "When accessing node attributes you should use a string for a key rather than a symbol."
   recipe do |ast|
     %w{node default override set normal}.map do |type|
-      ast.xpath("//*[self::aref_field or self::aref][vcall/ident/@value='#{type}']//symbol").map{|ar| match(ar)}
+      ast.xpath("//*[self::aref_field or self::aref][descendant::ident/@value='#{type}']//symbol").map{|ar| match(ar)}
     end.flatten
   end
 end
