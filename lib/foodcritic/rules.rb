@@ -133,3 +133,12 @@ rule "FC013", "Use file_cache_path rather than hard-coding tmp paths" do
     end.map{|download| match(download)}
   end
 end
+
+rule "FC014", "Consider extracting long ruby_block to library" do
+  tags %w{style}
+  recipe do |ast|
+    find_resources(ast, 'ruby_block').find_all do |rb|
+      ! rb.xpath("//fcall[ident/@value='block' and count(ancestor::*) = 8]/../../do_block[count(descendant::*) > 100]").empty?
+    end.map{|block| match(block)}
+  end
+end

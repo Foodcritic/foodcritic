@@ -41,6 +41,8 @@ module FoodCritic
                           'Use Markdown for README rather than RDoc'
                        when 'FC013' then
                           'Use file_cache_path rather than hard-coding tmp paths'
+                       when 'FC014' then
+                          'Consider extracting long ruby_block to library'
                      end
 
       if opt[:expect_warning]

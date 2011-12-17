@@ -542,3 +542,52 @@ Given /^a cookbook that downloads a file to (.*)$/ do |path|
     end
   }.strip
 end
+
+Given /^a cookbook that contains no ruby blocks$/ do
+  write_recipe %q{
+    package "tar" do
+      action :install
+    end
+  }.strip
+end
+
+Given /^a cookbook that contains a (short|long) ruby block$/ do |length|
+  if length == 'short'
+    write_recipe %q{
+      ruby_block "reload_client_config" do
+        block do
+          Chef::Config.from_file("/etc/chef/client.rb")
+        end
+        action :create
+      end
+    }.strip
+  else
+    write_recipe %q{
+      ruby_block "too_long" do
+        block do
+          begin
+            do_something('with argument')
+            do_something_else('with another argument')
+            foo = Foo.new('bar')
+            foo.activate_turbo_boost
+            foo.each do |thing|
+              case thing
+              when "fee"
+                puts 'Fee'
+              when "fi"
+                puts 'Fi'
+              when "fo"
+                puts 'Fo'
+              else
+                puts "Fum"
+              end
+            end
+          rescue Some::Exception
+            Chef::Log.warn "Problem activating the turbo boost"
+          end
+        end
+        action :create
+      end
+    }.strip
+  end
+end
