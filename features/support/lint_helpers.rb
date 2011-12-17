@@ -10,6 +10,10 @@ module FoodCritic
       write_file 'cookbooks/example/attributes/default.rb', content
     end
 
+    def write_definition(name, content)
+      write_file "cookbooks/example/definitions/#{name}.rb", content
+    end
+
     def write_metadata(content)
       write_file 'cookbooks/example/metadata.rb', content
     end
@@ -49,6 +53,8 @@ module FoodCritic
                           'Use file_cache_path rather than hard-coding tmp paths'
                        when 'FC014' then
                           'Consider extracting long ruby_block to library'
+                       when 'FC015' then
+                          'Consider converting definition to a LWRP'
                      end
 
       if opt[:expect_warning]

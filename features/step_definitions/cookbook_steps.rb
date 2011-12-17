@@ -29,12 +29,13 @@ When /^I check the cookbook(?: specifying tags(.*))?$/ do |tags|
   run_lint(tags)
 end
 
-Then /^the (?:[a-z \-]+) warning ([0-9]+) should (not )?be displayed(?: against the (attributes|metadata|README.md|README.rdoc) file)?$/ do |code, no_display, file|
+Then /^the (?:[a-z \-]+) warning ([0-9]+) should (not )?be displayed(?: against the (attributes|definition|metadata|README.md|README.rdoc) file)?$/ do |code, no_display, file|
   options = {}
   options[:expect_warning] = no_display != 'not '
 
   file = 'metadata.rb' if file == 'metadata'
   file = 'attributes/default.rb' if file == 'attributes'
+  file = 'definitions/apache_site.rb' if file == 'definition'
   options[:file] = "cookbooks/example/#{file}" unless file.nil?
 
   expect_warning("FC#{code}", options)
@@ -649,4 +650,22 @@ Then /^the node access warning 001 should warn on lines 2 and 10 in that order$/
     "FC001: Use strings in preference to symbols to access node attributes: cookbooks/example/recipes/default.rb:#{line}"
   end
   assert_partial_output(expected_warnings.join("\n"), all_output)
+end
+
+Given /^a cookbook that contains a definition$/ do
+  write_definition("apache_site", %q{
+    define :apache_site, :enable => true do
+      log "I am a definition"
+    end
+  })
+  write_recipe %q{
+    apache_site "default"
+  }.strip
+end
+
+Given /^a cookbook that does not contain a definition and has (no|a) definitions directory$/ do |has_dir|
+  create_dir 'cookbooks/example/definitions/' unless has_dir == 'no'
+  write_recipe %q{
+    log "A defining characteristic of this cookbook is that it has no definitions"
+  }.strip
 end

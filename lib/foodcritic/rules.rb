@@ -145,10 +145,17 @@ rule "FC013", "Use file_cache_path rather than hard-coding tmp paths" do
 end
 
 rule "FC014", "Consider extracting long ruby_block to library" do
-  tags %w{style}
+  tags %w{style libraries}
   recipe do |ast|
     find_resources(ast, 'ruby_block').find_all do |rb|
       ! rb.xpath("//fcall[ident/@value='block' and count(ancestor::*) = 8]/../../do_block[count(descendant::*) > 100]").empty?
     end.map{|block| match(block)}
+  end
+end
+
+rule "FC015", "Consider converting definition to a LWRP" do
+  tags %w{style definitions lwrp}
+  cookbook do |dir|
+    Dir[File.join(dir, 'definitions', '*.rb')].reject{|entry| ['.', '..'].include? entry}.map{|entry| file_match(entry)}
   end
 end
