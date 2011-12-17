@@ -2,26 +2,27 @@ Given /^a cookbook with a single recipe that accesses node attributes via string
   write_recipe %q{node['foo'] = 'bar'}
 end
 
-Given /^a cookbook with a single recipe that accesses multiple node attributes via strings$/ do
-  write_recipe %q{node['foo'] = 'bar'
-node['testing'] = 'bar'
-  }
+Given /^a cookbook with a single recipe that accesses multiple node attributes via symbols/ do
+  write_recipe %q{
+    node[:foo] = 'bar'
+    node[:testing] = 'bar'
+  }.strip
 end
 
-Given /^a cookbook with a single recipe that assigns node attributes accessed via strings to a local variable$/ do
-  write_recipe %q{baz = node['foo']}
+Given /^a cookbook with a single recipe that assigns node attributes accessed via symbols to a local variable$/ do
+  write_recipe %q{baz = node[:foo]}
 end
 
-Given /^a cookbook with a single recipe that accesses nested node attributes via strings$/ do
-  write_recipe %q{node['foo']['foo2'] = 'bar'}
+Given /^a cookbook with a single recipe that accesses nested node attributes via symbols/ do
+  write_recipe %q{node[:foo][:foo2] = 'bar'}
 end
 
 Given /^a cookbook with a single recipe that accesses node attributes via symbols/ do
   write_recipe %q{node[:foo] = 'bar'}
 end
 
-Given /^a cookbook that declares ([a-z]+) attributes via strings$/ do |attribute_type|
-  write_attributes %Q{#{attribute_type}["apache"]["dir"] = "/etc/apache2"}
+Given /^a cookbook that declares ([a-z]+) attributes via symbols/ do |attribute_type|
+  write_attributes %Q{#{attribute_type}[:apache][:dir] = "/etc/apache2"}
 end
 
 When /^I check the cookbook(?: specifying tags(.*))?$/ do |tags|
