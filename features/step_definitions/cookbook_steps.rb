@@ -689,3 +689,45 @@ Given /^a cookbook that contains a LWRP with (no|a) default action$/ do |has_def
     #{default_action unless has_default_action == 'no'}
   }.strip)
 end
+
+Given /^a cookbook that contains a LWRP that does not trigger notifications$/ do
+  write_resource("site", %q{
+    actions :create
+    attribute :name, :kind_of => String, :name_attribute => true
+  }.strip)
+  write_provider("site", %Q{
+    action :create do
+      log "Here is where I would create a site"
+    end
+  }.strip)
+end
+
+Given /^a cookbook that contains a LWRP with a single notification$/ do
+  write_resource("site", %q{
+    actions :create
+    attribute :name, :kind_of => String, :name_attribute => true
+  }.strip)
+  write_provider("site", %q{
+    action :create do
+      log "Here is where I would create a site"
+      new_resource.updated_by_last_action(true)
+    end
+  }.strip)
+end
+
+Given /^a cookbook that contains a LWRP with multiple notifications$/ do
+  write_resource("site", %q{
+    actions :create, :delete
+    attribute :name, :kind_of => String, :name_attribute => true
+  }.strip)
+  write_provider("site", %q{
+    action :create do
+      log "Here is where I would create a site"
+      new_resource.updated_by_last_action(true)
+    end
+    action :delete do
+      log "Here is where I would delete a site"
+      new_resource.updated_by_last_action(true)
+    end
+  }.strip)
+end

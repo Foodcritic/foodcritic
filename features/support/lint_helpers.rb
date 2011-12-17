@@ -63,8 +63,10 @@ module FoodCritic
                           'Consider extracting long ruby_block to library'
                        when 'FC015' then
                           'Consider converting definition to a LWRP'
-                       when "FC016" then
+                       when 'FC016' then
                           'LWRP does not declare a default action'
+                       when 'FC017' then
+                          'LWRP does not notify when updated'
                      end
 
       if opt[:expect_warning]

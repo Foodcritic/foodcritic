@@ -161,8 +161,18 @@ rule "FC015", "Consider converting definition to a LWRP" do
 end
 
 rule "FC016", "LWRP does not declare a default action" do
-  tags %w{style lwrp usability}
+  tags %w{correctness lwrp}
   provider do |ast, filename|
     ast.xpath("//def/bodystmt/descendant::assign/var_field/ivar/@value='@action'") ? [] : [file_match(filename)]
+  end
+end
+
+rule "FC017", "LWRP does not notify when updated" do
+  tags %w{correctness lwrp}
+  provider do |ast, filename|
+    if ast.xpath(%q{//call/*[self::vcall or self::var_ref/ident/@value='new_resource']/../
+      ident[@value='updated_by_last_action']}).empty?
+      [file_match(filename)]
+    end
   end
 end
