@@ -53,6 +53,7 @@
           </ul>
           <h5>Rules</h5>
           <ul>
+<li><a href="#FC001">FC001: Use strings in preference to symbols to access node attributes</a></li>
 <li><a href="#FC002">FC002: Avoid string interpolation where not required</a></li>
 <li><a href="#FC003">FC003: Check whether you are running with chef server before using server-specific features</a></li>
 <li><a href="#FC004">FC004: Use a service resource to start and stop services</a></li>
@@ -62,6 +63,14 @@
 <li><a href="#FC008">FC008: Generated cookbook metadata needs updating</a></li>
 <li><a href="#FC009">FC009: Resource attribute not recognised</a></li>
 <li><a href="#FC010">FC010: Invalid search syntax</a></li>
+<li><a href="#FC011">FC011: Missing README in markdown format</a></li>
+<li><a href="#FC012">FC012: Use Markdown for README rather than RDoc</a></li>
+<li><a href="#FC013">FC013: Use file_cache_path rather than hard-coding tmp paths</a></li>
+<li><a href="#FC014">FC014: Consider extracting long ruby_block to library</a></li>
+<li><a href="#FC015">FC015: Consider converting definition to a LWRP</a></li>
+<li><a href="#FC016">FC016: LWRP does not declare a default action</a></li>
+<li><a href="#FC017">FC017: LWRP does not notify when updated</a></li>
+<li><a href="#FC018">FC018: LWRP uses deprecated notification syntax</a></li>
           </ul>
         </div>
       </div>
@@ -145,6 +154,27 @@ foodcritic [cookbook_path]
         </ul>
 	<hr>
       <h1 id="rules">Built-in Rules</h1>
+        <h2 id="FC001">FC001: Use strings in preference to symbols to access node attributes</h2>
+            <p><span class="label">style</span> <span class="label">attributes</span></p>
+            <p>
+                Opscode recommend that you use strings rather than symbols when referencing node attributes. See <a href="https://github.com/acrmp/foodcritic/issues/1">this explanation from @jtimberman</a>.
+            </p>
+            <h3>Uses symbols to reference attributes</h3>
+            <p>This example would match the FC001 rule because the <code>version</code> attribute has been referenced with a symbol.</p>
+            <pre class="prettyprint">
+    # Don't do this
+    package "mysql-server" do
+      version node[:mysql][:version]
+      action :install
+    end</pre>
+
+            <h3>Modified version</h3>
+            <p>This modified example would <strong>not</strong> match the FC001 rule:</p>
+            <pre class="prettyprint">
+    package "mysql-server" do
+      version node['mysql']['version']
+      action :install
+    end</pre>
 	<h2 id="FC002">FC002: Avoid string interpolation where not required</h2>
         <p><span class="label">style</span> <span class="label">strings</span></p>
         <p>
@@ -387,6 +417,153 @@ end
 <pre class="prettyprint">
 search(:node, 'run_list:recipe\[foo\:\:bar\]') do |matching_node|
   puts matching_node.to_s
+end
+</pre>
+
+<h2 id="FC011">FC011: Missing README in markdown format</h2>
+<p><span class="label">style</span> <span class="label">readme</span></p>
+<p>The <a href="http://community.opscode.com/">Opscode Community site</a> will now render your cookbook README documentation
+inline - <a href="http://community.opscode.com/cookbooks/mysql">see this example for the mysql cookbook</a>.</p>
+<p>Your README needs to be in <a href="http://daringfireball.net/projects/markdown/syntax">Markdown format</a> for this
+    to work. This rule will match any cookbook that does not have a <code>README.md</code> file in the root directory.</p>
+
+<h2 id="FC012">FC012: Use Markdown for README rather than RDoc</h2>
+<p><span class="label">style</span> <span class="label">readme</span></p>
+<p>Writing cookbook documentation in RDoc has been deprecated in favour of <a href="http://daringfireball.net/projects/markdown/syntax">Markdown format</a>.
+    This rule will match any cookbook that has a <code>README.rdoc</code> file in the root directory.</p>
+
+<h2 id="FC013">FC013: Use file_cache_path rather than hard-coding tmp paths</h2>
+<p><span class="label">style</span> <span class="label">files</span></p>
+<p>This warning means that you have hard-coded a file download path in your cookbook to a temporary directory.
+This can be a problem on boxes built with a small <code>/tmp</code> mount point. Chef has
+its own configuration option <code>file_cache_path</code> you should instead:<br />
+<a href="http://wiki.opscode.com/display/chef/Chef+Configuration+Settings#ChefConfigurationSettings-filecachepath">http://wiki.opscode.com/display/chef/Chef+Configuration+Settings#ChefConfigurationSettings-filecachepath</a></p>
+
+<h3>Downloading to a hard-coded temp directory</h3>
+<p>This example matches the FC013 rule because it hard-codes the download path to <code>/tmp</code>.</p>
+<pre class="prettyprint">
+# Don't do this
+remote_file "/tmp/large-file.tar.gz" do
+  source "http://www.example.org/large-file.tar.gz"
+end
+</pre>
+
+<h3>Modified version</h3>
+<p>To remove this warning use the configured <code>file_cache_path</code>:</p>
+
+<pre class="prettyprint">
+remote_file "/tmp/large-file.tar.gz" do
+  source "#{Chef::Config[:file_cache_path]}/large-file.tar.gz"
+end
+</pre>
+
+<h2 id="FC014">FC014: Consider extracting long ruby_block to library</h2>
+<p><span class="label">style</span> <span class="label">libraries</span></p>
+<p>Your cookbook has a fairly long <code>ruby_block</code> resource. Long <code>ruby_block</code> resources are often candidates
+    for extraction to a separate module or class under the <code>libraries</code> directory.<br/>
+<a href="http://wiki.opscode.com/display/chef/Libraries">http://wiki.opscode.com/display/chef/Libraries</a></p>
+
+<h2 id="FC015">FC015: Consider converting definition to a LWRP</h2>
+<p><span class="label">style</span> <span class="label">definitions</span> <span class="label">lwrp</span></p>
+<p>Chef definitions are an older approach to creating a higher-level abstraction for a group of resources. Unlike LWRPs
+    they are not first class resources and cannot receive notifications. You should prefer LWRPs for new development.<br />
+<a href="http://wiki.opscode.com/display/chef/Definitions">http://wiki.opscode.com/display/chef/Definitions</a><br />
+<a href="http://wiki.opscode.com/display/chef/Lightweight+Resources+and+Providers+(LWRP)">http://wiki.opscode.com/display/chef/Lightweight+Resources+and+Providers+(LWRP)</a>
+</p>
+
+<h2 id="FC016">FC016: LWRP does not declare a default action</h2>
+<p><span class="label important">correctness</span> <span class="label">lwrp</span></p>
+<p>This warning means that the LWRP does not declare a default action. You should normally define a default action on your
+provider to avoid confusing users. Most resources have an intuitive default action.<br />
+<a href="http://wiki.opscode.com/display/chef/Lightweight+Resources+and+Providers+(LWRP)#LightweightResourcesandProviders%28LWRP%29-DefaultAction">http://wiki.opscode.com/display/chef/Lightweight+Resources+and+Providers+(LWRP)#LightweightResourcesandProviders%28LWRP%29-DefaultAction</a></p>
+
+<h3>Provider without a default action</h3>
+<p>This example matches the FC016 rule because it does not declare a default action.</p>
+<pre class="prettyprint">
+# Don't do this
+action :create do
+  # create action implementation
+end
+</pre>
+
+<h3>Modified version</h3>
+<p>With a default action of <code>:create</code> this will no longer match the rule.
+    Unfortunately the LWRP DSL doesn't yet support specifying a default action, so you need to drop into Ruby.</p>
+
+<pre class="prettyprint">
+action :create do
+  # create action implementation
+end
+
+def initialize(*args)
+  super
+  @action = :create
+end
+</pre>
+
+<h2 id="FC017">FC017: LWRP does not notify when updated</h2>
+<p><span class="label important">correctness</span> <span class="label">lwrp</span></p>
+<p>This warning means that the LWRP will not currently trigger notifications to other resources. This can be a source
+    of difficult to track down bugs.<br />
+<a href="http://wiki.opscode.com/display/chef/Resources#Resources-Notifications">http://wiki.opscode.com/display/chef/Resources#Resources-Notifications</a>
+
+<h3>Provider that does not send notifications</h3>
+<p>This example matches the FC017 rule because it does not mark that its state has changed and will therefore not send
+    notifications.</p>
+<pre class="prettyprint">
+# Don't do this
+action :create do
+  # create action implementation
+end
+</pre>
+
+<h3>Modified version</h3>
+<p>The call to <code>updated_by_last_action</code> ensures that notifications will work correctly.</p>
+
+<pre class="prettyprint">
+action :create do
+  # create action implementation
+
+  # My state has changed so I'd better notify observers
+  new_resource.updated_by_last_action(true)
+end
+</pre>
+
+<h2 id="FC018">FC018: LWRP uses deprecated notification syntax</h2>
+<p><span class="label">style</span> <span class="label">lwrp</span> <span class="label">deprecated</span></p>
+<p></p>
+<h3>Provider uses deprecated syntax</h3>
+<p>This example matches the FC018 rule because it uses the old syntax for indicating it has been updated.</p>
+<pre class="prettyprint">
+# Don't do this
+action :create do
+  # create action implementation
+
+  # My state has changed so I'd better notify observers, but I'm using a deprecated syntax
+  new_resource.updated = true
+end
+</pre>
+
+<p>You may also see this variation which accesses the instance variable directly (and will also result in a warning):</p>
+<pre class="prettyprint">
+# Don't do this
+action :create do
+  # create action implementation
+
+  # My state has changed so I'd better notify observers, but I'm using a deprecated syntax
+  @updated = true
+end
+</pre>
+
+<h3>Modified version</h3>
+<p>This example uses the newer syntax and will not raise the warning.</p>
+
+<pre class="prettyprint">
+action :create do
+  # create action implementation
+
+  # My state has changed so I'd better notify observers
+  new_resource.updated_by_last_action(true)
 end
 </pre>
 
