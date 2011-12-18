@@ -45,7 +45,7 @@ rule "FC005", "Avoid repetition of resource declarations" do
     # do all of the attributes for all resources of a given type match apart aside from one?
     resource_attributes_by_type(ast).each do |type, resource_atts|
         sorted_atts = resource_atts.map{|atts| atts.to_a.sort{|x,y| x.first.to_s <=> y.first.to_s }}
-        if sorted_atts.all?{|att| (att - sorted_atts.inject{|atts,a| atts & a}).length == 1}
+        if sorted_atts.length > 2 and sorted_atts.all?{|att| (att - sorted_atts.inject{|atts,a| atts & a}).length == 1}
           matches << match(find_resources(ast, type).first)
         end
     end
@@ -179,7 +179,7 @@ end
 
 rule "FC018", "LWRP uses deprecated notification syntax" do
   tags %w{style lwrp deprecated}
-  provider do |ast, filename|
+  provider do |ast|
     ast.xpath("//assign/var_field/ivar[@value='@updated']").map{|class_var| match(class_var)} +
     ast.xpath(%q{//assign/field/*[self::vcall or self::var_ref/ident/@value='new_resource']/../
       ident[@value='updated']}).map{|assign| match(assign)}

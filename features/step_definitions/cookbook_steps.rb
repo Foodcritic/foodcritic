@@ -191,6 +191,17 @@ Given /^a cookbook recipe that declares multiple resources varying only in the p
   }.strip
 end
 
+Given /^a cookbook recipe that declares two or fewer resources varying only in the package name$/ do
+  write_recipe %Q{
+    package "erlang-base" do
+      action :install
+    end
+    package "erlang-corba" do
+      action :install
+    end
+  }.strip
+end
+
 Given /^a cookbook recipe that declares multiple resources with more variation$/ do
   write_recipe %Q{
     package "erlang-base" do

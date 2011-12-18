@@ -9,6 +9,11 @@ Feature: Check for resource repetition
     When I check the cookbook
     Then the service resource warning 005 should be displayed
 
+  Scenario: Package resource varying only a single attribute for a small number of resources
+    Given a cookbook recipe that declares two or fewer resources varying only in the package name
+    When I check the cookbook
+    Then the service resource warning 005 should not be displayed
+
   Scenario: Package resource varying multiple attributes
     Given a cookbook recipe that declares multiple resources with more variation
     When I check the cookbook
