@@ -1,6 +1,6 @@
 # Food Critic
 
-Food Critic is a lint tool for Chef cookbooks. It requires Ruby 1.9.3. It doesn't do very much at the moment.
+Food Critic is a lint tool for Chef cookbooks. It requires Ruby 1.9.2+.
 
 # Homepage
 [http://acrmp.github.com/foodcritic/](http://acrmp.github.com/foodcritic/)
