@@ -326,6 +326,8 @@ end
 <p>This warning is shown when you include a recipe that is not in the current cookbook and not defined as a dependency in your cookbook metadata. This is potentially a big problem because things will blow up if the necessary dependency cannot be found when Chef tries to converge your node. For more information refer to the Chef wiki metadata page:<br />
 <a href="http://wiki.opscode.com/display/chef/Metadata">http://wiki.opscode.com/display/chef/Metadata</a></p>
 <p>The fix is to declare the cookbook of the recipe you are including as a dependency in your <code>metadata.rb</code> file.
+<p>You may also see this warning if foodcritic has not been able to infer the name of your cookbook correctly when the cookbook
+directory does not match the name of the cookbook specified in the include.</p>
 <h3>Modified version</h3>
 <p>Assuming you have a recipe that had the following line:</p>
 
