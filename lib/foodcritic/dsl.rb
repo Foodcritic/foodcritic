@@ -26,13 +26,6 @@ module FoodCritic
       rules.last.tags += tags
     end
 
-    # Set the rule description
-    #
-    # @param [String] description Set the rule description.
-    def description(description)
-      rules.last.description = description
-    end
-
     # Define a matcher that will be passed the AST with this method.
     #
     # @param [block] block Your implemented matcher that returns a match Hash.

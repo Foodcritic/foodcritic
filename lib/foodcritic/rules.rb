@@ -1,6 +1,5 @@
 rule "FC001", "Use strings in preference to symbols to access node attributes" do
   tags %w{style attributes}
-  description "When accessing node attributes you should use a string for a key rather than a symbol."
   recipe do |ast|
     %w{node default override set normal}.map do |type|
       ast.xpath("//*[self::aref_field or self::aref][descendant::ident/@value='#{type}']//symbol").map{|ar| match(ar)}
@@ -10,7 +9,6 @@ end
 
 rule "FC002", "Avoid string interpolation where not required" do
   tags %w{style strings}
-  description "When setting a resource value avoid string interpolation where not required."
   recipe do |ast|
     ast.xpath(%q{//string_literal[count(descendant::string_embexpr) = 1 and
       count(string_add/tstring_content|string_add/string_add/tstring_content) = 0]}).map{|str| match(str)}
@@ -19,7 +17,6 @@ end
 
 rule "FC003", "Check whether you are running with chef server before using server-specific features" do
   tags %w{portability solo}
-  description "Ideally your cookbooks should be usable without requiring chef server."
   recipe do |ast|
     checks_for_chef_solo?(ast) ? [] : searches(ast).map{|s| match(s)}
   end
@@ -27,7 +24,6 @@ end
 
 rule "FC004", "Use a service resource to start and stop services" do
   tags %w{style services}
-  description "Avoid use of execute to control services - use the service resource instead."
   recipe do |ast|
     find_resources(ast, 'execute').find_all do |cmd|
       cmd_str = (resource_attribute('command', cmd) || resource_name(cmd)).to_s
@@ -39,7 +35,6 @@ end
 
 rule "FC005", "Avoid repetition of resource declarations" do
   tags %w{style}
-  description "Where you have a lot of resources that vary in only a single attribute wrap them in a loop for brevity."
   recipe do |ast|
     matches = []
     # do all of the attributes for all resources of a given type match apart aside from one?
@@ -55,7 +50,6 @@ end
 
 rule "FC006", "Mode should be quoted or fully specified when setting file permissions" do
   tags %w{correctness files}
-  description "Not quoting mode when setting permissions can lead to incorrect permissions being set."
   recipe do |ast|
     ast.xpath(%q{//ident[@value='mode']/parent::command/descendant::int[string-length(@value) < 4]/
       ancestor::method_add_block}).map{|resource| match(resource)}
@@ -64,7 +58,6 @@ end
 
 rule "FC007", "Ensure recipe dependencies are reflected in cookbook metadata" do
   tags %w{correctness metadata}
-  description "You are including a recipe that is not in the current cookbook and not defined as a dependency in your cookbook metadata."
   recipe do |ast,filename|
     metadata_path = Pathname.new(File.join(File.dirname(filename), '..', 'metadata.rb')).cleanpath
     next unless File.exists? metadata_path
@@ -78,7 +71,6 @@ end
 
 rule "FC008", "Generated cookbook metadata needs updating" do
   tags %w{style metadata}
-  description "The cookbook metadata for this cookbook is boilerplate output from knife generate cookbook and needs updating with the real details of your cookbook."
   cookbook do |filename|
     metadata_path = Pathname.new(File.join(filename, 'metadata.rb')).cleanpath
     next unless File.exists? metadata_path
@@ -93,7 +85,6 @@ end
 
 rule "FC009", "Resource attribute not recognised" do
   tags %w{correctness}
-  description "You appear to be using an unrecognised attribute on a standard Chef resource. Please check for typos."
   recipe do |ast|
     matches = []
     resource_attributes_by_type(ast).each do |type,resources|
@@ -113,7 +104,6 @@ end
 
 rule "FC010", "Invalid search syntax" do
   tags %w{correctness search}
-  description "The search expression in the recipe could not be parsed. Please check your syntax."
   recipe do |ast|
     # This only works for literal search strings
     literal_searches(ast).reject{|search| valid_query?(search['value'])}.map{|search| match(search)}
