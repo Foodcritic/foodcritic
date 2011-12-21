@@ -339,9 +339,9 @@ Given /^a cookbook recipe that includes both declared and undeclared recipe depe
 end
 
 Then /^the undeclared dependency warning 007 should be displayed only for the undeclared dependencies$/ do
-  expect_warning("FC007", :file => 'cookbooks/example/metadata.rb', :line => 1, :expect_warning => false)
-  expect_warning("FC007", :file => 'cookbooks/example/metadata.rb', :line => 2, :expect_warning => false)
-  expect_warning("FC007", :file => 'cookbooks/example/metadata.rb', :line => 6, :expect_warning => true)
+  expect_warning("FC007", :file => 'cookbooks/example/recipes/default.rb', :line => 1, :expect_warning => false)
+  expect_warning("FC007", :file => 'cookbooks/example/recipes/default.rb', :line => 2, :expect_warning => false)
+  expect_warning("FC007", :file => 'cookbooks/example/recipes/default.rb', :line => 6, :expect_warning => true)
 end
 
 Given /^a cookbook recipe that includes a local recipe$/ do

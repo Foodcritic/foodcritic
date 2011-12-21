@@ -64,7 +64,7 @@ rule "FC007", "Ensure recipe dependencies are reflected in cookbook metadata" do
     undeclared = included_recipes(ast).keys.map{|recipe|recipe.split('::').first} - [cookbook_name(filename)] -
         declared_dependencies(read_file(metadata_path))
     included_recipes(ast).map do |recipe, resource|
-      match(resource).merge(:filename => metadata_path) if undeclared.include?(recipe) || undeclared.any?{|u| recipe.start_with?("#{u}::")}
+      match(resource) if undeclared.include?(recipe) || undeclared.any?{|u| recipe.start_with?("#{u}::")}
     end.compact
   end
 end
