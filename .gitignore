@@ -5,3 +5,4 @@ coverage
 doc
 pkg
 tmp
+Gemfile.lock

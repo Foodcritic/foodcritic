@@ -9,7 +9,7 @@ group :test do
 end
 
 group :development do
-  gem 'guard', '~> 0.8.8'
+  gem 'guard', '~> 0.9.1'
   gem 'guard-cucumber', '~> 0.7.4'
   gem "rake", '~> 0.9.2.2'
   gem "rdiscount", '~> 1.6.8'
