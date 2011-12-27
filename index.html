@@ -594,121 +594,304 @@ end
         <hr />
 
       <h2 id="writing-a-new-rule">Writing a new rule</h2>
+        <p>
+            <em>The instructions below work for the code in master. The current released gem does not include Pry as a dependency.</em>
+        </p>
+
+        <p>
+            In this contrived example we are going to add a new rule to raise a warning if a recipe or provider declares a log resource that contains the word 'password'.
+        </p>
 
       <p>
-          The rules are defined in a simple DSL here:<br />
+          First, a word about how Foodcritic works. The rules are defined in a simple DSL here:<br />
           <a href="https://github.com/acrmp/foodcritic/blob/master/lib/foodcritic/rules.rb">https://github.com/acrmp/foodcritic/blob/master/lib/foodcritic/rules.rb</a>
       </p>
 
-      <h3>The recipe block</h3>
         <p>
-            Each rule has a recipe block that defines the matching logic for the rule. The block accepts a
+            Each rule has a block that defines the matching logic for the rule. The block accepts a
             <a href="http://nokogiri.org/">Nokogiri</a> document that contains the Ripper parsed representation of your
-            recipe. You can see what this looks like by calling <code>to_xml</code> on the AST document.
+            recipe. Ripper is a very useful module that ships with recent version of Ruby allowing you to walk the tree
+            of symbols representing your program without actually having to eval it.
         </p>
 
+
+        <h3 id="writing-grab-source">Grab the source code</h3>
         <p>
-            So given a recipe that contains a single log resource:
+            It's easiest to <a href="http://help.github.com/fork-a-repo/">fork the repository</a> first and then clone from the forked version. Browse to the foodcritic repository on GitHub:<br/>
+            <a href="https://github.com/acrmp/foodcritic">https://github.com/acrmp/foodcritic</a>
         </p>
-        <strong>examples/recipes/default.rb</strong>
-<pre class="prettyprint">
-log "Chef is the business"
-</pre>
-
-<p>And a rule that does nothing except print the AST document to stdout:</p>
-
-<strong>rules.rb</strong>
-
-<pre class="prettyprint">
-rule "FC123", "Short description shown to the user" do
-  recipe do |ast|
-    puts ast.to_xml
-  end
-end
-</pre>
-
-<p>Then when you run foodcritic against the example recipe you will see the tree that represents the recipe as passed to
-your rule.</p>
-
-<strong>stdout</strong>
+        <p>
+            Click the 'Fork' button in the top right-hand corner. Cool, now you have your own copy of the repo.
+        </p>
 
 <pre>
-$ foodcritic example
+$ git clone https://you@github.com/you/foodcritic.git
+$ rvm use 1.9.3
+$ cd foodcritic
+$ git checkout -b log-contains-password
+Switched to a new branch 'log-contains-password'
+$ bundle install
 </pre>
 
-<pre class="prettyprint">
-&lt;?xml version="1.0"?&gt;
-&lt;opt&gt;
-  &lt;stmts_add&gt;
-    &lt;stmts_new/&gt;
-    &lt;command&gt;
-      &lt;ident value="log"&gt;
-        &lt;pos line="1" column="0"/&gt;
-      &lt;/ident&gt;
-      &lt;args_add_block value="false"&gt;
-        &lt;args_add&gt;
-          &lt;args_new/&gt;
-          &lt;string_literal&gt;
-            &lt;string_add&gt;
-              &lt;string_content/&gt;
-              &lt;tstring_content value="Chef is the business"&gt;
-                &lt;pos line="1" column="5"/&gt;
-              &lt;/tstring_content&gt;
-            &lt;/string_add&gt;
-          &lt;/string_literal&gt;
-        &lt;/args_add&gt;
-      &lt;/args_add_block&gt;
-    &lt;/command&gt;
-  &lt;/stmts_add&gt;
-&lt;/opt&gt;
+        <h3 id="writing-run-build">Run the foodcritic build</h3>
+        <p>
+            Before we make any code changes lets check that the existing code builds successfully on our machine.
+        </p>
+<pre>
+$ bundle exec rake
 </pre>
 
-<h3>Matching within the recipe block</h3>
+        <h3 id="writing-add-feature">Add a new feature</h3>
+        <p>
+            Lets add a Cucumber feature to describe our new rule with a couple of scenarios:
+        </p>
 
-<p>You can use Nokogiri's great support for XPath or CSS selectors to match against statements within the tree.</p>
+<pre>
+$ cat &gt; features/123_check_for_log_with_password.feature &lt;&lt;EOF
+Feature: Check for log statements that contain passwords
 
-<p>So if you wanted to get all <code>tstring_content</code> nodes that contained the word 'Chef' like our log statement above you
-could do something like the following within the recipe block:</p>
+  In order to prevent disclosure of credentials
+  As a developer
+  I want to identify when a log statement includes the word password
 
-<strong>rules.rb</strong>
+  Scenario: Log includes password
+    Given a recipe that declares a log resource including the word password
+    When I check the cookbook
+    Then the log resource includes password warning 123 should be displayed
 
-<pre class="prettyprint">
-recipe do |ast|
-  puts ast.xpath("//tstring_content[contains(@value, 'Chef')]").to_xml
-  []
+  Scenario: Log does not include password
+    Given a recipe that declares a log resource that does not include the word password
+    When I check the cookbook
+    Then the log resource includes password warning 123 should not be displayed
+EOF
+</pre>
+
+        <h3 id="writing-run-cucumber">Run Cucumber</h3>
+        <p>
+            Each of the lines in the scenario needs a matching step definition . If we run cucumber against our new feature:
+        </p>
+<pre>
+$ bundle exec cucumber features/123_check_for_log_with_password.feature
+...
+You can implement step definitions for undefined steps with these snippets:
+
+Given /^a recipe that declares a log resource including the word password$/ do
+  pending # express the regexp above with the code you wish you had
+end
+
+Given /^a recipe that declares a log resource that does not include the word password$/ do
+  pending # express the regexp above with the code you wish you had
 end
 </pre>
 
-<p>And the output will be something like:</p>
+        <p>
+            Cucumber is telling us that the <code>When</code> and <code>Then</code> steps already have matching step definitions, but we need to implement the <code>Given</code>s.
+        </p>
 
-<strong>stdout</strong>
+        <h3>Implement a step definition</h3>
 
-<pre class="prettyprint">
-&lt;tstring_content value="Chef is the business"&gt;
+        <p>
+            Lets implement the first <code>Given</code>, the one that creates a recipe that declares a log resource with the word password.
+        </p>
+
+<pre>
+cat &gt;&gt; features/step_definitions/cookbook_steps.rb &lt;&lt;EOF
+
+Given 'a recipe that declares a log resource including the word password' do
+  write_recipe %q{
+    log "The secret password is: password1"
+  }
+end
+EOF
+</pre>
+
+        <p>
+            Now lets run Cucumber. We expect it to fail at this stage.
+        </p>
+<pre>
+$ bundle exec cucumber features/123_check_for_log_with_password.feature
+...
+Failing Scenarios:
+cucumber features/123_check_for_log_with_password.feature:7 # Scenario: Log includes password
+</pre>
+
+        <p>
+            Great, we have a failing test. Now we can set about implementing the rule.
+        </p>
+
+        <h3 id="writing-add-warning">Ensure cucumber will recognise the new warning</h3>
+
+        <p>
+            In order for Cucumber to correctly recognise the new warning it needs to be added to the <code>WARNINGS</code> hash in <code>support/command_helpers.rb</code>.
+        </p>
+<pre>
+cat | git apply &lt;&lt;EOF
+diff --git a/features/support/command_helpers.rb b/features/support/command_helpers.rb
+--- a/features/support/command_helpers.rb
++++ b/features/support/command_helpers.rb
+@@ -26,3 +26,4 @@ module FoodCritic
+       'FC017' => 'LWRP does not notify when updated',
+-      'FC018' => 'LWRP uses deprecated notification syntax'
++      'FC018' => 'LWRP uses deprecated notification syntax',
++      'FC123' => 'Log contains password'
+     }
+EOF
+</pre>
+
+        <h3 id="writing-implement-rule">Implementing the rule</h3>
+        <p>
+            Lets use the very awesome <a href="http://pry.github.com/">Pry REPL</a> to interactively explore writing a
+            new rule, much as we might use Shef for writing Chef recipes.
+        </p>
+<pre>
+cat &gt;&gt; lib/foodcritic/rules.rb &lt;&lt;EOF
+
+rule "FC123", "Log contains password" do
+  recipe do |ast|
+    require 'pry'
+    binding.pry
+  end
+end
+EOF
+</pre>
+
+<p>
+    Run the build and you will be dropped into the Pry REPL:
+</p>
+
+<pre>
+$ bundle exec cucumber features/123_check_for_log_with_password.feature:7
+Feature: Check for log statements that contain passwords
+
+  In order to prevent disclosure of credentials
+  As a developer
+  I want to identify when a log statement includes the word password
+
+  Scenario: Log includes password                                           # features/123_check_for_log_with_password.feature:7
+    Given a recipe that declares a log resource including the word password # features/step_definitions/cookbook_steps.rb:501
+
+From: foodcritic/lib/foodcritic/rules.rb @ line 181 in FoodCritic::RuleDsl#load:
+
+   176:   end
+   177: end
+   178: rule "FC123", "Log contains password" do
+   179:   recipe do |ast|
+   180:     require 'pry'
+ =>181:     binding.pry
+   182:   end
+   183: end
+</pre>
+
+    <p>
+        This says that execution has been halted in the middle of our new rule.
+    </p>
+
+    <h3 id="writing-list-rules">Confirm the new placeholder rule is in the list</h3>
+You can see the list of currently loaded rules here and see that our new rule is included in the list:
+<pre>
+pry&gt; puts rules
+</pre>
+
+    <h3 id="writing-list-dsl-methods">Listing the available DSL methods</h3>
+
+    <p>
+        A number of pre-canned DSL methods exist to help in writing rules. You can list these by typing:
+    </p>
+<pre>
+pry&gt; Helpers.instance_methods.sort
+</pre>
+
+    <p>
+        To see the documentation for one method in particular (here the <code>included_recipes</code> method) type:
+    </p>
+<pre>
+pry&gt; show-doc included_recipes
+
+From: foodcritic/lib/foodcritic/helpers.rb @ line 143:
+Number of lines: 4
+Owner: FoodCritic::Helpers
+Visibility: public
+Signature: included_recipes(ast)
+
+Retrieve the recipes that are included within the given recipe AST.
+
+param [Nokogiri::XML::Node] ast The recipe AST
+return [Hash] include_recipe nodes keyed by included recipe name
+</pre>
+
+        <h3 id="writing-expression">Write an expression that matches your criteria</h3>
+        <p>
+            To view the XML representation of the AST, type:
+        </p>
+<pre>
+pry&gt; puts ast
+</pre>
+        <p>
+            You can use Nokogiri's great support for XPath or CSS selectors to match against statements within the tree.
+            Lets try and write a XPath expression that will match only the nodes you are interested in.
+        </p>
+<pre>
+pry&gt; puts ast.xpath("//command[ident/@value='log']/descendant::tstring_content[contains(@value, 'password')]")
+&lt;tstring_content value="The secret password is: password1"&gt;
   &lt;pos line="1" column="5"/&gt;
 &lt;/tstring_content&gt;
 </pre>
 
-<p>This node contains a <code>pos</code> child node that defines its location within the recipe. Now lets finish our rule by adding
-the matched node to the list of matches, which ensures the user will see a warning.</p>
+        <h3 id="writing-flag-matches">Flagging matches</h3>
 
-<strong>rules.rb</strong>
+        <p>
+            For foodcritic to report your warning you currently need to specify them as matches. You need to map a node
+            in the AST that has a child <code>pos</code> node which foodcritic can use to display the line number.
+        </p>
+<pre>
+pry&gt; ast.xpath("//command[ident/@value='log']/descendant::tstring_content[contains(@value, 'password')]").map{|n| match(n)}
+=> [{:matched=>"tstring_content", :line=>"1", :column=>"5"}]
+</pre>
 
+        <h3 id="writing-update-rule">Update the rule definition</h3>
+
+        <p>
+            Now we have what we think is the matching expression lets update the rule definition. The <code>-n</code> flag
+            tells Pry not to try to reload the rules (this doesn't work).
+        </p>
+<pre>
+pry&gt; edit -n ../../lib/foodcritic/rules.rb
+</pre>
+        <p>
+            This will drop you into your favourite <code>EDITOR</code> where you can update the rule body. Here as well as adding
+            our match expression (and removing the Pry references) I've added the <code>security</code> tag to group this rule with similar rules.
+        </p>
 <pre class="prettyprint">
-rule "FC123", "Short description shown to the user" do
-  description "A longer description with more information."
+rule "FC123", "Log contains password" do
+  tags %w{security}
   recipe do |ast|
-    ast.xpath("//tstring_content[contains(@value, 'Chef')]").map{|resource| match(resource)}
+    ast.xpath("//command[ident/@value='log']/descendant::tstring_content[contains(@value, 'password')]").map{|n| match(n)}
   end
 end
 </pre>
-
-<strong>stdout</strong>
-
 <pre>
-$ foodcritic example
-FC123: Short description shown to the user: example/recipes/default.rb:1
+pry&gt; exit
 </pre>
+        <p>
+            Run Cucumber to confirm that the rule implementation passes your example scenario:
+        </p>
+<pre>
+$ bundle exec cucumber features/123_check_for_log_with_password.feature:7
+1 scenario (1 passed)
+3 steps (3 passed)
+</pre>
+
+        <h3 id="writing-next-steps">Next steps</h3>
+        <p>
+            Once the step definitions have been completed you need to:
+            <ul>
+                <li>Think of other scenarios that you need to test. For this example you might consider that Chef allows you to log via direct calls to the Chef logger
+                as well and modify your scenarios and rule definition to deal with this.</li>
+                <li>Run the feature to confirm it passes on both Ruby 1.9.2 and 1.9.3 as there are AST differences between them.</li>
+                <li>Run the complete build again.</li>
+                <li>Push your changes to GitHub and open a pull request.</li>
+            </ul>
+        </p>
 
 <p>That's it - have fun. Thanks!</p>
 
