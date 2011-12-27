@@ -50,6 +50,13 @@ module FoodCritic
       @code, @name = code, name
       @tags = [code]
     end
+
+    # Returns a string representation of this rule.
+    #
+    # @return [String] Rule as a string.
+    def to_s
+      "#{@code}: #{@name}"
+    end
   end
 
 end

@@ -9,8 +9,11 @@ group :test do
 end
 
 group :development do
+  gem 'gist', '~> 2.0.4'
   gem 'guard', '~> 0.9.1'
   gem 'guard-cucumber', '~> 0.7.4'
+  gem 'pry', '~> 0.9.7.4'
+  gem 'pry-doc', '~> 0.3.0'
   gem "rake", '~> 0.9.2.2'
   gem "rdiscount", '~> 1.6.8'
   gem "yard", '~> 0.7.4'
