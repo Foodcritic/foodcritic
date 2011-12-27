@@ -1,5 +1,6 @@
 module FoodCritic
 
+  # Helper cookbook methods for use in your steps.
   module CookbookHelpers
 
     # Create an attributes file that references attributes with symbols
@@ -270,26 +271,47 @@ module FoodCritic
       str == 'unspecified' ? nil : str
     end
 
+    # Create a recipe with the provided content.
+    #
+    # @param [String] content The recipe content.
     def write_recipe(content)
       write_file 'cookbooks/example/recipes/default.rb', content.strip
     end
 
+    # Create attributes with the provided content.
+    #
+    # @param [String] content The attributes content.
     def write_attributes(content)
       write_file 'cookbooks/example/attributes/default.rb', content.strip
     end
 
+    # Create a definition with the provided content.
+    #
+    # @param [String] name The definition name.
+    # @param [String] content The definition content.
     def write_definition(name, content)
       write_file "cookbooks/example/definitions/#{name}.rb", content.strip
     end
 
+    # Create metdata with the provided content.
+    #
+    # @param [String] content The metadata content.
     def write_metadata(content)
       write_file 'cookbooks/example/metadata.rb', content.strip
     end
 
+    # Create a resource with the provided content.
+    #
+    # @param [String] name The resource name.
+    # @param [String] content The resource content.
     def write_resource(name, content)
       write_file "cookbooks/example/resources/#{name}.rb", content.strip
     end
 
+    # Create a provider with the provided content.
+    #
+    # @param [String] name The resource name.
+    # @param [String] content The resource content.
     def write_provider(name, content)
       write_file "cookbooks/example/providers/#{name}.rb", content.strip
     end

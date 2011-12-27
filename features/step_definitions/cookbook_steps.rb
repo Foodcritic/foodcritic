@@ -408,27 +408,27 @@ Given 'I have installed the lint tool' do
 end
 
 When /^I check the cookbook(?: specifying tags(.*))?$/ do |tags|
-  run_lint(tags)
+  run_lint((tags.nil? ? [] : tags.split(' ')) + ['cookbooks/example'])
 end
 
 When 'I run it on the command line specifying a cookbook that does not exist' do
-  run_simple('foodcritic no-such-cookbook', false)
+  run_lint(['no-such-cookbook'])
 end
 
 When 'I run it on the command line with no arguments' do
-  run_simple('foodcritic', false)
+  run_lint([])
 end
 
 When 'I run it on the command line with the help option' do
-  run_simple('foodcritic --help', false)
+  run_lint(['--help'])
 end
 
 When 'I run it on the command line with too many arguments' do
-  run_simple('foodcritic example example', false)
+  run_lint(['example', 'example'])
 end
 
 Then 'no error should have occurred' do
-  assert_exit_status(0)
+  assert_no_error_occurred
 end
 
 Then /^the (?:[a-zA-Z \-]+) warning ([0-9]+) should (not )?be displayed(?: against the (attributes|definition|metadata|provider|README.md|README.rdoc) file)?$/ do |code, no_display, file|
@@ -474,7 +474,7 @@ Then 'the node access warning 001 should warn on lines 2 and 10 in that order' d
   expected_warnings = [2, 10].map do |line|
     "FC001: Use strings in preference to symbols to access node attributes: cookbooks/example/recipes/default.rb:#{line}"
   end
-  assert_partial_output(expected_warnings.join("\n"), all_output)
+  expect_output(expected_warnings.join("\n"))
 end
 
 Then /^the simple usage text should be displayed along with a (non-)?zero exit code$/ do |non_zero|

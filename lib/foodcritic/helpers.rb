@@ -173,7 +173,7 @@ module FoodCritic
 
     # Recurse the nested arrays provided by Ripper to create a tree we can more easily apply expressions to.
     #
-    # @param [Hash] node The AST
+    # @param [Array] node The AST
     # @param [Nokogiri::XML::Document] doc The document being constructed
     # @param [Nokogiri::XML::Node] xml_node The current node
     # @return [Nokogiri::XML::Node] The XML representation

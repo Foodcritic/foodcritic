@@ -1,3 +1,4 @@
+require 'optparse'
 require 'ripper'
 require 'gherkin/tag_expression'
 
@@ -7,6 +8,29 @@ module FoodCritic
   class Linter
 
     include FoodCritic::Helpers
+
+    # Perform option parsing from the provided arguments and do a lint check based on those arguments.
+    #
+    # @param [Array] args The command-line arguments to parse
+    # @return [Array] Pair - the first item is string output, the second is the exit code.
+    def self.check(args)
+      options = {}
+      options[:tags] = []
+      parser = OptionParser.new do |opts|
+        opts.banner = 'foodcritic [cookbook_path]'
+        opts.on("-t", "--tags TAGS", "Only check against rules with the specified tags.") {|t|options[:tags] << t}
+      end
+
+      return [parser.help, 0] if args.length == 1 and args.first == '--help'
+
+      parser.parse!(args)
+
+      if args.length == 1 and Dir.exists?(args[0])
+        [FoodCritic::Linter.new.check(args[0], options), 0]
+      else
+        [parser.help, 2]
+      end
+    end
 
     # Create a new Linter, loading any defined rules.
     def initialize

@@ -1,7 +1,10 @@
 require 'simplecov'
-SimpleCov.start
+SimpleCov.start do
+  add_filter '/features/'
+end
 
 require 'aruba/cucumber'
+require 'foodcritic'
 
 Before do
   @aruba_timeout_seconds = 300
