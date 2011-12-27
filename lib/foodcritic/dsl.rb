@@ -1,5 +1,6 @@
 require 'pathname'
 
+# FoodCritic is a lint tool for Chef cookbooks.
 module FoodCritic
 
   # The DSL methods exposed for defining rules.

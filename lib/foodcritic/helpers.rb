@@ -15,6 +15,11 @@ module FoodCritic
       {:matched => node.respond_to?(:name) ? node.name : '', :line => pos['line'], :column => pos['column']}
     end
 
+    # Create a match for a specified file. Use this if the presence of the file triggers the warning rather than content.
+    #
+    # @param [String] file The filename to create a match for
+    # @return [Hash] Hash with the match details
+    # @see FoodCritic::Helpers#match
     def file_match(file)
       {:filename => file, :matched => file, :line => 1, :column => 1}
     end
