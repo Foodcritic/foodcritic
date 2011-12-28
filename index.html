@@ -681,7 +681,8 @@ end
 </pre>
 
         <p>
-            Cucumber is telling us that the <code>When</code> and <code>Then</code> steps already have matching step definitions, but we need to implement the <code>Given</code>s.
+            Cucumber is telling us that we need to implement the <code>Given</code> steps. The <code>When</code> and
+            <code>Then</code> steps have already been implemented for us.
         </p>
 
         <h3 id="writing-implement-step">Implement a step definition</h3>
@@ -739,53 +740,38 @@ EOF
             Lets use the very awesome <a href="http://pry.github.com/">Pry REPL</a> to interactively explore writing a
             new rule, much as we might use Shef for writing Chef recipes.
         </p>
-<pre class="prettyprint">
-$ cat &gt;&gt; lib/foodcritic/rules.rb &lt;&lt;EOF
-
-rule "FC123", "Log contains password" do
-  recipe do |ast|
-    require 'pry'
-    binding.pry
-  end
-end
-EOF
-</pre>
 
 <p>
-    Run the build and you will be dropped into the Pry REPL:
+    Run the build with <code>FC_REPL=true</code> and you will be dropped into the Pry REPL:
 </p>
 
 <pre>
-$ bundle exec cucumber features/123_check_for_log_with_password.feature:7
-Feature: Check for log statements that contain passwords
-
-  In order to prevent disclosure of credentials
-  As a developer
-  I want to identify when a log statement includes the word password
-
-  Scenario: Log includes password                                           # features/123_check_for_log_with_password.feature:7
-    Given a recipe that declares a log resource including the word password # features/step_definitions/cookbook_steps.rb:501
-
-From: foodcritic/lib/foodcritic/rules.rb @ line 181 in FoodCritic::RuleDsl#load:
-
-   176:   end
-   177: end
-   178: rule "FC123", "Log contains password" do
-   179:   recipe do |ast|
-   180:     require 'pry'
- =>181:     binding.pry
-   182:   end
-   183: end
+$ FC_REPL=true bundle exec cucumber features/123_check_for_log_with_password.feature:7
 </pre>
 
-    <p>
-        This says that execution has been halted in the middle of our new rule.
-    </p>
+    <h3 id="writing-add-rule">Add a new rule</h3>
+        <p>
+            First define a new placeholder rule:
+        </p>
+<pre>
+pry&gt; rule "FC123", "Log contains password" do
+  recipe do |ast|
+	  binding.pry
+  end
+end
+</pre>
 
-    <h3 id="writing-list-rules">Confirm the new placeholder rule is in the list</h3>
-You can see the list of currently loaded rules here and see that our new rule is included in the list:
+<p>
+    Check that it has been added to the list of rules:
+</p>
 <pre>
 pry&gt; puts rules
+</pre>
+        <p>
+            And exit, to be taken to the binding you declared above:
+        </p>
+<pre>
+pry&gt; exit
 </pre>
 
     <h3 id="writing-list-dsl-methods">Listing the available DSL methods</h3>
@@ -847,36 +833,37 @@ pry&gt; ast.xpath("//command[ident/@value='log']/descendant::tstring_content[con
         <h3 id="writing-update-rule">Update the rule definition</h3>
 
         <p>
-            Now we have what we think is the matching expression lets update the rule definition. The <code>-n</code> flag
-            tells Pry not to try to reload the rules (this doesn't work).
+            Now we have what we think is the matching expression lets update the rule definition:
         </p>
 <pre>
-pry&gt; edit -n ../../lib/foodcritic/rules.rb
-</pre>
-        <p>
-            This will drop you into your favourite <code>EDITOR</code> where you can update the rule body. Here as well as adding
-            our match expression (and removing the Pry references) I've added the <code>security</code> tag to group this rule with similar rules.
-        </p>
-<pre class="prettyprint">
-rule "FC123", "Log contains password" do
+pry&gt; cd ..
+pry&gt; reset_rules
+pry&gt; rule "FC123", "Log contains password" do
   tags %w{security}
   recipe do |ast|
     ast.xpath("//command[ident/@value='log']/descendant::tstring_content[contains(@value, 'password')]").map{|n| match(n)}
   end
 end
-</pre>
-<pre>
 pry&gt; exit
 </pre>
+
         <p>
-            Run Cucumber to confirm that the rule implementation passes your example scenario:
+            And finally re-run the check against the newly redefined rule:
         </p>
 <pre>
-$ bundle exec cucumber features/123_check_for_log_with_password.feature:7
+pry&gt; recheck
+pry&gt; review
+=&gt; FC011: Missing README in markdown format: cookbooks/example/README.md:1
+FC123: Log contains password: cookbooks/example/recipes/default.rb:1
+
+pry&gt; exit
+pry&gt; exit
+    When I check the cookbook                                               # features/step_definitions/cookbook_steps.rb:410
+    Then the log resource includes password warning 123 should be displayed # features/step_definitions/cookbook_steps.rb:434
+
 1 scenario (1 passed)
 3 steps (3 passed)
 </pre>
-
         <h3 id="writing-next-steps">Next steps</h3>
         <p>
             Once the step definitions have been completed you need to:
