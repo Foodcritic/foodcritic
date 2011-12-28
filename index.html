@@ -606,7 +606,7 @@ end
         <p>
             Each rule has a block that defines the matching logic for the rule. The block accepts a
             <a href="http://nokogiri.org/">Nokogiri</a> document that contains the Ripper parsed representation of your
-            recipe. Ripper is a very useful module that ships with recent version of Ruby allowing you to walk the tree
+            recipe. Ripper is a very useful module that ships with recent versions of Ruby allowing you to walk the tree
             of symbols representing your program without actually having to eval it.
         </p>
 
@@ -684,14 +684,14 @@ end
             Cucumber is telling us that the <code>When</code> and <code>Then</code> steps already have matching step definitions, but we need to implement the <code>Given</code>s.
         </p>
 
-        <h3>Implement a step definition</h3>
+        <h3 id="writing-implement-step">Implement a step definition</h3>
 
         <p>
             Lets implement the first <code>Given</code>, the one that creates a recipe that declares a log resource with the word password.
         </p>
 
-<pre>
-cat &gt;&gt; features/step_definitions/cookbook_steps.rb &lt;&lt;EOF
+<pre class="prettyprint">
+$ cat &gt;&gt; features/step_definitions/cookbook_steps.rb &lt;&lt;EOF
 
 Given 'a recipe that declares a log resource including the word password' do
   write_recipe %q{
@@ -720,8 +720,8 @@ cucumber features/123_check_for_log_with_password.feature:7 # Scenario: Log incl
         <p>
             In order for Cucumber to correctly recognise the new warning it needs to be added to the <code>WARNINGS</code> hash in <code>support/command_helpers.rb</code>.
         </p>
-<pre>
-cat | git apply &lt;&lt;EOF
+<pre class="prettyprint">
+$ cat &lt;&lt;EOF | git apply
 diff --git a/features/support/command_helpers.rb b/features/support/command_helpers.rb
 --- a/features/support/command_helpers.rb
 +++ b/features/support/command_helpers.rb
@@ -739,8 +739,8 @@ EOF
             Lets use the very awesome <a href="http://pry.github.com/">Pry REPL</a> to interactively explore writing a
             new rule, much as we might use Shef for writing Chef recipes.
         </p>
-<pre>
-cat &gt;&gt; lib/foodcritic/rules.rb &lt;&lt;EOF
+<pre class="prettyprint">
+$ cat &gt;&gt; lib/foodcritic/rules.rb &lt;&lt;EOF
 
 rule "FC123", "Log contains password" do
   recipe do |ast|
@@ -826,7 +826,7 @@ pry&gt; puts ast
             You can use Nokogiri's great support for XPath or CSS selectors to match against statements within the tree.
             Lets try and write a XPath expression that will match only the nodes you are interested in.
         </p>
-<pre>
+<pre class="prettyprint">
 pry&gt; puts ast.xpath("//command[ident/@value='log']/descendant::tstring_content[contains(@value, 'password')]")
 &lt;tstring_content value="The secret password is: password1"&gt;
   &lt;pos line="1" column="5"/&gt;
@@ -839,7 +839,7 @@ pry&gt; puts ast.xpath("//command[ident/@value='log']/descendant::tstring_conten
             For foodcritic to report your warning you currently need to specify them as matches. You need to map a node
             in the AST that has a child <code>pos</code> node which foodcritic can use to display the line number.
         </p>
-<pre>
+<pre class="prettyprint">
 pry&gt; ast.xpath("//command[ident/@value='log']/descendant::tstring_content[contains(@value, 'password')]").map{|n| match(n)}
 => [{:matched=>"tstring_content", :line=>"1", :column=>"5"}]
 </pre>
