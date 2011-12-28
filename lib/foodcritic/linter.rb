@@ -18,6 +18,7 @@ module FoodCritic
       options[:tags] = []
       parser = OptionParser.new do |opts|
         opts.banner = 'foodcritic [cookbook_path]'
+        opts.on("-r", "--[no-]repl", "Drop into a REPL for interactive rule editing.") {|r|options[:repl] = r}
         opts.on("-t", "--tags TAGS", "Only check against rules with the specified tags.") {|t|options[:tags] << t}
       end
 
@@ -32,9 +33,9 @@ module FoodCritic
       end
     end
 
-    # Create a new Linter, loading any defined rules.
+    # Create a new Linter.
     def initialize
-      load_rules
+
     end
 
     # Review the cookbooks at the provided path, identifying potential improvements.
@@ -44,6 +45,9 @@ module FoodCritic
     # @option options [Array] tags The tags to filter rules based on
     # @return [FoodCritic::Review] A review of your cookbooks, with any warnings issued.
     def check(cookbook_path, options)
+      @last_cookbook_path = cookbook_path
+      @last_options = options
+      load_rules unless defined? @rules
       warnings = []; last_dir = nil
       tag_expr = Gherkin::TagExpression.new(options[:tags])
       files_to_process(cookbook_path).each do |file|
@@ -57,7 +61,24 @@ module FoodCritic
         end
         last_dir = cookbook_dir
       end
-      Review.new(warnings)
+      @review = Review.new(warnings)
+      binding.pry if options[:repl]
+      @review
+    end
+
+    def recheck
+      check(@last_cookbook_path, @last_options)
+    end
+
+    # Load the rules from the (fairly unnecessary) DSL.
+    def load_rules
+      @rules = RuleDsl.load(File.join(File.dirname(__FILE__), 'rules.rb'), @last_options[:repl])
+    end
+
+    alias_method :reset_rules, :load_rules
+
+    def review
+      @review
     end
 
     private
@@ -71,11 +92,6 @@ module FoodCritic
       return [] unless match_method.respond_to?(:yield)
       matches = match_method.yield(*params)
       matches.respond_to?(:each) ? matches : []
-    end
-
-    # Load the rules from the (fairly unnecessary) DSL.
-    def load_rules
-      @rules = RuleDsl.load(File.join(File.dirname(__FILE__), 'rules.rb'))
     end
 
     # Return the files within a cookbook tree that we are interested in trying to match rules against.

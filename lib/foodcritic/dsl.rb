@@ -52,9 +52,10 @@ module FoodCritic
     #
     # @param [String] filename The path to the ruleset to load
     # @return [Array] The loaded rules, ready to be matched against provided cookbooks.
-    def self.load(filename)
+    def self.load(filename, with_repl)
       dsl = RuleDsl.new
       dsl.instance_eval(File.read(filename), filename)
+      dsl.instance_eval { binding.pry } if with_repl
       dsl.rules
     end
   end

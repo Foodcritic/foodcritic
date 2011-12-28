@@ -84,10 +84,15 @@ module FoodCritic
     #
     # @param [Array] cmd_args The command line arguments.
     def run_lint(cmd_args)
+      cmd_args.unshift '--repl' if with_repl?
       in_current_dir do
         review, @status = FoodCritic::Linter.check(cmd_args)
         @review = review.nil? || (review.respond_to?(:warnings) && review.warnings.empty?) ? '' : "#{review.to_s}\n"
       end
+    end
+
+    def with_repl?
+      (ENV.has_key?('FC_REPL') and ENV['FC_REPL'] == true.to_s)
     end
 
     # Assert that the usage message is displayed.

@@ -1,4 +1,5 @@
 require 'chef'
+require 'pry'
 require 'foodcritic/domain'
 require 'foodcritic/helpers'
 require 'foodcritic/dsl'
