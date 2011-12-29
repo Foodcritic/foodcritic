@@ -17,8 +17,8 @@ end
 
 rule "FC003", "Check whether you are running with chef server before using server-specific features" do
   tags %w{portability solo}
-  recipe do |ast|
-    checks_for_chef_solo?(ast) ? [] : searches(ast).map{|s| match(s)}
+  recipe do |ast,filename|
+    searches(ast).map{|s| match(s)} unless checks_for_chef_solo?(ast) or chef_solo_search_supported?(filename)
   end
 end
 

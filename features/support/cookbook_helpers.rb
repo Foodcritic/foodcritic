@@ -293,6 +293,14 @@ module FoodCritic
       write_file "cookbooks/example/definitions/#{name}.rb", content.strip
     end
 
+    # Create a library with the provided content.
+    #
+    # @param [String] name The library name.
+    # @param [String] content The library content.
+    def write_library(name, content)
+      write_file "cookbooks/example/libraries/#{name}.rb", content.strip
+    end
+
     # Create metdata with the provided content.
     #
     # @param [String] content The metadata content.

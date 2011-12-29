@@ -403,6 +403,18 @@ Given 'a recipe that declares multiple resources of the same type of which one h
   }
 end
 
+Given 'another cookbook that has chef-solo-search installed' do
+  write_library 'search', %q{
+    class Chef
+      class Recipe
+        def search(bag_name, query=nil, sort=nil, start=0, rows=1000, &block)
+          # https://github.com/edelight/chef-solo-search
+        end
+      end
+    end
+  }
+end
+
 Given 'I have installed the lint tool' do
 
 end
@@ -477,7 +489,7 @@ Then /^the boilerplate metadata warning 008 should warn on lines (.*)$/ do |line
 end
 
 Then 'the check for server warning 003 should not be displayed given we have checked' do
-  expect_warning("FC004", :line => 4, :expect_warning => false)
+  expect_warning("FC003", :line => 4, :expect_warning => false)
 end
 
 Then /^the file mode warning 006 should be (valid|invalid)$/ do |valid|
