@@ -45,8 +45,7 @@ module FoodCritic
     # @option options [Array] tags The tags to filter rules based on
     # @return [FoodCritic::Review] A review of your cookbooks, with any warnings issued.
     def check(cookbook_path, options)
-      @last_cookbook_path = cookbook_path
-      @last_options = options
+      @last_cookbook_path, @last_options = cookbook_path, options
       load_rules unless defined? @rules
       warnings = []; last_dir = nil
       tag_expr = Gherkin::TagExpression.new(options[:tags])
@@ -66,6 +65,7 @@ module FoodCritic
       @review
     end
 
+    # Convenience method to repeat the last check. Intended to be used from the REPL.
     def recheck
       check(@last_cookbook_path, @last_options)
     end
@@ -77,6 +77,9 @@ module FoodCritic
 
     alias_method :reset_rules, :load_rules
 
+    # Convenience method to retrieve the last review. Intended to be used from the REPL.
+    #
+    # @return [Review] The last review performed.
     def review
       @review
     end

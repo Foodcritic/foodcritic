@@ -4,6 +4,7 @@ SimpleCov.start do
 end
 
 require 'aruba/cucumber'
+require 'pry'
 require 'foodcritic'
 
 Before do

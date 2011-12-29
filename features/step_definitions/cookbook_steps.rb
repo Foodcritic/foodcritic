@@ -407,8 +407,23 @@ Given 'I have installed the lint tool' do
 
 end
 
+Given 'I have started the lint tool with the REPL enabled' do
+  @repl_match_string = 'Here is a placeholder recipe'
+  write_recipe %Q{
+    log "#{@repl_match_string}"
+  }
+end
+
 When /^I check the cookbook(?: specifying tags(.*))?$/ do |tags|
   run_lint((tags.nil? ? [] : tags.split(' ')) + ['cookbooks/example'])
+end
+
+When /^I define a new rule( and reset the list of rules| that includes a binding)?$/ do |qualifier|
+  @rule_code, @rule_name = 'FC000', 'Like caprese and with the basil'
+  repl_define_rule(@rule_code, @rule_name,
+                  :reset_rules => ! /reset/.match(qualifier).nil?,
+                  :with_binding => ! /binding/.match(qualifier).nil?,
+                  :rule_match_string => @repl_match_string)
 end
 
 When 'I run it on the command line specifying a cookbook that does not exist' do
@@ -425,6 +440,14 @@ end
 
 When 'I run it on the command line with too many arguments' do
   run_lint(['example', 'example'])
+end
+
+Then 'I should be able to see the AST from inside the rule' do
+  repl_ast_available?(@repl_match_string).should be_true
+end
+
+Then 'I should be able to see the list of helper DSL methods from inside the rule' do
+  repl_helper_methods_available?.should be_true
 end
 
 Then 'no error should have occurred' do
@@ -477,6 +500,14 @@ Then 'the node access warning 001 should warn on lines 2 and 10 in that order' d
   expect_output(expected_warnings.join("\n"))
 end
 
+Then 'the review should include the matching rules' do
+  repl_review_includes_match?(@rule_code, @rule_name).should be_true
+end
+
+Then /^the rule should (not )?be visible in the list of rules$/ do |invisible|
+  repl_rule_exists?(@rule_code, @rule_name).should == invisible.nil?
+end
+
 Then /^the simple usage text should be displayed along with a (non-)?zero exit code$/ do |non_zero|
   usage_displayed(non_zero.nil?)
 end
@@ -493,6 +524,10 @@ end
 
 Then 'the unrecognised attribute warning 009 should be displayed against the correct resource' do
   expect_warning('FC009', :line => 7)
+end
+
+Then 'the usage text should include an option for launching a REPL' do
+  expect_output(/-r, --\[no-\]repl[ ]+Drop into a REPL for interactive rule editing./)
 end
 
 Then /^the warnings shown should be (.*)$/ do |warnings|

@@ -63,16 +63,24 @@ module FoodCritic
 
     # Assert that the output contains the specified warning.
     #
-    # @param [String] warning The warning to check for.
-    def expect_output(warning)
-      @review.should include(warning)
+    # @param [String] output The warning to check for.
+    def expect_output(output)
+      if output.respond_to?(:~)
+        @review.should match(output)
+      else
+        @review.should include(output)
+      end
     end
 
     # Assert that the output does not contain the specified warning.
     #
     # @param [String] warning The warning to check for.
-    def expect_no_output(warning)
-      @review.should_not include(warning)
+    def expect_no_output(output)
+      if output.respond_to?(:~)
+        @review.should_not match(output)
+      else
+        @review.should_not include(output)
+      end
     end
 
     # Assert that no error occurred following a lint check.
