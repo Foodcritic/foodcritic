@@ -1,3 +1,4 @@
+@repl
 Feature: Interactive console
 
   In order to more quickly develop new rules and support exploratory changes

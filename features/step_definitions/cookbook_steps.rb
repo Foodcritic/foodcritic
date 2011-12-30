@@ -488,6 +488,10 @@ Then /^the boilerplate metadata warning 008 should warn on lines (.*)$/ do |line
   end
 end
 
+Then /the build status should be (successful|failed)$/ do |build_status|
+  build_status == 'successful' ? assert_no_error_occurred : assert_error_occurred
+end
+
 Then 'the check for server warning 003 should not be displayed given we have checked' do
   expect_warning("FC003", :line => 4, :expect_warning => false)
 end
@@ -539,7 +543,11 @@ Then 'the unrecognised attribute warning 009 should be displayed against the cor
 end
 
 Then 'the usage text should include an option for launching a REPL' do
-  expect_output(/-r, --\[no-\]repl[ ]+Drop into a REPL for interactive rule editing./)
+  expect_usage_option('r', '[no-]repl', 'Drop into a REPL for interactive rule editing.')
+end
+
+Then 'the usage text should include an option for specifying tags that will fail the build' do
+  expect_usage_option('f', 'epic-fail TAGS', 'Fail the build if any of the specified tags are matched.')
 end
 
 Then /^the warnings shown should be (.*)$/ do |warnings|

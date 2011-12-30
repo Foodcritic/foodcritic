@@ -15,11 +15,12 @@ module FoodCritic
     # @return [Array] Pair - the first item is string output, the second is the exit code.
     def self.check(args)
       options = {}
-      options[:tags] = []
+      options[:fail_tags] = []; options[:tags] = []
       parser = OptionParser.new do |opts|
         opts.banner = 'foodcritic [cookbook_path]'
         opts.on("-r", "--[no-]repl", "Drop into a REPL for interactive rule editing.") {|r|options[:repl] = r}
         opts.on("-t", "--tags TAGS", "Only check against rules with the specified tags.") {|t|options[:tags] << t}
+        opts.on("-f", "--epic-fail TAGS", "Fail the build if any of the specified tags are matched.") {|t|options[:fail_tags] << t}
       end
 
       return [parser.help, 0] if args.length == 1 and args.first == '--help'
@@ -27,7 +28,8 @@ module FoodCritic
       parser.parse!(args)
 
       if args.length == 1 and Dir.exists?(args[0])
-        [FoodCritic::Linter.new.check(args[0], options), 0]
+        review = FoodCritic::Linter.new.check(args[0], options)
+        [review, review.failed? ? 3 : 0]
       else
         [parser.help, 2]
       end
@@ -43,12 +45,14 @@ module FoodCritic
     # @param [String] cookbook_path The file path to an individual cookbook directory
     # @param [Hash] options Options to apply to the linting
     # @option options [Array] tags The tags to filter rules based on
+    # @option options [Array] fail_tags The tags to fail the build on
     # @return [FoodCritic::Review] A review of your cookbooks, with any warnings issued.
     def check(cookbook_path, options)
       @last_cookbook_path, @last_options = cookbook_path, options
       load_rules unless defined? @rules
-      warnings = []; last_dir = nil
+      warnings = []; last_dir = nil; matched_rule_tags = Set.new
       tag_expr = Gherkin::TagExpression.new(options[:tags])
+
       files_to_process(cookbook_path).each do |file|
         cookbook_dir = Pathname.new(File.join(File.dirname(file), '..')).cleanpath
         ast = read_file(file)
@@ -56,11 +60,16 @@ module FoodCritic
           rule_matches = matches(rule.recipe, ast, file)
           rule_matches += matches(rule.provider, ast, file) if File.basename(File.dirname(file)) == 'providers'
           rule_matches += matches(rule.cookbook, cookbook_dir) if last_dir != cookbook_dir
-          rule_matches.each{|match| warnings << Warning.new(rule, {:filename => file}.merge(match))}
+          rule_matches.each do |match|
+            warnings << Warning.new(rule, {:filename => file}.merge(match))
+            matched_rule_tags += rule.tags
+          end
         end
         last_dir = cookbook_dir
       end
-      @review = Review.new(warnings)
+
+      @review = Review.new(warnings, should_fail_build?(options[:fail_tags], matched_rule_tags))
+
       binding.pry if options[:repl]
       @review
     end
@@ -105,6 +114,21 @@ module FoodCritic
       return [dir] unless File.directory? dir
       Dir.glob(File.join(dir, '{attributes,providers,recipes}/*.rb')) +
           Dir.glob(File.join(dir, '*/{attributes,providers,recipes}/*.rb'))
+    end
+
+    # Whether to fail the build.
+    #
+    # @param [Array] fail_tags The tags that should cause the build to fail, or special value 'any' for any tag.
+    # @param [Set] matched_tags The tags of warnings we have matches for
+    # @return [Boolean] True if the build should be failed
+    def should_fail_build?(fail_tags, matched_tags)
+      if fail_tags.empty?
+        false
+      elsif fail_tags.include? 'any'
+        true
+      else
+        Gherkin::TagExpression.new(fail_tags).eval(matched_tags)
+      end
     end
 
   end

@@ -24,8 +24,17 @@ module FoodCritic
     # Create a new review
     #
     # @param [Array] warnings The warnings raised in this review
-    def initialize(warnings)
+    # @param [Boolean] is_failed Have warnings been raised that mean this should be considered failed?
+    def initialize(warnings, is_failed)
       @warnings = warnings
+      @is_failed = is_failed
+    end
+
+    # If this review has failed or not.
+    #
+    # @return [Boolean] True if this review has failed.
+    def failed?
+      @is_failed
     end
 
     # Returns a string representation of this review.

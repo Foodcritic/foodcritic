@@ -56,6 +56,30 @@ module FoodCritic
     def expect_no_warning(code, options={:expect_warning => false})
       expect_warning(code, options)
     end
+
+    # Expect a command line option / switch to be included in the usage.
+    #
+    # @param [String] short_switch The short version of the switch
+    # @param [String] long_switch The long descriptive version of the switch
+    # @param [String] description The description of the switch
+    def expect_usage_option(short_switch, long_switch, description)
+      expected_switch = "-#{Regexp.escape(short_switch)}, --#{Regexp.escape(long_switch)}[ ]+#{Regexp.escape(description)}"
+      expect_output(Regexp.new(expected_switch))
+    end
+
+    # Assert that the usage message is displayed.
+    #
+    # @param [Boolean] is_exit_zero The exit code to check for.
+    def usage_displayed(is_exit_zero)
+      expect_output 'foodcritic [cookbook_path]'
+      expect_usage_option('t', 'tags TAGS', 'Only check against rules with the specified tags.')
+      if is_exit_zero
+        assert_no_error_occurred
+      else
+        assert_error_occurred
+      end
+    end
+
   end
 
   # Helpers used when features are executed in-process.
@@ -74,13 +98,18 @@ module FoodCritic
 
     # Assert that the output does not contain the specified warning.
     #
-    # @param [String] warning The warning to check for.
+    # @param [String] output The output to check for.
     def expect_no_output(output)
       if output.respond_to?(:~)
         @review.should_not match(output)
       else
         @review.should_not include(output)
       end
+    end
+
+    # Assert that an error occurred following a lint check.
+    def assert_error_occurred
+      @status.should_not == 0
     end
 
     # Assert that no error occurred following a lint check.
@@ -103,19 +132,6 @@ module FoodCritic
       (ENV.has_key?('FC_REPL') and ENV['FC_REPL'] == true.to_s)
     end
 
-    # Assert that the usage message is displayed.
-    #
-    # @param [Boolean] is_exit_zero The exit code to check for.
-    def usage_displayed(is_exit_zero)
-      expect_output 'foodcritic [cookbook_path]'
-      @review.should match /( )+-t, --tags TAGS( )+Only check against rules with the specified tags./
-      if is_exit_zero
-        @status.should == 0
-      else
-        @status.should_not == 0
-      end
-    end
-
   end
 
   # Helpers used when features are executed out of process.
@@ -123,16 +139,29 @@ module FoodCritic
 
     # Assert that the output contains the specified warning.
     #
-    # @param [String] warning The warning to check for.
-    def expect_output(warning)
-      assert_partial_output(warning, all_output)
+    # @param [String] output The output to check for.
+    def expect_output(output)
+      if output.respond_to?(:~)
+        assert_matching_output(output.to_s, all_output)
+      else
+        assert_partial_output(output, all_output)
+      end
     end
 
     # Assert that the output does not contain the specified warning.
     #
-    # @param [String] warning The warning to check for.
-    def expect_no_output(warning)
-      assert_no_partial_output(warning, all_output)
+    # @param [String] output The output to check for.
+    def expect_no_output(output)
+      if output.respond_to?(:~)
+        assert_matching_output('^((?!#{output}).)*$', all_output)
+      else
+        assert_no_partial_output(output, all_output)
+      end
+    end
+
+    # Assert that an error occurred following a lint check.
+    def assert_error_occurred
+      assert_not_exit_status 0
     end
 
     # Assert that no error occurred following a lint check.
@@ -145,19 +174,6 @@ module FoodCritic
     # @param [Array] cmd_args The command line arguments.
     def run_lint(cmd_args)
       run_simple(unescape("foodcritic #{cmd_args.join(' ')}"), false)
-    end
-
-    # Assert that the usage message is displayed.
-    #
-    # @param [Boolean] is_exit_zero The exit code to check for.
-    def usage_displayed(is_exit_zero)
-      assert_partial_output 'foodcritic [cookbook_path]', all_output
-      assert_matching_output('( )+-t, --tags TAGS( )+Only check against rules with the specified tags.', all_output)
-      if is_exit_zero
-        assert_exit_status 0
-      else
-        assert_not_exit_status 0
-      end
     end
   end
 
