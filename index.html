@@ -40,6 +40,7 @@
             <li><a href="#getting-started">Getting started</a></li>
             <li><a href="#why">Why?</a></li>
             <li><a href="#rules">Built-in rules</a></li>
+            <li><a href="#ci">Using in Continuous Integration</a></li>
             <li><a href="#faq">Frequently Asked Questions</a></li>
             <li><a href="#writing-a-new-rule">Writing a new rule</a></li>
           </ul>
@@ -105,6 +106,11 @@ $ foodcritic cookbooks</pre>
         <hr>
         <div class="row">
           <div class="span6">
+              <h2>Continuous Integration</h2>
+              <p>Using foodcritic as part of your continuous integration setup.</p>
+              <p><a class="btn" href="#ci">View details &raquo;</a></p>
+          </div>
+          <div class="span5">
             <h2>FAQ</h2>
             <p>Answers to Frequently Asked Questions.</p>
             <p><a class="btn" href="#faq">View details &raquo;</a></p>
@@ -571,6 +577,112 @@ end
 
         <hr />
 
+      <h2 id="ci">Continuous Integration</h2>
+        <h3 id="ci-add-job">I'd like to include foodcritic in my Continuous Integration setup. How do I go about doing that?</h3>
+        <p>To manually add a new job to <a href="http://jenkins-ci.org/">Jenkins</a> to check your cookbooks with foodcritic do the following:</p>
+        <ol>
+            <li>Ensure you have Ruby 1.9.2+ and the foodcritic gem installed on the box running Jenkins.</li>
+            <li>You'll probably need to install the Git plugin. In Jenkins select "Manage Jenkins" -&gt; "Manage Plugins". Select the "Available" tab. Check the
+            checkbox next to the Git Plugin and click the "Install without restart" button.</li>
+            <li>In Jenkins select "New Job". Enter a name for the job "my-cookbook", select "Build a free-style software project" and click "OK".</li>
+            <li>On the resulting page select "Git" under "Source Code Management" and enter the URL for your repo.</li>
+            <li>Check the checkbox "Poll SCM" under "Build Triggers".</li>
+            <li>Click "Add Build Step" -> "Execute shell" under "Build". This is where we will call foodcritic.</li>
+            <li>Assuming you are using rvm enter the following as the command:
+<pre>
+#!/usr/bin/env rvm-shell 1.9.3
+foodcritic .</pre>
+            </li>
+            <li>Click "Save".</li>
+            <li>Cool, we've created your new job. Now lets see if it works. Click "Build Now" on the left-hand side.</li>
+            <li>You can click the build progress bar to be taken directly to the console output. After a moment you should
+                see that the build has been successful and foodcritic warnings (if any) are shown in your console output.</li>
+        </ol>
+
+        <p>Yes, for maximum goodness you should be <a href="https://github.com/fnichol/chef-jenkins">automating all this with Chef</a>. :-)</p>
+        <p>
+        For more information refer to the instructions for building a "free-style software project" here:<br />
+        <a href="https://wiki.jenkins-ci.org/display/JENKINS/Building+a+software+project">https://wiki.jenkins-ci.org/display/JENKINS/Building+a+software+project</a>
+        </p>
+        <p>See also this blog post about <code>rvm-shell</code> which ensures you have the right version of Ruby loaded when trying to build with foodcritic:<br/>
+        <a href="http://blog.ninjahideout.com/posts/rvm-improved-support-for-hudson">http://blog.ninjahideout.com/posts/rvm-improved-support-for-hudson</a></p>
+
+        <h3 id="ci-fail-build">Ok, but I'd like to fail the build if there are any warnings that might stop my cookbook from working.</h3>
+        <p>
+            CI is only useful if people will act on it. Lets start by only failing the build when there is a
+            <span class="label important">correctness</span> problem that would likely break our Chef run. We'll continue to
+            have the other warnings available for reference in the console log but only correctness issues will fail the build.
+        </p>
+        <ol>
+            <li>Select the "my-cookbook" job in Jenkins and click "Configure".</li>
+            <li>Scroll down to our "Execute shell" command and change it to look like the following:
+<pre>
+#!/usr/bin/env rvm-shell 1.9.3
+foodcritic -f correctness .</pre>
+            </li>
+            <li>Click "Save" and then "Build Now".</li>
+        </ol>
+
+        <h3>Tracking warnings over time</h3>
+        <p>
+            The <a href="https://wiki.jenkins-ci.org/display/JENKINS/Warnings+Plugin">Jenkins Warnings plugin</a> can be
+            configured to understand foodcritic output and track your cookbook warnings over time.
+        </p>
+        <ol>
+            <li>You'll need to install the Warnings plugin. In Jenkins select "Manage Jenkins" -&gt; "Manage Plugins".
+            Select the "Available" tab. Check the checkbox next to the Warnings Plugin and click the
+                "Install without restart" button.</li>
+            <li>From "Manage Jenkins" select "Configure System". Scroll down to the "Compiler Warnings" section and
+            click the "Add" button next to "Parsers".</li>
+            <li>Enter "Foodcritic" in the Name field.</li>
+            <li>Enter the following regex in the "Regular Expression" field:
+            <pre>
+^(FC[0-9]+): (.*): ([^:]+):([0-9]+)$</pre></li>
+            <li>Enter the following Groovy script into the "Mapping Script" field:
+<pre>
+import hudson.plugins.warnings.parser.Warning
+
+String fileName = matcher.group(3)
+String lineNumber = matcher.group(4)
+String category = matcher.group(1)
+String message = matcher.group(2)
+
+return new Warning(fileName, Integer.parseInt(lineNumber), "Chef Lint Warning", category, message);
+</pre>
+            </li>
+            <li>To test the match, enter the following example message in the "Example Log Message" field:
+<pre>
+FC001: Use strings in preference to symbols to access node attributes: ./recipes/innostore.rb:30</pre>
+            </li>
+            <li>Click in the "Mapping Script" field and you should see the following appear below the Example Log Message:
+<pre>
+One warning found
+file name: ./recipes/innostore.rb
+line number: 30
+priority: Normal Priority
+category:  FC001
+type: Chef Lint Warning
+message: Use strings in prefe[...]ols to access node attributes
+</pre>
+            </li>
+            <li>Cool, it's parsed our example message successfully. Click "Save" to save the parser.</li>
+            <li>Select the "my-cookbook" job in Jenkins and click "Configure".</li>
+            <li>Check the checkbox next to "Scan for compiler warnings" underneath "Post-build Actions".</li>
+            <li>Click the "Add" button next to "Scan console log" and select our "Foodcritic" parser from the drop-down list.</li>
+            <li>Click the "Advanced..." button and check the "Run always" checkbox.</li>
+            <li>Click "Save" and then "Build Now".</li>
+            <li>Add the bottom of the console log you should see something similar to this:
+<pre>
+[WARNINGS] Parsing warnings in console log with parsers [Foodcritic]
+[WARNINGS] Foodcritic : Found 48 warnings.
+</pre>
+            </li>
+            <li>Click "Back to Project". Once you have built the project a couple of times the warnings
+            trend will appear here.</li>
+        </ol>
+
+        <hr />
+
       <h2 id="faq">Frequently Asked Questions</h2>
 
         <h3 id="faq-spurious-warnings">When I run it against my cookbooks there are warnings that I'm not interested in. How can I avoid
@@ -587,16 +699,6 @@ end
           older version of the systemu gem which causes this warning to appear.<br />
           <a href="http://tickets.opscode.com/browse/OHAI-311">http://tickets.opscode.com/browse/OHAI-311</a>
         </p>
-
-        <h3 id="faq-ci">I'd like to include foodcritic in my Continuous Integration setup. How do I go about doing that?</h3>
-        <p>You should be able to incorporate foodcritic into your build like any other command following the instructions for building a "free-style software project" here:<br />
-        <a href="https://wiki.jenkins-ci.org/display/JENKINS/Building+a+software+project">https://wiki.jenkins-ci.org/display/JENKINS/Building+a+software+project</a>
-        </p>
-        <p>See also this blog post about <code>rvm-shell</code> which ensures you have the right version of Ruby loaded when trying to build with foodcritic:<br/>
-        <a href="http://blog.ninjahideout.com/posts/rvm-improved-support-for-hudson">http://blog.ninjahideout.com/posts/rvm-improved-support-for-hudson</a></p>
-        <p><span class="label notice">Note</span> Foodcritic doesn't currently set the exit code which is annoying - we'll change this soon.</p>
-        <p>You may want to consider using <strong>pennyworth</strong> which wraps up a number of tools useful for infrastructure as code in a convenient bundle:<br />
-        <a href="https://github.com/heavywater/pennyworth">https://github.com/heavywater/pennyworth</a></p>
 
         <hr />
 
