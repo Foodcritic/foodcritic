@@ -1,3 +1,27 @@
+## 0.7.0 (31st December, 2011)
+
+Features:
+
+  - New `-f` option added to allow you to specify which warnings should result in the build being failed. See the new
+    documentation on [using Foodcritic in Continuous Integration](http://acrmp.github.com/foodcritic/#ci) for more
+    information.
+  - New `-r` option added to drop you into the Pry REPL to interactively develop rules. See the updated documentation on
+    [Writing a new rule](http://acrmp.github.com/foodcritic/#writing-a-new-rule) for more information.
+
+Bugfixes:
+
+  - [FC003: Check whether you are running with chef server before using server-specific features](http://acrmp.github.com/foodcritic/#FC003) rule
+    modified to not warn if the [edelight chef-solo-search library](https://github.com/edelight/chef-solo-search) has been installed. Thanks @tobami.
+  - [FC007: Ensure recipe dependencies are reflected in cookbook metadata](http://acrmp.github.com/foodcritic/#FC007) rule
+    modified to flag undeclared dependencies against the offending file rather than metadata.rb.
+  - Removed the unused description field from the rule dsl.
+
+Other:
+
+  - Project features now run much faster, running in-process by default. You can set an environment variable
+    (`FC_FORK_PROCESS`) to specify that Cucumber runs should match the earlier behaviour and spawn a separate process
+    using Aruba.
+
 ## 0.6.0 (18th December, 2011)
 
 Features:
