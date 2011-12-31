@@ -581,6 +581,13 @@ end
         <p>For example if you don't care about <span class="label">style</span> warnings you could run foodcritic like so:</p>
         <pre>$ foodcritic --tags ~style cookbooks</pre>
 
+        <h3 id="faq-rbconfig-warning">When I run it under MRI 1.9.3 I get a warning "Use RbConfig instead of obsolete and deprecated Config." printed to the console.</h3>
+        <p>
+          This is because foodcritic uses Chef under the covers to implement some of its checks. Ohai is locked to an
+          older version of the systemu gem which causes this warning to appear.<br />
+          <a href="http://tickets.opscode.com/browse/OHAI-311">http://tickets.opscode.com/browse/OHAI-311</a>
+        </p>
+
         <h3 id="faq-ci">I'd like to include foodcritic in my Continuous Integration setup. How do I go about doing that?</h3>
         <p>You should be able to incorporate foodcritic into your build like any other command following the instructions for building a "free-style software project" here:<br />
         <a href="https://wiki.jenkins-ci.org/display/JENKINS/Building+a+software+project">https://wiki.jenkins-ci.org/display/JENKINS/Building+a+software+project</a>
