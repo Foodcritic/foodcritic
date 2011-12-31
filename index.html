@@ -438,7 +438,7 @@ inline - <a href="http://community.opscode.com/cookbooks/mysql">see this example
 <p><span class="label">style</span> <span class="label">files</span></p>
 <p>This warning means that you have hard-coded a file download path in your cookbook to a temporary directory.
 This can be a problem on boxes built with a small <code>/tmp</code> mount point. Chef has
-its own configuration option <code>file_cache_path</code> you should instead:<br />
+its own configuration option <code>file_cache_path</code> you should use instead:<br />
 <a href="http://wiki.opscode.com/display/chef/Chef+Configuration+Settings#ChefConfigurationSettings-filecachepath">http://wiki.opscode.com/display/chef/Chef+Configuration+Settings#ChefConfigurationSettings-filecachepath</a></p>
 
 <h3>Downloading to a hard-coded temp directory</h3>
@@ -756,7 +756,7 @@ $ FC_REPL=true bundle exec cucumber features/123_check_for_log_with_password.fea
 <pre>
 pry&gt; rule "FC123", "Log contains password" do
   recipe do |ast|
-	  binding.pry
+    binding.pry
   end
 end
 </pre>
