@@ -1,4 +1,4 @@
 #!/usr/bin/env ruby
-require 'foodcritic'
+require_relative '../lib/foodcritic'
 result, status = FoodCritic::Linter.check(ARGV)
 puts result; exit status.to_i
