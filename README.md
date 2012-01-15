@@ -23,5 +23,6 @@ To see what has changed in recent versions see the [CHANGELOG](https://github.co
 Food Critic follows the [Rubygems RationalVersioningPolicy](http://docs.rubygems.org/read/chapter/7).
 
 # Contributing
-Additional rules and bugfixes are welcome! Please fork and submit a pull request on an individual branch per change.
+Additional [rules](http://acrmp.github.com/foodcritic/#writing-a-new-rule) and bugfixes are welcome! Please fork and
+submit a pull request on an individual branch per change.
 
