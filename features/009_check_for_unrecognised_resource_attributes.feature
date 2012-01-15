@@ -10,7 +10,7 @@ Feature: Check for unrecognised resource attributes
     Then the unrecognised attribute warning 009 should be <shown>
   Examples:
     | type    | attributes                  | shown |
-    | file    | user,group,mode,action      | true  |
+    | file    | punter,group,mode,action    | true  |
     | file    | owner,group,mode,action     | false |
     | file    | action,retries              | false |
     | group   | gid                         | false |

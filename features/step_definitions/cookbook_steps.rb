@@ -387,7 +387,7 @@ Given 'a recipe that declares multiple resources of the same type of which one h
       action :create
     end
     file "/tmp/something" do
-      user "root"
+      punter "root"
       group "root"
       mode "0755"
       action :create
