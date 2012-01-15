@@ -266,8 +266,9 @@ module FoodCritic
     # Create a recipe with the provided content.
     #
     # @param [String] content The recipe content.
-    def write_recipe(content)
-      write_file 'cookbooks/example/recipes/default.rb', content.strip
+    # @param [String] cookbook_name Optional name of the cookbook.
+    def write_recipe(content, cookbook_name = 'example')
+      write_file "cookbooks/#{cookbook_name}/recipes/default.rb", content.strip
     end
 
     # Create attributes with the provided content.

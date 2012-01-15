@@ -24,7 +24,8 @@ module FoodCritic
       'FC015' => 'Consider converting definition to a LWRP',
       'FC016' => 'LWRP does not declare a default action',
       'FC017' => 'LWRP does not notify when updated',
-      'FC018' => 'LWRP uses deprecated notification syntax'
+      'FC018' => 'LWRP uses deprecated notification syntax',
+      'FC019' => 'Access node attributes in a consistent manner'
     }
 
     # If the cucumber features should run foodcritic in the same process or spawn a separate process.

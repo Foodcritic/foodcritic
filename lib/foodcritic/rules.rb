@@ -1,9 +1,7 @@
 rule "FC001", "Use strings in preference to symbols to access node attributes" do
   tags %w{style attributes}
   recipe do |ast|
-    %w{node default override set normal}.map do |type|
-      ast.xpath("//*[self::aref_field or self::aref][descendant::ident/@value='#{type}']//symbol").map{|ar| match(ar)}
-    end.flatten
+    attribute_access(ast, :symbol).map{|ar| match(ar)}
   end
 end
 
@@ -166,5 +164,19 @@ rule "FC018", "LWRP uses deprecated notification syntax" do
     ast.xpath("//assign/var_field/ivar[@value='@updated']").map{|class_var| match(class_var)} +
     ast.xpath(%q{//assign/field/*[self::vcall or self::var_ref/ident/@value='new_resource']/../
       ident[@value='updated']}).map{|assign| match(assign)}
+  end
+end
+
+rule "FC019", "Access node attributes in a consistent manner" do
+  tags %w{style attributes}
+  cookbook do |cookbook_dir|
+    asts = {}; files = Dir["#{cookbook_dir}/**/*.rb"].map{|file| {:path => file, :ast => read_file(file)}}
+    types = [:string, :symbol].map{|type| {:access_type => type, :count => files.count do |file|
+      ! attribute_access(file[:ast], type).tap{|ast|
+        asts[type] = {:ast => ast.first, :path => file[:path]} if (! ast.empty?) and (! asts.has_key?(type))
+      }.empty?
+    end}}
+    least_used = asts[types.min{|a,b| a[:count] <=> b[:count]}[:access_type]]
+    [match(least_used[:ast]).merge(:filename => least_used[:path])] if asts.size > 1
   end
 end

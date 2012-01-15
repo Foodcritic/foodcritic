@@ -76,6 +76,18 @@ module FoodCritic
       end
     end
 
+    # Find attribute accesses by type.
+    #
+    # @param [Nokogiri::XML::Node] ast The AST of the cookbook recipe to check
+    # @param [Symbol] accessed_via The approach used to access the attributes (:string or :symbol)
+    # @return [Array] The matching nodes if any
+    def attribute_access(ast, accessed_via)
+      accessed_via = 'tstring_content' if accessed_via == :string
+      %w{node default override set normal}.map do |att_type|
+        ast.xpath("//*[self::aref_field or self::aref][descendant::ident/@value='#{att_type}']//#{accessed_via}")
+      end.flatten.sort
+    end
+
     # Find Chef resources of the specified type.
     # TODO: Include blockless resources
     #

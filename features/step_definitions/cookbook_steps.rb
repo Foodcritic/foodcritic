@@ -201,7 +201,7 @@ Given 'a cookbook that contains no ruby blocks' do
   }
 end
 
-Given /^a cookbook that declares ([a-z]+) attributes via symbols/ do |attribute_type|
+Given /^a cookbook that declares ([a-z]+) attributes via symbols$/ do |attribute_type|
   attributes_with_symbols(attribute_type)
 end
 
@@ -275,12 +275,20 @@ Given 'a cookbook with a single recipe that accesses nested node attributes via 
   write_recipe %q{node[:foo][:foo2] = 'bar'}
 end
 
-Given 'a cookbook with a single recipe that accesses node attributes via strings' do
-  write_recipe %q{node['foo'] = 'bar'}
+Given /a(nother)? cookbook with a single recipe that accesses node attributes via (strings|symbols)(?: only)?$/ do |more_than_one, type|
+  write_recipe %Q{node[#{type == 'strings' ? "'foo'" : ':foo'}] = 'bar'}, more_than_one.nil? ? 'example' : 'another_example'
 end
 
-Given 'a cookbook with a single recipe that accesses node attributes via symbols' do
-  write_recipe %q{node[:foo] = 'bar'}
+Given 'a cookbook with a single recipe that accesses node attributes via strings and symbols' do
+  write_recipe %q{
+    file "/tmp/#{node['foo']}" do
+      owner "root"
+      group "root"
+      mode "0755"
+      action :create
+      only_if { node[:foo] }
+    end
+  }
 end
 
 Given 'a cookbook with a single recipe which accesses node attributes with symbols on lines 2 and 10' do
@@ -309,6 +317,16 @@ Given /^a cookbook with a single recipe that creates a directory resource with (
                         'a compound expression' => :compound_symbols,
                         'an interpolated variable and a literal' => :interpolated_symbol_and_literal,
                         'a literal and interpolated variable' => :literal_and_interpolated_symbol}[path_type])
+end
+
+Given 'a cookbook with a single recipe that does not access node attributes' do
+  write_recipe %q{
+    template "/tmp/somefile" do
+      mode "0644"
+      source "somefile.erb"
+      only_if "test -f /etc/passwd"
+    end
+  }
 end
 
 Given 'a cookbook with a single recipe that searches but checks first to see if this is server' do
@@ -398,6 +416,16 @@ Given 'a recipe that declares multiple resources of the same type of which one h
   }
 end
 
+Given 'a recipe that reads them as strings' do
+  write_recipe %q{
+    directory node['apache']['dir'] do
+      group 'apache'
+      owner 'apache'
+      action :create
+    end
+  }
+end
+
 Given 'another cookbook that has chef-solo-search installed' do
   write_library 'search', %q{
     class Chef
@@ -421,8 +449,8 @@ Given 'I have started the lint tool with the REPL enabled' do
   }
 end
 
-When /^I check the cookbook(?: specifying tags(.*))?$/ do |tags|
-  run_lint((tags.nil? ? [] : tags.split(' ')) + ['cookbooks/example'])
+When /^I check the cookbook( tree)?(?: specifying tags(.*))?$/ do |whole_tree, tags|
+  run_lint((tags.nil? ? [] : tags.split(' ')) + ["cookbooks/#{whole_tree.nil? ? 'example' : ''}"])
 end
 
 When /^I define a new rule( and reset the list of rules| that includes a binding)?$/ do |qualifier|
