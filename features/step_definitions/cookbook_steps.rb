@@ -275,29 +275,18 @@ Given 'a cookbook with a single recipe that accesses nested node attributes via 
   write_recipe %q{node[:foo][:foo2] = 'bar'}
 end
 
-Given /a(nother)? cookbook with a single recipe that accesses node attributes via (strings|symbols|auto-vivified methods)(?: only)?$/ do |more_than_one, type|
+Given /a(nother)? cookbook with a single recipe that (reads|updates|ignores) node attributes via (.*)(?: only)?$/ do |more_than_one,op,types|
   cookbook_name = more_than_one.nil? ? 'example' : 'another_example'
-  att_access = case type
-    when 'strings'
-      "['foo']"
-    when 'symbols'
-      '[:foo]'
-    else
-      '.foo'
-  end
-  write_recipe %Q{node#{att_access} = 'bar'}, cookbook_name
-end
 
-Given 'a cookbook with a single recipe that accesses node attributes via strings and symbols' do
-  write_recipe %q{
-    file "/tmp/#{node['foo']}" do
-      owner "root"
-      group "root"
-      mode "0755"
-      action :create
-      only_if { node[:foo] }
-    end
-  }
+  access = {:strings => "['foo']", :symbols => '[:foo]', :vivified => '.foo'}
+
+  if types == 'none'
+    write_recipe("log 'hello world'", cookbook_name)
+  elsif op == 'reads'
+    write_recipe(types.split(',').map{|type| "log node#{access[type.to_sym]}"}.join("\n"), cookbook_name)
+  else
+    write_recipe(types.split(',').map{|type| "node#{access[type.to_sym]} = 'foo'"}.join("\n"), cookbook_name)
+  end
 end
 
 Given 'a cookbook with a single recipe which accesses node attributes with symbols on lines 2 and 10' do
@@ -326,16 +315,6 @@ Given /^a cookbook with a single recipe that creates a directory resource with (
                         'a compound expression' => :compound_symbols,
                         'an interpolated variable and a literal' => :interpolated_symbol_and_literal,
                         'a literal and interpolated variable' => :literal_and_interpolated_symbol}[path_type])
-end
-
-Given 'a cookbook with a single recipe that does not access node attributes' do
-  write_recipe %q{
-    template "/tmp/somefile" do
-      mode "0644"
-      source "somefile.erb"
-      only_if "test -f /etc/passwd"
-    end
-  }
 end
 
 Given 'a cookbook with a single recipe that searches but checks first to see if this is server' do
@@ -520,6 +499,10 @@ Then /^the (?:[a-zA-Z \-]+) warning ([0-9]+) should (not )?be displayed(?: again
   end
   options[:line] = 3 if code == '018' and options[:expect_warning]
   expect_warning("FC#{code}", options)
+end
+
+Then /^the attribute consistency warning 019 should be (shown|not shown)$/ do |show_warning|
+  expect_warning('FC019', :line => nil, :expect_warning => show_warning == 'shown')
 end
 
 Then /^the boilerplate metadata warning 008 should warn on lines (.*)$/ do |lines_to_warn|

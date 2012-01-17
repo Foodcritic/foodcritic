@@ -5,7 +5,7 @@ Feature: Check Node Access
   I want to identify if the cookbooks access node attributes with symbols rather than strings
 
   Scenario: Cookbook recipe accesses attributes via symbols
-    Given a cookbook with a single recipe that accesses node attributes via symbols
+    Given a cookbook with a single recipe that reads node attributes via symbols
     When I check the cookbook
     Then the node access warning 001 should be displayed
 
@@ -25,7 +25,7 @@ Feature: Check Node Access
     Then the node access warning 001 should be displayed twice for the same line
 
   Scenario: Cookbook recipe accesses attributes via strings
-    Given a cookbook with a single recipe that accesses node attributes via strings
+    Given a cookbook with a single recipe that reads node attributes via strings
     When I check the cookbook
     Then the node access warning 001 should not be displayed
 

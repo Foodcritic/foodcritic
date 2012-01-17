@@ -4,45 +4,35 @@ Feature: Check for consistency in node access
   As a developer
   I want to identify if the same cookbook uses varying approaches to accessing node attributes
 
-  Scenario: Cookbook recipe accesses attributes via symbols
-    Given a cookbook with a single recipe that accesses node attributes via symbols only
+  Scenario Outline: Retrieve node attributes
+    Given a cookbook with a single recipe that <accesses> node attributes via <read_access_type>
     When I check the cookbook
-    Then the attribute consistency warning 019 should not be displayed
+    Then the attribute consistency warning 019 should be <show_warning>
 
-  Scenario: Cookbook recipe accesses attributes via strings only
-    Given a cookbook with a single recipe that accesses node attributes via strings only
-    When I check the cookbook
-    Then the attribute consistency warning 019 should not be displayed
-
-  Scenario: Cookbook recipe accesses attributes via auto-vivified methods only
-    Given a cookbook with a single recipe that accesses node attributes via auto-vivified methods only
-    When I check the cookbook
-    Then the attribute consistency warning 019 should not be displayed
-
-  Scenario: Cookbook recipe accesses attributes in multiple ways
-    Given a cookbook with a single recipe that accesses node attributes via strings and symbols
-    When I check the cookbook
-    Then the attribute consistency warning 019 should be displayed
-
-  Scenario: Cookbook recipe does not access attributes
-    Given a cookbook with a single recipe that does not access node attributes
-    When I check the cookbook
-    Then the attribute consistency warning 019 should not be displayed
-
-  Scenario: Cookbook accesses attributes in multiple ways
-    Given a cookbook that declares default attributes via symbols
-      And a recipe that reads them as strings
-    When I check the cookbook
-    Then the attribute consistency warning 019 should be displayed
-
-  Scenario: Cookbook accesses attributes in multiple ways - auto-vivifying
-    Given a cookbook that declares default attributes via symbols
-      And a recipe that reads them as auto-vivified methods
-    When I check the cookbook
-    Then the attribute consistency warning 019 should be displayed against the attributes file
+    Examples:
+      | accesses | read_access_type | show_warning |
+      | ignores  | none             | not shown    |
+      | reads    | symbols          | not shown    |
+      | reads    | strings          | not shown    |
+      | reads    | vivified         | not shown    |
+      | reads    | strings,symbols  | shown        |
+      | reads    | strings,vivified | shown        |
+      | reads    | symbols,strings  | shown        |
+      | reads    | symbols,vivified | shown        |
+      | reads    | vivified,strings | shown        |
+      | reads    | vivified,symbols | shown        |
+      | updates  | symbols          | not shown    |
+      | updates  | strings          | not shown    |
+      | updates  | vivified         | not shown    |
+      | updates  | strings,symbols  | shown        |
+      | updates  | strings,vivified | shown        |
+      | updates  | symbols,strings  | shown        |
+      | updates  | symbols,vivified | shown        |
+      | updates  | vivified,strings | shown        |
+      | updates  | vivified,symbols | shown        |
 
   Scenario: Two cookbooks with differing approaches
-    Given a cookbook with a single recipe that accesses node attributes via strings only
-      And another cookbook with a single recipe that accesses node attributes via symbols only
+    Given a cookbook with a single recipe that reads node attributes via strings only
+      And another cookbook with a single recipe that reads node attributes via symbols only
      When I check the cookbook tree
     Then the attribute consistency warning 019 should not be displayed
