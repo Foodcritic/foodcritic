@@ -275,10 +275,11 @@ Given 'a cookbook with a single recipe that accesses nested node attributes via 
   write_recipe %q{node[:foo][:foo2] = 'bar'}
 end
 
-Given /a(nother)? cookbook with a single recipe that (reads|updates|ignores) node attributes via (.*)(?: only)?$/ do |more_than_one,op,types|
+Given /a(nother)? cookbook with a single recipe that (reads|updates|ignores)(nested)? node attributes via (.*)(?: only)?$/ do |more_than_one,op,nested,types|
   cookbook_name = more_than_one.nil? ? 'example' : 'another_example'
 
-  access = {:strings => "['foo']", :symbols => '[:foo]', :vivified => '.foo'}
+  access = nested.nil? ? {:strings => "['foo']", :symbols => '[:foo]', :vivified => '.foo'} :
+           {:strings => "['bar']['baz']", :symbols => '[:fee][:fi][:fo][:fum]', :vivified => '.bar.baz'}
 
   if types == 'none'
     write_recipe("log 'hello world'", cookbook_name)
