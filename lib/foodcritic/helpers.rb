@@ -93,6 +93,7 @@ module FoodCritic
     #
     # @param [Nokogiri::XML::Node] ast The AST of the cookbook recipe to check
     # @param [String] type The type of resource to look for (or nil for all resources)
+    # @return [Array] AST nodes of Chef resources.
     def find_resources(ast, type = nil)
       ast.xpath(%Q{//method_add_block[command/ident#{type.nil? ? '' : "[@value='#{type}']"}]})
     end
@@ -108,6 +109,7 @@ module FoodCritic
     # Retrieve the name attribute associated with the specified resource.
     #
     # @param [Nokogiri::XML::Node] resource The resource AST to lookup the name attribute under
+    # @return [String] The name attribute value
     def resource_name(resource)
       resource.xpath('string(command//tstring_content/@value)')
     end
