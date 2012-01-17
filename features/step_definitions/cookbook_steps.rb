@@ -416,26 +416,6 @@ Given 'a recipe that declares multiple resources of the same type of which one h
   }
 end
 
-Given 'a recipe that reads them as auto-vivified methods' do
-  write_recipe %q{
-    directory node.apache.dir do
-      group 'apache'
-      owner 'apache'
-      action :create
-    end
-  }
-end
-
-Given 'a recipe that reads them as strings' do
-  write_recipe %q{
-    directory node['apache']['dir'] do
-      group 'apache'
-      owner 'apache'
-      action :create
-    end
-  }
-end
-
 Given 'another cookbook that has chef-solo-search installed' do
   write_library 'search', %q{
     class Chef
