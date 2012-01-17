@@ -275,19 +275,30 @@ Given 'a cookbook with a single recipe that accesses nested node attributes via 
   write_recipe %q{node[:foo][:foo2] = 'bar'}
 end
 
-Given /a(nother)? cookbook with a single recipe that (reads|updates|ignores)(nested)? node attributes via (.*)(?: only)?$/ do |more_than_one,op,nested,types|
+Given /a(nother)? cookbook with a single recipe that (reads|updates|ignores)(nested)? node attributes via ([a-z,]*)(?: and calls node\.)?([a-z_]+)?(?: only)?$/ do |more_than_one,op,nested,types,method|
   cookbook_name = more_than_one.nil? ? 'example' : 'another_example'
 
   access = nested.nil? ? {:strings => "['foo']", :symbols => '[:foo]', :vivified => '.foo'} :
            {:strings => "['bar']['baz']", :symbols => '[:fee][:fi][:fo][:fum]', :vivified => '.bar.baz'}
 
-  if types == 'none'
-    write_recipe("log 'hello world'", cookbook_name)
-  elsif op == 'reads'
-    write_recipe(types.split(',').map{|type| "log node#{access[type.to_sym]}"}.join("\n"), cookbook_name)
-  else
-    write_recipe(types.split(',').map{|type| "node#{access[type.to_sym]} = 'foo'"}.join("\n"), cookbook_name)
+  recipe_content =
+      (if types == 'none'
+        "log 'hello world'"
+      elsif op == 'reads'
+        types.split(',').map{|type| "log node#{access[type.to_sym]}"}.join("\n")
+      else
+        types.split(',').map{|type| "node#{access[type.to_sym]} = 'foo'"}.join("\n")
+      end)
+
+  unless method.nil?
+    recipe_content += "\n"
+    recipe_content += {:run_list => "log 'hello' if node.run_list.roles.include?(node[:foo][:bar])",
+     :run_state => "node.run_state[:reboot_requested] = true",
+     :set => "node.set['foo']['bar']['baz'] = 'secret'"}[method.to_sym]
   end
+
+  write_recipe(recipe_content, cookbook_name)
+
 end
 
 Given 'a cookbook with a single recipe which accesses node attributes with symbols on lines 2 and 10' do

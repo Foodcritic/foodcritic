@@ -31,6 +31,18 @@ Feature: Check for consistency in node access
       | updates  | vivified,strings |        | shown        |
       | updates  | vivified,symbols |        | shown        |
 
+  Scenario Outline: Ignore node built-in methods
+    Given a cookbook with a single recipe that <accesses> node attributes via <read_access_type> and calls node.<method>
+    When I check the cookbook
+    Then the attribute consistency warning 019 should be <show_warning>
+
+    Examples:
+      | accesses | read_access_type | method    | show_warning |
+      | reads    | symbols          | run_list  | not shown    |
+      | reads    | symbols          | run_state | not shown    |
+      | reads    | strings          | set       | not shown    |
+      | reads    | strings,symbols  | set       | shown        |
+
   Scenario: Two cookbooks with differing approaches
     Given a cookbook with a single recipe that reads node attributes via strings only
       And another cookbook with a single recipe that reads node attributes via symbols only

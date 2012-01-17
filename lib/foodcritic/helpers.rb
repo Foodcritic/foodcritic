@@ -84,10 +84,14 @@ module FoodCritic
     def attribute_access(ast, accessed_via)
       %w{node default override set normal}.map do |att_type|
         if accessed_via == :vivified
-          ast.xpath("//*[self::call or self::field][descendant::ident/@value='#{att_type}'][@value='.']/descendant::ident")
+          call = ast.xpath(%Q{//*[self::call or self::field][descendant::ident/@value='#{att_type}']
+            [@value='.']/descendant::ident})
+          (call.size > 1 and call.first['value'] == 'node' and
+              Chef::Node.public_instance_methods.include?(call[1]['value'].to_sym)) ? [] : call
         else
           accessed_via = 'tstring_content' if accessed_via == :string
-          ast.xpath("//*[self::aref_field or self::aref][descendant::ident/@value='#{att_type}']//#{accessed_via}")
+          ast.xpath(%Q{//*[self::aref_field or self::aref][descendant::ident[not(ancestor::aref/call)]/
+            @value='#{att_type}']/descendant::#{accessed_via}})
         end
       end.flatten.sort
     end
