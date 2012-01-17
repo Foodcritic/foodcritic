@@ -275,8 +275,17 @@ Given 'a cookbook with a single recipe that accesses nested node attributes via 
   write_recipe %q{node[:foo][:foo2] = 'bar'}
 end
 
-Given /a(nother)? cookbook with a single recipe that accesses node attributes via (strings|symbols)(?: only)?$/ do |more_than_one, type|
-  write_recipe %Q{node[#{type == 'strings' ? "'foo'" : ':foo'}] = 'bar'}, more_than_one.nil? ? 'example' : 'another_example'
+Given /a(nother)? cookbook with a single recipe that accesses node attributes via (strings|symbols|auto-vivified methods)(?: only)?$/ do |more_than_one, type|
+  cookbook_name = more_than_one.nil? ? 'example' : 'another_example'
+  att_access = case type
+    when 'strings'
+      "['foo']"
+    when 'symbols'
+      '[:foo]'
+    else
+      '.foo'
+  end
+  write_recipe %Q{node#{att_access} = 'bar'}, cookbook_name
 end
 
 Given 'a cookbook with a single recipe that accesses node attributes via strings and symbols' do
@@ -412,6 +421,16 @@ Given 'a recipe that declares multiple resources of the same type of which one h
     end
     package "foo" do
       action :install
+    end
+  }
+end
+
+Given 'a recipe that reads them as auto-vivified methods' do
+  write_recipe %q{
+    directory node.apache.dir do
+      group 'apache'
+      owner 'apache'
+      action :create
     end
   }
 end

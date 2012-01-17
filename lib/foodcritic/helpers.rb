@@ -79,12 +79,16 @@ module FoodCritic
     # Find attribute accesses by type.
     #
     # @param [Nokogiri::XML::Node] ast The AST of the cookbook recipe to check
-    # @param [Symbol] accessed_via The approach used to access the attributes (:string or :symbol)
+    # @param [Symbol] accessed_via The approach used to access the attributes (:string, :symbol or :vivified)
     # @return [Array] The matching nodes if any
     def attribute_access(ast, accessed_via)
-      accessed_via = 'tstring_content' if accessed_via == :string
       %w{node default override set normal}.map do |att_type|
-        ast.xpath("//*[self::aref_field or self::aref][descendant::ident/@value='#{att_type}']//#{accessed_via}")
+        if accessed_via == :vivified
+          ast.xpath("//*[self::call or self::field][descendant::ident/@value='#{att_type}'][@value='.']/descendant::ident")
+        else
+          accessed_via = 'tstring_content' if accessed_via == :string
+          ast.xpath("//*[self::aref_field or self::aref][descendant::ident/@value='#{att_type}']//#{accessed_via}")
+        end
       end.flatten.sort
     end
 

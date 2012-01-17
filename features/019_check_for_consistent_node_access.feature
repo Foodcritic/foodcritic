@@ -14,6 +14,11 @@ Feature: Check for consistency in node access
     When I check the cookbook
     Then the attribute consistency warning 019 should not be displayed
 
+  Scenario: Cookbook recipe accesses attributes via auto-vivified methods only
+    Given a cookbook with a single recipe that accesses node attributes via auto-vivified methods only
+    When I check the cookbook
+    Then the attribute consistency warning 019 should not be displayed
+
   Scenario: Cookbook recipe accesses attributes in multiple ways
     Given a cookbook with a single recipe that accesses node attributes via strings and symbols
     When I check the cookbook
@@ -29,6 +34,12 @@ Feature: Check for consistency in node access
       And a recipe that reads them as strings
     When I check the cookbook
     Then the attribute consistency warning 019 should be displayed
+
+  Scenario: Cookbook accesses attributes in multiple ways - auto-vivifying
+    Given a cookbook that declares default attributes via symbols
+      And a recipe that reads them as auto-vivified methods
+    When I check the cookbook
+    Then the attribute consistency warning 019 should be displayed against the attributes file
 
   Scenario: Two cookbooks with differing approaches
     Given a cookbook with a single recipe that accesses node attributes via strings only

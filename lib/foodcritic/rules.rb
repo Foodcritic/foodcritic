@@ -171,12 +171,14 @@ rule "FC019", "Access node attributes in a consistent manner" do
   tags %w{style attributes}
   cookbook do |cookbook_dir|
     asts = {}; files = Dir["#{cookbook_dir}/**/*.rb"].map{|file| {:path => file, :ast => read_file(file)}}
-    types = [:string, :symbol].map{|type| {:access_type => type, :count => files.count do |file|
+    types = [:string, :symbol, :vivified].map{|type| {:access_type => type, :count => files.count do |file|
       ! attribute_access(file[:ast], type).tap{|ast|
         asts[type] = {:ast => ast.first, :path => file[:path]} if (! ast.empty?) and (! asts.has_key?(type))
       }.empty?
-    end}}
-    least_used = asts[types.min{|a,b| a[:count] <=> b[:count]}[:access_type]]
-    [match(least_used[:ast]).merge(:filename => least_used[:path])] if asts.size > 1
+    end}}.reject{|type| type[:count] == 0}
+    if asts.size > 1
+      least_used = asts[types.min{|a,b| a[:count] <=> b[:count]}[:access_type]]
+      [match(least_used[:ast]).merge(:filename => least_used[:path])]
+    end
   end
 end
