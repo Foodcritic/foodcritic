@@ -19,3 +19,4 @@ Feature: Check for conditional attributes that look like Ruby
     | only_if "test -f /foo/bar/baz/foo"                         | not shown    |
     | only_if do ::File.symlink?(node[:foo][:bar]) end           | not shown    |
     | only_if "::File.symlink?(node[:foo][:bar])"                | shown        |
+    | only_if "foo --bar"                                        | not shown    |

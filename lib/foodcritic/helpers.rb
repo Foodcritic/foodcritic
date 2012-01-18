@@ -265,10 +265,10 @@ module FoodCritic
     # @param [String] str The string to check
     # @return [Boolean] True if this string might be an OS command
     def os_command?(str)
-      str.start_with?('grep ', 'which ') or              # common commands
-      str.include?('|') or                               # probably a pipe, could be alternation
-      str.match(/^[\w]+$/) or                            # command name only
-      str.match(/ -[a-z] /i) or str.match(/ --[a-z\-]/i) # command-line flag
+      str.start_with?('grep ', 'which ') or # common commands
+      str.include?('|') or                  # probably a pipe, could be alternation
+      str.match(/^[\w]+$/) or               # command name only
+      str.match(/ --?[a-z]/i)               # command-line flag
     end
 
   end
