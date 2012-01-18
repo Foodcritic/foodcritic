@@ -1,6 +1,7 @@
 require 'chef'
 require 'pry'
 require_relative 'foodcritic/domain'
+require_relative 'foodcritic/error_checker'
 require_relative 'foodcritic/helpers'
 require_relative 'foodcritic/dsl'
 require_relative 'foodcritic/linter'

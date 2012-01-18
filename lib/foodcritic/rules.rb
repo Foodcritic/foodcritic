@@ -185,13 +185,14 @@ end
 
 rule "FC020", "Conditional execution string attribute looks like Ruby" do
   tags %w{correctness}
-  recipe do |ast|
-    find_resources(ast).map do |r|
-      r.xpath("//command[ident/@value='only_if' or ident/@value='not_if']/descendant::tstring_content")
-    end.reject{|c| c.empty?}.find_all do |conditional|
-      cmd = conditional.attr('value').to_s
-      # pretty rough heuristic
-      ! cmd.include?('test -f') and ! cmd.include? 'grep' and read_string(cmd).xpath('count(descendant::*) > 20')
-    end.map{|probably_ruby_code| match(probably_ruby_code)}
+  recipe do |ast, filename|
+    conditions = ast.xpath(%q{//command[(ident/@value='only_if' or ident/@value='not_if') and
+      descendant::tstring_content]}).map{|m| match(m)}
+    unless conditions.empty?
+      lines = File.readlines(filename) # go back and get the raw untokenized string
+      conditions.map do |condition|
+        {:match => condition, :raw_string => lines[(condition[:line].to_i) -1].strip.sub(/^(not|only)_if[\s+]"/, '').chop}
+      end.find_all{|cond| ruby_code?(cond[:raw_string]) and ! os_command?(cond[:raw_string])}.map{|cond| cond[:match]}
+    end
   end
 end

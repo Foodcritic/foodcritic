@@ -246,15 +246,29 @@ module FoodCritic
     # @param [String] file The file to read
     # @return [Nokogiri::XML::Node] The recipe AST
     def read_file(file)
-      read_string(IO.read(file))
+      build_xml(Ripper::SexpBuilder.new(IO.read(file)).parse)
     end
 
-    # Read the AST for the given Ruby code passed as a string
+    # Does the provided string look like ruby code?
     #
-    # @param [String] str The string to parse
-    # @return [Nokogiri::XML::Node] The recipe AST
-    def read_string(str)
-      build_xml(Ripper::SexpBuilder.new(str).parse)
+    # @param [String] str The string to check for rubiness
+    # @return [Boolean] True if this string could be syntactically valid Ruby
+    def ruby_code?(str)
+      checker = FoodCritic::ErrorChecker.new(str)
+      checker.parse
+      ! checker.error?
+    end
+
+    # Does the provided string look like an Operating System command? This is a rough heuristic to be taken with a
+    # pinch of salt.
+    #
+    # @param [String] str The string to check
+    # @return [Boolean] True if this string might be an OS command
+    def os_command?(str)
+      str.start_with?('grep ', 'which ') or              # common commands
+      str.include?('|') or                               # probably a pipe, could be alternation
+      str.match(/^[\w]+$/) or                            # command name only
+      str.match(/ -[a-z] /i) or str.match(/ --[a-z\-]/i) # command-line flag
     end
 
   end
