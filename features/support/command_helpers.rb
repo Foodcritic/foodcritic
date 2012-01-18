@@ -25,7 +25,8 @@ module FoodCritic
       'FC016' => 'LWRP does not declare a default action',
       'FC017' => 'LWRP does not notify when updated',
       'FC018' => 'LWRP uses deprecated notification syntax',
-      'FC019' => 'Access node attributes in a consistent manner'
+      'FC019' => 'Access node attributes in a consistent manner',
+      'FC020' => 'Conditional execution string attribute looks like Ruby'
     }
 
     # If the cucumber features should run foodcritic in the same process or spawn a separate process.

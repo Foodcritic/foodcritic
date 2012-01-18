@@ -246,7 +246,15 @@ module FoodCritic
     # @param [String] file The file to read
     # @return [Nokogiri::XML::Node] The recipe AST
     def read_file(file)
-      build_xml(Ripper::SexpBuilder.new(IO.read(file)).parse)
+      read_string(IO.read(file))
+    end
+
+    # Read the AST for the given Ruby code passed as a string
+    #
+    # @param [String] str The string to parse
+    # @return [Nokogiri::XML::Node] The recipe AST
+    def read_string(str)
+      build_xml(Ripper::SexpBuilder.new(str).parse)
     end
 
   end

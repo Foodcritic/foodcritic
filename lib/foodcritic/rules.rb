@@ -182,3 +182,16 @@ rule "FC019", "Access node attributes in a consistent manner" do
     end
   end
 end
+
+rule "FC020", "Conditional execution string attribute looks like Ruby" do
+  tags %w{correctness}
+  recipe do |ast|
+    find_resources(ast).map do |r|
+      r.xpath("//command[ident/@value='only_if' or ident/@value='not_if']/descendant::tstring_content")
+    end.reject{|c| c.empty?}.find_all do |conditional|
+      cmd = conditional.attr('value').to_s
+      # pretty rough heuristic
+      ! cmd.include?('test -f') and ! cmd.include? 'grep' and read_string(cmd).xpath('count(descendant::*) > 20')
+    end.map{|probably_ruby_code| match(probably_ruby_code)}
+  end
+end

@@ -6,6 +6,16 @@ Given /^a cookbook recipe that attempts to perform a search with (.*)$/ do |sear
   recipe_with_search(search_type.include?('subexpression') ? :with_subexpression : search_type.gsub(' ', '_').to_sym)
 end
 
+Given /^a cookbook recipe that declares a resource with a (.*)$/ do |conditional|
+  write_recipe %Q{
+    template "/tmp/foo" do
+      mode "0644"
+      source "foo.erb"
+      #{conditional}
+    end
+  }
+end
+
 Given 'a cookbook recipe that declares multiple package resources mixed with other resources' do
   write_recipe %q{
     package "erlang-base" do
@@ -511,6 +521,10 @@ end
 
 Then 'the check for server warning 003 should not be displayed given we have checked' do
   expect_warning("FC003", :line => 4, :expect_warning => false)
+end
+
+Then /^the conditional string looks like ruby warning 020 should be (shown|not shown)$/ do |show_warning|
+  expect_warning('FC020', :line => nil, :expect_warning => show_warning == 'shown')
 end
 
 Then /^the file mode warning 006 should be (valid|invalid)$/ do |valid|
