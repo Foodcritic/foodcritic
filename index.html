@@ -72,6 +72,8 @@
 <li><a href="#FC016">FC016: LWRP does not declare a default action</a></li>
 <li><a href="#FC017">FC017: LWRP does not notify when updated</a></li>
 <li><a href="#FC018">FC018: LWRP uses deprecated notification syntax</a></li>
+<li><a href="#FC019">FC019: Access node attributes in a consistent manner</a></li>
+<li><a href="#FC020">FC020: Conditional execution string attribute looks like Ruby</a></li>
           </ul>
         </div>
       </div>
@@ -148,7 +150,9 @@ $ gem install foodcritic
 <p>Great - that's it. You should now find you have a <code>foodcritic</code> command on your <code>PATH</code>. Run foodcritic to see what arguments it supports:</p>
 <pre>$ foodcritic --help
 foodcritic [cookbook_path]
+    -r, --[no-]repl                  Drop into a REPL for interactive rule editing.
     -t, --tags TAGS                  Only check against rules with the specified tags.
+    -f, --epic-fail TAGS             Fail the build if any of the specified tags are matched.
 </pre>
 	<p>Now for the fun part. Try running it against your favourite cookbook.
 	<hr>
@@ -168,19 +172,19 @@ foodcritic [cookbook_path]
             <h3>Uses symbols to reference attributes</h3>
             <p>This example would match the FC001 rule because the <code>version</code> attribute has been referenced with a symbol.</p>
             <pre class="prettyprint">
-    # Don't do this
-    package "mysql-server" do
-      version node[:mysql][:version]
-      action :install
-    end</pre>
+# Don't do this
+package "mysql-server" do
+  version node[:mysql][:version]
+  action :install
+end</pre>
 
             <h3>Modified version</h3>
             <p>This modified example would <strong>not</strong> match the FC001 rule:</p>
             <pre class="prettyprint">
-    package "mysql-server" do
-      version node['mysql']['version']
-      action :install
-    end</pre>
+package "mysql-server" do
+  version node['mysql']['version']
+  action :install
+end</pre>
 	<h2 id="FC002">FC002: Avoid string interpolation where not required</h2>
         <p><span class="label">style</span> <span class="label">strings</span></p>
         <p>
@@ -379,11 +383,11 @@ version "0.0.1"
 <a href="http://wiki.opscode.com/display/chef/Resources">http://wiki.opscode.com/display/chef/Resources</a></p>
 
 <h3>Resource with an unrecognised attribute</h3>
-<p>This example matches the FC009 rule because <code>user</code> is not a recognised attribute for the file resource.</p>
+<p>This example matches the FC009 rule because <code>punter</code> is not a recognised attribute for the file resource.</p>
 <pre class="prettyprint">
 # Don't do this
 file "/tmp/something" do
-  user "root"
+  punter "root"
   group "root"
   mode "0755"
   action :create
@@ -575,6 +579,57 @@ action :create do
 end
 </pre>
 
+<h2 id="FC019">FC019: Access node attributes in a consistent manner</h2>
+<p><span class="label">style</span> <span class="label">attributes</span></p>
+<p>Node attributes can be accessed in multiple ways in Chef. This warning is shown when a cookbook is not consistent
+in the approach it uses to access attributes. It is not displayed for variations between cookbooks.</p>
+
+<h3>Recipe mixes symbols and strings for accessing node attributes</h3>
+<pre class="prettyprint">
+# Don't do this
+node[:apache][:dir] = '/etc/apache2'
+
+directory node['apache']['dir'] do
+  owner 'apache'
+  group 'apache'
+  action :create
+end
+</pre>
+
+<h3>Modified version</h3>
+<pre class="prettyprint">
+node['apache']['dir'] = '/etc/apache2'
+
+directory node['apache']['dir'] do
+  owner 'apache'
+  group 'apache'
+  action :create
+end
+</pre>
+
+<h2 id="FC020">FC020: Conditional execution string attribute looks like Ruby</h2>
+<p><span class="label important">correctness</span></p>
+<p>When specifying an <code>only_if</code> or <code>not_if</code> attribute for conditional execution of your resource
+you have the option of either a command string or Ruby block. This warning is shown when your condition is passed as
+a string but <em>looks</em> like a Ruby block.<br/>
+<a href="http://wiki.opscode.com/display/chef/Resources#Resources-ConditionalExecution">http://wiki.opscode.com/display/chef/Resources#Resources-ConditionalExecution</a></p>
+
+<h3>Passes Ruby block condition as string</h3>
+<pre class="prettyprint">
+# Don't do this
+execute "my_random_command" do
+  action :run
+  not_if "::File.directory?(node[:foo])"
+end
+</pre>
+
+<h3>Modified version</h3>
+<pre class="prettyprint">
+execute "my_random_command" do
+  action :run
+  not_if { ::File.directory?(node[:foo]) }
+end
+</pre>
         <hr />
 
       <h2 id="ci">Continuous Integration</h2>
