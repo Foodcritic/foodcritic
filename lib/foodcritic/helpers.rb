@@ -80,8 +80,9 @@ module FoodCritic
     #
     # @param [Nokogiri::XML::Node] ast The AST of the cookbook recipe to check
     # @param [Symbol] accessed_via The approach used to access the attributes (:string, :symbol or :vivified)
+    # @param [Boolean] exclude_with_dots Exclude attribute accesses that mix strings/symbols with dot notation.
     # @return [Array] The matching nodes if any
-    def attribute_access(ast, accessed_via)
+    def attribute_access(ast, accessed_via, exclude_with_dots)
       %w{node default override set normal}.map do |att_type|
         if accessed_via == :vivified
           call = ast.xpath(%Q{//*[self::call or self::field][descendant::ident/@value='#{att_type}']
@@ -90,8 +91,10 @@ module FoodCritic
               Chef::Node.public_instance_methods.include?(call[1]['value'].to_sym)) ? [] : call
         else
           accessed_via = 'tstring_content' if accessed_via == :string
-          ast.xpath(%Q{//*[self::aref_field or self::aref][descendant::ident[not(ancestor::aref/call)]/
-            @value='#{att_type}']/descendant::#{accessed_via}})
+          expr = '//*[self::aref_field or self::aref][descendant::ident'
+          expr += '[not(ancestor::aref/call)]' if exclude_with_dots
+          expr += "/@value='#{att_type}']/descendant::#{accessed_via}"
+          ast.xpath(expr)
         end
       end.flatten.sort
     end

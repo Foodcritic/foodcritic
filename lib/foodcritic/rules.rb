@@ -1,7 +1,7 @@
 rule "FC001", "Use strings in preference to symbols to access node attributes" do
   tags %w{style attributes}
   recipe do |ast|
-    attribute_access(ast, :symbol).map{|ar| match(ar)}
+    attribute_access(ast, :symbol, false).map{|ar| match(ar)}
   end
 end
 
@@ -172,7 +172,7 @@ rule "FC019", "Access node attributes in a consistent manner" do
   cookbook do |cookbook_dir|
     asts = {}; files = Dir["#{cookbook_dir}/**/*.rb"].map{|file| {:path => file, :ast => read_file(file)}}
     types = [:string, :symbol, :vivified].map{|type| {:access_type => type, :count => files.count do |file|
-      ! attribute_access(file[:ast], type).tap{|ast|
+      ! attribute_access(file[:ast], type, true).tap{|ast|
         asts[type] = {:ast => ast.first, :path => file[:path]} if (! ast.empty?) and (! asts.has_key?(type))
       }.empty?
     end}}.reject{|type| type[:count] == 0}
