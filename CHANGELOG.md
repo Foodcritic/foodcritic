@@ -1,3 +1,16 @@
+## 0.8.0 (19th January, 2012)
+
+Features:
+
+  - [FC019: Access node attributes in a consistent manner](http://acrmp.github.com/foodcritic/#FC019) rule added.
+  - [FC020: Conditional execution string attribute looks like Ruby](http://acrmp.github.com/foodcritic/#FC020) rule added.
+
+Other:
+
+  - Rule 'FC016: LWRP does not declare a default action' was incorrectly checking the provider for a default action
+    rather than the resource. Removed this rule temporarily to avoid showing false positives. A user has patched this
+    and will be submitting a pull request shortly.
+
 ## 0.7.0 (31st December, 2011)
 
 Features:
