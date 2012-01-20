@@ -285,7 +285,7 @@ Given 'a cookbook with a single recipe that accesses nested node attributes via 
   write_recipe %q{node[:foo][:foo2] = 'bar'}
 end
 
-Given /a(nother)? cookbook with a single recipe that (reads|updates|ignores)(nested)? node attributes via ([a-z,]*)(?: and calls node\.)?([a-z_]+)?(?: only)?$/ do |more_than_one,op,nested,types,method|
+Given /a(nother)? cookbook with a single recipe that (reads|updates|ignores)(nested)? node attributes via ([a-z,]*)(?:(?: and calls node\.)?([a-z_]+)?| with (.*)?)(?: only)?$/ do |more_than_one,op,nested,types,method,expr|
   cookbook_name = more_than_one.nil? ? 'example' : 'another_example'
 
   access = nested.nil? ? {:strings => "['foo']", :symbols => '[:foo]', :vivified => '.foo'} :
@@ -300,8 +300,9 @@ Given /a(nother)? cookbook with a single recipe that (reads|updates|ignores)(nes
         types.split(',').map{|type| "node#{access[type.to_sym]} = 'foo'"}.join("\n")
       end)
 
+  recipe_content += "\n#{expr}"
+
   unless method.nil?
-    recipe_content += "\n"
     recipe_content += {:run_list => "log 'hello' if node.run_list.roles.include?(node[:foo][:bar])",
      :run_state => "node.run_state[:reboot_requested] = true",
      :set => "node.set['foo']['bar']['baz'] = 'secret'"}[method.to_sym]

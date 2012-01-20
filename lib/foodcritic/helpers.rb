@@ -85,10 +85,10 @@ module FoodCritic
     def attribute_access(ast, accessed_via, exclude_with_dots)
       %w{node default override set normal}.map do |att_type|
         if accessed_via == :vivified
-          call = ast.xpath(%Q{//*[self::call or self::field][descendant::ident/@value='#{att_type}']
-            [@value='.']/descendant::ident})
-          (call.size > 1 and call.first['value'] == 'node' and
-              Chef::Node.public_instance_methods.include?(call[1]['value'].to_sym)) ? [] : call
+          call = ast.xpath("//*[self::call or self::field][vcall or var_ref/ident/@value='#{att_type}'][@value='.']")
+          call.xpath("aref/args_add_block").size == 0 and (call.xpath("descendant::ident").size > 1 and
+              call.xpath("descendant::ident").first['value'] == 'node' and
+                ! Chef::Node.public_instance_methods.include?(call.xpath("ident/@value").to_s.to_sym)) ? call : []
         else
           accessed_via = 'tstring_content' if accessed_via == :string
           expr = '//*[self::aref_field or self::aref][descendant::ident'

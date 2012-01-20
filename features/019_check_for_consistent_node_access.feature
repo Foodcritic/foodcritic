@@ -43,6 +43,24 @@ Feature: Check for consistency in node access
       | reads    | strings          | set       | not shown    |
       | reads    | strings,symbols  | set       | shown        |
 
+  Scenario Outline: Ignore method calls on node values
+    Given a cookbook with a single recipe that <accesses> node attributes via <read_access_type> with <expression>
+    When I check the cookbook
+    Then the attribute consistency warning 019 should be <show_warning>
+
+    Examples:
+      | accesses | read_access_type | expression                        | show_warning |
+      | reads    | symbols          | node.run_list                     | not shown    |
+      | reads    | symbols          | node[:foo].chomp                  | not shown    |
+      | reads    | symbols          | node[:foo][:bar].split(' ').first | not shown    |
+      | reads    | symbols          | node[:foo].bar                    | not shown    |
+      | reads    | symbols          | foo = node[:foo].bar              | not shown    |
+      | reads    | symbols          | node[:foo].each{\|f\| puts f}     | not shown    |
+      | updates  | symbols          | node[:foo].strip                  | not shown    |
+      | updates  | strings          | node[:foo].strip                  | shown        |
+      | updates  | strings          | foo = node[:foo].strip            | shown        |
+      | updates  | symbols          | node['foo'].strip                 | shown        |
+
   Scenario: Two cookbooks with differing approaches
     Given a cookbook with a single recipe that reads node attributes via strings only
       And another cookbook with a single recipe that reads node attributes via symbols only
