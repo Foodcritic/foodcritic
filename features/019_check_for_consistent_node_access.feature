@@ -50,6 +50,7 @@ Feature: Check for consistency in node access
 
     Examples:
       | accesses | read_access_type | expression                        | show_warning |
+      | reads    | symbols          | node.platform_version             | shown        |
       | reads    | symbols          | node.run_list                     | not shown    |
       | reads    | symbols          | node[:foo].chomp                  | not shown    |
       | reads    | symbols          | node[:foo][:bar].split(' ').first | not shown    |
