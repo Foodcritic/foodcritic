@@ -1,3 +1,10 @@
+## 0.8.1 (20th January, 2012)
+
+Bugfixes:
+
+  - [FC019: Access node attributes in a consistent manner](http://acrmp.github.com/foodcritic/#FC019) modified
+    to avoid false positives on methods invoked on values in a Mash.
+
 ## 0.8.0 (19th January, 2012)
 
 Features:
