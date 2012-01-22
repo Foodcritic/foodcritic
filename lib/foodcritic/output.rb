@@ -44,6 +44,7 @@ module FoodCritic
           next
         end
       }, review.cookbook_path])
+      Rak.send(:remove_const, :VERSION) # Prevent duplicate VERSION warning
       load Gem.bin_path('rak', 'rak') # Assumes Rubygems
     end
 
