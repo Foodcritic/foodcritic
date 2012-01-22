@@ -38,6 +38,7 @@ Feature: Check for consistency in node access
 
     Examples:
       | accesses | read_access_type | method    | show_warning |
+      | reads    | strings          | platform? | not shown    |
       | reads    | symbols          | run_list  | not shown    |
       | reads    | symbols          | run_state | not shown    |
       | reads    | strings          | set       | not shown    |

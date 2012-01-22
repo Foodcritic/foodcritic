@@ -85,11 +85,13 @@ module FoodCritic
     def attribute_access(ast, accessed_via, exclude_with_dots)
       %w{node default override set normal}.map do |att_type|
         if accessed_via == :vivified
-          call = ast.xpath(%Q{//*[self::call or self::field][vcall/ident/@value='#{att_type}' or
+          calls = ast.xpath(%Q{//*[self::call or self::field][vcall/ident/@value='#{att_type}' or
             var_ref/ident/@value='#{att_type}'][@value='.']})
-          call.xpath("aref/args_add_block").size == 0 and (call.xpath("descendant::ident").size > 1 and
-              call.xpath("descendant::ident").first['value'] == 'node' and
-                ! Chef::Node.public_instance_methods.include?(call.xpath("ident/@value").to_s.to_sym)) ? call : []
+          calls.select do |call|
+            call.xpath("aref/args_add_block").size == 0 and (call.xpath("descendant::ident").size > 1 and
+                call.xpath("descendant::ident").first['value'] == att_type.to_s and
+                  ! dsl_methods.include?(call.xpath("ident/@value").to_s.to_sym))
+          end
         else
           accessed_via = 'tstring_content' if accessed_via == :string
           expr = '//*[self::aref_field or self::aref][descendant::ident'
@@ -98,6 +100,14 @@ module FoodCritic
           ast.xpath(expr)
         end
       end.flatten.sort
+    end
+
+    # The set of methods in the Chef DSL
+    #
+    # @return [Array] Array of method symbols
+    def dsl_methods
+      (Chef::Node.public_instance_methods +
+       Chef::Mixin::RecipeDefinitionDSLCore.included_modules.map{|mixin| mixin.public_instance_methods}).flatten.sort.uniq
     end
 
     # Find Chef resources of the specified type.
