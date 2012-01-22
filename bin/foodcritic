@@ -3,6 +3,7 @@ require_relative '../lib/foodcritic'
 module FoodCritic
   cmd_line = CommandLine.new(ARGV)
   review, status = Linter.check(cmd_line)
-  SummaryOutput.new.output(review)
+  printer = cmd_line.show_context? ? ContextOutput.new : SummaryOutput.new
+  printer.output(review)
   exit status.to_i
 end

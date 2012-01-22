@@ -1,5 +1,6 @@
 require 'chef'
 require 'pry'
+require 'rak'
 require_relative 'foodcritic/command_line'
 require_relative 'foodcritic/domain'
 require_relative 'foodcritic/error_checker'

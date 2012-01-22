@@ -56,7 +56,7 @@ module FoodCritic
         last_dir = cookbook_dir
       end
 
-      @review = Review.new(warnings, should_fail_build?(options[:fail_tags], matched_rule_tags))
+      @review = Review.new(cookbook_path, warnings, should_fail_build?(options[:fail_tags], matched_rule_tags))
 
       binding.pry if options[:repl]
       @review
