@@ -125,7 +125,7 @@ module FoodCritic
     def run_lint(cmd_args)
       cmd_args.unshift '--repl' if with_repl?
       in_current_dir do
-        review, @status = FoodCritic::Linter.check(cmd_args)
+        review, @status = FoodCritic::Linter.check(CommandLine.new(cmd_args))
         @review = review.nil? || (review.respond_to?(:warnings) && review.warnings.empty?) ? '' : "#{review.to_s}\n"
       end
     end

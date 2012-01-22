@@ -1,4 +1,8 @@
 #!/usr/bin/env ruby
 require_relative '../lib/foodcritic'
-result, status = FoodCritic::Linter.check(ARGV)
-puts result; exit status.to_i
+module FoodCritic
+  cmd_line = CommandLine.new(ARGV)
+  review, status = Linter.check(cmd_line)
+  SummaryOutput.new.output(review)
+  exit status.to_i
+end

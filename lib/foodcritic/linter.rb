@@ -13,25 +13,13 @@ module FoodCritic
     #
     # @param [Array] args The command-line arguments to parse
     # @return [Array] Pair - the first item is string output, the second is the exit code.
-    def self.check(args)
-      options = {}
-      options[:fail_tags] = []; options[:tags] = []
-      parser = OptionParser.new do |opts|
-        opts.banner = 'foodcritic [cookbook_path]'
-        opts.on("-r", "--[no-]repl", "Drop into a REPL for interactive rule editing.") {|r|options[:repl] = r}
-        opts.on("-t", "--tags TAGS", "Only check against rules with the specified tags.") {|t|options[:tags] << t}
-        opts.on("-f", "--epic-fail TAGS", "Fail the build if any of the specified tags are matched.") {|t|options[:fail_tags] << t}
-      end
-
-      return [parser.help, 0] if args.length == 1 and args.first == '--help'
-
-      parser.parse!(args)
-
-      if args.length == 1 and Dir.exists?(args[0])
-        review = FoodCritic::Linter.new.check(args[0], options)
+    def self.check(cmd_line)
+      return [cmd_line.help, 0] if cmd_line.show_help?
+      if cmd_line.valid_path?
+        review = FoodCritic::Linter.new.check(cmd_line.cookbook_path, cmd_line.options)
         [review, review.failed? ? 3 : 0]
       else
-        [parser.help, 2]
+        [cmd_line.help, 2]
       end
     end
 
