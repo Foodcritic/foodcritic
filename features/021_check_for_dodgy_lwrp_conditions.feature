@@ -15,11 +15,13 @@ Feature: Check for dodgy provider conditions
     Then the dodgy resource condition warning 021 <show_warning> be displayed against the provider file
 
   Examples:
-    | name                               | condition                                              | show_warning |
-    | "create_site"                      | not_if { ::File.exists?("/tmp/#{new_resource.name}")}  | should       |
-    | "create_site_#{new_resource.name}" | not_if { ::File.exists?("/tmp/#{new_resource.name}")}  | should not   |
-    | "create_site"                      | only_if { ::File.exists?("/tmp/#{new_resource.name}")} | should       |
-    | "create_site_#{new_resource.name}" | only_if { ::File.exists?("/tmp/#{new_resource.name}")} | should not   |
-    | "create_site"                      | only_if "[ ! -f \"/tmp/#{new_resource.name}\" ]"       | should       |
-    | "create_site"                      | not_if "[ -f \"/tmp/#{new_resource.name}\" ]"          | should       |
-    | "create_site_#{new_resource.name}" | not_if "[ -f \"/tmp/#{new_resource.name}\" ]"          | should not   |
+    | name                               | condition                                                  | show_warning |
+    | "create_site"                      | not_if { ::File.exists?("/tmp/#{new_resource.name}")}      | should       |
+    | "create_site_#{new_resource.name}" | not_if { ::File.exists?("/tmp/#{new_resource.name}")}      | should not   |
+    | "create_site"                      | only_if { ::File.exists?("/tmp/#{new_resource.name}")}     | should       |
+    | "create_site_#{new_resource.name}" | only_if { ::File.exists?("/tmp/#{new_resource.name}")}     | should not   |
+    | "create_site"                      | only_if "[ ! -f \"/tmp/#{new_resource.name}\" ]"           | should       |
+    | "create_site"                      | not_if "[ -f \"/tmp/#{new_resource.name}\" ]"              | should       |
+    | "create_site_#{new_resource.name}" | not_if "[ -f \"/tmp/#{new_resource.name}\" ]"              | should not   |
+    | "create_site"                      | only_if do ::File.exists?("/tmp/#{new_resource.name}") end | should       |
+    | "create_site_#{new_resource.name}" | only_if do ::File.exists?("/tmp/#{new_resource.name}") end | should not   |
