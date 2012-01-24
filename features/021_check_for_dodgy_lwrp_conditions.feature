@@ -20,3 +20,6 @@ Feature: Check for dodgy provider conditions
     | "create_site_#{new_resource.name}" | not_if { ::File.exists?("/tmp/#{new_resource.name}")}  | should not   |
     | "create_site"                      | only_if { ::File.exists?("/tmp/#{new_resource.name}")} | should       |
     | "create_site_#{new_resource.name}" | only_if { ::File.exists?("/tmp/#{new_resource.name}")} | should not   |
+    | "create_site"                      | only_if "[ ! -f \"/tmp/#{new_resource.name}\" ]"       | should       |
+    | "create_site"                      | not_if "[ -f \"/tmp/#{new_resource.name}\" ]"          | should       |
+    | "create_site_#{new_resource.name}" | not_if "[ -f \"/tmp/#{new_resource.name}\" ]"          | should not   |
