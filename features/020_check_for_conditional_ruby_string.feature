@@ -20,3 +20,5 @@ Feature: Check for conditional attributes that look like Ruby
     | only_if do ::File.symlink?(node[:foo][:bar]) end           | not shown    |
     | only_if "::File.symlink?(node[:foo][:bar])"                | shown        |
     | only_if "foo --bar"                                        | not shown    |
+    | not_if 'ls -1 \| grep foo'                                 | not shown    |
+    | not_if '::File.directory?(node[:foo])'                     | shown        |

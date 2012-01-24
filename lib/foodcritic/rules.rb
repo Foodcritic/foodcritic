@@ -198,7 +198,7 @@ rule "FC020", "Conditional execution string attribute looks like Ruby" do
     unless conditions.empty?
       lines = File.readlines(filename) # go back and get the raw untokenized string
       conditions.map do |condition|
-        {:match => condition, :raw_string => lines[(condition[:line].to_i) -1].strip.sub(/^(not|only)_if[\s+]"/, '').chop}
+        {:match => condition, :raw_string => lines[(condition[:line].to_i) -1].strip.sub(/^(not|only)_if[\s+]["']/, '').chop}
       end.find_all{|cond| ruby_code?(cond[:raw_string]) and ! os_command?(cond[:raw_string])}.map{|cond| cond[:match]}
     end
   end
