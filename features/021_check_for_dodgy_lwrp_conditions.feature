@@ -9,12 +9,14 @@ Feature: Check for dodgy provider conditions
     When I check the cookbook
     Then the dodgy resource condition warning 021 should not be displayed against the provider file
 
-  Scenario: Provider with re-used resource
-    Given a cookbook that contains a LWRP that declares a resource with a condition that will only be evaluated once
+  Scenario Outline: Provider conditions
+    Given a cookbook that contains a LWRP that declares a resource called <name> with the condition <condition>
     When I check the cookbook
-    Then the dodgy resource condition warning 021 should be displayed against the provider file
+    Then the dodgy resource condition warning 021 <show_warning> be displayed against the provider file
 
-  Scenario: Provider with separate resource
-    Given a cookbook that contains a LWRP that declares a resource with a condition that will be evaluated for each resource
-    When I check the cookbook
-    Then the dodgy resource condition warning 021 should not be displayed against the provider file
+  Examples:
+    | name                               | condition                                              | show_warning |
+    | "create_site"                      | not_if { ::File.exists?("/tmp/#{new_resource.name}")}  | should       |
+    | "create_site_#{new_resource.name}" | not_if { ::File.exists?("/tmp/#{new_resource.name}")}  | should not   |
+    | "create_site"                      | only_if { ::File.exists?("/tmp/#{new_resource.name}")} | should       |
+    | "create_site_#{new_resource.name}" | only_if { ::File.exists?("/tmp/#{new_resource.name}")} | should not   |

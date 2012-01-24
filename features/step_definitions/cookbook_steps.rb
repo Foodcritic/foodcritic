@@ -193,31 +193,16 @@ Given /^a cookbook that contains a LWRP (?:with a single notification|that uses 
   cookbook_with_lwrp({:notifies => :does_notify})
 end
 
-Given 'a cookbook that contains a LWRP that declares a resource with a condition that will be evaluated for each resource' do
+Given /^a cookbook that contains a LWRP that declares a resource called ([^ ]+) with the condition (.*)$/ do |name,condition|
   write_resource("site", %q{
     actions :create
     attribute :name, :name_attribute => true
   })
-  write_provider("site", %q{
+  write_provider("site", %Q{
     action :create do
-      execute "create_site_#{new_resource.name}" do
-        command "echo 'Creating: #{new_resource.name}'; touch '/tmp/#{new_resource.name}'"
-        not_if { ::File.exists?("/tmp/#{new_resource.name}")}
-      end
-    end
-  })
-end
-
-Given 'a cookbook that contains a LWRP that declares a resource with a condition that will only be evaluated once' do
-  write_resource("site", %q{
-    actions :create
-    attribute :name, :name_attribute => true
-  })
-  write_provider("site", %q{
-    action :create do
-      execute "create_site" do
-        command "echo 'Creating: #{new_resource.name}'; touch '/tmp/#{new_resource.name}'"
-        not_if { ::File.exists?("/tmp/#{new_resource.name}")}
+      execute #{name} do
+        command "echo 'Creating: \#{new_resource.name}'; touch '/tmp/\#{new_resource.name}'"
+        #{condition}
       end
     end
   })
