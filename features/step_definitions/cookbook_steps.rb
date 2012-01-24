@@ -24,12 +24,12 @@ Given 'a cookbook recipe that declares multiple package resources mixed with oth
     package "erlang-corba" do
       action :install
     end
+    package "erlang-crypto" do
+      action :install
+    end
     service "apache" do
       supports :restart => true, :reload => true
       action :enable
-    end
-    package "erlang-crypto" do
-      action :install
     end
     template "/tmp/somefile" do
       mode "0644"
@@ -70,6 +70,29 @@ Given 'a cookbook recipe that declares multiple resources with more variation' d
     package "erlang-crypto" do
       version '13.b.3'
       action :install
+    end
+    package "rabbitmq-server" do
+      action :install
+    end
+  }
+end
+
+Given 'a cookbook recipe that declares non contiguous package resources mixed with other resources' do
+  write_recipe %q{
+    package "erlang-base" do
+      action :install
+    end
+    service "apache" do
+      supports :restart => true, :reload => true
+      action :enable
+    end
+    package "erlang-crypto" do
+      action :install
+    end
+    template "/tmp/somefile" do
+      mode "0644"
+      source "somefile.erb"
+      not_if "test -f /etc/passwd"
     end
     package "rabbitmq-server" do
       action :install

@@ -23,3 +23,8 @@ Feature: Check for resource repetition
     Given a cookbook recipe that declares multiple package resources mixed with other resources
     When I check the cookbook
     Then the service resource warning 005 should be displayed
+
+  Scenario: Non-contiguous packages mixed with other resources
+    Given a cookbook recipe that declares non contiguous package resources mixed with other resources
+    When I check the cookbook
+    Then the service resource warning 005 should not be displayed
