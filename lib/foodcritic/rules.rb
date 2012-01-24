@@ -202,3 +202,16 @@ rule "FC020", "Conditional execution string attribute looks like Ruby" do
     end
   end
 end
+
+rule "FC021", "Resource condition in provider may not behave as expected" do
+  tags %w{correctness lwrp}
+  provider do |ast|
+    find_resources(ast).map do |resource|
+      condition = resource.xpath(%q{descendant::method_add_block[descendant::ident/@value='not_if' or
+              descendant::ident/@value='only_if'][brace_block/descendant::ident/@value='new_resource']/
+              preceding-sibling::stmts_add/../../../do_block/
+              preceding-sibling::command[count(descendant::string_embexpr) = 0]})
+      match(condition) unless condition.empty?
+    end.compact
+  end
+end

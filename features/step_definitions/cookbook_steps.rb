@@ -193,12 +193,42 @@ Given /^a cookbook that contains a LWRP (?:with a single notification|that uses 
   cookbook_with_lwrp({:notifies => :does_notify})
 end
 
-Given 'a cookbook that contains a LWRP that does not trigger notifications' do
+Given 'a cookbook that contains a LWRP that declares a resource with a condition that will be evaluated for each resource' do
+  write_resource("site", %q{
+    actions :create
+    attribute :name, :name_attribute => true
+  })
+  write_provider("site", %q{
+    action :create do
+      execute "create_site_#{new_resource.name}" do
+        command "echo 'Creating: #{new_resource.name}'; touch '/tmp/#{new_resource.name}'"
+        not_if { ::File.exists?("/tmp/#{new_resource.name}")}
+      end
+    end
+  })
+end
+
+Given 'a cookbook that contains a LWRP that declares a resource with a condition that will only be evaluated once' do
+  write_resource("site", %q{
+    actions :create
+    attribute :name, :name_attribute => true
+  })
+  write_provider("site", %q{
+    action :create do
+      execute "create_site" do
+        command "echo 'Creating: #{new_resource.name}'; touch '/tmp/#{new_resource.name}'"
+        not_if { ::File.exists?("/tmp/#{new_resource.name}")}
+      end
+    end
+  })
+end
+
+Given /^a cookbook that contains a LWRP that (?:does not trigger notifications|declares a resource with no condition)$/ do
   write_resource("site", %q{
     actions :create
     attribute :name, :kind_of => String, :name_attribute => true
   })
-  write_provider("site", %Q{
+  write_provider("site", %q{
     action :create do
       log "Here is where I would create a site"
     end
@@ -530,6 +560,7 @@ Then /^the (?:[a-zA-Z \-]+) warning ([0-9]+) should (not )?be displayed(?: again
     end
   end
   options[:line] = 3 if code == '018' and options[:expect_warning]
+  options[:line] = 2 if code == '021'
   expect_warning("FC#{code}", options)
 end
 
