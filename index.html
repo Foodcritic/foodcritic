@@ -284,7 +284,8 @@ end
 <h3>Modified version</h3>
 <p>This modified example would <strong>not</strong> match the FC005 rule. It takes advantage of the fact that Chef processes recipes in two distinct phases<br />
 <a href="http://wiki.opscode.com/display/chef/Anatomy+of+a+Chef+Run">http://wiki.opscode.com/display/chef/Anatomy+of+a+Chef+Run</a></p>
-<p>Don't worry about changing your recipe if it already does what you want - the amount of Ruby syntactic sugar to apply is very much a matter of personal taste.</p>
+<p>Don't worry about changing your recipe if it already does what you want - the amount of Ruby syntactic sugar to apply is very much a matter of personal taste. Note that this rule also isn't clever enough yet to detect if your resources are
+wrapped in a control structure and not suitable for 'rolling up' into a loop.</p>
 <p>
 <pre class="prettyprint">
 # It's shorter to do this
