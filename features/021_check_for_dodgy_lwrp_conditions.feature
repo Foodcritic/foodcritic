@@ -2,7 +2,7 @@ Feature: Check for dodgy provider conditions
 
   In order to ensure that resources are declared as intended within a resource provider
   As a developer
-  I want to identify resources conditions that will be checked only for the first resource
+  I want to identify resource conditions that will be checked only for the first resource
 
   Scenario: Provider with no condition
     Given a cookbook that contains a LWRP that declares a resource with no condition
@@ -16,6 +16,7 @@ Feature: Check for dodgy provider conditions
 
   Examples:
     | name                               | condition                                                  | show_warning |
+    | "create_site"                      | not_if { ::File.exists?("/tmp/fixed-path")}                | should not   |
     | "create_site"                      | not_if { ::File.exists?("/tmp/#{new_resource.name}")}      | should       |
     | "create_site_#{new_resource.name}" | not_if { ::File.exists?("/tmp/#{new_resource.name}")}      | should not   |
     | "create_site"                      | only_if { ::File.exists?("/tmp/#{new_resource.name}")}     | should       |
