@@ -214,3 +214,19 @@ rule "FC021", "Resource condition in provider may not behave as expected" do
     end.compact
   end
 end
+
+rule "FC022", "Resource condition within loop may not behave as expected" do
+  tags %w{correctness}
+  recipe do |ast|
+    ast.xpath("//call[ident/@value='each']/../do_block").map do |loop|
+      block_vars = loop.xpath("block_var/params/child::*").map{|n| n.name.sub(/^ident/, '')}
+      find_resources(loop).map do |resource|
+        # if any of the parameters to the block are used in a condition then we have a match
+        unless (block_vars & (resource.xpath(%q{descendant::ident[@value='not_if' or @value='only_if']/
+          ancestor::*[self::method_add_block or self::command][1]/descendant::ident/@value}).map{|a| a.value})).empty?
+          match(resource) unless resource.xpath('command[count(descendant::string_embexpr) = 0]').empty?
+        end
+      end
+    end.flatten.compact
+  end
+end

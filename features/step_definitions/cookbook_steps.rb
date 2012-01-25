@@ -6,6 +6,17 @@ Given /^a cookbook recipe that attempts to perform a search with (.*)$/ do |sear
   recipe_with_search(search_type.include?('subexpression') ? :with_subexpression : search_type.gsub(' ', '_').to_sym)
 end
 
+Given /^a cookbook recipe that declares a resource called ([^ ]+) with the condition (.*)(in|outside) a loop$/ do |name,condition,is_loop|
+  write_recipe %Q{
+    #{'%w{rover fido}.each do |pet_name|' if is_loop == 'in'}
+      execute #{name} do
+        command "echo 'Feeding: \#{pet_name}'; touch '/tmp/\#{pet_name}'"
+        #{condition.nil? ? 'not_if { ::File.exists?("/tmp/\#{pet_name}")}' : condition}
+      end
+    #{'end' if is_loop == 'in'}
+  }
+end
+
 Given /^a cookbook recipe that declares a resource with a (.*)$/ do |conditional|
   write_recipe %Q{
     template "/tmp/foo" do
@@ -545,7 +556,7 @@ Then /^the (?:[a-zA-Z \-]+) warning ([0-9]+) should (not )?be displayed(?: again
     end
   end
   options[:line] = 3 if code == '018' and options[:expect_warning]
-  options[:line] = 2 if code == '021'
+  options[:line] = 2 if ['021', '022'].include?(code)
   expect_warning("FC#{code}", options)
 end
 
