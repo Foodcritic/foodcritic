@@ -37,6 +37,13 @@ module FoodCritic
     # Define a matcher that will be passed the AST with this method.
     #
     # @param [block] block Your implemented matcher that returns a match Hash.
+    def resource(&block)
+      rules.last.resource = block
+    end
+
+    # Define a matcher that will be passed the AST with this method.
+    #
+    # @param [block] block Your implemented matcher that returns a match Hash.
     def provider(&block)
       rules.last.provider = block
     end

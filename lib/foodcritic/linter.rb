@@ -47,6 +47,7 @@ module FoodCritic
         @rules.select{|rule| tag_expr.eval(rule.tags)}.each do |rule|
           rule_matches = matches(rule.recipe, ast, file)
           rule_matches += matches(rule.provider, ast, file) if File.basename(File.dirname(file)) == 'providers'
+          rule_matches += matches(rule.resource, ast, file) if File.basename(File.dirname(file)) == 'resources'
           rule_matches += matches(rule.cookbook, cookbook_dir) if last_dir != cookbook_dir
           rule_matches.each do |match|
             warnings << Warning.new(rule, {:filename => file}.merge(match))
@@ -100,8 +101,8 @@ module FoodCritic
     # @return [Array] The files underneath the provided directory to be processed.
     def files_to_process(dir)
       return [dir] unless File.directory? dir
-      Dir.glob(File.join(dir, '{attributes,providers,recipes}/*.rb')) +
-          Dir.glob(File.join(dir, '*/{attributes,providers,recipes}/*.rb'))
+      Dir.glob(File.join(dir, '{attributes,providers,recipes,resources}/*.rb')) +
+          Dir.glob(File.join(dir, '*/{attributes,providers,recipes,resources}/*.rb'))
     end
 
     # Whether to fail the build.

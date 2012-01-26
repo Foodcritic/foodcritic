@@ -65,16 +65,17 @@ module FoodCritic
     # @option lwrp [Symbol] :notifies One of :does_not_notify, :does_notify, :deprecated_syntax, :class_variable
     def cookbook_with_lwrp(lwrp)
       lwrp = {:default_action => false, :notifies => :does_not_notify}.merge!(lwrp)
-      write_resource("site", %q{
-        actions :create
-        attribute :name, :kind_of => String, :name_attribute => true
-      })
       default_action = %q{
         def initialize(*args)
           super
           @action = :create
         end
       }.strip
+      write_resource("site", %Q{
+        actions :create
+        attribute :name, :kind_of => String, :name_attribute => true
+        #{default_action if lwrp[:default_action] == :ruby_default_action}
+      })
       notifications = {:does_notify => 'new_resource.updated_by_last_action(true)',
                        :deprecated_syntax => 'new_resource.updated = true',
                        :class_variable => '@updated = true'}
@@ -83,7 +84,6 @@ module FoodCritic
           log "Here is where I would create a site"
           #{notifications[lwrp[:notifies]]}
         end
-        #{default_action if lwrp[:default_action] == :ruby_default_action}
       })
     end
 

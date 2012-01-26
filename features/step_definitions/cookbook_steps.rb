@@ -545,7 +545,7 @@ Then 'no error should have occurred' do
   assert_no_error_occurred
 end
 
-Then /^the (?:[a-zA-Z \-]+) warning ([0-9]+) should (not )?be displayed(?: against the (attributes|definition|metadata|provider|README.md|README.rdoc) file)?$/ do |code, no_display, file|
+Then /^the (?:[a-zA-Z \-]+) warning ([0-9]+) should (not )?be displayed(?: against the (attributes|definition|metadata|provider|resource|README.md|README.rdoc) file)?$/ do |code, no_display, file|
   options = {}
   options[:expect_warning] = no_display != 'not '
   unless file.nil?

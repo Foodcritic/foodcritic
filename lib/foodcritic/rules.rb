@@ -149,7 +149,7 @@ end
 
 rule "FC016", "LWRP does not declare a default action" do
   tags %w{correctness lwrp}
-  provider do |ast, filename|
+  resource do |ast, filename|
     ast.xpath("//def/bodystmt/descendant::assign/var_field/ivar/@value='@action'") ? [] : [file_match(filename)]
   end
 end
