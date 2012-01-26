@@ -1,3 +1,27 @@
+## 0.9.0 (26th January, 2012)
+
+Features:
+
+  - New experimental `-C` option added to output context for rule matches.
+  - [FC021: Resource condition in provider may not behave as expected](http://acrmp.github.com/foodcritic/#FC021) rule
+    added.
+  - [FC022: Resource condition within loop may not behave as expected](http://acrmp.github.com/foodcritic/#FC022) rule
+    added.
+
+Bugfixes:
+
+  - [FC005: Avoid repetition of resource declarations](http://acrmp.github.com/foodcritic/#FC005) rule modified to only
+    warn when there are at least three *consecutive* resources of the same type that could be 'rolled up' into a loop.
+  - [FC016: LWRP does not declare a default action](http://acrmp.github.com/foodcritic/#FC016) rule restored. Thanks @stevendanna
+  - [FC019: Access node attributes in a consistent manner](http://acrmp.github.com/foodcritic/#FC019) rule modified to no
+    longer treat DSL mixin methods as auto-vivified attributes. Identification of least used access method should now be
+    accurate.
+
+Other:
+
+  - [FC020: Conditional execution string attribute looks like Ruby](http://acrmp.github.com/foodcritic/#FC020) rule now
+    grabs conditions from within single quotes.
+
 ## 0.8.1 (20th January, 2012)
 
 Bugfixes:
