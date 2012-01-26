@@ -501,9 +501,7 @@ resource to avoid confusing users. Most resources have an intuitive default acti
 <p>This example matches the FC016 rule because it does not declare a default action.</p>
 <pre class="prettyprint">
 # Don't do this
-action :create do
-  # create action implementation
-end
+actions :create
 </pre>
 
 <h3>Modified version</h3>
@@ -511,9 +509,7 @@ end
     Unfortunately the LWRP DSL doesn't yet support specifying a default action, so you need to drop into Ruby.</p>
 
 <pre class="prettyprint">
-action :create do
-  # create action implementation
-end
+actions :create
 
 def initialize(*args)
   super
