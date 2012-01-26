@@ -492,10 +492,10 @@ end
 <h2 id="FC016">FC016: LWRP does not declare a default action</h2>
 <p><span class="label important">correctness</span> <span class="label">lwrp</span></p>
 <p>This warning means that the LWRP does not declare a default action. You should normally define a default action on your
-provider to avoid confusing users. Most resources have an intuitive default action.<br />
+resource to avoid confusing users. Most resources have an intuitive default action.<br />
 <a href="http://wiki.opscode.com/display/chef/Lightweight+Resources+and+Providers+(LWRP)#LightweightResourcesandProviders%28LWRP%29-DefaultAction">http://wiki.opscode.com/display/chef/Lightweight+Resources+and+Providers+(LWRP)#LightweightResourcesandProviders%28LWRP%29-DefaultAction</a></p>
 
-<h3>Provider without a default action</h3>
+<h3>Resource without a default action</h3>
 <p>This example matches the FC016 rule because it does not declare a default action.</p>
 <pre class="prettyprint">
 # Don't do this
