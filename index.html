@@ -74,6 +74,8 @@
 <li><a href="#FC018">FC018: LWRP uses deprecated notification syntax</a></li>
 <li><a href="#FC019">FC019: Access node attributes in a consistent manner</a></li>
 <li><a href="#FC020">FC020: Conditional execution string attribute looks like Ruby</a></li>
+<li><a href="#FC021">FC021: Resource condition in provider may not behave as expected</a></li>
+<li><a href="#FC022">FC022: Resource condition within loop may not behave as expected</a></li>
           </ul>
         </div>
       </div>
@@ -634,6 +636,82 @@ end
 execute "my_random_command" do
   action :run
   not_if { ::File.directory?(node[:foo]) }
+end
+</pre>
+
+<h2 id="FC021">FC021: Resource condition in provider may not behave as expected</h2>
+<p><span class="label important">correctness</span> <span class="label">lwrp</span></p>
+
+<p>A change introduced in Chef 0.10.6 means that conditions may not work as expected for resources redeclared with the same
+name. If your LWRP defines a resource and that resource:
+<ul>
+    <li>Has an <a href="http://wiki.opscode.com/display/chef/Resources#Resources-ConditionalExecution">associated condition</a> which
+    references a resource attribute. AND</li>
+    <li>The resource has a fixed name.</li>
+</ul>
+Then you will likely find that only the first resource will be applied.
+See this ticket for more background:<br/>
+<a href="http://tickets.opscode.com/browse/CHEF-2812">http://tickets.opscode.com/browse/CHEF-2812</a></p>
+
+<h3>Resource condition will be evaluated only once</h3>
+<p>Because the <code>feed_pet</code> resource will have the same name across all instances of your LWRP, the condition
+will only be checked for the first resource.</p>
+<pre class="prettyprint">
+# Don't do this
+action :feed do
+  execute "feed_pet" do
+    command "echo 'Feeding: #{new_resource.name}'; touch '/tmp/#{new_resource.name}'"
+    not_if { ::File.exists?("/tmp/#{new_resource.name}")}
+  end
+end
+</pre>
+
+<h3>Modified version</h3>
+<p>By making the resource name change for each unique instance of our LWRP instance we avoid this behaviour.</p>
+<pre class="prettyprint">
+action :feed do
+  execute "feed_pet_#{new_resource.name}" do
+    command "echo 'Feeding: #{new_resource.name}'; touch '/tmp/#{new_resource.name}'"
+    not_if { ::File.exists?("/tmp/#{new_resource.name}")}
+  end
+end
+</pre>
+
+<h2 id="FC022">FC022: Resource condition within loop may not behave as expected</h2>
+<p><span class="label important">correctness</span></p>
+
+<p>A change introduced in Chef 0.10.6 means that conditions may not work as expected for resources declared within a loop.
+If your recipe defines a resource and that resource:
+<ul>
+    <li>Has an <a href="http://wiki.opscode.com/display/chef/Resources#Resources-ConditionalExecution">associated condition</a> which
+    references a block variable. AND</li>
+    <li>The resource has a fixed name.</li>
+</ul>
+Then you will likely find that only the first resource will be applied.
+See this ticket for more background:<br/>
+<a href="http://tickets.opscode.com/browse/CHEF-2812">http://tickets.opscode.com/browse/CHEF-2812</a></p>
+
+<h3>Resource condition will be evaluated only once</h3>
+<p>Because the <code>feed_pet</code> resource will have the same name for every iteration of the loop, the condition
+will only be checked for the first resource.</p>
+<pre class="prettyprint">
+# Don't do this
+%w{rover fido}.each do |pet_name|
+  execute "feed_pet" do
+    command "echo 'Feeding: #{pet_name}'; touch '/tmp/#{pet_name}'"
+    not_if { ::File.exists?("/tmp/#{pet_name}")}
+  end
+end
+</pre>
+
+<h3>Modified version</h3>
+<p>By making the resource name change for each iteration of the loop we avoid this behaviour.</p>
+<pre class="prettyprint">
+%w{rover fido}.each do |pet_name|
+  execute "feed_pet_#{pet_name}" do
+    command "echo 'Feeding: #{pet_name}'; touch '/tmp/#{pet_name}'"
+    not_if { ::File.exists?("/tmp/#{pet_name}")}
+  end
 end
 </pre>
         <hr />
