@@ -472,8 +472,8 @@ end
 <p>To remove this warning use the configured <code>file_cache_path</code>:</p>
 
 <pre class="prettyprint">
-remote_file "/tmp/large-file.tar.gz" do
-  source "#{Chef::Config[:file_cache_path]}/large-file.tar.gz"
+remote_file "#{Chef::Config[:file_cache_path]}/large-file.tar.gz" do
+  source "http://www.example.org/large-file.tar.gz"
 end
 </pre>
 
