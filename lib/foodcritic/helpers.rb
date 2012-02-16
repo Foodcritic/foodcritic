@@ -1,10 +1,12 @@
 require 'nokogiri'
-require 'chef/solr_query/query_transform'
 
 module FoodCritic
 
   # Helper methods that form part of the Rules DSL.
   module Helpers
+
+    include FoodCritic::Chef
+    include FoodCritic::Chef::Search
 
     # Create a match from the specified node.
     #
@@ -62,20 +64,6 @@ module FoodCritic
       ast.xpath("//method_add_arg[fcall/ident/@value = 'search' and count(descendant::string_embexpr) = 0]/descendant::tstring_content")
     end
 
-    # Is this a valid Lucene query?
-    #
-    # @param [String] query The query to check for syntax errors
-    # @return [Boolean] True if the query is well-formed
-    def valid_query?(query)
-      # Exceptions for flow control. Alternatively we could re-implement the parse method.
-      begin
-        Chef::SolrQuery::QueryTransform.parse(query)
-        true
-      rescue Chef::Exceptions::QueryParseError
-        false
-      end
-    end
-
     class AttFilter
       def is_att_type(value)
         value.select{|n| %w{node default override set normal}.include?(n.to_s)}
@@ -104,14 +92,6 @@ module FoodCritic
           ast.xpath(expr, AttFilter.new)
         end
       ).sort
-    end
-
-    # The set of methods in the Chef DSL
-    #
-    # @return [Array] Array of method symbols
-    def dsl_methods
-      (Chef::Node.public_instance_methods +
-       Chef::Mixin::RecipeDefinitionDSLCore.included_modules.map{|mixin| mixin.public_instance_methods}).flatten.sort.uniq
     end
 
     # Find Chef resources of the specified type.

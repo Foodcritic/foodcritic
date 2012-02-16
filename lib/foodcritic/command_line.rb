@@ -3,6 +3,8 @@ module FoodCritic
   # Command line parsing.
   class CommandLine
 
+    include FoodCritic::Chef::Search
+
     # Create a new instance of CommandLine
     #
     # @param [Array] args The command line arguments
@@ -16,6 +18,7 @@ module FoodCritic
         opts.on("-t", "--tags TAGS", "Only check against rules with the specified tags.") {|t|options[:tags] << t}
         opts.on("-f", "--epic-fail TAGS", "Fail the build if any of the specified tags are matched.") {|t|options[:fail_tags] << t}
         opts.on("-C", "--[no-]context", "Show lines matched against rather than the default summary.") {|c|options[:context] = c}
+        opts.on("-S", "--search-grammar PATH", "Specify grammar to use when validating search syntax.") {|s|options[:search_grammar] = s}
       end
       @parser.parse!(args) unless show_help?
     end
@@ -46,6 +49,16 @@ module FoodCritic
     # @return [String] Path to the cookbook(s) being checked.
     def cookbook_path
       @args[0]
+    end
+
+    # Is the search grammar specified valid?
+    #
+    # @return [Boolean] True if the grammar has not been provided or can be loaded.
+    def valid_grammar?
+      return true unless options.key?(:search_grammar)
+      return false unless File.exists?(options[:search_grammar])
+      load_search_parser([options[:search_grammar]])
+      search_parser_loaded?
     end
 
     # If matches should be shown with context rather than the default summary display.

@@ -1,6 +1,7 @@
 require 'optparse'
 require 'ripper'
 require 'gherkin/tag_expression'
+require 'set'
 
 module FoodCritic
 
@@ -15,7 +16,9 @@ module FoodCritic
     # @return [Array] Pair - the first item is string output, the second is the exit code.
     def self.check(cmd_line)
       return [cmd_line.help, 0] if cmd_line.show_help?
-      if cmd_line.valid_path?
+      if ! cmd_line.valid_grammar?
+        [cmd_line.help, 4]
+      elsif cmd_line.valid_path?
         review = FoodCritic::Linter.new.check(cmd_line.cookbook_path, cmd_line.options)
         [review, review.failed? ? 3 : 0]
       else

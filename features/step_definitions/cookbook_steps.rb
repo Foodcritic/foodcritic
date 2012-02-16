@@ -641,3 +641,17 @@ end
 Then /^the warnings shown should be (.*)$/ do |warnings|
   warnings.split(',').each {|warning| expect_warning(warning, :line => nil)}
 end
+
+When /^I check the cookbook specifying a search grammar that (does not exist|is not in treetop format|is a valid treetop grammar)$/ do |search_grammar|
+  case search_grammar
+    when 'is not in treetop format'
+      write_file('search.treetop', 'I am not a valid treetop grammar')
+    when 'is a valid treetop grammar'
+      write_file('search.treetop', IO.read(chef_search_grammars.first))
+  end
+  run_lint(['--search-grammar', 'search.treetop', 'cookbooks/example'])
+end
+
+Then /^the check should abort with an error$/ do
+  assert_error_occurred
+end

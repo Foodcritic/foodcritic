@@ -78,7 +78,11 @@ module FoodCritic
     # @param [Boolean] is_exit_zero The exit code to check for.
     def usage_displayed(is_exit_zero)
       expect_output 'foodcritic [cookbook_path]'
+      expect_usage_option('f', 'epic-fail TAGS', 'Fail the build if any of the specified tags are matched.')
+      expect_usage_option('r', '[no-]repl', 'Drop into a REPL for interactive rule editing.')
       expect_usage_option('t', 'tags TAGS', 'Only check against rules with the specified tags.')
+      expect_usage_option('C', '[no-]context', 'Show lines matched against rather than the default summary.')
+      expect_usage_option('S', 'search-grammar PATH', 'Specify grammar to use when validating search syntax.')
       if is_exit_zero
         assert_no_error_occurred
       else

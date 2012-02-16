@@ -85,13 +85,9 @@ rule "FC009", "Resource attribute not recognised" do
   recipe do |ast|
     matches = []
     resource_attributes_by_type(ast).each do |type,resources|
-      if Chef::Resource.const_defined?(convert_to_class_name(type))
-        allowed_atts = Chef::Resource.const_get(convert_to_class_name(type)).public_instance_methods(true)
-        resources.each do |resource|
-          invalid_atts = resource.keys.map{|att|att.to_sym} - allowed_atts
-          unless invalid_atts.empty?
-            matches << match(find_resources(ast, type).find{|res|resource_attributes(res).include?(invalid_atts.first.to_s)})
-          end
+      resources.each do |resource|
+        resource.keys.map{|att|att.to_sym}.reject{|att| attribute?(type.to_sym, att)}.each do |invalid_att|
+          matches << match(find_resources(ast, type).find{|res|resource_attributes(res).include?(invalid_att.to_s)})
         end
       end
     end
