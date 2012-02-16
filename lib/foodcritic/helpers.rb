@@ -76,6 +76,12 @@ module FoodCritic
       end
     end
 
+    class AttFilter
+      def is_att_type(value)
+        value.select{|n| %w{node default override set normal}.include?(n.to_s)}
+      end
+    end
+
     # Find attribute accesses by type.
     #
     # @param [Nokogiri::XML::Node] ast The AST of the cookbook recipe to check
@@ -83,23 +89,21 @@ module FoodCritic
     # @param [Boolean] exclude_with_dots Exclude attribute accesses that mix strings/symbols with dot notation.
     # @return [Array] The matching nodes if any
     def attribute_access(ast, accessed_via, exclude_with_dots)
-      %w{node default override set normal}.map do |att_type|
-        if accessed_via == :vivified
-          calls = ast.xpath(%Q{//*[self::call or self::field][vcall/ident/@value='#{att_type}' or
-            var_ref/ident/@value='#{att_type}'][@value='.']})
+        (if accessed_via == :vivified
+          calls = ast.xpath(%Q{//*[self::call or self::field][is_att_type(vcall/ident/@value) or
+            is_att_type(var_ref/ident/@value)][@value='.']}, AttFilter.new)
           calls.select do |call|
             call.xpath("aref/args_add_block").size == 0 and (call.xpath("descendant::ident").size > 1 and
-                call.xpath("descendant::ident").first['value'] == att_type.to_s and
                   ! dsl_methods.include?(call.xpath("ident/@value").to_s.to_sym))
           end
         else
           accessed_via = 'tstring_content' if accessed_via == :string
-          expr = '//*[self::aref_field or self::aref][descendant::ident'
+          expr = '//*[self::aref_field or self::aref][is_att_type(descendant::ident'
           expr += '[not(ancestor::aref/call)]' if exclude_with_dots
-          expr += "/@value='#{att_type}']/descendant::#{accessed_via}"
-          ast.xpath(expr)
+          expr += "/@value)]/descendant::#{accessed_via}"
+          ast.xpath(expr, AttFilter.new)
         end
-      end.flatten.sort
+      ).sort
     end
 
     # The set of methods in the Chef DSL

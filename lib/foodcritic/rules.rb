@@ -176,7 +176,7 @@ end
 rule "FC019", "Access node attributes in a consistent manner" do
   tags %w{style attributes}
   cookbook do |cookbook_dir|
-    asts = {}; files = Dir["#{cookbook_dir}/**/*.rb"].map{|file| {:path => file, :ast => read_file(file)}}
+    asts = {}; files = Dir["#{cookbook_dir}/*/*.rb"].map{|file| {:path => file, :ast => read_file(file)}}
     types = [:string, :symbol, :vivified].map{|type| {:access_type => type, :count => files.map do |file|
       attribute_access(file[:ast], type, true).tap{|ast|
         asts[type] = {:ast => ast, :path => file[:path]} if (! ast.empty?) and (! asts.has_key?(type))
