@@ -38,7 +38,7 @@ module FoodCritic
     # @param [String] recipe_path The path to the current recipe
     # @return [Boolean] True if the chef-solo-search library is available.
     def chef_solo_search_supported?(recipe_path)
-      search_libs = Dir[File.join(Pathname.new(File.join(recipe_path, '../../..')).realpath, "**/libraries/search.rb")]
+      search_libs = Dir[File.join(Pathname.new(File.join(recipe_path, '../../..')).realpath, "*/libraries/search.rb")]
       search_libs.any? do |lib|
         ! read_file(lib).xpath(%q{//class[count(descendant::const[@value='Chef' or @value='Recipe']) = 2]/
             descendant::def/ident[@value='search']}).empty?
