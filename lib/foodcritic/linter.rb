@@ -44,10 +44,11 @@ module FoodCritic
       warnings = []; last_dir = nil; matched_rule_tags = Set.new
       tag_expr = Gherkin::TagExpression.new(options[:tags])
 
+      active_rules = @rules.select{|rule| tag_expr.eval(rule.tags)}
       files_to_process(cookbook_path).each do |file|
         cookbook_dir = Pathname.new(File.join(File.dirname(file), '..')).cleanpath
         ast = read_file(file)
-        @rules.select{|rule| tag_expr.eval(rule.tags)}.each do |rule|
+        active_rules.each do |rule|
           rule_matches = matches(rule.recipe, ast, file)
           rule_matches += matches(rule.provider, ast, file) if File.basename(File.dirname(file)) == 'providers'
           rule_matches += matches(rule.resource, ast, file) if File.basename(File.dirname(file)) == 'resources'
