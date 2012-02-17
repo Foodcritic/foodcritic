@@ -19,7 +19,7 @@ def chef_dsl_methods
    end).flatten.sort.uniq
 end
 
-def self.chef_resource_attributes
+def chef_resource_attributes
   resources = Chef::Resource.constants.sort.map do |resource_klazz|
     resource = Chef::Resource.const_get(resource_klazz)
     if resource.respond_to?(:public_instance_methods) and
