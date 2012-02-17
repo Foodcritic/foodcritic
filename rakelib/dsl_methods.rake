@@ -8,8 +8,8 @@ METADATA_FILE = 'chef_dsl_metadata.json'
 file METADATA_FILE do
   chef_dsl_metadata = {:dsl_methods => chef_dsl_methods,
                        :attributes => chef_resource_attributes}
-  Yajl::Encoder.encode(chef_dsl_metadata, File.open(METADATA_FILE, 'w'),
-    :pretty => true)
+  json = Yajl::Encoder.encode(chef_dsl_metadata, :pretty => true)
+  File.open(METADATA_FILE, 'w'){|f| f.write(json)}
 end
 
 def chef_dsl_methods
