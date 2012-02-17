@@ -19,6 +19,7 @@ Gem::Specification.new do |s|
   s.add_dependency('pry-doc', '~> 0.3.0')
   s.add_dependency('rak', '~> 1.4')
   s.add_dependency('treetop', '~> 1.4.10')
-  s.files = Dir['lib/**/*.rb']
+  s.add_dependency('yajl-ruby', '~> 1.1.0')
+  s.files = Dir['lib/**/*.rb'] + Dir['*.json']
   s.required_ruby_version = '>= 1.9.2'
 end

@@ -3,6 +3,7 @@ require 'polyglot'
 require 'treetop'
 require 'pry'
 require 'rak'
+require 'yajl'
 
 require_relative 'foodcritic/chef'
 require_relative 'foodcritic/command_line'
