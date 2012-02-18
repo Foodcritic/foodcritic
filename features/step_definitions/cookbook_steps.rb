@@ -17,12 +17,41 @@ Given /^a cookbook recipe that declares a resource called ([^ ]+) with the condi
   }
 end
 
+Given /^a cookbook recipe that declares (a resource|multiple resources) nested in a (if|unless) condition with (.*)$/ do |arity, wrapping_condition, condition_attribute|
+  blk = "{ File.exists?('/etc/passwd') }"
+  str = "'test -f /etc/passwd'"
+  write_recipe %Q{
+    #{wrapping_condition} node['foo'] == 'bar'
+      service "apache" do
+        action :enable
+        #{
+          case condition_attribute
+            when /(only_if|not_if) block/ then "#{$1} #{blk}"
+            when /(only_if|not_if) string/ then "#{$1} #{str}"
+          end
+        }
+      end
+      #{%q{service "httpd" do
+        action :enable
+      end} if arity.include?('multiple')}
+    end
+  }
+end
+
 Given /^a cookbook recipe that declares a resource with a (.*)$/ do |conditional|
   write_recipe %Q{
     template "/tmp/foo" do
       mode "0644"
       source "foo.erb"
       #{conditional}
+    end
+  }
+end
+
+Given 'a cookbook recipe that declares a resource with no conditions at all' do
+  write_recipe %q{
+    service "apache" do
+      action :enable
     end
   }
 end
@@ -118,6 +147,29 @@ Given 'a cookbook recipe that declares two or fewer resources varying only in th
     end
     package "erlang-corba" do
       action :install
+    end
+  }
+end
+
+Given 'a cookbook recipe that has a wrapping condition containing a resource with no condition attribute and a Ruby statement' do
+  write_recipe %q{
+    if node['foo'] == 'bar'
+      Chef::Log.info "Enabling apache to start at boot"
+      service "apache" do
+        action :enable
+      end
+    end
+  }
+end
+
+Given 'a cookbook recipe that has a wrapping condition containing a resource with no condition attribute within a loop' do
+  write_recipe %q{
+    unless node['bar'].include? 'something'
+      bars.each do |bar|
+        service bar['name'] do
+          action :enable
+        end
+      end
     end
   }
 end

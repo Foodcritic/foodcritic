@@ -226,3 +226,14 @@ rule "FC022", "Resource condition within loop may not behave as expected" do
     end.flatten.compact
   end
 end
+
+rule "FC023", "Prefer conditional attributes" do
+  tags %w{style}
+  recipe do |ast|
+    ast.xpath(%q{//method_add_block[command/ident][count(descendant::ident
+      [@value='only_if' or @value='not_if']) = 0]/ancestor::*[self::if or
+      self::unless][count(descendant::method_add_block[command/ident]) = 1]
+      [count(stmts_add/method_add_block/call) = 0]
+      [count(stmts_add/stmts_add) = 0]}).map{|condition| match(condition)}
+  end
+end
