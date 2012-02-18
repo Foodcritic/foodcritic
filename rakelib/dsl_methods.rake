@@ -1,15 +1,19 @@
-require 'chef'
-require 'chef/mixin/convert_to_class_name'
 require 'yajl'
 
-include Chef::Mixin::ConvertToClassName
 METADATA_FILE = 'chef_dsl_metadata.json'
 
 file METADATA_FILE do
+  require_chef
   chef_dsl_metadata = {:dsl_methods => chef_dsl_methods,
                        :attributes => chef_resource_attributes}
   json = Yajl::Encoder.encode(chef_dsl_metadata, :pretty => true)
   File.open(METADATA_FILE, 'w'){|f| f.write(json)}
+end
+
+def require_chef
+  require 'chef'
+  require 'chef/mixin/convert_to_class_name'
+  include Chef::Mixin::ConvertToClassName
 end
 
 def chef_dsl_methods
