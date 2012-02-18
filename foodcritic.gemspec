@@ -12,14 +12,14 @@ Gem::Specification.new do |s|
   s.executables << 'foodcritic'
   s.add_dependency('chef', '~> 0.10.4')
   s.add_dependency("json", ">= 1.4.4", "<= 1.6.1")
-  s.add_dependency('gherkin', '~> 2.7.1')
+  s.add_dependency('gherkin', '~> 2.8.0')
   s.add_dependency('gist', '~> 2.0.4')
   s.add_dependency('nokogiri', '~> 1.5.0')
   s.add_dependency('pry', '~> 0.9.7.4')
   s.add_dependency('pry-doc', '~> 0.3.0')
   s.add_dependency('rak', '~> 1.4')
   s.add_dependency('treetop', '~> 1.4.10')
-  s.add_dependency('yajl-ruby', '~> 1.1.0')
+  s.add_dependency('yajl-ruby', '~> 1.0.0')
   s.files = Dir['lib/**/*.rb'] + Dir['*.json']
   s.required_ruby_version = '>= 1.9.2'
 end

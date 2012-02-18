@@ -4,7 +4,7 @@ gem 'foodcritic', :path => '.'
 
 group :test do
   gem 'aruba', '~> 0.4.11'
-  gem 'cucumber', '~> 1.1.4'
+  gem 'cucumber', '~> 1.1.5'
   gem 'simplecov', '~> 0.5.4'
 end
 

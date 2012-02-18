@@ -42,9 +42,8 @@ module FoodCritic
       @last_cookbook_path, @last_options = cookbook_path, options
       load_rules unless defined? @rules
       warnings = []; last_dir = nil; matched_rule_tags = Set.new
-      tag_expr = Gherkin::TagExpression.new(options[:tags])
 
-      active_rules = @rules.select{|rule| tag_expr.eval(rule.tags)}
+      active_rules = @rules.select{|rule| matching_tags?(options[:tags], rule.tags)}
       files_to_process(cookbook_path).each do |file|
         cookbook_dir = Pathname.new(File.join(File.dirname(file), '..')).cleanpath
         ast = read_file(file)
@@ -120,8 +119,17 @@ module FoodCritic
       elsif fail_tags.include? 'any'
         true
       else
-        Gherkin::TagExpression.new(fail_tags).eval(matched_tags)
+        matching_tags?(fail_tags, matched_tags)
       end
+    end
+
+    # Evaluate the specified tags
+    #
+    # @param [Array] tag_expr Tag expressions
+    # @param [Array] tags Tags to match against
+    # @return [Boolean] True if the tags match
+    def matching_tags?(tag_expr, tags)
+      Gherkin::TagExpression.new(tag_expr).eval(tags.map{|t| Gherkin::Formatter::Model::Tag.new(t, 1)})
     end
 
   end

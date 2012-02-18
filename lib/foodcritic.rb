@@ -1,5 +1,5 @@
 require 'pathname'
-require 'polyglot'
+require 'gherkin'
 require 'treetop'
 require 'pry'
 require 'rak'
