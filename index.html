@@ -857,13 +857,6 @@ message: Use strings in prefe[...]ols to access node attributes
         <p>For example if you don't care about <span class="label">style</span> warnings you could run foodcritic like so:</p>
         <pre>$ foodcritic --tags ~style cookbooks</pre>
 
-        <h3 id="faq-rbconfig-warning">When I run it under MRI 1.9.3 I get a warning "Use RbConfig instead of obsolete and deprecated Config." printed to the console.</h3>
-        <p>
-          This is because foodcritic uses Chef under the covers to implement some of its checks. Ohai is locked to an
-          older version of the systemu gem which causes this warning to appear.<br />
-          <a href="http://tickets.opscode.com/browse/OHAI-311">http://tickets.opscode.com/browse/OHAI-311</a>
-        </p>
-
         <h3 id="faq-readline">When I run foodcritic it dies with 'cannot load such file -- readline (LoadError)'</h3>
         <p>
             This is because your current Ruby has not been installed with Readline. If you are using RVM you can follow the
