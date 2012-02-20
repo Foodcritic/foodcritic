@@ -1,3 +1,15 @@
+## 0.10.0 (20th February, 2012)
+
+Features:
+
+  - Performance improvements.
+  - [FC023: Prefer conditional attributes](http://acrmp.github.com/foodcritic/#FC023) rule added. Stolen from @ampledata with thanks.
+  - New `-S` option added to allow an alternate search grammar to be specified.
+
+Other:
+
+  - Chef is no longer loaded at startup for performance reasons. Foodcritic now ships with Chef DSL metadata.
+
 ## 0.9.0 (26th January, 2012)
 
 Features:
