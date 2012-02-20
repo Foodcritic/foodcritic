@@ -76,6 +76,7 @@
 <li><a href="#FC020">FC020: Conditional execution string attribute looks like Ruby</a></li>
 <li><a href="#FC021">FC021: Resource condition in provider may not behave as expected</a></li>
 <li><a href="#FC022">FC022: Resource condition within loop may not behave as expected</a></li>
+<li><a href="#FC023">FC023: Prefer conditional attributes</a></li>
           </ul>
         </div>
       </div>
@@ -708,6 +709,34 @@ end
     command "echo 'Feeding: #{pet_name}'; touch '/tmp/#{pet_name}'"
     not_if { ::File.exists?("/tmp/#{pet_name}")}
   end
+end
+</pre>
+
+<h2 id="FC023">FC023: Prefer conditional attributes</h2>
+<p><span class="label">style</span></p>
+<p>
+  This warning means you have surrounded a resource with an <code>if</code> or <code>unless</code> rather than defining the condition directly on the resource itself. Note that this warning is only raised for single resources as you could reasonably enclose multiple resources in a condition like this for brevity.
+</p>
+
+<h3>Resource enclosed in a condition</h3>
+<p>This example matches the FC023 rule because it encloses a rule within a condition, rather than using the built-in Chef <code>not_if</code> or <code>only_if</code> conditional execution attributes.<br />
+<a href="http://wiki.opscode.com/display/chef/Resources#Resources-ConditionalExecution">http://wiki.opscode.com/display/chef/Resources#Resources-ConditionalExecution</a></p>
+
+<pre class="prettyprint">
+# Don't do this
+if node['foo'] == 'bar'
+  service "apache" do
+    action :enable
+  end
+end
+</pre>
+
+<h3>Modified version</h3>
+<p>You can avoid the warning above with more idiomatic Chef that specifies the condition above as an attribute on the resource:
+<pre class="prettyprint">
+service "apache" do
+  action :enable
+  only_if { node['foo'] == 'bar'}
 end
 </pre>
         <hr />
