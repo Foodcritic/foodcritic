@@ -16,7 +16,7 @@ Feature: Check file mode
       | cookbook_file | 00644  |   valid             |
       | directory     |   755  | invalid             |
       | directory     |  "755" |   valid             |
-      | directory     |  0644  |   valid             |
+      | directory     |  0644  | invalid             |
       | directory     | "0644" |   valid             |
       | directory     |   400  | invalid             |
       | directory     | 00400  |   valid             |
