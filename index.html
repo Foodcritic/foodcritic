@@ -306,7 +306,7 @@ end
 <h2 id="FC006">FC006: Mode should be quoted or fully specified when setting file permissions</h2>
 <p><span class="label important">correctness</span> <span class="label">files</span></p>
 
-<p>When setting file or directory permissions via the <code>mode</code> attribute you need to either quote the octal number or ensure it is specified to <strong>at least four digits in length</strong>. Otherwise the permissions that are set after Ruby coerces the number may not match what you expect.</p>
+<p>When setting file or directory permissions via the <code>mode</code> attribute you need to either quote the octal number or ensure it is specified <strong>with a leading zero</strong>. Otherwise the permissions that are set after Ruby coerces the number may not match what you expect.</p>
 
 <h3>File mode won't be interpreted correctly</h3>
 <pre class="prettyprint">
@@ -335,7 +335,7 @@ end
 directory "/var/lib/foo" do
   owner "root"
   group "root"
-  mode 0644
+  mode 00644
   action :create
 end
 </pre>
