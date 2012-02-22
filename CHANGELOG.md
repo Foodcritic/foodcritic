@@ -1,3 +1,9 @@
+## 0.11.0 (22nd February, 2012)
+
+Bugfixes:
+
+  - Major bugfix to [FC006: Mode should be quoted or fully specified when setting file permissions](http://acrmp.github.com/foodcritic/#FC006). In earlier versions a literal file mode that set the first octet would not have been picked up by this rule ([related issue](https://github.com/acrmp/foodcritic/pull/9)). Thanks @aia for finding and fixing this bug. Check your cookbooks against FC006 after upgrading to see if you are affected.
+
 ## 0.10.0 (20th February, 2012)
 
 Features:
