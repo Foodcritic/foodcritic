@@ -857,6 +857,9 @@ message: Use strings in prefe[...]ols to access node attributes
         <p>For example if you don't care about <span class="label">style</span> warnings you could run foodcritic like so:</p>
         <pre>$ foodcritic --tags ~style cookbooks</pre>
 
+        <p>Each rule has an implicit tag so you can exclude individual rules by rule code:</p>
+        <pre>$ foodcritic --tags ~FC002 cookbooks</pre>
+
         <h3 id="faq-readline">When I run foodcritic it dies with 'cannot load such file -- readline (LoadError)'</h3>
         <p>
             This is because your current Ruby has not been installed with Readline. If you are using RVM you can follow the
