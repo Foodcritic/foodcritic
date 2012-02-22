@@ -23,6 +23,7 @@ Feature: Check file mode
       | file          |  "755" |   valid             |
       | file          |   755  | invalid             |
       | file          |   644  | invalid             |
+      | file          |   044  | invalid             |
       | file          | "0644" |   valid             |
       | template      |  00400 |   valid             |
       | template      |   400  | invalid             |
