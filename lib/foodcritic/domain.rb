@@ -51,7 +51,8 @@ module FoodCritic
 
   # A rule to be matched against.
   class Rule
-    attr_accessor :code, :name, :cookbook, :recipe, :provider, :resource, :tags
+    attr_accessor :code, :name, :cookbook, :recipe, :provider, :resource
+    attr_writer :tags
 
     # Create a new rule
     #
@@ -60,6 +61,10 @@ module FoodCritic
     def initialize(code, name)
       @code, @name = code, name
       @tags = [code]
+    end
+
+    def tags
+      ['any'] + @tags
     end
 
     # Returns a string representation of this rule.

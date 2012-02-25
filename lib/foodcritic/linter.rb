@@ -54,7 +54,7 @@ module FoodCritic
           rule_matches += matches(rule.cookbook, cookbook_dir) if last_dir != cookbook_dir
           rule_matches.each do |match|
             warnings << Warning.new(rule, {:filename => file}.merge(match))
-            matched_rule_tags += rule.tags
+            matched_rule_tags << rule.tags
           end
         end
         last_dir = cookbook_dir
@@ -114,13 +114,8 @@ module FoodCritic
     # @param [Set] matched_tags The tags of warnings we have matches for
     # @return [Boolean] True if the build should be failed
     def should_fail_build?(fail_tags, matched_tags)
-      if fail_tags.empty?
-        false
-      elsif fail_tags.include? 'any'
-        true
-      else
-        matching_tags?(fail_tags, matched_tags)
-      end
+      return false if fail_tags.empty?
+      matched_tags.any?{|tags| matching_tags?(fail_tags, tags)}
     end
 
     # Evaluate the specified tags
