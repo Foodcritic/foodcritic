@@ -15,7 +15,9 @@ end
 
 Cucumber::Rake::Task.new(:features) do |t|
   t.cucumber_opts = ['-f', 'progress']
-  t.cucumber_opts += ['-t', '~@repl', 'features'] if ENV.has_key?('FC_FORK_PROCESS') and ENV['FC_FORK_PROCESS'] == true.to_s
+  if ENV.has_key?('FC_FORK_PROCESS') and ENV['FC_FORK_PROCESS'] == true.to_s
+    t.cucumber_opts += ['-t', '~@repl', 'features']
+  end
 end
 
 YARD::Rake::YardocTask.new
