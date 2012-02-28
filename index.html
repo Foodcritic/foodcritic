@@ -786,6 +786,24 @@ foodcritic -f correctness .</pre>
             </li>
             <li>Click "Save" and then "Build Now".</li>
         </ol>
+        <h4>More complex expressions</h4>
+        <p>
+         Foodcritic supports more complex expressions with the standard Cucumber
+         tag syntax. For example:
+        </p>
+<pre>
+#!/usr/bin/env rvm-shell 1.9.3
+foodcritic -f any -f ~FC014 .
+</pre>
+        <p>
+          Here we use <code>any</code> to fail the build on any warning, but then
+          use the tilde <code>~</code> to exclude FC014. The build will fail on
+          any warning raised, except FC014.
+        </p>
+        <p>
+          You can find more detail on Cucumber tag expressions at the Cucumber wiki:<br />
+          <a href="https://github.com/cucumber/cucumber/wiki/Tags">https://github.com/cucumber/cucumber/wiki/Tags</a>
+        </p>
 
         <h3>Tracking warnings over time</h3>
         <p>
