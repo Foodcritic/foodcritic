@@ -39,6 +39,7 @@ module FoodCritic
     # @option options [Array] fail_tags The tags to fail the build on
     # @return [FoodCritic::Review] A review of your cookbooks, with any warnings issued.
     def check(cookbook_path, options)
+      raise ArgumentError.new "Cookbook path is required" if cookbook_path.nil?
       @last_cookbook_path, @last_options = cookbook_path, options
       load_rules unless defined? @rules
       warnings = []; last_dir = nil; matched_rule_tags = Set.new
@@ -60,7 +61,8 @@ module FoodCritic
         last_dir = cookbook_dir
       end
 
-      @review = Review.new(cookbook_path, warnings, should_fail_build?(options[:fail_tags], matched_rule_tags))
+      @review = Review.new(cookbook_path, warnings,
+			should_fail_build?(options[:fail_tags], matched_rule_tags))
 
       binding.pry if options[:repl]
       @review
