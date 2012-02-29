@@ -1,3 +1,15 @@
+## 0.11.1 (29th February, 2012)
+
+Bugfixes:
+
+  - Foodcritic could fail to activate yajl-json in some circumstances, failing
+    with a runtime error. Whether this occurred was dependent on the version of
+    yajl-json activated by Chef, which would vary dependent on the other gems
+    installed on the system. See the
+    [related issue](https://github.com/acrmp/foodcritic/issues/14) for more
+    information. Thanks @jaymzh for identifying the issue and striving to get
+    Foodcritic playing well with Omnibus.
+
 ## 0.11.0 (22nd February, 2012)
 
 Bugfixes:
