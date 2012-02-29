@@ -4,7 +4,7 @@ Bugfixes:
 
   - Foodcritic could fail to activate yajl-json in some circumstances, failing
     with a runtime error. Whether this occurred was dependent on the version of
-    yajl-json activated by Chef, which would vary dependent on the other gems
+    yajl-ruby activated by Chef, which would vary dependent on the other gems
     installed on the system. See the
     [related issue](https://github.com/acrmp/foodcritic/issues/14) for more
     information. Thanks @jaymzh for identifying the issue and striving to get
