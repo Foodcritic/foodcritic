@@ -5,6 +5,5 @@ chef_dsl_metadata.json
 coverage
 doc
 pkg
-*.swp
 tmp
 Gemfile.lock

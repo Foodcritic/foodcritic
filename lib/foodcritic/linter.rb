@@ -39,7 +39,6 @@ module FoodCritic
     # @option options [Array] fail_tags The tags to fail the build on
     # @return [FoodCritic::Review] A review of your cookbooks, with any warnings issued.
     def check(cookbook_path, options)
-      raise ArgumentError.new "Cookbook path is required" if cookbook_path.nil?
       @last_cookbook_path, @last_options = cookbook_path, options
       load_rules unless defined? @rules
       warnings = []; last_dir = nil; matched_rule_tags = Set.new
@@ -55,14 +54,13 @@ module FoodCritic
           rule_matches += matches(rule.cookbook, cookbook_dir) if last_dir != cookbook_dir
           rule_matches.each do |match|
             warnings << Warning.new(rule, {:filename => file}.merge(match))
-            matched_rule_tags << rule.tags
+            matched_rule_tags += rule.tags
           end
         end
         last_dir = cookbook_dir
       end
 
-      @review = Review.new(cookbook_path, warnings,
-			should_fail_build?(options[:fail_tags], matched_rule_tags))
+      @review = Review.new(cookbook_path, warnings, should_fail_build?(options[:fail_tags], matched_rule_tags))
 
       binding.pry if options[:repl]
       @review
@@ -116,8 +114,13 @@ module FoodCritic
     # @param [Set] matched_tags The tags of warnings we have matches for
     # @return [Boolean] True if the build should be failed
     def should_fail_build?(fail_tags, matched_tags)
-      return false if fail_tags.empty?
-      matched_tags.any?{|tags| matching_tags?(fail_tags, tags)}
+      if fail_tags.empty?
+        false
+      elsif fail_tags.include? 'any'
+        true
+      else
+        matching_tags?(fail_tags, matched_tags)
+      end
     end
 
     # Evaluate the specified tags

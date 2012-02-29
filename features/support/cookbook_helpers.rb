@@ -58,7 +58,6 @@ module FoodCritic
         end
       end
       write_recipe(recipe)
-      write_readme('Hello World') # Don't trigger FC011
     end
 
     # Create a cookbook with a LRWP
@@ -272,14 +271,6 @@ module FoodCritic
     # @return [String] The string or nil if 'unspecified'
     def nil_if_unspecified(str)
       str == 'unspecified' ? nil : str
-    end
-
-    # Create a README with the provided content.
-    #
-    # @param [String] content The recipe content.
-    # @param [String] cookbook_name Optional name of the cookbook.
-    def write_readme(content, cookbook_name = 'example')
-      write_file "cookbooks/#{cookbook_name}/README.md", content.strip
     end
 
     # Create a recipe with the provided content.
