@@ -8,79 +8,6 @@ module FoodCritic
     include FoodCritic::Chef
     include FoodCritic::Chef::Search
 
-    # Create a match from the specified node.
-    #
-    # @param [Nokogiri::XML::Node] node The node to create a match for
-    # @return [Hash] Hash with the matched node name and position with the recipe
-    def match(node)
-      raise ArgumentError.new unless node.respond_to?(:xpath)
-      pos = node.xpath('descendant::pos').first
-      return nil if pos.nil?
-      {:matched => node.respond_to?(:name) ? node.name : '', :line => pos['line'].to_i, :column => pos['column'].to_i}
-    end
-
-    # Create a match for a specified file. Use this if the presence of the file triggers the warning rather than content.
-    #
-    # @param [String] file The filename to create a match for
-    # @return [Hash] Hash with the match details
-    # @see FoodCritic::Helpers#match
-    def file_match(file)
-      raise ArgumentError.new("Filename cannot be nil") if file.nil?
-      {:filename => file, :matched => file, :line => 1, :column => 1}
-    end
-
-    # Does the specified recipe check for Chef Solo?
-    #
-    # @param [Nokogiri::XML::Node] ast The AST of the cookbook recipe to check.
-    # @return [Boolean] True if there is a test for Chef::Config[:solo] in the
-    #   recipe
-    def checks_for_chef_solo?(ast)
-      ! ast.xpath(%q{//if/aref[count(descendant::const[@value = 'Chef' or
-          @value = 'Config']) = 2
-          and count(descendant::ident[@value='solo']) > 0]}).empty?
-    end
-
-    # Is the chef-solo-search library available?
-    #
-    # @param [String] recipe_path The path to the current recipe
-    # @return [Boolean] True if the chef-solo-search library is available.
-    def chef_solo_search_supported?(recipe_path)
-      return false if recipe_path.nil? || ! File.exists?(recipe_path)
-      cbk_tree_path = Pathname.new(File.join(recipe_path, '../../..'))
-      search_libs = Dir[File.join(cbk_tree_path.realpath, "*/libraries/search.rb")]
-      search_libs.any? do |lib|
-        ! read_file(lib).xpath(%q{//class[count(descendant::const[@value='Chef'
-        or @value='Recipe']) = 2]/descendant::def/ident[@value='search']}).empty?
-      end
-    end
-
-    # Searches performed by the specified recipe.
-    #
-    # @param [Nokogiri::XML::Node] ast The AST of the cookbook recipe to check.
-    # @return [Array] The AST nodes in the recipe where searches are performed
-    def searches(ast)
-      return [] unless ast.respond_to?(:xpath)
-      ast.xpath("//fcall/ident[@value = 'search']")
-    end
-
-    # Searches performed by the specified recipe that are literal strings.
-    # Searches with a query formed from a subexpression will be ignored.
-    #
-    # @param [Nokogiri::XML::Node] ast The AST of the cookbook recipe to check
-    # @return [Array] The matching nodes
-    def literal_searches(ast)
-      return [] unless ast.respond_to?(:xpath)
-      ast.xpath("//method_add_arg[fcall/ident/@value = 'search' and
-        count(descendant::string_embexpr) = 0]/descendant::tstring_content")
-    end
-
-    class AttFilter
-      def is_att_type(value)
-        return [] unless value.respond_to?(:select)
-        value.select{|n| %w{node default override set normal}.include?(n.to_s)}
-      end
-    end
-
     # Find attribute accesses by type.
     #
     # @param [Nokogiri::XML::Node] ast The AST of the cookbook recipe to check
@@ -92,7 +19,7 @@ module FoodCritic
     def attribute_access(ast, accessed_via, exclude_with_dots)
       return [] unless ast.respond_to?(:xpath)
       unless [:vivified, :symbol, :string].include? accessed_via
-        raise ArgumentError.new "Node type not recognised"
+        raise ArgumentError, "Node type not recognised"
       end
 
       (if accessed_via == :vivified
@@ -115,143 +42,8 @@ module FoodCritic
       ).sort
     end
 
-    # Find Chef resources of the specified type.
-    # TODO: Include blockless resources
-    #
-    # @param [Nokogiri::XML::Node] ast The AST of the cookbook recipe to check
-    # @param [String] type The type of resource to look for (or nil for all
-    #   resources)
-    # @return [Array] AST nodes of Chef resources.
-    def find_resources(ast, type = nil)
-      return [] unless ast.respond_to?(:xpath)
-      scope_type = ''
-      scope_type = "[@value='#{type}']" unless type.nil?
-      ast.xpath("//method_add_block[command/ident#{scope_type}]")
-    end
-
-    # Return the type, e.g. 'package' for a given resource
-    #
-    # @param [Nokogiri::XML::Node] resource The resource AST
-    # @return [String] The type of resource
-    def resource_type(resource)
-      unless resource.respond_to?(:xpath)
-        raise ArgumentError.new "Resource must support #xpath"
-      end
-      type = resource.xpath('string(command/ident/@value)')
-      if type.empty?
-        raise ArgumentError.new "Provided AST node is not a resource"
-      end
-      type
-    end
-
-    # Retrieve the name attribute associated with the specified resource.
-    #
-    # @param [Nokogiri::XML::Node] resource The resource AST to lookup the name
-    #   attribute under
-    # @return [String] The name attribute value
-    def resource_name(resource)
-      unless resource.respond_to?(:xpath)
-        raise ArgumentError.new "Resource must support #xpath"
-      end
-      resource.xpath('string(command//tstring_content/@value)')
-    end
-
-    # Retrieve a single-valued attribute from the specified resource.
-    #
-    # @param [String] name The attribute name
-    # @param [Nokogiri::XML::Node] resource The resource AST to lookup the
-    #   attribute under
-    # @return [String] The attribute value for the specified attribute
-    def resource_attribute(name, resource)
-      resource_attributes(resource)[name]
-    end
-
-    # Retrieve all attributes from the specified resource.
-    #
-    # @param [Nokogiri::XML::Node] resource The resource AST
-    # @return [Hash] The resource attributes
-    def resource_attributes(resource)
-      atts = {:name => resource_name(resource)}
-      resource.xpath('do_block/descendant::command
-                     [count(ancestor::do_block) = 1]').each do |att|
-        if att.xpath('descendant::symbol').empty?
-          att_value = att.xpath('string(descendant::tstring_content/@value)')
-        else
-          att_value = att.xpath('string(descendant::symbol/ident/@value)').to_sym
-        end
-        atts[att.xpath('string(ident/@value)')] = att_value
-      end
-      atts
-    end
-
-    # Retrieve all resources of a given type
-    #
-    # @param [Nokogiri::XML::Node] ast The recipe AST
-    # @return [Hash] The matching resources
-    def resources_by_type(ast)
-      unless ast.respond_to?(:xpath)
-        raise ArgumentError.new "AST must support #xpath"
-      end
-      result = Hash.new{|hash, key| hash[key] = Array.new}
-      find_resources(ast).each do |resource|
-        result[resource_type(resource)] << resource
-      end
-      result
-    end
-
-    # Retrieve the attributes as a hash for all resources of a given type.
-    #
-    # @param [Nokogiri::XML::Node] ast The recipe AST
-    # @return [Hash] Resources keyed by type, with an array for each
-    def resource_attributes_by_type(ast)
-      result = {}
-      resources_by_type(ast).each do |type,resources|
-        result[type] = resources.map{|resource| resource_attributes(resource)}
-      end
-      result
-    end
-
-    # Retrieve the recipes that are included within the given recipe AST.
-    #
-    # @param [Nokogiri::XML::Node] ast The recipe AST
-    # @return [Hash] include_recipe nodes keyed by included recipe name
-    def included_recipes(ast)
-      # we only support literal strings, ignoring sub-expressions
-      included = ast.xpath(%q{//command[ident/@value = 'include_recipe' and count(descendant::string_embexpr) = 0]/
-        descendant::tstring_content})
-      Hash[included.map{|recipe|recipe['value']}.zip(included)]
-    end
-
-    # The name of the cookbook containing the specified file.
-    #
-    # @param [String] file The file in the cookbook
-    # @return [String] The name of the containing cookbook
-    def cookbook_name(file)
-      File.basename(File.absolute_path(File.join(File.dirname(file), '..')))
-    end
-
-    # The dependencies declared in cookbook metadata.
-    #
-    # @param [Nokogiri::XML::Node] ast The metadata rb AST
-    # @return [Array] List of cookbooks depended on
-    def declared_dependencies(ast)
-      deps = ast.xpath("//command[ident/@value='depends']/descendant::args_add/descendant::tstring_content")
-      # handle quoted word arrays
-      var_ref = ast.xpath("//command[ident/@value='depends']/descendant::var_ref/ident")
-      deps += ast.xpath(%Q{//block_var/params/ident#{var_ref.first['value']}/ancestor::method_add_block/
-          call/descendant::tstring_content}) unless var_ref.empty?
-      deps.map{|dep| dep['value']}
-    end
-
-    # If the provided node is the line / column information.
-    #
-    # @param [Nokogiri::XML::Node] node A node within the AST
-    # @return [Boolean] True if this node holds the position data
-    def position_node?(node)
-      node.respond_to?(:length) and node.length == 2 and node.respond_to?(:all?) and node.all?{|child| child.respond_to?(:to_i)}
-    end
-
-    # Recurse the nested arrays provided by Ripper to create a tree we can more easily apply expressions to.
+    # Recurse the nested arrays provided by Ripper to create a tree we can more
+    # easily apply expressions to.
     #
     # @param [Array] node The AST
     # @param [Nokogiri::XML::Document] doc The document being constructed
@@ -271,7 +63,8 @@ module FoodCritic
             xml_node.add_child(pos)
           else
             if child.respond_to?(:first)
-              n = Nokogiri::XML::Node.new(child.first.to_s.gsub(/[^a-z_]/, ''), doc)
+              n = Nokogiri::XML::Node.new(
+                child.first.to_s.gsub(/[^a-z_]/, ''), doc)
               xml_node.add_child(build_xml(child, doc, n))
             else
               xml_node['value'] = child.to_s unless child.nil?
@@ -282,26 +75,132 @@ module FoodCritic
       xml_node
     end
 
-    # Read the AST for the given Ruby file
+    # Does the specified recipe check for Chef Solo?
     #
-    # @param [String] file The file to read
-    # @return [Nokogiri::XML::Node] The recipe AST
-    def read_file(file)
-      build_xml(Ripper::SexpBuilder.new(IO.read(file)).parse)
+    # @param [Nokogiri::XML::Node] ast The AST of the cookbook recipe to check.
+    # @return [Boolean] True if there is a test for Chef::Config[:solo] in the
+    #   recipe
+    def checks_for_chef_solo?(ast)
+      raise_unless_xpath!(ast)
+      ! ast.xpath(%q{//if/aref[count(descendant::const[@value = 'Chef' or
+          @value = 'Config']) = 2
+          and count(descendant::ident[@value='solo']) > 0]}).empty?
     end
 
-    # Does the provided string look like ruby code?
+    # Is the chef-solo-search library available?
     #
-    # @param [String] str The string to check for rubiness
-    # @return [Boolean] True if this string could be syntactically valid Ruby
-    def ruby_code?(str)
-      checker = FoodCritic::ErrorChecker.new(str)
-      checker.parse
-      ! checker.error?
+    # @param [String] recipe_path The path to the current recipe
+    # @return [Boolean] True if the chef-solo-search library is available.
+    def chef_solo_search_supported?(recipe_path)
+      return false if recipe_path.nil? || ! File.exists?(recipe_path)
+      cbk_tree_path = Pathname.new(File.join(recipe_path, '../../..'))
+      search_libs = Dir[File.join(cbk_tree_path.realpath, "*/libraries/search.rb")]
+      search_libs.any? do |lib|
+        ! read_file(lib).xpath(%q{//class[count(descendant::const[@value='Chef'
+        or @value='Recipe']) = 2]/descendant::def/ident[@value='search']}).empty?
+      end
     end
 
-    # Does the provided string look like an Operating System command? This is a rough heuristic to be taken with a
-    # pinch of salt.
+    # The name of the cookbook containing the specified file.
+    #
+    # @param [String] file The file in the cookbook
+    # @return [String] The name of the containing cookbook
+    def cookbook_name(file)
+      raise ArgumentError, 'File cannot be nil or empty' if file.to_s.empty?
+      until (file.split(File::SEPARATOR) & standard_recipe_subdirs).empty? do
+        file = File.absolute_path(File.dirname(file.to_s))
+      end
+      file = File.dirname(file) unless File.extname(file).empty?
+      File.basename(file)
+    end
+
+    # The dependencies declared in cookbook metadata.
+    #
+    # @param [Nokogiri::XML::Node] ast The metadata rb AST
+    # @return [Array] List of cookbooks depended on
+    def declared_dependencies(ast)
+      raise_unless_xpath!(ast)
+      deps = ast.xpath(%q{//command[ident/@value='depends']/
+        descendant::args_add/descendant::tstring_content})
+      # handle quoted word arrays
+      var_ref = ast.xpath(%q{//command[ident/@value='depends']/
+        descendant::var_ref/ident})
+      unless var_ref.empty?
+        deps += ast.xpath(%Q{//block_var/params/ident#{var_ref.first['value']}/
+          ancestor::method_add_block/call/descendant::tstring_content}) 
+      end
+      deps.map{|dep| dep['value']}
+    end
+
+    # Create a match for a specified file. Use this if the presence of the file
+    # triggers the warning rather than content.
+    #
+    # @param [String] file The filename to create a match for
+    # @return [Hash] Hash with the match details
+    # @see FoodCritic::Helpers#match
+    def file_match(file)
+      raise ArgumentError, "Filename cannot be nil" if file.nil?
+      {:filename => file, :matched => file, :line => 1, :column => 1}
+    end
+
+    # Find Chef resources of the specified type.
+    # TODO: Include blockless resources
+    #
+    # @param [Nokogiri::XML::Node] ast The AST of the cookbook recipe to check
+    # @param [String] type The type of resource to look for (or nil for all
+    #   resources)
+    # @return [Array] AST nodes of Chef resources.
+    def find_resources(ast, type = nil)
+      return [] unless ast.respond_to?(:xpath)
+      scope_type = ''
+      scope_type = "[@value='#{type}']" unless type.nil?
+      ast.xpath("//method_add_block[command/ident#{scope_type}]")
+    end
+
+    # Retrieve the recipes that are included within the given recipe AST.
+    #
+    # @param [Nokogiri::XML::Node] ast The recipe AST
+    # @return [Hash] include_recipe nodes keyed by included recipe name
+    def included_recipes(ast)
+      raise_unless_xpath!(ast)
+      # we only support literal strings, ignoring sub-expressions
+      included = ast.xpath(%q{//command[ident/@value = 'include_recipe' and
+        count(descendant::string_embexpr) = 0]/descendant::tstring_content})
+      included.inject(Hash.new([])){|h, i| h[i['value']] += [i]; h}
+    end
+
+    class AttFilter
+      def is_att_type(value)
+        return [] unless value.respond_to?(:select)
+        value.select{|n| %w{node default override set normal}.include?(n.to_s)}
+      end
+    end
+
+    # Searches performed by the specified recipe that are literal strings.
+    # Searches with a query formed from a subexpression will be ignored.
+    #
+    # @param [Nokogiri::XML::Node] ast The AST of the cookbook recipe to check
+    # @return [Array] The matching nodes
+    def literal_searches(ast)
+      return [] unless ast.respond_to?(:xpath)
+      ast.xpath("//method_add_arg[fcall/ident/@value = 'search' and
+        count(descendant::string_embexpr) = 0]/descendant::tstring_content")
+    end
+
+    # Create a match from the specified node.
+    #
+    # @param [Nokogiri::XML::Node] node The node to create a match for
+    # @return [Hash] Hash with the matched node name and position with the recipe
+    def match(node)
+      raise_unless_xpath!(node)
+      pos = node.xpath('descendant::pos').first
+      return nil if pos.nil?
+      {:matched => node.respond_to?(:name) ? node.name : '',
+       :line => pos['line'].to_i, :column => pos['column'].to_i}
+    end
+
+    # Does the provided string look like an Operating System command? This is a
+    # rough heuristic to be taken with a pinch of salt.
     #
     # @param [String] str The string to check
     # @return [Boolean] True if this string might be an OS command
@@ -310,6 +209,139 @@ module FoodCritic
       str.include?('|') or                  # probably a pipe, could be alternation
       str.match(/^[\w]+$/) or               # command name only
       str.match(/ --?[a-z]/i)               # command-line flag
+    end
+
+    # If the provided node is the line / column information.
+    #
+    # @param [Nokogiri::XML::Node] node A node within the AST
+    # @return [Boolean] True if this node holds the position data
+    def position_node?(node)
+      node.respond_to?(:length) and node.length == 2 and
+        node.respond_to?(:all?) and node.all?{|child| child.respond_to?(:to_i)}
+    end
+
+    # Read the AST for the given Ruby file
+    #
+    # @param [String] file The file to read
+    # @return [Nokogiri::XML::Node] The recipe AST
+    def read_file(file)
+      build_xml(Ripper::SexpBuilder.new(File.read(file)).parse)
+    end
+
+    # Retrieve a single-valued attribute from the specified resource.
+    #
+    # @param [String] name The attribute name
+    # @param [Nokogiri::XML::Node] resource The resource AST to lookup the
+    #   attribute under
+    # @return [String] The attribute value for the specified attribute
+    def resource_attribute(name, resource)
+      raise ArgumentError, "Attribute name cannot be empty" if name.empty?
+      resource_attributes(resource)[name.to_s]
+    end
+
+    # Retrieve all attributes from the specified resource.
+    #
+    # @param [Nokogiri::XML::Node] resource The resource AST
+    # @return [Hash] The resource attributes
+    def resource_attributes(resource)
+      atts = {}
+      name = resource_name(resource)
+      atts[:name] = name unless name.empty?
+      resource.xpath('do_block/descendant::command
+                     [count(ancestor::do_block) = 1]').each do |att|
+        if att.xpath('descendant::symbol').empty?
+          att_value = att.xpath('string(descendant::tstring_content/@value)')
+        else
+          att_value = att.xpath('string(descendant::symbol/ident/@value)').to_sym
+        end
+        atts[att.xpath('string(ident/@value)')] = att_value
+      end
+      atts
+    end
+
+    # Retrieve the attributes as a hash for all resources of a given type.
+    #
+    # @param [Nokogiri::XML::Node] ast The recipe AST
+    # @return [Hash] Resources keyed by type, with an array for each
+    def resource_attributes_by_type(ast)
+      result = {}
+      resources_by_type(ast).each do |type,resources|
+        result[type] = resources.map{|resource| resource_attributes(resource)}
+      end
+      result
+    end
+
+    # Retrieve the name attribute associated with the specified resource.
+    #
+    # @param [Nokogiri::XML::Node] resource The resource AST to lookup the name
+    #   attribute under
+    # @return [String] The name attribute value
+    def resource_name(resource)
+      raise_unless_xpath!(resource)
+      resource.xpath('string(command//tstring_content/@value)')
+    end
+
+    # Retrieve all resources of a given type
+    #
+    # @param [Nokogiri::XML::Node] ast The recipe AST
+    # @return [Hash] The matching resources
+    def resources_by_type(ast)
+      raise_unless_xpath!(ast)
+      result = Hash.new{|hash, key| hash[key] = Array.new}
+      find_resources(ast).each do |resource|
+        result[resource_type(resource)] << resource
+      end
+      result
+    end
+
+    # Return the type, e.g. 'package' for a given resource
+    #
+    # @param [Nokogiri::XML::Node] resource The resource AST
+    # @return [String] The type of resource
+    def resource_type(resource)
+      raise_unless_xpath!(resource)
+      type = resource.xpath('string(command/ident/@value)')
+      if type.empty?
+        raise ArgumentError, "Provided AST node is not a resource"
+      end
+      type
+    end
+
+    # Does the provided string look like ruby code?
+    #
+    # @param [String] str The string to check for rubiness
+    # @return [Boolean] True if this string could be syntactically valid Ruby
+    def ruby_code?(str)
+      str = str.to_s
+      return false if str.empty?
+      checker = FoodCritic::ErrorChecker.new(str)
+      checker.parse
+      ! checker.error?
+    end
+
+    # Searches performed by the specified recipe.
+    #
+    # @param [Nokogiri::XML::Node] ast The AST of the cookbook recipe to check.
+    # @return [Array] The AST nodes in the recipe where searches are performed
+    def searches(ast)
+      return [] unless ast.respond_to?(:xpath)
+      ast.xpath("//fcall/ident[@value = 'search']")
+    end
+
+    # The list of standard recipe sub-directories.
+    #
+    # @return [Array] The standard list of directories.
+    def standard_recipe_subdirs
+      %w{attributes definitions files libraries providers recipes resources
+         templates}
+    end
+
+    private
+
+    def raise_unless_xpath!(ast)
+      unless ast.respond_to?(:xpath)
+        raise ArgumentError, "AST must support #xpath"
+      end
     end
 
   end

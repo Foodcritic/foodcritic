@@ -58,11 +58,16 @@ rule "FC007", "Ensure recipe dependencies are reflected in cookbook metadata" do
   recipe do |ast,filename|
     metadata_path = Pathname.new(File.join(File.dirname(filename), '..', 'metadata.rb')).cleanpath
     next unless File.exists? metadata_path
-    undeclared = included_recipes(ast).keys.map{|recipe|recipe.split('::').first} - [cookbook_name(filename)] -
+    undeclared = included_recipes(ast).keys.map do |recipe|
+      recipe.split('::').first
+    end - [cookbook_name(filename)] -
         declared_dependencies(read_file(metadata_path))
-    included_recipes(ast).map do |recipe, resource|
-      match(resource) if undeclared.include?(recipe) || undeclared.any?{|u| recipe.start_with?("#{u}::")}
-    end.compact
+    included_recipes(ast).map do |recipe, include_stmts|
+      if undeclared.include?(recipe) ||
+         undeclared.any?{|u| recipe.start_with?("#{u}::")}
+        include_stmts.map{|i| match(i)}
+      end
+    end.flatten.compact
   end
 end
 

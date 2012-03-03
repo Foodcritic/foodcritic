@@ -4,6 +4,199 @@ describe FoodCritic::Helpers do
 
   let(:api) { Object.new.extend(FoodCritic::Helpers) }
 
+  describe "#attribute_access" do
+    let(:ast) { MiniTest::Mock.new }
+    it "returns empty if the provided ast does not support XPath" do
+      api.attribute_access(nil, :vivified, false).must_be_empty
+    end
+    it "returns empty if the provided ast has no matches" do
+      ast.expect :xpath, [], [String]
+      [:vivified, :string, :symbol].each do |access_type|
+        api.attribute_access([], :vivified, false).must_be_empty
+      end
+    end
+    it "raises if the specified node type is not recognised" do
+      ast.expect :xpath, [], [String]
+      lambda do
+        api.attribute_access(ast, :cymbals, false)
+      end.must_raise(ArgumentError)
+    end
+    it "does not raise if the specified node type is valid" do
+      ast.expect :xpath, [], [String, FoodCritic::Helpers::AttFilter]
+      [:vivified, :symbol, :string].each do |access_type|
+        api.attribute_access(ast, access_type, false)
+      end
+    end
+    it "returns vivified attributes access" do
+      call = MiniTest::Mock.new
+      call.expect :xpath, [], [/args_add_block/]
+      call.expect :xpath, ["node", "bar"], [/ident/]
+      ast.expect :xpath, [call], [String, FoodCritic::Helpers::AttFilter]
+      api.attribute_access(ast, :vivified, false).must_equal([call])
+      ast.verify
+      call.verify
+    end
+  end
+
+  describe "#build_xml" do
+    it "returns an empty document if passed nil" do
+      api.build_xml(nil).children.must_be_empty
+    end
+    it "returns an empty document when the node is not enumerable" do
+      api.build_xml("foo").children.must_be_empty
+    end
+  end
+
+  describe "#checks_for_chef_solo?" do
+    let(:ast) { ast = MiniTest::Mock.new }
+    it "raises if the provided ast does not support XPath" do
+      lambda{api.checks_for_chef_solo?(nil)}.must_raise(ArgumentError)
+    end
+    it "returns false if there is no reference to chef solo" do
+      ast.expect :xpath, [], [String]
+      refute api.checks_for_chef_solo?(ast)
+    end
+    it "returns true if there is one reference to chef solo" do
+      ast.expect :xpath, ['aref'], [String]
+      assert api.checks_for_chef_solo?(ast)
+    end
+    it "returns true if there are multiple references to chef solo" do
+      ast.expect :xpath, ['aref', 'aref'], [String]
+      assert api.checks_for_chef_solo?(ast)
+    end
+  end
+
+  describe "#chef_solo_search_supported?" do
+    it "returns false if the recipe path is nil" do
+      refute api.chef_solo_search_supported?(nil)
+    end
+    it "returns false if the recipe path does not exist" do
+      refute api.chef_solo_search_supported?('/tmp/non-existent-path')
+    end
+  end
+
+  describe "#cookbook_name" do
+    it "raises if passed a nil" do
+      lambda{api.cookbook_name(nil)}.must_raise ArgumentError
+    end
+    it "raises if passed an empty string" do
+      lambda{api.cookbook_name('')}.must_raise ArgumentError
+    end
+    it "returns the cookbook name when passed a recipe" do
+      api.cookbook_name('cookbooks/apache2/recipes/default.rb').must_equal 'apache2'
+    end
+    it "returns the cookbook name when passed the cookbook metadata" do
+      api.cookbook_name('cookbooks/apache2/metadata.rb').must_equal 'apache2'
+    end
+    it "returns the cookbook name when passed a template" do
+      api.cookbook_name('cookbooks/apache2/templates/default/a2ensite.erb').must_equal 'apache2'
+    end
+  end
+
+  describe "#declared_dependencies" do
+    it "raises if the ast does not support XPath" do
+      lambda{api.declared_dependencies(nil)}.must_raise ArgumentError
+    end
+    it "returns an empty if there are no declared dependencies" do
+      ast = MiniTest::Mock.new.expect :xpath, [], [String]
+      api.declared_dependencies(ast).must_be_empty
+    end
+  end
+
+  describe "#file_match" do
+    it "includes the provided filename in the match" do
+      api.file_match("foo.rb")[:filename].must_equal "foo.rb"
+    end
+    it "retains the full provided filename path in the match" do
+      api.file_match("foo/bar/foo.rb")[:filename].must_equal "foo/bar/foo.rb"
+    end
+    it "raises an error if the provided filename is nil" do
+      lambda{api.file_match(nil)}.must_raise(ArgumentError)
+    end
+    it "sets the line and column to the beginning of the file" do
+      match = api.file_match("bar.rb")
+      match[:line].must_equal 1
+      match[:column].must_equal 1
+    end
+  end
+
+  describe "#find_resources" do
+    let(:ast) { MiniTest::Mock.new }
+    it "returns empty unless the ast supports XPath" do
+      api.find_resources(nil, nil).must_be_empty
+    end
+    it "restricts by resource type when provided" do
+      ast.expect :xpath, ['method_add_block'],
+        ["//method_add_block[command/ident[@value='file']]"]
+      api.find_resources(ast, 'file')
+      ast.verify
+    end
+    it "does not restrict by resource type when not provided" do
+      ast.expect :xpath, ['method_add_block'],
+                         ["//method_add_block[command/ident]"]
+      api.find_resources(ast, nil)
+      ast.verify
+    end
+    it "returns any matches" do
+      ast.expect :xpath, ['method_add_block'], [String]
+      api.find_resources(ast, nil).must_equal ['method_add_block']
+    end
+  end
+
+  describe "#included_recipes" do
+    it "raises if the ast does not support XPath" do
+      lambda{api.included_recipes(nil)}.must_raise ArgumentError
+    end
+    it "returns an empty hash if there are no included recipes" do
+      ast = MiniTest::Mock.new.expect :xpath, [], [String]
+      api.included_recipes(ast).keys.must_be_empty
+    end
+    it "returns a hash keyed by recipe name" do
+      ast = MiniTest::Mock.new.expect :xpath, [{'value' => 'foo::bar'}], [String]
+      api.included_recipes(ast).keys.must_equal ['foo::bar']
+    end
+    it "returns a hash where the values are the matching nodes" do
+      ast = MiniTest::Mock.new.expect :xpath, [{'value' => 'foo::bar'}], [String]
+      api.included_recipes(ast).values.must_equal [[{'value' => 'foo::bar'}]]
+    end
+  end
+
+  describe :AttFilter do
+    describe "#is_att_type" do
+      let(:filter) { FoodCritic::Helpers::AttFilter.new }
+      it "returns empty if the argument is not enumerable" do
+        filter.is_att_type(nil).must_be_empty
+      end
+      it "filters out values that are not Chef node attribute types" do
+        nodes = %w{node node badger default override ostrich set normal}
+        filter.is_att_type(nodes).uniq.size.must_equal 5
+      end
+      it "returns all filtered nodes" do
+        nodes = %w{node node override default normal set set override}
+        filter.is_att_type(nodes).must_equal nodes
+      end
+      it "returns empty if there are no Chef node attribute types" do
+        nodes = %w{squirrel badger pooh tigger}
+        filter.is_att_type(nodes).must_be_empty
+      end
+    end
+  end
+
+  describe "#literal_searches" do
+    let(:ast) { ast = MiniTest::Mock.new }
+    it "returns empty if the AST does not support XPath expressions" do
+      api.literal_searches(nil).must_be_empty
+    end
+    it "returns empty if the AST has no elements" do
+      ast.expect :xpath, [], [String]
+      api.literal_searches(ast).must_be_empty
+    end
+    it "returns the AST elements for each literal search" do
+      ast.expect :xpath, ['tstring_content'], [String]
+      api.literal_searches(ast).must_equal ['tstring_content']
+    end
+  end
+
   describe "#match" do
     it "raises if the provided node is nil" do
       lambda{api.match(nil)}.must_raise(ArgumentError)
@@ -43,140 +236,110 @@ describe FoodCritic::Helpers do
     end
   end
 
-  describe :file_match do
-    it "includes the provided filename in the match" do
-      api.file_match("foo.rb")[:filename].must_equal "foo.rb"
+  describe "#os_command?" do
+    it "identifies grep as an os command" do
+      assert api.os_command?('grep pattern file')
     end
-    it "retains the full provided filename path in the match" do
-      api.file_match("foo/bar/foo.rb")[:filename].must_equal "foo/bar/foo.rb"
+    it "identifies which as an os command" do
+      assert api.os_command?('which ls')
     end
-    it "raises an error if the provided filename is nil" do
-      lambda{api.file_match(nil)}.must_raise(ArgumentError)
+    it "assumes any pipe is a unix pipe" do
+      assert api.os_command?('ls | grep foo')
     end
-    it "sets the line and column to the beginning of the file" do
-      match = api.file_match("bar.rb")
-      match[:line].must_equal 1
-      match[:column].must_equal 1
+    it "assumes a single word is an os command" do
+      assert api.os_command?('ls')
+    end
+    it "identifies a single character flag as an os command" do
+      assert api.os_command?('ls -l')
+    end
+    it "identifies a long flag as an os command" do
+      assert api.os_command?('curl --basic')
     end
   end
 
-  describe "#checks_for_chef_solo?" do
-    let(:ast) { ast = MiniTest::Mock.new }
-    it "returns false if there is no reference to chef solo" do
-      ast.expect :xpath, [], [String]
-      refute api.checks_for_chef_solo?(ast)
+  describe "#position_node?" do
+    it "returns false if the node does not have a length" do
+      refute api.position_node?(nil)
     end
-    it "returns true if there is one reference to chef solo" do
-      ast.expect :xpath, ['aref'], [String]
-      assert api.checks_for_chef_solo?(ast)
+    it "returns false if the node does not have two elements" do
+      refute api.position_node?([])
+      refute api.position_node?([1])
+      refute api.position_node?([1, 2, 3])
     end
-    it "returns true if there are multiple references to chef solo" do
-      ast.expect :xpath, ['aref', 'aref'], [String]
-      assert api.checks_for_chef_solo?(ast)
+    it "returns false if all the children cannot be coerced to ints" do
+      no_coerce = Object.new
+      refute api.position_node?([no_coerce, 1])
+      refute api.position_node?([2, no_coerce])
+      refute api.position_node?([no_coerce, no_coerce])
     end
-  end
-  describe "#chef_solo_search_supported?" do
-    it "returns false if the recipe path is nil" do
-      refute api.chef_solo_search_supported?(nil)
-    end
-    it "returns false if the recipe path does not exist" do
-      refute api.chef_solo_search_supported?('/tmp/non-existent-path')
+    it "returns true otherwise" do
+      assert api.position_node?([1, 2])
     end
   end
-  describe "#searches" do
-    let(:ast) { ast = MiniTest::Mock.new }
-    it "returns empty if the AST does not support XPath expressions" do
-      api.searches('not-an-ast').must_be_empty
-    end
-    it "returns empty if the AST has no elements" do
-      ast.expect :xpath, [], [String]
-      api.searches(ast).must_be_empty
-    end
-    it "returns the AST elements for each use of search" do
-      ast.expect :xpath, ['ident'], [String]
-      api.searches(ast).must_equal ['ident']
+
+  describe "#read_file" do
+    it "raises if the file cannot be read" do
+      lambda {api.read_file(nil)}.must_raise(TypeError)
     end
   end
-  describe "#literal_searches" do
-    let(:ast) { ast = MiniTest::Mock.new }
-    it "returns empty if the AST does not support XPath expressions" do
-      api.literal_searches(nil).must_be_empty
+
+  describe "#resource_attribute" do
+    let(:resource) do
+      Class.new do
+        def xpath(str)
+          raise "Not expected"
+        end
+      end.new
     end
-    it "returns empty if the AST has no elements" do
-      ast.expect :xpath, [], [String]
-      api.literal_searches(ast).must_be_empty
+    it "raises if the resource does not support XPath" do
+      lambda{api.resource_attribute("mode", nil)}.must_raise ArgumentError
     end
-    it "returns the AST elements for each literal search" do
-      ast.expect :xpath, ['tstring_content'], [String]
-      api.literal_searches(ast).must_equal ['tstring_content']
-    end
-  end
-  describe :AttFilter do
-    describe "#is_att_type" do
-      let(:filter) { FoodCritic::Helpers::AttFilter.new }
-      it "returns empty if the argument is not enumerable" do
-        filter.is_att_type(nil).must_be_empty
-      end
-      it "filters out values that are not Chef node attribute types" do
-        nodes = %w{node node badger default override ostrich set normal}
-        filter.is_att_type(nodes).uniq.size.must_equal 5
-      end
-      it "returns all filtered nodes" do
-        nodes = %w{node node override default normal set set override}
-        filter.is_att_type(nodes).must_equal nodes
-      end
-      it "returns empty if there are no Chef node attribute types" do
-        nodes = %w{squirrel badger pooh tigger}
-        filter.is_att_type(nodes).must_be_empty
-      end
+    it "raises if the attribute name is empty" do
+      lambda{api.resource_attribute("", resource)}.must_raise ArgumentError
     end
   end
-  describe "#attribute_access" do
-    let(:ast) { ast = MiniTest::Mock.new }
-    it "returns empty if the provided ast does not support XPath" do
-      api.attribute_access(nil, :vivified, false).must_be_empty
+
+  describe "#resource_attributes" do
+    it "raises if the resource does not support XPath" do
+      lambda{api.resource_attributes(nil)}.must_raise ArgumentError
     end
-    it "returns empty if the provided ast has no matches" do
-      ast.expect :xpath, [], [String]
-      [:vivified, :string, :symbol].each do |access_type|
-        api.attribute_access([], :vivified, false).must_be_empty
-      end
-    end
-    it "raises if the specified node type is not recognised" do
-      ast.expect :xpath, [], [String]
-      lambda do
-        api.attribute_access(ast, :cymbals, false)
-      end.must_raise(ArgumentError)
-    end
-    it "does not raise if the specified node type is valid" do
-      ast.expect :xpath, [], [String, FoodCritic::Helpers::AttFilter]
-      [:vivified, :symbol, :string].each do |access_type|
-        api.attribute_access(ast, access_type, false)
-      end
+    it "returns an empty if the resource has no attributes" do
+      resource = MiniTest::Mock.new.expect :xpath, [], [String]
+      api.resource_attributes(resource).must_equal({})
     end
   end
-  describe "#find_resources" do
-    let(:ast) { MiniTest::Mock.new }
-    it "returns empty unless the ast supports XPath" do
-      api.find_resources(nil, nil).must_be_empty
+
+  describe "#resource_attributes_by_type" do
+    it "raises if the ast does not support XPath" do
+      lambda{api.resource_attributes_by_type(nil)}.must_raise ArgumentError
     end
-    it "restricts by resource type when provided" do
-      ast.expect :xpath, ['method_add_block'],
-        ["//method_add_block[command/ident[@value='file']]"]
-      api.find_resources(ast, 'file')
-      ast.verify
-    end
-    it "does not restrict by resource type when not provided" do
-      ast.expect :xpath, ['method_add_block'],
-                         ["//method_add_block[command/ident]"]
-      api.find_resources(ast, nil)
-      ast.verify
-    end
-    it "returns any matches" do
-      ast.expect :xpath, ['method_add_block'], [String]
-      api.find_resources(ast, nil).must_equal ['method_add_block']
+    it "returns an empty hash if there are no resources" do
+      ast = MiniTest::Mock.new.expect :xpath, [], [String]
+      api.resource_attributes_by_type(ast).keys.must_be_empty
     end
   end
+
+  describe "#resource_name" do
+    it "raises if the resource does not support XPath" do
+      lambda {api.resource_name('foo')}.must_raise ArgumentError
+    end
+    it "returns the resource name for a resource" do
+      ast = MiniTest::Mock.new
+      ast.expect :xpath, 'bob', [String]
+      api.resource_name(ast).must_equal 'bob'
+    end
+  end
+
+  describe "#resources_by_type" do
+    it "raises if the ast does not support XPath" do
+      lambda{api.resources_by_type(nil)}.must_raise ArgumentError
+    end
+    it "returns an empty hash if there are no resources" do
+      ast = MiniTest::Mock.new.expect :xpath, [], [String]
+      api.resources_by_type(ast).keys.must_be_empty
+    end
+  end
+
   describe "#resource_type" do
     it "raises if the resource does not support XPath" do
       lambda {api.resource_type(nil)}.must_raise ArgumentError
@@ -192,37 +355,59 @@ describe FoodCritic::Helpers do
       api.resource_type(ast).must_equal 'directory'
     end
   end
-  describe "#resource_name" do
-    it "raises if the resource does not support XPath" do
-      lambda {api.resource_name('foo')}.must_raise ArgumentError
+
+  describe "#ruby_code?" do
+    it "says a nil is not ruby code" do
+      refute api.ruby_code?(nil)
     end
-    it "returns the resource name for a resource" do
-      ast = MiniTest::Mock.new
-      ast.expect :xpath, 'bob', [String]
-      api.resource_name(ast).must_equal 'bob'
+    it "says an empty string is not ruby code" do
+      refute api.ruby_code?('')
     end
-  end
-  describe "#resource_attributes" do
-    it "raises if the resource does not support XPath" do
-      lambda{api.resource_attributes(nil)}.must_raise ArgumentError
+    it "coerces arguments to a string" do
+      assert api.ruby_code?(%w{foo bar})
     end
-  end
-  describe "#resources_by_type" do
-    it "raises if the ast does not support XPath" do
-      lambda{api.resources_by_type(nil)}.must_raise ArgumentError
+    it "returns true for a snippet of ruby code" do
+      assert api.ruby_code?("assert api.ruby_code?(nil)")
     end
-    it "returns an empty hash if there are no resources" do
-      ast = MiniTest::Mock.new.expect :xpath, [], [String]
-      api.resources_by_type(ast).keys.must_be_empty
+    it "returns false for a unix command" do
+      refute api.ruby_code?("find -type f -print")
     end
   end
-  describe "#resource_attributes_by_type" do
-    it "raises if the ast does not support XPath" do
-      lambda{api.resource_attributes_by_type(nil)}.must_raise ArgumentError
+
+  describe "#searches" do
+    let(:ast) { ast = MiniTest::Mock.new }
+    it "returns empty if the AST does not support XPath expressions" do
+      api.searches('not-an-ast').must_be_empty
     end
-    it "returns an empty hash if there are no resources" do
-      ast = MiniTest::Mock.new.expect :xpath, [], [String]
-      api.resource_attributes_by_type(ast).keys.must_be_empty
+    it "returns empty if the AST has no elements" do
+      ast.expect :xpath, [], [String]
+      api.searches(ast).must_be_empty
+    end
+    it "returns the AST elements for each use of search" do
+      ast.expect :xpath, ['ident'], [String]
+      api.searches(ast).must_equal ['ident']
     end
   end
+
+  describe "#standard_recipe_subdirs" do
+    it "is enumerable" do
+      api.standard_recipe_subdirs.each{|s| s}
+    end
+    it "is sorted in alphabetical order" do
+      api.standard_recipe_subdirs.must_equal(api.standard_recipe_subdirs.sort)
+    end
+    it "includes the directories generated by knife create cookbook" do
+      %w{attributes definitions files libraries providers recipes resources
+         templates}.each do |dir|
+         api.standard_recipe_subdirs.must_include dir
+      end
+    end
+    it "does not include the spec directory" do
+      api.standard_recipe_subdirs.wont_include 'spec'
+    end
+    it "does not include a subdirectory of a subdirectory" do
+      api.standard_recipe_subdirs.wont_include 'default'
+    end
+  end
+
 end
