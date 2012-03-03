@@ -577,8 +577,12 @@ When 'I run it on the command line with no arguments' do
   run_lint([])
 end
 
-When 'I run it on the command line with the help option' do
-  run_lint(['--help'])
+When /^I run it on the command line with the ([^ ]+) option$/ do |long_option|
+  run_lint(["--#{long_option}"])
+end
+
+When 'I run it on the command line with the unimplemented verbose option' do
+  run_lint(['-v'])
 end
 
 When 'I run it on the command line with too many arguments' do
@@ -634,6 +638,10 @@ end
 
 Then /^the conditional string looks like ruby warning 020 should be (shown|not shown)$/ do |show_warning|
   expect_warning('FC020', :line => nil, :expect_warning => show_warning == 'shown')
+end
+
+Then 'the current version should be displayed' do
+  expect_output("foodcritic #{FoodCritic::VERSION}")
 end
 
 Then /^the file mode warning 006 should be (valid|invalid)$/ do |valid|

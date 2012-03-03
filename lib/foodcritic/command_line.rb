@@ -10,6 +10,7 @@ module FoodCritic
     # @param [Array] args The command line arguments
     def initialize(args)
       @args = args
+      @original_args = args.dup
       @options = {}
       @options[:fail_tags] = []; @options[:tags] = []
       @parser = OptionParser.new do |opts|
@@ -19,6 +20,7 @@ module FoodCritic
         opts.on("-f", "--epic-fail TAGS", "Fail the build if any of the specified tags are matched.") {|t|options[:fail_tags] << t}
         opts.on("-C", "--[no-]context", "Show lines matched against rather than the default summary.") {|c|options[:context] = c}
         opts.on("-S", "--search-grammar PATH", "Specify grammar to use when validating search syntax.") {|s|options[:search_grammar] = s}
+        opts.on("-V", "--version", "Display version."){|v|options[:version] = true}
       end
       @parser.parse!(args) unless show_help?
     end
@@ -35,6 +37,20 @@ module FoodCritic
     # @return [String] Help text describing the command-line options available.
     def help
       @parser.help
+    end
+
+    # Show the current version to the end user?
+    #
+    # @return [Boolean] True if the version should be shown.
+    def show_version?
+      @options.key?(:version) and @original_args != ['-v']
+    end
+
+    # The version string.
+    #
+    # @return [String] Current installed version.
+    def version
+      "foodcritic #{FoodCritic::VERSION}"
     end
 
     # If the cookbook path provided is valid

@@ -23,3 +23,13 @@ Feature: Command line help
     Given I have installed the lint tool
      When I run it on the command line with the help option
      Then the simple usage text should be displayed along with a zero exit code
+
+  Scenario: Display version
+    Given I have installed the lint tool
+     When I run it on the command line with the version option
+     Then the current version should be displayed
+
+  Scenario: Future verbose option
+    Given I have installed the lint tool
+     When I run it on the command line with the unimplemented verbose option
+     Then the simple usage text should be displayed along with a non-zero exit code

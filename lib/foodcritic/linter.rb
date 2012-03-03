@@ -16,6 +16,7 @@ module FoodCritic
     # @return [Array] Pair - the first item is string output, the second is the exit code.
     def self.check(cmd_line)
       return [cmd_line.help, 0] if cmd_line.show_help?
+      return [cmd_line.version, 0] if cmd_line.show_version?
       if ! cmd_line.valid_grammar?
         [cmd_line.help, 4]
       elsif cmd_line.valid_path?

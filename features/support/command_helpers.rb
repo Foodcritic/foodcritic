@@ -84,6 +84,7 @@ module FoodCritic
       expect_usage_option('t', 'tags TAGS', 'Only check against rules with the specified tags.')
       expect_usage_option('C', '[no-]context', 'Show lines matched against rather than the default summary.')
       expect_usage_option('S', 'search-grammar PATH', 'Specify grammar to use when validating search syntax.')
+      expect_usage_option('V', 'version', 'Display version.')
       if is_exit_zero
         assert_no_error_occurred
       else
