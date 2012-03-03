@@ -534,16 +534,30 @@ Given 'a recipe that declares multiple resources of the same type of which one h
   }
 end
 
-Given 'another cookbook that has chef-solo-search installed' do
-  write_library 'search', %q{
-    class Chef
-      class Recipe
-        def search(bag_name, query=nil, sort=nil, start=0, rows=1000, &block)
-          # https://github.com/edelight/chef-solo-search
+Given /^another cookbook that has (an older )?chef-solo-search installed$/ do |older|
+  if older.nil?
+    write_library 'search', %q{
+      class Chef
+        module Mixin
+          module Language
+            def search(bag_name, query=nil, sort=nil, start=0, rows=1000, &block)
+              # https://github.com/edelight/chef-solo-search
+            end
+          end
         end
       end
-    end
-  }
+    }
+  else
+    write_library 'search', %q{
+      class Chef
+        class Recipe
+          def search(bag_name, query=nil, sort=nil, start=0, rows=1000, &block)
+            # https://github.com/edelight/chef-solo-search
+          end
+        end
+      end
+    }
+  end
 end
 
 Given 'I have installed the lint tool' do

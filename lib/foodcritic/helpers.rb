@@ -96,8 +96,8 @@ module FoodCritic
       cbk_tree_path = Pathname.new(File.join(recipe_path, '../../..'))
       search_libs = Dir[File.join(cbk_tree_path.realpath, "*/libraries/search.rb")]
       search_libs.any? do |lib|
-        ! read_file(lib).xpath(%q{//class[count(descendant::const[@value='Chef'
-        or @value='Recipe']) = 2]/descendant::def/ident[@value='search']}).empty?
+        ! read_file(lib).xpath(%q{//class[count(descendant::const[@value='Chef']
+          ) = 1]/descendant::def/ident[@value='search']}).empty?
       end
     end
 
