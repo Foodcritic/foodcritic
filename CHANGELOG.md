@@ -1,3 +1,30 @@
+## 1.0.0 (4th March, 2012)
+
+Features:
+
+  - New `-I` option added to specify the path to your own custom rules
+    ([related issue](https://github.com/acrmp/foodcritic/issues/8)).
+  - The
+    [Rule API](https://github.com/acrmp/foodcritic/blob/v1.0.0/lib/foodcritic/api.rb)
+    was previously not supported and subject to change without warning. From
+    this release it will now follow the
+    [same versioning policy](http://docs.rubygems.org/read/chapter/7) as the
+    command line interface.
+  - A version flag (--version or -V) has been added ([related issue](https://github.com/acrmp/foodcritic/issues/16)).
+
+Bugfixes:
+
+  - The evaluation of rule tags has been updated to be consistent with Cucumber.
+    The major version number of foodcritic has been bumped to indicate that this
+    is a breaking change. If you make use of tags (for example in a CI build)
+    you may need to update your syntax. See the
+    [related issue](https://github.com/acrmp/foodcritic/issues/11) for more
+    information. Thanks @jaymzh.
+  - [FC003: Check whether you are running with chef server before using
+    server-specific features](http://acrmp.github.com/foodcritic/#FC003) has
+    been updated to correctly identify the new version of chef-solo-search
+    ([related issue](https://github.com/acrmp/foodcritic/issues/17)).
+
 ## 0.11.1 (29th February, 2012)
 
 Bugfixes:
