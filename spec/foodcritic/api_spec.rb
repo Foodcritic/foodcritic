@@ -1,49 +1,40 @@
 require_relative '../spec_helper'
 
-describe FoodCritic::Helpers do
+describe FoodCritic::Api do
 
-  let(:api) { Object.new.extend(FoodCritic::Helpers) }
+  let(:api) { Object.new.extend(FoodCritic::Api) }
 
   describe "#attribute_access" do
     let(:ast) { MiniTest::Mock.new }
     it "returns empty if the provided ast does not support XPath" do
-      api.attribute_access(nil, :vivified, false).must_be_empty
+      api.attribute_access(nil, :type => :vivified).must_be_empty
     end
     it "returns empty if the provided ast has no matches" do
       ast.expect :xpath, [], [String]
       [:vivified, :string, :symbol].each do |access_type|
-        api.attribute_access([], :vivified, false).must_be_empty
+        api.attribute_access([], :type => :vivified).must_be_empty
       end
     end
     it "raises if the specified node type is not recognised" do
       ast.expect :xpath, [], [String]
       lambda do
-        api.attribute_access(ast, :cymbals, false)
+        api.attribute_access(ast, :type => :cymbals)
       end.must_raise(ArgumentError)
     end
     it "does not raise if the specified node type is valid" do
-      ast.expect :xpath, [], [String, FoodCritic::Helpers::AttFilter]
+      ast.expect :xpath, [], [String, FoodCritic::Api::AttFilter]
       [:vivified, :symbol, :string].each do |access_type|
-        api.attribute_access(ast, access_type, false)
+        api.attribute_access(ast, :type => access_type)
       end
     end
     it "returns vivified attributes access" do
       call = MiniTest::Mock.new
       call.expect :xpath, [], [/args_add_block/]
       call.expect :xpath, ["node", "bar"], [/ident/]
-      ast.expect :xpath, [call], [String, FoodCritic::Helpers::AttFilter]
-      api.attribute_access(ast, :vivified, false).must_equal([call])
+      ast.expect :xpath, [call], [String, FoodCritic::Api::AttFilter]
+      api.attribute_access(ast, :type => :vivified).must_equal([call])
       ast.verify
       call.verify
-    end
-  end
-
-  describe "#build_xml" do
-    it "returns an empty document if passed nil" do
-      api.build_xml(nil).children.must_be_empty
-    end
-    it "returns an empty document when the node is not enumerable" do
-      api.build_xml("foo").children.must_be_empty
     end
   end
 
@@ -123,23 +114,29 @@ describe FoodCritic::Helpers do
   describe "#find_resources" do
     let(:ast) { MiniTest::Mock.new }
     it "returns empty unless the ast supports XPath" do
-      api.find_resources(nil, nil).must_be_empty
+      api.find_resources(nil).must_be_empty
     end
     it "restricts by resource type when provided" do
       ast.expect :xpath, ['method_add_block'],
         ["//method_add_block[command/ident[@value='file']]"]
-      api.find_resources(ast, 'file')
+      api.find_resources(ast, :type => 'file')
       ast.verify
     end
     it "does not restrict by resource type when not provided" do
       ast.expect :xpath, ['method_add_block'],
                          ["//method_add_block[command/ident]"]
-      api.find_resources(ast, nil)
+      api.find_resources(ast)
+      ast.verify
+    end
+    it "allows resource type to be specified as :any" do
+      ast.expect :xpath, ['method_add_block'],
+                         ["//method_add_block[command/ident]"]
+      api.find_resources(ast, :type => :any)
       ast.verify
     end
     it "returns any matches" do
       ast.expect :xpath, ['method_add_block'], [String]
-      api.find_resources(ast, nil).must_equal ['method_add_block']
+      api.find_resources(ast).must_equal ['method_add_block']
     end
   end
 
@@ -163,7 +160,7 @@ describe FoodCritic::Helpers do
 
   describe :AttFilter do
     describe "#is_att_type" do
-      let(:filter) { FoodCritic::Helpers::AttFilter.new }
+      let(:filter) { FoodCritic::Api::AttFilter.new }
       it "returns empty if the argument is not enumerable" do
         filter.is_att_type(nil).must_be_empty
       end
@@ -257,29 +254,9 @@ describe FoodCritic::Helpers do
     end
   end
 
-  describe "#position_node?" do
-    it "returns false if the node does not have a length" do
-      refute api.position_node?(nil)
-    end
-    it "returns false if the node does not have two elements" do
-      refute api.position_node?([])
-      refute api.position_node?([1])
-      refute api.position_node?([1, 2, 3])
-    end
-    it "returns false if all the children cannot be coerced to ints" do
-      no_coerce = Object.new
-      refute api.position_node?([no_coerce, 1])
-      refute api.position_node?([2, no_coerce])
-      refute api.position_node?([no_coerce, no_coerce])
-    end
-    it "returns true otherwise" do
-      assert api.position_node?([1, 2])
-    end
-  end
-
-  describe "#read_file" do
+  describe "#read_ast" do
     it "raises if the file cannot be read" do
-      lambda {api.read_file(nil)}.must_raise(TypeError)
+      lambda {api.read_ast(nil)}.must_raise(TypeError)
     end
   end
 
@@ -292,10 +269,10 @@ describe FoodCritic::Helpers do
       end.new
     end
     it "raises if the resource does not support XPath" do
-      lambda{api.resource_attribute("mode", nil)}.must_raise ArgumentError
+      lambda{api.resource_attribute(nil, "mode")}.must_raise ArgumentError
     end
     it "raises if the attribute name is empty" do
-      lambda{api.resource_attribute("", resource)}.must_raise ArgumentError
+      lambda{api.resource_attribute(resource, "")}.must_raise ArgumentError
     end
   end
 
@@ -389,24 +366,24 @@ describe FoodCritic::Helpers do
     end
   end
 
-  describe "#standard_recipe_subdirs" do
+  describe "#standard_cookbook_subdirs" do
     it "is enumerable" do
-      api.standard_recipe_subdirs.each{|s| s}
+      api.standard_cookbook_subdirs.each{|s| s}
     end
     it "is sorted in alphabetical order" do
-      api.standard_recipe_subdirs.must_equal(api.standard_recipe_subdirs.sort)
+      api.standard_cookbook_subdirs.must_equal(api.standard_cookbook_subdirs.sort)
     end
     it "includes the directories generated by knife create cookbook" do
       %w{attributes definitions files libraries providers recipes resources
          templates}.each do |dir|
-         api.standard_recipe_subdirs.must_include dir
+         api.standard_cookbook_subdirs.must_include dir
       end
     end
     it "does not include the spec directory" do
-      api.standard_recipe_subdirs.wont_include 'spec'
+      api.standard_cookbook_subdirs.wont_include 'spec'
     end
     it "does not include a subdirectory of a subdirectory" do
-      api.standard_recipe_subdirs.wont_include 'default'
+      api.standard_cookbook_subdirs.wont_include 'default'
     end
   end
 

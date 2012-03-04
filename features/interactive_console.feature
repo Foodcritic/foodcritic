@@ -23,7 +23,7 @@ Feature: Interactive console
   Scenario: List DSL methods
     Given I have started the lint tool with the REPL enabled
      When I define a new rule that includes a binding
-     Then I should be able to see the list of helper DSL methods from inside the rule
+     Then I should be able to see the full list of DSL methods from inside the rule
 
   Scenario: View cookbook AST
     Given I have started the lint tool with the REPL enabled

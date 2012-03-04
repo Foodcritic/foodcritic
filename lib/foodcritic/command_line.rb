@@ -3,8 +3,6 @@ module FoodCritic
   # Command line parsing.
   class CommandLine
 
-    include FoodCritic::Chef::Search
-
     # Create a new instance of CommandLine
     #
     # @param [Array] args The command line arguments
@@ -73,8 +71,9 @@ module FoodCritic
     def valid_grammar?
       return true unless options.key?(:search_grammar)
       return false unless File.exists?(options[:search_grammar])
-      load_search_parser([options[:search_grammar]])
-      search_parser_loaded?
+      search = FoodCritic::Chef::Search.new
+      search.create_parser([options[:search_grammar]])
+      search.parser?
     end
 
     # If matches should be shown with context rather than the default summary display.

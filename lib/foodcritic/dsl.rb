@@ -7,12 +7,13 @@ module FoodCritic
   class RuleDsl
     attr_reader :rules
 
-    include Helpers
+    include Api
 
     # Define a new rule
     #
     # @param [String] code The short unique identifier for this rule, e.g. 'FC001'
-    # @param [String] name The short descriptive name of this rule presented to the end user.
+    # @param [String] name The short descriptive name of this rule presented to
+    #   the end user.
     # @param [Block] block The rule definition
     def rule(code, name, &block)
       @rules = [] if @rules.nil?
@@ -58,7 +59,8 @@ module FoodCritic
     # Load the ruleset
     #
     # @param [String] filename The path to the ruleset to load
-    # @return [Array] The loaded rules, ready to be matched against provided cookbooks.
+    # @return [Array] The loaded rules, ready to be matched against provided
+    #   cookbooks.
     def self.load(filename, with_repl)
       dsl = RuleDsl.new
       dsl.instance_eval(File.read(filename), filename)

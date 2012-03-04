@@ -1,7 +1,7 @@
 rule "FC001", "Use strings in preference to symbols to access node attributes" do
   tags %w{style attributes}
   recipe do |ast|
-    attribute_access(ast, :symbol, false).map{|ar| match(ar)}
+    attribute_access(ast, :type => :symbol).map{|ar| match(ar)}
   end
 end
 
@@ -23,8 +23,8 @@ end
 rule "FC004", "Use a service resource to start and stop services" do
   tags %w{style services}
   recipe do |ast|
-    find_resources(ast, 'execute').find_all do |cmd|
-      cmd_str = (resource_attribute('command', cmd) || resource_name(cmd)).to_s
+    find_resources(ast, :type => 'execute').find_all do |cmd|
+      cmd_str = (resource_attribute(cmd, 'command') || resource_name(cmd)).to_s
       cmd_str.include?('/etc/init.d') || cmd_str.start_with?('service ') || cmd_str.start_with?('/sbin/service ') ||
           cmd_str.start_with?('start ') || cmd_str.start_with?('stop ') || cmd_str.start_with?('invoke-rc.d ')
     end.map{|cmd| match(cmd)}
@@ -61,7 +61,7 @@ rule "FC007", "Ensure recipe dependencies are reflected in cookbook metadata" do
     undeclared = included_recipes(ast).keys.map do |recipe|
       recipe.split('::').first
     end - [cookbook_name(filename)] -
-        declared_dependencies(read_file(metadata_path))
+        declared_dependencies(read_ast(metadata_path))
     included_recipes(ast).map do |recipe, include_stmts|
       if undeclared.include?(recipe) ||
          undeclared.any?{|u| recipe.start_with?("#{u}::")}
@@ -76,7 +76,7 @@ rule "FC008", "Generated cookbook metadata needs updating" do
   cookbook do |filename|
     metadata_path = Pathname.new(File.join(filename, 'metadata.rb')).cleanpath
     next unless File.exists? metadata_path
-    md = read_file(metadata_path)
+    md = read_ast(metadata_path)
     {'maintainer' => 'YOUR_COMPANY_NAME', 'maintainer_email' => 'YOUR_EMAIL'}.map do |field,value|
       md.xpath(%Q{//command[ident/@value='#{field}']/descendant::tstring_content[@value='#{value}']}).map do |m|
         match(m).merge(:filename => metadata_path)
@@ -91,8 +91,12 @@ rule "FC009", "Resource attribute not recognised" do
     matches = []
     resource_attributes_by_type(ast).each do |type,resources|
       resources.each do |resource|
-        resource.keys.map{|att|att.to_sym}.reject{|att| attribute?(type.to_sym, att)}.each do |invalid_att|
-          matches << match(find_resources(ast, type).find{|res|resource_attributes(res).include?(invalid_att.to_s)})
+        resource.keys.map{|att|att.to_sym}.reject do |att|
+          resource_attribute?(type.to_sym, att)
+        end.each do |invalid_att|
+          matches << match(find_resources(ast, :type => type).find do |res|
+            resource_attributes(res).include?(invalid_att.to_s)
+          end)
         end
       end
     end
@@ -125,8 +129,8 @@ end
 rule "FC013", "Use file_cache_path rather than hard-coding tmp paths" do
   tags %w{style files}
   recipe do |ast|
-    find_resources(ast, 'remote_file').find_all do |download|
-      path = (resource_attribute('path', download) || resource_name(download)).to_s
+    find_resources(ast, :type => 'remote_file').find_all do |download|
+      path = (resource_attribute(download, 'path') || resource_name(download)).to_s
       path.start_with?('/tmp/')
     end.map{|download| match(download)}
   end
@@ -135,7 +139,7 @@ end
 rule "FC014", "Consider extracting long ruby_block to library" do
   tags %w{style libraries}
   recipe do |ast|
-    find_resources(ast, 'ruby_block').find_all do |rb|
+    find_resources(ast, :type => 'ruby_block').find_all do |rb|
       ! rb.xpath("//fcall[ident/@value='block' and count(ancestor::*) = 8]/../../do_block[count(descendant::*) > 100]").empty?
     end.map{|block| match(block)}
   end
@@ -177,9 +181,9 @@ end
 rule "FC019", "Access node attributes in a consistent manner" do
   tags %w{style attributes}
   cookbook do |cookbook_dir|
-    asts = {}; files = Dir["#{cookbook_dir}/*/*.rb"].map{|file| {:path => file, :ast => read_file(file)}}
+    asts = {}; files = Dir["#{cookbook_dir}/*/*.rb"].map{|file| {:path => file, :ast => read_ast(file)}}
     types = [:string, :symbol, :vivified].map{|type| {:access_type => type, :count => files.map do |file|
-      attribute_access(file[:ast], type, true).tap{|ast|
+      attribute_access(file[:ast], :type => type, :ignore_calls => true).tap{|ast|
         asts[type] = {:ast => ast, :path => file[:path]} if (! ast.empty?) and (! asts.has_key?(type))
       }.size
     end.inject(:+)}}.reject{|type| type[:count] == 0}

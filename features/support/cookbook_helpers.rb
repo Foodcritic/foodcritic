@@ -3,8 +3,6 @@ module FoodCritic
   # Helper cookbook methods for use in your steps.
   module CookbookHelpers
 
-    include FoodCritic::Chef::Search # Needed to load Lucene grammar
-
     # Create an attributes file that references attributes with symbols
     #
     # @param [String] type The type of node attribute to write

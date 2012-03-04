@@ -607,8 +607,33 @@ Then 'I should be able to see the AST from inside the rule' do
   repl_ast_available?(@repl_match_string).should be_true
 end
 
-Then 'I should be able to see the list of helper DSL methods from inside the rule' do
-  repl_helper_methods_available?.should be_true
+Then 'I should be able to see the full list of DSL methods from inside the rule' do
+  repl_api_methods.should == [
+    :attribute_access,
+    :checks_for_chef_solo?,
+    :chef_dsl_methods,
+    :chef_solo_search_supported?,
+    :cookbook_name,
+    :declared_dependencies,
+    :file_match,
+    :find_resources,
+    :included_recipes,
+    :literal_searches,
+    :match,
+    :os_command?,
+    :read_ast,
+    :resource_attribute,
+    :resource_attribute?,
+    :resource_attributes,
+    :resource_attributes_by_type,
+    :resource_name,
+    :resource_type,
+    :resources_by_type,
+    :ruby_code?,
+    :searches,
+    :standard_cookbook_subdirs,
+    :valid_query?
+  ]
 end
 
 Then 'no error should have occurred' do
@@ -721,7 +746,7 @@ When /^I check the cookbook specifying a search grammar that (does not exist|is 
     when 'is not in treetop format'
       write_file('search.treetop', 'I am not a valid treetop grammar')
     when 'is a valid treetop grammar'
-      write_file('search.treetop', IO.read(chef_search_grammars.first))
+      write_file('search.treetop', IO.read(FoodCritic::Chef::Search.new.chef_search_grammars.first))
   end
   run_lint(['--search-grammar', 'search.treetop', 'cookbooks/example'])
 end

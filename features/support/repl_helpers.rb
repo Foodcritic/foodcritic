@@ -16,7 +16,7 @@ module FoodCritic
 
       rule_changes = %Q{
         throw :breakout, 0
-        Helpers.instance_methods.sort
+        Api.instance_methods.sort
         ast.to_xml
         throw :breakout, 0
         reset_rules
@@ -62,11 +62,12 @@ module FoodCritic
       @pry_output.include? "#{code}: #{name}: cookbooks/example/recipes/default.rb:1"
     end
 
-    # Were the DSL helper methods available to the rule author when in the context of the rule?
+    # DSL methods available to the rule author when in the context of
+    # the rule.
     #
-    # @return [Boolean] True if standard helper methods were available.
-    def repl_helper_methods_available?
-      %w{cookbook_name included_recipes resource_name}.all? {|helper_method| @pry_output.include?(helper_method)}
+    # @return [Array] API methods visible from the REPL
+    def repl_api_methods
+      @pry_output.split("=>")[8].gsub(/[\[\], :]/, '').split("\n").map{|m| m.to_sym}
     end
 
     # Was the AST available to the rule author when in the context of the rule?
