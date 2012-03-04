@@ -1025,11 +1025,11 @@ $ cat &lt;&lt;EOF | git apply
 diff --git a/features/support/command_helpers.rb b/features/support/command_helpers.rb
 --- a/features/support/command_helpers.rb
 +++ b/features/support/command_helpers.rb
-@@ -30,3 +30,4 @@ module FoodCritic
-       'FC021' => 'Resource condition in provider may not behave as expected',
--      'FC022' => 'Resource condition within loop may not behave as expected'
-+      'FC022' => 'Resource condition within loop may not behave as expected',
-+      'FC123' => 'Log contains password'
+@@ -31,3 +31,4 @@ module FoodCritic
+       'FC022' =&gt; 'Resource condition within loop may not behave as expected',
+-      'FC023' =&gt; 'Prefer conditional attributes'
++      'FC023' =&gt; 'Prefer conditional attributes',
++      'FC123' =&gt; 'Log contains password'
      }
 EOF
 </pre>
