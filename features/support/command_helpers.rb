@@ -83,6 +83,7 @@ module FoodCritic
       expect_usage_option('r', '[no-]repl', 'Drop into a REPL for interactive rule editing.')
       expect_usage_option('t', 'tags TAGS', 'Only check against rules with the specified tags.')
       expect_usage_option('C', '[no-]context', 'Show lines matched against rather than the default summary.')
+      expect_usage_option('I', 'include PATH', 'Additional rule file path(s) to load.')
       expect_usage_option('S', 'search-grammar PATH', 'Specify grammar to use when validating search syntax.')
       expect_usage_option('V', 'version', 'Display version.')
       if is_exit_zero

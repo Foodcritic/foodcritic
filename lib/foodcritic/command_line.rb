@@ -10,13 +10,14 @@ module FoodCritic
       @args = args
       @original_args = args.dup
       @options = {}
-      @options[:fail_tags] = []; @options[:tags] = []
+      @options[:fail_tags] = []; @options[:tags] = []; @options[:include_rules] = []
       @parser = OptionParser.new do |opts|
         opts.banner = 'foodcritic [cookbook_path]'
         opts.on("-r", "--[no-]repl", "Drop into a REPL for interactive rule editing.") {|r|options[:repl] = r}
         opts.on("-t", "--tags TAGS", "Only check against rules with the specified tags.") {|t|options[:tags] << t}
         opts.on("-f", "--epic-fail TAGS", "Fail the build if any of the specified tags are matched.") {|t|options[:fail_tags] << t}
         opts.on("-C", "--[no-]context", "Show lines matched against rather than the default summary.") {|c|options[:context] = c}
+        opts.on("-I", "--include PATH", "Additional rule file path(s) to load.") {|i|options[:include_rules] << i}
         opts.on("-S", "--search-grammar PATH", "Specify grammar to use when validating search syntax.") {|s|options[:search_grammar] = s}
         opts.on("-V", "--version", "Display version."){|v|options[:version] = true}
       end

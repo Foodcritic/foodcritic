@@ -83,8 +83,8 @@ module FoodCritic
 
     # Load the rules from the (fairly unnecessary) DSL.
     def load_rules
-      @rules = RuleDsl.load(File.join(File.dirname(__FILE__), 'rules.rb'),
-                 @last_options[:repl])
+      @rules = RuleDsl.load([File.join(File.dirname(__FILE__), 'rules.rb')] +
+        @last_options[:include_rules], @last_options[:repl])
     end
 
     alias_method :reset_rules, :load_rules

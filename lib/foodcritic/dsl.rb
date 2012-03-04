@@ -58,12 +58,16 @@ module FoodCritic
 
     # Load the ruleset
     #
-    # @param [String] filename The path to the ruleset to load
+    # @param [Array] paths The paths to the rulesets to load
     # @return [Array] The loaded rules, ready to be matched against provided
     #   cookbooks.
-    def self.load(filename, with_repl)
+    def self.load(paths, with_repl)
       dsl = RuleDsl.new
-      dsl.instance_eval(File.read(filename), filename)
+      paths.map do |path|
+        File.directory?(path) ? Dir["#{path}/**/*.rb"].sort : path
+      end.flatten.each do |path|
+        dsl.instance_eval(File.read(path), path)
+      end
       dsl.instance_eval { binding.pry } if with_repl
       dsl.rules
     end

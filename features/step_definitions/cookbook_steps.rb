@@ -583,6 +583,35 @@ When /^I define a new rule( and reset the list of rules| that includes a binding
                   :rule_match_string => @repl_match_string)
 end
 
+When /^I run it on the command line including a custom rule (file|directory) containing a rule that matches$/ do |path_type|
+  write_file 'rules/custom_rules.rb', %q{
+      rule "BAR001", "Use symbols in preference to strings to access node attributes" do
+        tags %w{style attributes}
+        recipe do |ast|
+          attribute_access(ast, :type => :string).map{|ar| match(ar)}
+        end
+      end
+  }
+  run_lint(['-I',
+            path_type == 'file' ? 'rules/custom_rules.rb' : 'rules',
+            'cookbooks/example'])
+end
+
+When /^I run it on the command line including a file which does not contain Ruby code$/ do
+  write_file 'rules/invalid_rules.rb', 'echo "not ruby"'
+  begin
+    run_lint(['-I', 'rules/invalid_rules.rb', 'cookbooks/example'])
+  rescue => @error
+  end
+end
+
+When /^I run it on the command line including a missing custom rule file$/ do
+  begin
+    run_lint(['-I', 'rules/missing_rules.rb', 'cookbooks/example'])
+  rescue => @error
+  end
+end
+
 When 'I run it on the command line specifying a cookbook that does not exist' do
   run_lint(['no-such-cookbook'])
 end
@@ -601,6 +630,14 @@ end
 
 When 'I run it on the command line with too many arguments' do
   run_lint(['example', 'example'])
+end
+
+Then 'a warning for the custom rule should be displayed' do
+  expect_output('BAR001: Use symbols in preference to strings to access node attributes: cookbooks/example/recipes/default.rb:1')
+end
+
+Then /^an? '([^']+)' error should be displayed$/ do |expected_error|
+  @error.message.should include expected_error
 end
 
 Then 'I should be able to see the AST from inside the rule' do
