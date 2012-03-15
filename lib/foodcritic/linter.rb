@@ -107,7 +107,16 @@ module FoodCritic
     def matches(match_method, *params)
       return [] unless match_method.respond_to?(:yield)
       matches = match_method.yield(*params)
-      matches.respond_to?(:each) ? matches : []
+      return [] unless matches.respond_to?(:each)
+      matches.map do |m|
+        if m.respond_to?(:node_name)
+          match(m)
+        elsif m.respond_to?(:xpath)
+          m.to_a.map{|m| match(m)}
+        else
+          m
+        end
+      end.flatten
     end
 
     # Return the files within a cookbook tree that we are interested in trying

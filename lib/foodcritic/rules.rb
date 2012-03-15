@@ -1,7 +1,7 @@
 rule "FC001", "Use strings in preference to symbols to access node attributes" do
   tags %w{style attributes}
   recipe do |ast|
-    attribute_access(ast, :type => :symbol).map{|ar| match(ar)}
+    attribute_access(ast, :type => :symbol)
   end
 end
 
@@ -9,14 +9,14 @@ rule "FC002", "Avoid string interpolation where not required" do
   tags %w{style strings}
   recipe do |ast|
     ast.xpath(%q{//string_literal[count(descendant::string_embexpr) = 1 and
-      count(string_add/tstring_content|string_add/string_add/tstring_content) = 0]}).map{|str| match(str)}
+      count(string_add/tstring_content|string_add/string_add/tstring_content) = 0]})
   end
 end
 
 rule "FC003", "Check whether you are running with chef server before using server-specific features" do
   tags %w{portability solo}
   recipe do |ast,filename|
-    searches(ast).map{|s| match(s)} unless checks_for_chef_solo?(ast) or chef_solo_search_supported?(filename)
+    searches(ast) unless checks_for_chef_solo?(ast) or chef_solo_search_supported?(filename)
   end
 end
 
@@ -27,7 +27,7 @@ rule "FC004", "Use a service resource to start and stop services" do
       cmd_str = (resource_attribute(cmd, 'command') || resource_name(cmd)).to_s
       cmd_str.include?('/etc/init.d') || cmd_str.start_with?('service ') || cmd_str.start_with?('/sbin/service ') ||
           cmd_str.start_with?('start ') || cmd_str.start_with?('stop ') || cmd_str.start_with?('invoke-rc.d ')
-    end.map{|cmd| match(cmd)}
+    end
   end
 end
 
@@ -40,7 +40,7 @@ rule "FC005", "Avoid repetition of resource declarations" do
       first_resource = cont_res[1][0][:ast]
       # we have contiguous resources of the same type, but do they share the same attributes?
       sorted_atts = cont_res[1].map{|atts| atts.delete_if{|k| k == :ast}.to_a.sort{|x,y| x.first.to_s <=> y.first.to_s}}
-      match(first_resource) if sorted_atts.all?{|att| (att - sorted_atts.inject{|atts,a| atts & a}).length == 1}
+      first_resource if sorted_atts.all?{|att| (att - sorted_atts.inject{|atts,a| atts & a}).length == 1}
     end.compact
   end
 end
@@ -49,7 +49,7 @@ rule "FC006", "Mode should be quoted or fully specified when setting file permis
   tags %w{correctness files}
   recipe do |ast|
     ast.xpath(%q{//ident[@value='mode']/parent::command/descendant::int[string-length(@value) < 5 and not(starts-with(@value, "0") and string-length(@value) = 4)]/
-      ancestor::method_add_block}).map{|resource| match(resource)}
+      ancestor::method_add_block})
   end
 end
 
@@ -65,7 +65,7 @@ rule "FC007", "Ensure recipe dependencies are reflected in cookbook metadata" do
     included_recipes(ast).map do |recipe, include_stmts|
       if undeclared.include?(recipe) ||
          undeclared.any?{|u| recipe.start_with?("#{u}::")}
-        include_stmts.map{|i| match(i)}
+        include_stmts
       end
     end.flatten.compact
   end
@@ -94,9 +94,9 @@ rule "FC009", "Resource attribute not recognised" do
         resource.keys.map{|att|att.to_sym}.reject do |att|
           resource_attribute?(type.to_sym, att)
         end.each do |invalid_att|
-          matches << match(find_resources(ast, :type => type).find do |res|
+          matches << find_resources(ast, :type => type).find do |res|
             resource_attributes(res).include?(invalid_att.to_s)
-          end)
+          end
         end
       end
     end
@@ -108,7 +108,7 @@ rule "FC010", "Invalid search syntax" do
   tags %w{correctness search}
   recipe do |ast|
     # This only works for literal search strings
-    literal_searches(ast).reject{|search| valid_query?(search['value'])}.map{|search| match(search)}
+    literal_searches(ast).reject{|search| valid_query?(search['value'])}
   end
 end
 
@@ -132,7 +132,7 @@ rule "FC013", "Use file_cache_path rather than hard-coding tmp paths" do
     find_resources(ast, :type => 'remote_file').find_all do |download|
       path = (resource_attribute(download, 'path') || resource_name(download)).to_s
       path.start_with?('/tmp/')
-    end.map{|download| match(download)}
+    end
   end
 end
 
@@ -141,7 +141,7 @@ rule "FC014", "Consider extracting long ruby_block to library" do
   recipe do |ast|
     find_resources(ast, :type => 'ruby_block').find_all do |rb|
       ! rb.xpath("//fcall[ident/@value='block' and count(ancestor::*) = 8]/../../do_block[count(descendant::*) > 100]").empty?
-    end.map{|block| match(block)}
+    end
   end
 end
 
@@ -174,7 +174,7 @@ rule "FC018", "LWRP uses deprecated notification syntax" do
   provider do |ast|
     ast.xpath("//assign/var_field/ivar[@value='@updated']").map{|class_var| match(class_var)} +
     ast.xpath(%q{//assign/field/*[self::vcall or self::var_ref/ident/@value='new_resource']/../
-      ident[@value='updated']}).map{|assign| match(assign)}
+      ident[@value='updated']})
   end
 end
 
@@ -215,7 +215,7 @@ rule "FC021", "Resource condition in provider may not behave as expected" do
       condition = resource.xpath(%q{//method_add_block/descendant::ident[@value='not_if' or @value='only_if']/
         ancestor::*[self::method_add_block or self::command][1][descendant::ident/@value='new_resource']/
         ancestor::stmts_add[2]/method_add_block/command[count(descendant::string_embexpr) = 0]})
-      match(condition) unless condition.empty?
+      condition
     end.compact
   end
 end
@@ -229,7 +229,7 @@ rule "FC022", "Resource condition within loop may not behave as expected" do
         # if any of the parameters to the block are used in a condition then we have a match
         unless (block_vars & (resource.xpath(%q{descendant::ident[@value='not_if' or @value='only_if']/
           ancestor::*[self::method_add_block or self::command][1]/descendant::ident/@value}).map{|a| a.value})).empty?
-          match(resource) unless resource.xpath('command[count(descendant::string_embexpr) = 0]').empty?
+          resource unless resource.xpath('command[count(descendant::string_embexpr) = 0]').empty?
         end
       end
     end.flatten.compact
@@ -243,6 +243,6 @@ rule "FC023", "Prefer conditional attributes" do
       [@value='only_if' or @value='not_if']) = 0]/ancestor::*[self::if or
       self::unless][count(descendant::method_add_block[command/ident]) = 1]
       [count(stmts_add/method_add_block/call) = 0]
-      [count(stmts_add/stmts_add) = 0]}).map{|condition| match(condition)}
+      [count(stmts_add/stmts_add) = 0]})
   end
 end
