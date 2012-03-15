@@ -139,6 +139,7 @@ module FoodCritic
       included.inject(Hash.new([])){|h, i| h[i['value']] += [i]; h}
     end
 
+    # XPath custom function
     class AttFilter
       def is_att_type(value)
         return [] unless value.respond_to?(:select)

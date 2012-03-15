@@ -46,6 +46,7 @@ module FoodCritic
         :symbolize_keys => true)
     end
 
+    # Chef Search
     class Search
 
       # The search grammars that ship with any Chef gems installed locally.
