@@ -9,17 +9,37 @@ module FoodCritic
     def initialize(args)
       @args = args
       @original_args = args.dup
-      @options = {}
-      @options[:fail_tags] = []; @options[:tags] = []; @options[:include_rules] = []
+      @options = {:fail_tags => [], :tags => [], :include_rules => []}
       @parser = OptionParser.new do |opts|
         opts.banner = 'foodcritic [cookbook_path]'
-        opts.on("-r", "--[no-]repl", "Drop into a REPL for interactive rule editing.") {|r|options[:repl] = r}
-        opts.on("-t", "--tags TAGS", "Only check against rules with the specified tags.") {|t|options[:tags] << t}
-        opts.on("-f", "--epic-fail TAGS", "Fail the build if any of the specified tags are matched.") {|t|options[:fail_tags] << t}
-        opts.on("-C", "--[no-]context", "Show lines matched against rather than the default summary.") {|c|options[:context] = c}
-        opts.on("-I", "--include PATH", "Additional rule file path(s) to load.") {|i|options[:include_rules] << i}
-        opts.on("-S", "--search-grammar PATH", "Specify grammar to use when validating search syntax.") {|s|options[:search_grammar] = s}
-        opts.on("-V", "--version", "Display version."){|v|options[:version] = true}
+        opts.on("-r", "--[no-]repl",
+          "Drop into a REPL for interactive rule editing.") do |r|
+          options[:repl] = r
+        end
+        opts.on("-t", "--tags TAGS",
+          "Only check against rules with the specified tags.") do |t|
+          options[:tags] << t
+        end
+        opts.on("-f", "--epic-fail TAGS",
+          "Fail the build if any of the specified tags are matched.") do |t|
+          options[:fail_tags] << t
+        end
+        opts.on("-C", "--[no-]context",
+          "Show lines matched against rather than the default summary.") do |c|
+          options[:context] = c
+        end
+        opts.on("-I", "--include PATH",
+          "Additional rule file path(s) to load.") do |i|
+          options[:include_rules] << i
+        end
+        opts.on("-S", "--search-grammar PATH",
+          "Specify grammar to use when validating search syntax.") do |s|
+          options[:search_grammar] = s
+        end
+        opts.on("-V", "--version",
+          "Display version.") do |v|
+          options[:version] = true
+        end
       end
       @parser.parse!(args) unless show_help?
     end
@@ -68,7 +88,8 @@ module FoodCritic
 
     # Is the search grammar specified valid?
     #
-    # @return [Boolean] True if the grammar has not been provided or can be loaded.
+    # @return [Boolean] True if the grammar has not been provided or can be
+    #   loaded.
     def valid_grammar?
       return true unless options.key?(:search_grammar)
       return false unless File.exists?(options[:search_grammar])
@@ -77,7 +98,8 @@ module FoodCritic
       search.parser?
     end
 
-    # If matches should be shown with context rather than the default summary display.
+    # If matches should be shown with context rather than the default summary
+    # display.
     #
     # @return [Boolean] True if matches should be shown with context.
     def show_context?

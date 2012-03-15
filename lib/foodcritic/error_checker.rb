@@ -18,7 +18,8 @@ module FoodCritic
 
     # Register with all available error handlers.
     def self.register_error_handlers
-      SexpBuilder.public_instance_methods.grep(/^on_.*_error$/).sort.each do |err_meth|
+      error_methods = SexpBuilder.public_instance_methods.grep(/^on_.*_error$/)
+      error_methods.sort.each do |err_meth|
         define_method(err_meth) { |*| @found_error = true }
       end
     end

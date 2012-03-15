@@ -11,7 +11,8 @@ module FoodCritic
 
     # Define a new rule
     #
-    # @param [String] code The short unique identifier for this rule, e.g. 'FC001'
+    # @param [String] code The short unique identifier for this rule,
+    #   e.g. 'FC001'
     # @param [String] name The short descriptive name of this rule presented to
     #   the end user.
     # @param [Block] block The rule definition

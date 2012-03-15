@@ -2,7 +2,8 @@ module FoodCritic
 
   # Default output showing a summary view.
   class SummaryOutput
-    # Output a summary view only listing the matching rules, file and line number.
+    # Output a summary view only listing the matching rules, file and line
+    # number.
     #
     # @param [Review] review The review to output.
     def output(review)
@@ -21,10 +22,12 @@ module FoodCritic
         puts review; return
       end
 
-      # Cheating here and mis-using Rak (Ruby port of Ack) to generate pretty colourised context.
+      # Cheating here and mis-using Rak (Ruby port of Ack) to generate pretty
+      # colourised context.
       #
-      # Rak supports evaluating a custom expression as an alternative to a regex. Our expression consults a hash of the
-      # matches found and then we let Rak take care of the presentation.
+      # Rak supports evaluating a custom expression as an alternative to a
+      # regex. Our expression consults a hash of the matches found and then we
+      # let Rak take care of the presentation.
       line_lookup = key_by_file_and_line(review)
       Rak.class_eval do
         const_set(:RULE_COLOUR, "\033[1;36m")
@@ -33,8 +36,9 @@ module FoodCritic
       ARGV.replace(['--context', '--eval', %q{
         # This code will be evaluated inline by Rak.
         fn = fn.split("\n").first
-        if @warnings.key?(fn) and @warnings[fn].key?($.) # filename and line number
-          rule_name = "#{RULE_COLOUR if opt[:colour]}#{@warnings[fn][$.].to_a.join("\n")}#{CLEAR_COLOURS}"
+        if @warnings.key?(fn) and @warnings[fn].key?($.) # filename and line no
+          rule_name = opt[:colour] ? RULE_COLOUR : ''
+          rule_name += "#{@warnings[fn][$.].to_a.join("\n")}#{CLEAR_COLOURS}"
           if ! displayed_filename
             fn = "#{fn}\n#{rule_name}"
           else
@@ -50,16 +54,20 @@ module FoodCritic
 
     private
 
-    # Build a hash lookup by filename and line number for warnings found in the specified review.
+    # Build a hash lookup by filename and line number for warnings found in the
+    # specified review.
     #
     # @param [Review] review The review to convert.
     # @return [Hash] Nested hashes keyed by filename and line number.
     def key_by_file_and_line(review)
       warn_hash = {}
       review.warnings.each do |warning|
-        filename = Pathname.new(warning.match[:filename]).cleanpath.to_s;  line_num = warning.match[:line].to_i
+        filename = Pathname.new(warning.match[:filename]).cleanpath.to_s
+        line_num = warning.match[:line].to_i
         warn_hash[filename] = {} unless warn_hash.key?(filename)
-        warn_hash[filename][line_num] = Set.new unless warn_hash[filename].key?(line_num)
+        unless warn_hash[filename].key?(line_num)
+          warn_hash[filename][line_num] = Set.new
+        end
         warn_hash[filename][line_num] << warning.rule
       end
       warn_hash

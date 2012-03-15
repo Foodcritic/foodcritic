@@ -67,7 +67,8 @@ module FoodCritic
             begin
               break parser unless parser.nil?
               # don't instantiate custom nodes
-              Treetop.load_from_string(IO.read(lucene_grammar).gsub(/<[^>]+>/, ''))
+              Treetop.load_from_string(
+                IO.read(lucene_grammar).gsub(/<[^>]+>/, ''))
               LuceneParser.new
             rescue
               # silently swallow and try the next grammar

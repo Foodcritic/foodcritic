@@ -61,7 +61,8 @@ module FoodCritic
     def chef_solo_search_supported?(recipe_path)
       return false if recipe_path.nil? || ! File.exists?(recipe_path)
       cbk_tree_path = Pathname.new(File.join(recipe_path, '../../..'))
-      search_libs = Dir[File.join(cbk_tree_path.realpath, "*/libraries/search.rb")]
+      search_libs = Dir[File.join(cbk_tree_path.realpath,
+        '*/libraries/search.rb')]
       search_libs.any? do |lib|
         ! read_ast(lib).xpath(%q{//class[count(descendant::const[@value='Chef']
           ) = 1]/descendant::def/ident[@value='search']}).empty?
@@ -159,7 +160,8 @@ module FoodCritic
     # Create a match from the specified node.
     #
     # @param [Nokogiri::XML::Node] node The node to create a match for
-    # @return [Hash] Hash with the matched node name and position with the recipe
+    # @return [Hash] Hash with the matched node name and position with the
+    #   recipe
     def match(node)
       raise_unless_xpath!(node)
       pos = node.xpath('descendant::pos').first
@@ -175,7 +177,7 @@ module FoodCritic
     # @return [Boolean] True if this string might be an OS command
     def os_command?(str)
       str.start_with?('grep ', 'which ') or # common commands
-      str.include?('|') or                  # probably a pipe, could be alternation
+      str.include?('|') or                  # a pipe, could be alternation
       str.match(/^[\w]+$/) or               # command name only
       str.match(/ --?[a-z]/i)               # command-line flag
     end
@@ -212,7 +214,8 @@ module FoodCritic
         if att.xpath('descendant::symbol').empty?
           att_value = att.xpath('string(descendant::tstring_content/@value)')
         else
-          att_value = att.xpath('string(descendant::symbol/ident/@value)').to_sym
+          att_value =
+            att.xpath('string(descendant::symbol/ident/@value)').to_sym
         end
         atts[att.xpath('string(ident/@value)')] = att_value
       end

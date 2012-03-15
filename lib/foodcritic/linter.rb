@@ -54,13 +54,20 @@ module FoodCritic
       active_rules = @rules.select{|rule| matching_tags?(options[:tags],
         rule.tags)}
       files_to_process(cookbook_path).each do |file|
-        cookbook_dir = Pathname.new(File.join(File.dirname(file), '..')).cleanpath
+        cookbook_dir = Pathname.new(
+          File.join(File.dirname(file), '..')).cleanpath
         ast = read_ast(file)
         active_rules.each do |rule|
           rule_matches = matches(rule.recipe, ast, file)
-          rule_matches += matches(rule.provider, ast, file) if File.basename(File.dirname(file)) == 'providers'
-          rule_matches += matches(rule.resource, ast, file) if File.basename(File.dirname(file)) == 'resources'
-          rule_matches += matches(rule.cookbook, cookbook_dir) if last_dir != cookbook_dir
+          if File.basename(File.dirname(file)) == 'providers'
+            rule_matches += matches(rule.provider, ast, file)
+          end
+          if File.basename(File.dirname(file)) == 'resources'
+          rule_matches += matches(rule.resource, ast, file)
+          end
+          if last_dir != cookbook_dir
+            rule_matches += matches(rule.cookbook, cookbook_dir)
+          end
           rule_matches.each do |match|
             warnings << Warning.new(rule, {:filename => file}.merge(match))
             matched_rule_tags << rule.tags
@@ -76,7 +83,8 @@ module FoodCritic
       @review
     end
 
-    # Convenience method to repeat the last check. Intended to be used from the REPL.
+    # Convenience method to repeat the last check. Intended to be used from the
+    # REPL.
     def recheck
       check(@last_cookbook_path, @last_options)
     end
@@ -127,8 +135,9 @@ module FoodCritic
     #   processed.
     def files_to_process(dir)
       return [dir] unless File.directory? dir
-      Dir.glob(File.join(dir, '{attributes,providers,recipes,resources}/*.rb')) +
-        Dir.glob(File.join(dir, '*/{attributes,providers,recipes,resources}/*.rb'))
+      cookbook_glob = '{attributes,providers,recipes,resources}/*.rb'
+      Dir.glob(File.join(dir, cookbook_glob)) +
+        Dir.glob(File.join(dir, "*/#{cookbook_glob}"))
     end
 
     # Whether to fail the build.
