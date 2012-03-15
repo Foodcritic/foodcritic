@@ -91,7 +91,7 @@ rule "FC009", "Resource attribute not recognised" do
     matches = []
     resource_attributes_by_type(ast).each do |type,resources|
       resources.each do |resource|
-        resource.keys.map{|att|att.to_sym}.reject do |att|
+        resource.keys.map(&:to_sym).reject do |att|
           resource_attribute?(type.to_sym, att)
         end.each do |invalid_att|
           matches << find_resources(ast, :type => type).find do |res|

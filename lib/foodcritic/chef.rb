@@ -8,7 +8,7 @@ module FoodCritic
     # @return [Array] Array of method symbols
     def chef_dsl_methods
       load_metadata
-      @dsl_metadata[:dsl_methods].map{|m| m.to_sym}
+      @dsl_metadata[:dsl_methods].map(&:to_sym)
     end
 
     # Is the specified attribute valid for the type of resource? Note that this
