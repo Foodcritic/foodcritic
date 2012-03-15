@@ -1,3 +1,12 @@
+## 1.0.1 (15th March, 2012)
+
+Bugfixes:
+
+  - Nokogiri 1.5.1 and 1.5.2 cause a segfault so prevent their use until a fix
+    is released
+    ([related issue](https://github.com/acrmp/foodcritic/issues/18)).
+    Thanks @miah.
+
 ## 1.0.0 (4th March, 2012)
 
 Features:
