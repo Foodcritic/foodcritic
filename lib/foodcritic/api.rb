@@ -22,24 +22,11 @@ module FoodCritic
         raise ArgumentError, "Node type not recognised"
       end
 
-      (if options[:type] == :vivified
-        calls = ast.xpath(%q{//*[self::call or self::field]
-          [is_att_type(vcall/ident/@value) or
-           is_att_type(var_ref/ident/@value)][@value='.']}, AttFilter.new)
-        calls.select do |call|
-          call.xpath("aref/args_add_block").size == 0 and
-          (call.xpath("descendant::ident").size > 1 and
-           ! chef_dsl_methods.include?(call.xpath("ident/@value").to_s.to_sym))
-        end
+      if options[:type] == :vivified
+        vivified_attribute_access(ast)
       else
-        type = (options[:type] == :string) ? 'tstring_content' : options[:type]
-        expr = '//*[self::aref_field or self::aref]'
-        expr += '[is_att_type(descendant::ident'
-        expr += '[not(ancestor::aref/call)]' if options[:ignore_calls]
-        expr += "/@value)]/descendant::#{type}"
-        ast.xpath(expr, AttFilter.new)
+        standard_attribute_access(ast, options)
       end
-      ).sort
     end
 
     # Does the specified recipe check for Chef Solo?
@@ -348,6 +335,26 @@ module FoodCritic
       unless ast.respond_to?(:xpath)
         raise ArgumentError, "AST must support #xpath"
       end
+    end
+
+    def standard_attribute_access(ast, options)
+      type = options[:type] == :string ? 'tstring_content' : options[:type]
+      expr = '//*[self::aref_field or self::aref]'
+      expr += '[is_att_type(descendant::ident'
+      expr += '[not(ancestor::aref/call)]' if options[:ignore_calls]
+      expr += "/@value)]/descendant::#{type}"
+      ast.xpath(expr, AttFilter.new).sort
+    end
+
+    def vivified_attribute_access(ast)
+      calls = ast.xpath(%q{//*[self::call or self::field]
+        [is_att_type(vcall/ident/@value) or
+        is_att_type(var_ref/ident/@value)][@value='.']}, AttFilter.new)
+      calls.select do |call|
+        call.xpath("aref/args_add_block").size == 0 and
+          (call.xpath("descendant::ident").size > 1 and
+            ! chef_dsl_methods.include?(call.xpath("ident/@value").to_s.to_sym))
+      end.sort
     end
 
   end
