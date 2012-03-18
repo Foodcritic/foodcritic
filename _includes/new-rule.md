@@ -1,3 +1,35 @@
+There are two approaches you can take to implementing a new rule.
+
+* You can create a local rule specific to your organisation. This is often the
+  easiest way to get started.
+
+* You can extend Foodcritic with a new rule. Do this if you are intending to
+  contribute your rule back so people outside your organisation can use it.
+
+## Local rules
+
+Your local rules directory should have a `Gemfile` defined to express the
+versions of foodcritic that your rule is known to work with. This is to avoid
+API changes breaking your rules. Foodcritic follows the
+[RubyGems RationalVersioningPolicy](http://docs.rubygems.org/read/chapter/7).
+
+    $ mkdir local-rules && cd local-rules
+    $ echo "gem 'foodcritic', '~> 1.0.0'" > Gemfile
+    $ gem install bundler
+    $ bundle install --binstubs
+    $ cat > rules.rb <<EOF
+    rule "MYORG001", "My custom rule" do
+      tags %w{style attributes}
+      recipe do |ast|
+        attribute_access(ast, :type => :string).map{|ar| match(ar)}
+      end
+    end
+    EOF
+    $ cd ..
+    $ local-rules/bin/foodcritic -t MYORG001 -I local-rules cookbooks
+
+## Contributing a rule
+
 In this contrived example we are going to add a new rule to raise a warning if a
 recipe or provider declares a log resource that contains the word 'password'.
 
