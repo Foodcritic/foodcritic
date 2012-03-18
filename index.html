@@ -1,1178 +1,1217 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <title>Foodcritic</title>
-    <meta name="description" content="">
-    <meta name="author" content="">
-
-    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
-    <!--[if lt IE 9]>
-      <script type="text/javascript" src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-
-    <!-- Le styles -->
-    <link href="bootstrap.css" rel="stylesheet">
-    <link href="prettify.css" type="text/css" rel="stylesheet" />
-    <script type="text/javascript" src="prettify.js"></script>
-    <style type="text/css">
-      body {
-        padding-top: 60px;
-      }
-    </style>
-  </head>
-
-  <body onload="prettyPrint()">
-    <div class="topbar">
-      <div class="topbar-inner">
-        <div class="container-fluid">
-          <a class="brand" href="#">Foodcritic</a>
-          <p class="pull-right">A lint tool for your Opscode Chef cookbooks.</p>
-
-        </div>
-      </div>
-    </div>
-    <div class="container-fluid">
-      <div class="sidebar">
-        <div class="well">
-          <h5>Documentation</h5>
-          <ul>
-            <li><a href="#getting-started">Getting started</a></li>
-            <li><a href="#why">Why?</a></li>
-            <li><a href="#rules">Built-in rules</a></li>
-            <li><a href="#ci">Using in Continuous Integration</a></li>
-            <li><a href="#faq">Frequently Asked Questions</a></li>
-            <li><a href="#writing-a-new-rule">Writing a new rule</a></li>
-          </ul>
-          <h5>Project</h5>
-          <ul>
-            <li><a href="https://github.com/acrmp/foodcritic">Code</a></li>
-            <li><a href="http://travis-ci.org/acrmp/foodcritic">Travis CI</a></li>
-            <li><a href="https://github.com/acrmp/foodcritic/issues?sort=created&direction=desc&state=open">Issues</a></li>
-            <li><a href="https://github.com/acrmp/foodcritic/blob/master/CHANGELOG.md">Changelog</a></li>
-            <li><a href="https://raw.github.com/acrmp/foodcritic/master/LICENSE">License</a></li>
-          </ul>
-          <h5>Rules</h5>
-          <ul>
-<li><a href="#FC001">FC001: Use strings in preference to symbols to access node attributes</a></li>
-<li><a href="#FC002">FC002: Avoid string interpolation where not required</a></li>
-<li><a href="#FC003">FC003: Check whether you are running with chef server before using server-specific features</a></li>
-<li><a href="#FC004">FC004: Use a service resource to start and stop services</a></li>
-<li><a href="#FC005">FC005: Avoid repetition of resource declarations</a></li>
-<li><a href="#FC006">FC006: Mode should be quoted or fully specified when setting file permissions</a></li>
-<li><a href="#FC007">FC007: Ensure recipe dependencies are reflected in cookbook metadata</a></li>
-<li><a href="#FC008">FC008: Generated cookbook metadata needs updating</a></li>
-<li><a href="#FC009">FC009: Resource attribute not recognised</a></li>
-<li><a href="#FC010">FC010: Invalid search syntax</a></li>
-<li><a href="#FC011">FC011: Missing README in markdown format</a></li>
-<li><a href="#FC012">FC012: Use Markdown for README rather than RDoc</a></li>
-<li><a href="#FC013">FC013: Use file_cache_path rather than hard-coding tmp paths</a></li>
-<li><a href="#FC014">FC014: Consider extracting long ruby_block to library</a></li>
-<li><a href="#FC015">FC015: Consider converting definition to a LWRP</a></li>
-<li><a href="#FC016">FC016: LWRP does not declare a default action</a></li>
-<li><a href="#FC017">FC017: LWRP does not notify when updated</a></li>
-<li><a href="#FC018">FC018: LWRP uses deprecated notification syntax</a></li>
-<li><a href="#FC019">FC019: Access node attributes in a consistent manner</a></li>
-<li><a href="#FC020">FC020: Conditional execution string attribute looks like Ruby</a></li>
-<li><a href="#FC021">FC021: Resource condition in provider may not behave as expected</a></li>
-<li><a href="#FC022">FC022: Resource condition within loop may not behave as expected</a></li>
-<li><a href="#FC023">FC023: Prefer conditional attributes</a></li>
-          </ul>
-        </div>
-      </div>
-      <div class="content">
-        <div class="hero-unit">
-          <h1>Foodcritic</h1>
-          <p>A lint tool for your Opscode Chef cookbooks.</p>
-          <pre>
-$ rvm use 1.9.3
-$ gem install foodcritic
-$ foodcritic cookbooks</pre>
-          <a href="#getting-started" class="btn large primary">Become a Chef snob</a>
-        </div>
-        <div class="row">
-          <div class="span6">
-            <h2>Getting started</h2>
-            <p>The important stuff: how to get up and running. Covers how to install and run foodcritic against your cookbook tree.</p>
-            <p><a class="btn" href="#getting-started">View details &raquo;</a></p>
-
-          </div>
-          <div class="span5">
-            <h2>Why?</h2>
-             <p>The rationale for using a lint tool on your cookbooks - why you should practice continuous inspection.</p>
-            <p><a class="btn" href="#why">View details &raquo;</a></p>
-         </div>
-          <div class="span5">
-            <h2>Built-in Rules</h2>
-            <p>The reference list of rules that come with foodcritic and what they mean.</p>
-            <p><a class="btn" href="#rules">View details &raquo;</a></p>
-          </div>
-        </div>
-        <hr>
-        <div class="row">
-          <div class="span6">
-              <h2>Continuous Integration</h2>
-              <p>Using foodcritic as part of your continuous integration setup.</p>
-              <p><a class="btn" href="#ci">View details &raquo;</a></p>
-          </div>
-          <div class="span5">
-            <h2>FAQ</h2>
-            <p>Answers to Frequently Asked Questions.</p>
-            <p><a class="btn" href="#faq">View details &raquo;</a></p>
-          </div>
-          <div class="span5">
-            <h2>Writing a new rule</h2>
-             <p>You can extend foodcritic with rules you define yourself. Pull requests are welcomed!</p>
-            <p><a class="btn" href="#writing-a-new-rule">View details &raquo;</a></p>
-         </div>
-        </div>
-
-        <hr>
-
-        <h1 id="getting-started">Getting started</h1>
-        <h2>Pre-requesites</h2>
-        <p>Foodcritic runs on Ruby (MRI) 1.9.2+ which depending on your workstation setup may be a more recent version of Ruby than you have installed. The <a href="http://beginrescueend.com/">Ruby Version Manager (RVM)</a> is a popular choice for running multiple versions of ruby on the same workstation, so you can try foodcritic out without running the risk of damaging your main install.</p>
-        <h3>Installing RVM</h3>
-        <p>
-        RVM can be installed from the current development code on the projects GitHub - however if you are just getting started with RVM I would recommend installing the latest stable version with the <code>stable</code> argument. The full instructions for installing RVM can be found here:<br />
-        <a href="http://beginrescueend.com/rvm/install/">http://beginrescueend.com/rvm/install/</a>
-        </p>
-        <p>
-            See also this blog post from Michal Papis for more information:<br />
-            <a href="http://www.engineyard.com/blog/2012/rvm-stable-and-more/">http://www.engineyard.com/blog/2012/rvm-stable-and-more/</a>
-        </p>
-        <h3>Installing Ruby 1.9.3</h3>
-        <p>
-          With RVM installed successfully you can now use it to install MRI 1.9.3:
-        </p>
-        <pre>
-$ rvm install ruby-1.9.3
-</pre>
-        <h2>Installing foodcritic</h2>
-        <p>Ok - now we can move on to installing foodcritic itself. Foodcritic is <a href="https://rubygems.org/gems/foodcritic">distributed as a Rubygem</a> - run the following commands to install it:</p>
-<pre>
-$ rvm use 1.9.3
-$ gem install foodcritic
-</pre>
-<p>Great - that's it. You should now find you have a <code>foodcritic</code> command on your <code>PATH</code>. Run foodcritic to see what arguments it supports:</p>
-<pre>$ foodcritic --help
-foodcritic [cookbook_path]
-    -r, --[no-]repl                  Drop into a REPL for interactive rule editing.
-    -t, --tags TAGS                  Only check against rules with the specified tags.
-    -f, --epic-fail TAGS             Fail the build if any of the specified tags are matched.
-    -C, --[no-]context               Show lines matched against rather than the default summary.
-</pre>
-	<p>Now for the fun part. Try running it against your favourite cookbook.
-	<hr>
-      <h1 id="why">Why?</h1>
-      <p>Foodcritic has two goals:</p>
-        <ul>
-        <li>To make it easier to flag problems in your Chef cookbooks that will cause Chef to blow up when you attempt to converge. This is about faster feedback. If you automate checks for common problems you can save a lot of time.</li>
-        <li>To encourage discussion within the Chef community on the more subjective stuff - what does a good cookbook look like? Opscode have avoided being overly prescriptive which by and large I think is a good thing. Having a set of rules to base discussion on helps drive out what we as a community think is good style.</li>
-        </ul>
-	<hr>
-      <h1 id="rules">Built-in Rules</h1>
-        <h2 id="FC001">FC001: Use strings in preference to symbols to access node attributes</h2>
-            <p><span class="label">style</span> <span class="label">attributes</span></p>
-            <p>
-                Opscode recommend that you use strings rather than symbols when referencing node attributes. See <a href="https://github.com/acrmp/foodcritic/issues/1">this explanation from @jtimberman</a>.
-            </p>
-            <h3>Uses symbols to reference attributes</h3>
-            <p>This example would match the FC001 rule because the <code>version</code> attribute has been referenced with a symbol.</p>
-            <pre class="prettyprint">
-# Don't do this
-package "mysql-server" do
-  version node[:mysql][:version]
-  action :install
-end</pre>
-
-            <h3>Modified version</h3>
-            <p>This modified example would <strong>not</strong> match the FC001 rule:</p>
-            <pre class="prettyprint">
-package "mysql-server" do
-  version node['mysql']['version']
-  action :install
-end</pre>
-	<h2 id="FC002">FC002: Avoid string interpolation where not required</h2>
-        <p><span class="label">style</span> <span class="label">strings</span></p>
-        <p>
-        When you declare a resource in your recipes you frequently want to reference dynamic values such as node attributes. This warning will be shown if you are unnecessarily wrapping an attribute reference in a string.
-        </p>
-        <h3>Unnecessary string interpolation</h3>
-        <p>This example would match the FC002 rule because the <code>version</code> attribute has been unnecessarily quoted.</p>
-        <pre class="prettyprint">
-# Don't do this
-package "mysql-server" do
-  version "#{node['mysql']['version']}"
-  action :install
-end</pre>
-
-        <h3>Modified version</h3>
-        <p>This modified example would <strong>not</strong> match the FC002 rule:</p>
-        <pre class="prettyprint">
-package "mysql-server" do
-  version node['mysql']['version']
-  action :install
-end</pre>
-	<h2 id="FC003">FC003: Check whether you are running with chef server before using server-specific features</h2>
-        <p><span class="label warning">portability</span> <span class="label">solo</span></p>
-        <p>
-	  Chef Server extends the feature-set of a Chef deployment and is probably the most popular configuration. It is also possible to run the Chef client in a standalone mode with Chef Solo. Where your cookbooks make use of features that only exist in a Chef Server based setup you should check whether you are running in solo mode.<br />
-<a href="http://wiki.opscode.com/display/chef/Chef+Solo">http://wiki.opscode.com/display/chef/Chef+Solo</a>
-
-        </p>
-        <h3>Does not check for Chef Solo</h3>
-<p>
-  This example would match the FC003 rule because it does not check if it is running in Chef Solo before using search which is a server-specific feature:
-</p>
-<pre class="prettyprint">
-nodes = search(:node, "hostname:[* TO *] AND chef_environment:#{node.chef_environment}")
-</pre>
-<h3>Modified version</h3>
-<p>
-  This modified example would <strong>not</strong> match the FC003 rule:</p>
-<pre class="prettyprint">
-if Chef::Config[:solo]
-  Chef::Log.warn("This recipe uses search. Chef Solo does not support search.")
-else
-  nodes = search(:node, "hostname:[* TO *] AND chef_environment:#{node.chef_environment}")
-end
-</pre>
-
-	<h2 id="FC004">FC004: Use a service resource to start and stop services</h2>
-        <p><span class="label">style</span> <span class="label">services</span></p>
-        <p>
-	  This warning is shown if you are starting or stopping a service using the Chef <code>execute</code> resource rather than the more idiomatic <code>service</code> resource. You can read more about the service resource here:<br />
-<a href="http://wiki.opscode.com/display/chef/Resources#Resources-Service">http://wiki.opscode.com/display/chef/Resources#Resources-Service</a>
-        </p>
-        <h3>Uses execute to control a service</h3>
-        <p>
-          This example would match the FC004 rule because it uses <code>execute</code> for service control. There is no reason to use <code>execute</code> because the <code>service</code> resource exposes the <code>start_command</code> attribute to give you full control over the command issued.
-        </p>
-<pre class="prettyprint">
-# Don't do this
-execute "start-tomcat" do
-  command "/etc/init.d/tomcat6 start"
-  action :run
-end
-</pre>
-	<h3>Modified version</h3>
-        <p>
-          This modified example would <strong>not</strong> match the FC004 rule:</p>
-<pre class="prettyprint">
-service "tomcat" do
-  action :start
-end
-</pre>
-
-<h2 id="FC005">FC005: Avoid repetition of resource declarations</h2>
-<p><span class="label">style</span></p>
-<p>
-  When writing Chef recipes you have the full power of Ruby at your disposal. One of the cases where this is helpful is where you need to declare a large number of resources that only differ in a single attribute - the canonical example is installing a long list of packages.
-</p>
-<h3>Unnecessarily repetitive</h3>
-<p>
-    This example matches the FC005 rule because all the resources of type <code>package</code> differ only in a single attribute - the name of the package to be upgraded. This rule is very simple and looks only for resources that <strong>all</strong> differ in only a single attribute. For example - if only one of the packages specified the version then this rule would not match.
-</p>
-<pre class="prettyprint">
-# You could do this
-package "erlang-base" do
-  action :upgrade
-end
-package "erlang-corba" do
-  action :upgrade
-end
-package "erlang-crypto" do
-  action :upgrade
-end
-package "rabbitmq-server" do
-  action :upgrade
-end
-</pre>
-<h3>Modified version</h3>
-<p>This modified example would <strong>not</strong> match the FC005 rule. It takes advantage of the fact that Chef processes recipes in two distinct phases<br />
-<a href="http://wiki.opscode.com/display/chef/Anatomy+of+a+Chef+Run">http://wiki.opscode.com/display/chef/Anatomy+of+a+Chef+Run</a></p>
-<p>Don't worry about changing your recipe if it already does what you want - the amount of Ruby syntactic sugar to apply is very much a matter of personal taste. Note that this rule also isn't clever enough yet to detect if your resources are
-wrapped in a control structure and not suitable for 'rolling up' into a loop.</p>
-<p>
-<pre class="prettyprint">
-# It's shorter to do this
-%w{erlang-base erlang-corba erlang-crypto rabbitmq-server}.each do |pkg|
-  package pkg do
-    action :upgrade
-  end
-end
-</pre>
-<h2 id="FC006">FC006: Mode should be quoted or fully specified when setting file permissions</h2>
-<p><span class="label important">correctness</span> <span class="label">files</span></p>
-
-<p>When setting file or directory permissions via the <code>mode</code> attribute you should either quote the octal number or ensure it is specified to five digits. Otherwise the permissions that are set after Ruby coerces the number may not match what you expect.</p>
-
-<h3>File mode won't be interpreted correctly</h3>
-<pre class="prettyprint">
-# Don't do this
-directory "/var/lib/foo" do
-  owner "root"
-  group "root"
-  mode 644
-  action :create
-end
-</pre>
-
-<h3>Modified versions</h3>        
-<p>These modified examples would <strong>not</strong> match the FC006 rule:</p>
-<pre class="prettyprint">
-# This is ok
-directory "/var/lib/foo" do
-  owner "root"
-  group "root"
-  mode "644"
-  action :create
-end
-</pre>
-<pre class="prettyprint">
-# And so is this
-directory "/var/lib/foo" do
-  owner "root"
-  group "root"
-  mode 00644
-  action :create
-end
-</pre>
-
-<h2 id="FC007">FC007: Ensure recipe dependencies are reflected in cookbook metadata</h2>
-<p><span class="label important">correctness</span> <span class="label">metadata</span></p>
-<p>This warning is shown when you include a recipe that is not in the current cookbook and not defined as a dependency in your cookbook metadata. This is potentially a big problem because things will blow up if the necessary dependency cannot be found when Chef tries to converge your node. For more information refer to the Chef wiki metadata page:<br />
-<a href="http://wiki.opscode.com/display/chef/Metadata">http://wiki.opscode.com/display/chef/Metadata</a></p>
-<p>The fix is to declare the cookbook of the recipe you are including as a dependency in your <code>metadata.rb</code> file.
-<p>You may also see this warning if foodcritic has not been able to infer the name of your cookbook correctly when the cookbook
-directory does not match the name of the cookbook specified in the include.</p>
-<h3>Modified version</h3>
-<p>Assuming you have a recipe that had the following line:</p>
-
-<pre class="prettyprint">
-include_recipe "apache2::default"
-</pre>
-
-<p>Then to remove this warning you would add the <code>apache2</code> cookbook as a dependency to your own cookbook metadata in the <code>metadata.rb</code> file at the root of your cookbook.</p>
-
-<pre class="prettyprint">
-depends "apache2"
-</pre>
-
-<h2 id="FC008">FC008: Generated cookbook metadata needs updating</h2>
-<p><span class="label">style</span> <span class="label">metadata</span></p>
-<p>This warning is shown if you used <code>knife cookbook create</code> to create a new cookbook and didn't override the maintainer and maintainer email. You need to set these to real values in <code>metadata.rb</code> or run knife again with the real values.<br />
-<a href="http://wiki.opscode.com/display/chef/Managing+Cookbooks+With+Knife#ManagingCookbooksWithKnife-create">http://wiki.opscode.com/display/chef/Managing+Cookbooks+With+Knife#ManagingCookbooksWithKnife-create</a></p>
-
-<h3>Maintainer metadata is boilerplate default</h3>
-<pre class="prettyprint">
-# Don't do this
-maintainer "YOUR_COMPANY_NAME"
-maintainer_email "YOUR_EMAIL"
-license "All rights reserved"
-description "Installs/Configures example"
-long_description IO.read(File.join(File.dirname(__FILE__), 'README.rdoc'))
-version "0.0.1"
-</pre>
-
-<h3>Modified version</h3>
-<pre class="prettyprint">
-maintainer "Example Ltd"
-maintainer_email "postmaster@example.com"
-license "All rights reserved"
-description "Installs/Configures example"
-long_description IO.read(File.join(File.dirname(__FILE__), 'README.rdoc'))
-version "0.0.1"
-</pre>
-
-<h2 id="FC009">FC009: Resource attribute not recognised</h2>
-<p><span class="label important">correctness</span></p>
-<p>This warning is likely to mean that your recipe will fail to run when you attempt to converge. Your recipe may be syntactically valid Ruby, but the attribute you have attempted to set on a built-in Chef resource is not recognised. This is commonly a typo or you need to check the documentation to see what the attribute you are trying to set is called:<br />
-<a href="http://wiki.opscode.com/display/chef/Resources">http://wiki.opscode.com/display/chef/Resources</a></p>
-
-<h3>Resource with an unrecognised attribute</h3>
-<p>This example matches the FC009 rule because <code>punter</code> is not a recognised attribute for the file resource.</p>
-<pre class="prettyprint">
-# Don't do this
-file "/tmp/something" do
-  punter "root"
-  group "root"
-  mode "0755"
-  action :create
-end
-</pre>
-
-<h3>Modified version</h3>
-<p>Checking the documentation we can see the correct attribute is <code>owner</code>.
-<pre class="prettyprint">
-file "/tmp/something" do
-  owner "root"
-  group "root"
-  mode "0755"
-  action :create
-end
-</pre>
-
-<h2 id="FC010">FC010: Invalid search syntax</h2>
-<p><span class="label important">correctness</span> <span class="label">search</span></p>
-<p>The search syntax used is not recognised as valid Lucene search criteria. This is commonly because you have made a typo
-or are not escaping special characters in the query syntax.<br />
-<a href="http://wiki.opscode.com/display/chef/Search#Search-QuerySyntax">http://wiki.opscode.com/display/chef/Search#Search-QuerySyntax</a></p>
-
-<p>Note that this rule will not identify syntax errors in searches composed of subexpressions. It checks only for literal
-    search strings.</p>
-
-<h3>Unescaped search syntax</h3>
-<p>This example matches the FC010 rule because search metacharacters - in this case the square brackets - have not been
-    properly escaped.</p>
-<pre class="prettyprint">
-# Don't do this
-search(:node, 'run_list:recipe[foo::bar]') do |matching_node|
-  puts matching_node.to_s
-end
-</pre>
-
-<h3>Modified version</h3>
-<p>With the characters escaped this will no longer match the rule.</p>
-<pre class="prettyprint">
-search(:node, 'run_list:recipe\[foo\:\:bar\]') do |matching_node|
-  puts matching_node.to_s
-end
-</pre>
-
-<h2 id="FC011">FC011: Missing README in markdown format</h2>
-<p><span class="label">style</span> <span class="label">readme</span></p>
-<p>The <a href="http://community.opscode.com/">Opscode Community site</a> will now render your cookbook README documentation
-inline - <a href="http://community.opscode.com/cookbooks/mysql">see this example for the mysql cookbook</a>.</p>
-<p>Your README needs to be in <a href="http://daringfireball.net/projects/markdown/syntax">Markdown format</a> for this
-    to work. This rule will match any cookbook that does not have a <code>README.md</code> file in the root directory.</p>
-
-<h2 id="FC012">FC012: Use Markdown for README rather than RDoc</h2>
-<p><span class="label">style</span> <span class="label">readme</span></p>
-<p>Writing cookbook documentation in RDoc has been deprecated in favour of <a href="http://daringfireball.net/projects/markdown/syntax">Markdown format</a>.
-    This rule will match any cookbook that has a <code>README.rdoc</code> file in the root directory.</p>
-
-<h2 id="FC013">FC013: Use file_cache_path rather than hard-coding tmp paths</h2>
-<p><span class="label">style</span> <span class="label">files</span></p>
-<p>This warning means that you have hard-coded a file download path in your cookbook to a temporary directory.
-This can be a problem on boxes built with a small <code>/tmp</code> mount point. Chef has
-its own configuration option <code>file_cache_path</code> you should use instead:<br />
-<a href="http://wiki.opscode.com/display/chef/Chef+Configuration+Settings#ChefConfigurationSettings-filecachepath">http://wiki.opscode.com/display/chef/Chef+Configuration+Settings#ChefConfigurationSettings-filecachepath</a></p>
-
-<h3>Downloading to a hard-coded temp directory</h3>
-<p>This example matches the FC013 rule because it hard-codes the download path to <code>/tmp</code>.</p>
-<pre class="prettyprint">
-# Don't do this
-remote_file "/tmp/large-file.tar.gz" do
-  source "http://www.example.org/large-file.tar.gz"
-end
-</pre>
-
-<h3>Modified version</h3>
-<p>To remove this warning use the configured <code>file_cache_path</code>:</p>
-
-<pre class="prettyprint">
-remote_file "#{Chef::Config[:file_cache_path]}/large-file.tar.gz" do
-  source "http://www.example.org/large-file.tar.gz"
-end
-</pre>
-
-<h2 id="FC014">FC014: Consider extracting long ruby_block to library</h2>
-<p><span class="label">style</span> <span class="label">libraries</span></p>
-<p>Your cookbook has a fairly long <code>ruby_block</code> resource. Long <code>ruby_block</code> resources are often candidates
-    for extraction to a separate module or class under the <code>libraries</code> directory.<br/>
-<a href="http://wiki.opscode.com/display/chef/Libraries">http://wiki.opscode.com/display/chef/Libraries</a></p>
-
-<h2 id="FC015">FC015: Consider converting definition to a LWRP</h2>
-<p><span class="label">style</span> <span class="label">definitions</span> <span class="label">lwrp</span></p>
-<p>Chef definitions are an older approach to creating a higher-level abstraction for a group of resources. Unlike LWRPs
-    they are not first class resources and cannot receive notifications. You should prefer LWRPs for new development.<br />
-<a href="http://wiki.opscode.com/display/chef/Definitions">http://wiki.opscode.com/display/chef/Definitions</a><br />
-<a href="http://wiki.opscode.com/display/chef/Lightweight+Resources+and+Providers+(LWRP)">http://wiki.opscode.com/display/chef/Lightweight+Resources+and+Providers+(LWRP)</a>
-</p>
-
-<h2 id="FC016">FC016: LWRP does not declare a default action</h2>
-<p><span class="label important">correctness</span> <span class="label">lwrp</span></p>
-<p>This warning means that the LWRP does not declare a default action. You should normally define a default action on your
-resource to avoid confusing users. Most resources have an intuitive default action.<br />
-<a href="http://wiki.opscode.com/display/chef/Lightweight+Resources+and+Providers+(LWRP)#LightweightResourcesandProviders%28LWRP%29-DefaultAction">http://wiki.opscode.com/display/chef/Lightweight+Resources+and+Providers+(LWRP)#LightweightResourcesandProviders%28LWRP%29-DefaultAction</a></p>
-
-<h3>Resource without a default action</h3>
-<p>This example matches the FC016 rule because it does not declare a default action.</p>
-<pre class="prettyprint">
-# Don't do this
-actions :create
-</pre>
-
-<h3>Modified version</h3>
-<p>With a default action of <code>:create</code> this will no longer match the rule.
-    Unfortunately the LWRP DSL doesn't yet support specifying a default action, so you need to drop into Ruby.</p>
-
-<pre class="prettyprint">
-actions :create
-
-def initialize(*args)
-  super
-  @action = :create
-end
-</pre>
-
-<h2 id="FC017">FC017: LWRP does not notify when updated</h2>
-<p><span class="label important">correctness</span> <span class="label">lwrp</span></p>
-<p>This warning means that the LWRP will not currently trigger notifications to other resources. This can be a source
-    of difficult to track down bugs.<br />
-<a href="http://wiki.opscode.com/display/chef/Resources#Resources-Notifications">http://wiki.opscode.com/display/chef/Resources#Resources-Notifications</a>
-
-<h3>Provider that does not send notifications</h3>
-<p>This example matches the FC017 rule because it does not mark that its state has changed and will therefore not send
-    notifications.</p>
-<pre class="prettyprint">
-# Don't do this
-action :create do
-  # create action implementation
-end
-</pre>
-
-<h3>Modified version</h3>
-<p>The call to <code>updated_by_last_action</code> ensures that notifications will work correctly.</p>
-
-<pre class="prettyprint">
-action :create do
-  # create action implementation
-
-  # My state has changed so I'd better notify observers
-  new_resource.updated_by_last_action(true)
-end
-</pre>
-
-<h2 id="FC018">FC018: LWRP uses deprecated notification syntax</h2>
-<p><span class="label">style</span> <span class="label">lwrp</span> <span class="label">deprecated</span></p>
-<p></p>
-<h3>Provider uses deprecated syntax</h3>
-<p>This example matches the FC018 rule because it uses the old syntax for indicating it has been updated.</p>
-<pre class="prettyprint">
-# Don't do this
-action :create do
-  # create action implementation
-
-  # My state has changed so I'd better notify observers, but I'm using a deprecated syntax
-  new_resource.updated = true
-end
-</pre>
-
-<p>You may also see this variation which accesses the instance variable directly (and will also result in a warning):</p>
-<pre class="prettyprint">
-# Don't do this
-action :create do
-  # create action implementation
-
-  # My state has changed so I'd better notify observers, but I'm using a deprecated syntax
-  @updated = true
-end
-</pre>
-
-<h3>Modified version</h3>
-<p>This example uses the newer syntax and will not raise the warning.</p>
-
-<pre class="prettyprint">
-action :create do
-  # create action implementation
-
-  # My state has changed so I'd better notify observers
-  new_resource.updated_by_last_action(true)
-end
-</pre>
-
-<h2 id="FC019">FC019: Access node attributes in a consistent manner</h2>
-<p><span class="label">style</span> <span class="label">attributes</span></p>
-<p>Node attributes can be accessed in multiple ways in Chef. This warning is shown when a cookbook is not consistent
-in the approach it uses to access attributes. It is not displayed for variations between cookbooks.</p>
-
-<h3>Recipe mixes symbols and strings for accessing node attributes</h3>
-<pre class="prettyprint">
-# Don't do this
-node[:apache][:dir] = '/etc/apache2'
-
-directory node['apache']['dir'] do
-  owner 'apache'
-  group 'apache'
-  action :create
-end
-</pre>
-
-<h3>Modified version</h3>
-<pre class="prettyprint">
-node['apache']['dir'] = '/etc/apache2'
-
-directory node['apache']['dir'] do
-  owner 'apache'
-  group 'apache'
-  action :create
-end
-</pre>
-
-<h2 id="FC020">FC020: Conditional execution string attribute looks like Ruby</h2>
-<p><span class="label important">correctness</span></p>
-<p>When specifying an <code>only_if</code> or <code>not_if</code> attribute for conditional execution of your resource
-you have the option of either a command string or Ruby block. This warning is shown when your condition is passed as
-a string but <em>looks</em> like a Ruby block.<br/>
-<a href="http://wiki.opscode.com/display/chef/Resources#Resources-ConditionalExecution">http://wiki.opscode.com/display/chef/Resources#Resources-ConditionalExecution</a></p>
-
-<h3>Passes Ruby block condition as string</h3>
-<pre class="prettyprint">
-# Don't do this
-execute "my_random_command" do
-  action :run
-  not_if "::File.directory?(node[:foo])"
-end
-</pre>
-
-<h3>Modified version</h3>
-<pre class="prettyprint">
-execute "my_random_command" do
-  action :run
-  not_if { ::File.directory?(node[:foo]) }
-end
-</pre>
-
-<h2 id="FC021">FC021: Resource condition in provider may not behave as expected</h2>
-<p><span class="label important">correctness</span> <span class="label">lwrp</span></p>
-
-<p>A change introduced in Chef 0.10.6 means that conditions may not work as expected for resources redeclared with the same
-name. If your LWRP defines a resource and that resource:
-<ul>
-    <li>Has an <a href="http://wiki.opscode.com/display/chef/Resources#Resources-ConditionalExecution">associated condition</a> which
-    references a resource attribute. AND</li>
-    <li>The resource has a fixed name.</li>
-</ul>
-Then you will likely find that only the first resource will be applied.
-See this ticket for more background:<br/>
-<a href="http://tickets.opscode.com/browse/CHEF-2812">http://tickets.opscode.com/browse/CHEF-2812</a></p>
-
-<h3>Resource condition will be evaluated only once</h3>
-<p>Because the <code>feed_pet</code> resource will have the same name across all instances of your LWRP, the condition
-will only be checked for the first resource.</p>
-<pre class="prettyprint">
-# Don't do this
-action :feed do
-  execute "feed_pet" do
-    command "echo 'Feeding: #{new_resource.name}'; touch '/tmp/#{new_resource.name}'"
-    not_if { ::File.exists?("/tmp/#{new_resource.name}")}
-  end
-end
-</pre>
-
-<h3>Modified version</h3>
-<p>By making the resource name change for each unique instance of our LWRP instance we avoid this behaviour.</p>
-<pre class="prettyprint">
-action :feed do
-  execute "feed_pet_#{new_resource.name}" do
-    command "echo 'Feeding: #{new_resource.name}'; touch '/tmp/#{new_resource.name}'"
-    not_if { ::File.exists?("/tmp/#{new_resource.name}")}
-  end
-end
-</pre>
-
-<h2 id="FC022">FC022: Resource condition within loop may not behave as expected</h2>
-<p><span class="label important">correctness</span></p>
-
-<p>A change introduced in Chef 0.10.6 means that conditions may not work as expected for resources declared within a loop.
-If your recipe defines a resource and that resource:
-<ul>
-    <li>Has an <a href="http://wiki.opscode.com/display/chef/Resources#Resources-ConditionalExecution">associated condition</a> which
-    references a block variable. AND</li>
-    <li>The resource has a fixed name.</li>
-</ul>
-Then you will likely find that only the first resource will be applied.
-See this ticket for more background:<br/>
-<a href="http://tickets.opscode.com/browse/CHEF-2812">http://tickets.opscode.com/browse/CHEF-2812</a></p>
-
-<h3>Resource condition will be evaluated only once</h3>
-<p>Because the <code>feed_pet</code> resource will have the same name for every iteration of the loop, the condition
-will only be checked for the first resource.</p>
-<pre class="prettyprint">
-# Don't do this
-%w{rover fido}.each do |pet_name|
-  execute "feed_pet" do
-    command "echo 'Feeding: #{pet_name}'; touch '/tmp/#{pet_name}'"
-    not_if { ::File.exists?("/tmp/#{pet_name}")}
-  end
-end
-</pre>
-
-<h3>Modified version</h3>
-<p>By making the resource name change for each iteration of the loop we avoid this behaviour.</p>
-<pre class="prettyprint">
-%w{rover fido}.each do |pet_name|
-  execute "feed_pet_#{pet_name}" do
-    command "echo 'Feeding: #{pet_name}'; touch '/tmp/#{pet_name}'"
-    not_if { ::File.exists?("/tmp/#{pet_name}")}
-  end
-end
-</pre>
-
-<h2 id="FC023">FC023: Prefer conditional attributes</h2>
-<p><span class="label">style</span></p>
-<p>
-  This warning means you have surrounded a resource with an <code>if</code> or <code>unless</code> rather than defining the condition directly on the resource itself. Note that this warning is only raised for single resources as you could reasonably enclose multiple resources in a condition like this for brevity.
-</p>
-
-<h3>Resource enclosed in a condition</h3>
-<p>This example matches the FC023 rule because it encloses a rule within a condition, rather than using the built-in Chef <code>not_if</code> or <code>only_if</code> conditional execution attributes.<br />
-<a href="http://wiki.opscode.com/display/chef/Resources#Resources-ConditionalExecution">http://wiki.opscode.com/display/chef/Resources#Resources-ConditionalExecution</a></p>
-
-<pre class="prettyprint">
-# Don't do this
-if node['foo'] == 'bar'
-  service "apache" do
-    action :enable
-  end
-end
-</pre>
-
-<h3>Modified version</h3>
-<p>You can avoid the warning above with more idiomatic Chef that specifies the condition above as an attribute on the resource:
-<pre class="prettyprint">
-service "apache" do
-  action :enable
-  only_if { node['foo'] == 'bar'}
-end
-</pre>
-        <hr />
-
-      <h2 id="ci">Continuous Integration</h2>
-        <h3 id="ci-add-job">I'd like to include foodcritic in my Continuous Integration setup. How do I go about doing that?</h3>
-        <p>To manually add a new job to <a href="http://jenkins-ci.org/">Jenkins</a> to check your cookbooks with foodcritic do the following:</p>
-        <ol>
-            <li>Ensure you have Ruby 1.9.2+ and the foodcritic gem installed on the box running Jenkins.</li>
-            <li>You'll probably need to install the Git plugin. In Jenkins select "Manage Jenkins" -&gt; "Manage Plugins". Select the "Available" tab. Check the
-            checkbox next to the Git Plugin and click the "Install without restart" button.</li>
-            <li>In Jenkins select "New Job". Enter a name for the job "my-cookbook", select "Build a free-style software project" and click "OK".</li>
-            <li>On the resulting page select "Git" under "Source Code Management" and enter the URL for your repo.</li>
-            <li>Check the checkbox "Poll SCM" under "Build Triggers".</li>
-            <li>Click "Add Build Step" -> "Execute shell" under "Build". This is where we will call foodcritic.</li>
-            <li>Assuming you are using rvm enter the following as the command:
-<pre>
-#!/usr/bin/env rvm-shell 1.9.3
-foodcritic .</pre>
-            </li>
-            <li>Click "Save".</li>
-            <li>Cool, we've created your new job. Now lets see if it works. Click "Build Now" on the left-hand side.</li>
-            <li>You can click the build progress bar to be taken directly to the console output. After a moment you should
-                see that the build has been successful and foodcritic warnings (if any) are shown in your console output.</li>
-        </ol>
-
-        <p>Yes, for maximum goodness you should be <a href="https://github.com/fnichol/chef-jenkins">automating all this with Chef</a>. :-)</p>
-        <p>
-        For more information refer to the instructions for building a "free-style software project" here:<br />
-        <a href="https://wiki.jenkins-ci.org/display/JENKINS/Building+a+software+project">https://wiki.jenkins-ci.org/display/JENKINS/Building+a+software+project</a>
-        </p>
-        <p>See also this blog post about <code>rvm-shell</code> which ensures you have the right version of Ruby loaded when trying to build with foodcritic:<br/>
-        <a href="http://blog.ninjahideout.com/posts/rvm-improved-support-for-hudson">http://blog.ninjahideout.com/posts/rvm-improved-support-for-hudson</a></p>
-
-        <h3 id="ci-fail-build">Ok, but I'd like to fail the build if there are any warnings that might stop my cookbook from working.</h3>
-        <p>
-            CI is only useful if people will act on it. Lets start by only failing the build when there is a
-            <span class="label important">correctness</span> problem that would likely break our Chef run. We'll continue to
-            have the other warnings available for reference in the console log but only correctness issues will fail the build.
-        </p>
-        <ol>
-            <li>Select the "my-cookbook" job in Jenkins and click "Configure".</li>
-            <li>Scroll down to our "Execute shell" command and change it to look like the following:
-<pre>
-#!/usr/bin/env rvm-shell 1.9.3
-foodcritic -f correctness .</pre>
-            </li>
-            <li>Click "Save" and then "Build Now".</li>
-        </ol>
-        <h4>More complex expressions</h4>
-        <p>
-         Foodcritic supports more complex expressions with the standard Cucumber
-         tag syntax. For example:
-        </p>
-<pre>
-#!/usr/bin/env rvm-shell 1.9.3
-foodcritic -f any -f ~FC014 .
-</pre>
-        <p>
-          Here we use <code>any</code> to fail the build on any warning, but then
-          use the tilde <code>~</code> to exclude FC014. The build will fail on
-          any warning raised, except FC014.
-        </p>
-        <p>
-          You can find more detail on Cucumber tag expressions at the Cucumber wiki:<br />
-          <a href="https://github.com/cucumber/cucumber/wiki/Tags">https://github.com/cucumber/cucumber/wiki/Tags</a>
-        </p>
-
-        <h3>Tracking warnings over time</h3>
-        <p>
-            The <a href="https://wiki.jenkins-ci.org/display/JENKINS/Warnings+Plugin">Jenkins Warnings plugin</a> can be
-            configured to understand foodcritic output and track your cookbook warnings over time.
-        </p>
-        <ol>
-            <li>You'll need to install the Warnings plugin. In Jenkins select "Manage Jenkins" -&gt; "Manage Plugins".
-            Select the "Available" tab. Check the checkbox next to the Warnings Plugin and click the
-                "Install without restart" button.</li>
-            <li>From "Manage Jenkins" select "Configure System". Scroll down to the "Compiler Warnings" section and
-            click the "Add" button next to "Parsers".</li>
-            <li>Enter "Foodcritic" in the Name field.</li>
-            <li>Enter the following regex in the "Regular Expression" field:
-            <pre>
-^(FC[0-9]+): (.*): ([^:]+):([0-9]+)$</pre></li>
-            <li>Enter the following Groovy script into the "Mapping Script" field:
-<pre>
-import hudson.plugins.warnings.parser.Warning
-
-String fileName = matcher.group(3)
-String lineNumber = matcher.group(4)
-String category = matcher.group(1)
-String message = matcher.group(2)
-
-return new Warning(fileName, Integer.parseInt(lineNumber), "Chef Lint Warning", category, message);
-</pre>
-            </li>
-            <li>To test the match, enter the following example message in the "Example Log Message" field:
-<pre>
-FC001: Use strings in preference to symbols to access node attributes: ./recipes/innostore.rb:30</pre>
-            </li>
-            <li>Click in the "Mapping Script" field and you should see the following appear below the Example Log Message:
-<pre>
-One warning found
-file name: ./recipes/innostore.rb
-line number: 30
-priority: Normal Priority
-category:  FC001
-type: Chef Lint Warning
-message: Use strings in prefe[...]ols to access node attributes
-</pre>
-            </li>
-            <li>Cool, it's parsed our example message successfully. Click "Save" to save the parser.</li>
-            <li>Select the "my-cookbook" job in Jenkins and click "Configure".</li>
-            <li>Check the checkbox next to "Scan for compiler warnings" underneath "Post-build Actions".</li>
-            <li>Click the "Add" button next to "Scan console log" and select our "Foodcritic" parser from the drop-down list.</li>
-            <li>Click the "Advanced..." button and check the "Run always" checkbox.</li>
-            <li>Click "Save" and then "Build Now".</li>
-            <li>Add the bottom of the console log you should see something similar to this:
-<pre>
-[WARNINGS] Parsing warnings in console log with parsers [Foodcritic]
-[WARNINGS] Foodcritic : Found 48 warnings.
-</pre>
-            </li>
-            <li>Click "Back to Project". Once you have built the project a couple of times the warnings
-            trend will appear here.</li>
-        </ol>
-
-        <hr />
-
-      <h2 id="faq">Frequently Asked Questions</h2>
-
-        <h3 id="faq-spurious-warnings">When I run it against my cookbooks there are warnings that I'm not interested in. How can I avoid
-        these being shown?</h3>
-        <p>You can include or exclude rules to apply using the <code>-- tags</code> argument to foodcritic. The tag expressions you can
-        specify follow the same syntax as that used in Cucumber - see the Cucumber wiki page below for details.<br /><a href="https://github.com/cucumber/cucumber/wiki/tags">https://github.com/cucumber/cucumber/wiki/tags</a></p>
-
-        <p>For example if you don't care about <span class="label">style</span> warnings you could run foodcritic like so:</p>
-        <pre>$ foodcritic --tags ~style cookbooks</pre>
-
-        <p>Each rule has an implicit tag so you can exclude individual rules by rule code:</p>
-        <pre>$ foodcritic --tags ~FC002 cookbooks</pre>
-
-        <h3 id="faq-readline">When I run foodcritic it dies with 'cannot load such file -- readline (LoadError)'</h3>
-        <p>
-            This is because your current Ruby has not been installed with Readline. If you are using RVM you can follow the
-            instructions on the RVM site to resolve this:<br />
-            <a href="http://beginrescueend.com/packages/readline/">http://beginrescueend.com/packages/readline/</a>
-        </p>
-
-        <hr />
-
-      <h2 id="writing-a-new-rule">Writing a new rule</h2>
-        <p>
-            In this contrived example we are going to add a new rule to raise a warning if a recipe or provider declares a log resource that contains the word 'password'.
-        </p>
-
-      <p>
-          First, a word about how Foodcritic works. The rules are defined in a simple DSL here:<br />
-          <a href="https://github.com/acrmp/foodcritic/blob/master/lib/foodcritic/rules.rb">https://github.com/acrmp/foodcritic/blob/master/lib/foodcritic/rules.rb</a>
-      </p>
-
-        <p>
-            Each rule has a block that defines the matching logic for the rule. The block accepts a
-            <a href="http://nokogiri.org/">Nokogiri</a> document that contains the Ripper parsed representation of your
-            recipe. Ripper is a very useful module that ships with recent versions of Ruby allowing you to walk the tree
-            of symbols representing your program without actually having to eval it.
-        </p>
-
-
-        <h3 id="writing-grab-source">Grab the source code</h3>
-        <p>
-            It's easiest to <a href="http://help.github.com/fork-a-repo/">fork the repository</a> first and then clone from the forked version. Browse to the foodcritic repository on GitHub:<br/>
-            <a href="https://github.com/acrmp/foodcritic">https://github.com/acrmp/foodcritic</a>
-        </p>
-        <p>
-            Click the 'Fork' button in the top right-hand corner. Cool, now you have your own copy of the repo.
-        </p>
-
-<pre>
-$ git clone https://you@github.com/you/foodcritic.git
-$ rvm use 1.9.3
-$ cd foodcritic
-$ git checkout -b log-contains-password
-Switched to a new branch 'log-contains-password'
-$ bundle install
-</pre>
-
-        <h3 id="writing-run-build">Run the foodcritic build</h3>
-        <p>
-            Before we make any code changes lets check that the existing code builds successfully on our machine.
-        </p>
-<pre>
-$ bundle exec rake
-</pre>
-
-        <h3 id="writing-add-feature">Add a new feature</h3>
-        <p>
-            Lets add a Cucumber feature to describe our new rule with a couple of scenarios:
-        </p>
-
-<pre>
-$ cat &gt; features/123_check_for_log_with_password.feature &lt;&lt;EOF
-Feature: Check for log statements that contain passwords
-
-  In order to prevent disclosure of credentials
-  As a developer
-  I want to identify when a log statement includes the word password
-
-  Scenario: Log includes password
-    Given a recipe that declares a log resource including the word password
-    When I check the cookbook
-    Then the log resource includes password warning 123 should be displayed
-
-  Scenario: Log does not include password
-    Given a recipe that declares a log resource that does not include the word password
-    When I check the cookbook
-    Then the log resource includes password warning 123 should not be displayed
-EOF
-</pre>
-
-        <h3 id="writing-run-cucumber">Run Cucumber</h3>
-        <p>
-            Each of the lines in the scenario needs a matching step definition . If we run cucumber against our new feature:
-        </p>
-<pre>
-$ bundle exec cucumber features/123_check_for_log_with_password.feature
-...
-You can implement step definitions for undefined steps with these snippets:
-
-Given /^a recipe that declares a log resource including the word password$/ do
-  pending # express the regexp above with the code you wish you had
-end
-
-Given /^a recipe that declares a log resource that does not include the word password$/ do
-  pending # express the regexp above with the code you wish you had
-end
-</pre>
-
-        <p>
-            Cucumber is telling us that we need to implement the <code>Given</code> steps. The <code>When</code> and
-            <code>Then</code> steps have already been implemented for us.
-        </p>
-
-        <h3 id="writing-implement-step">Implement a step definition</h3>
-
-        <p>
-            Lets implement the first <code>Given</code>, the one that creates a recipe that declares a log resource with the word password.
-        </p>
-
-<pre class="prettyprint">
-$ cat &gt;&gt; features/step_definitions/cookbook_steps.rb &lt;&lt;EOF
-
-Given 'a recipe that declares a log resource including the word password' do
-  write_recipe %q{
-    log "The secret password is: password1"
-  }
-end
-EOF
-</pre>
-
-        <p>
-            Now lets run Cucumber. We expect it to fail at this stage.
-        </p>
-<pre>
-$ bundle exec cucumber features/123_check_for_log_with_password.feature
-...
-Failing Scenarios:
-cucumber features/123_check_for_log_with_password.feature:7 # Scenario: Log includes password
-</pre>
-
-        <p>
-            Great, we have a failing test. Now we can set about implementing the rule.
-        </p>
-
-        <h3 id="writing-add-warning">Ensure cucumber will recognise the new warning</h3>
-
-        <p>
-            In order for Cucumber to correctly recognise the new warning it needs to be added to the <code>WARNINGS</code> hash in <code>support/command_helpers.rb</code>.
-        </p>
-<pre class="prettyprint">
-$ cat &lt;&lt;EOF | git apply
-diff --git a/features/support/command_helpers.rb b/features/support/command_helpers.rb
---- a/features/support/command_helpers.rb
-+++ b/features/support/command_helpers.rb
-@@ -31,3 +31,4 @@ module FoodCritic
-       'FC022' =&gt; 'Resource condition within loop may not behave as expected',
--      'FC023' =&gt; 'Prefer conditional attributes'
-+      'FC023' =&gt; 'Prefer conditional attributes',
-+      'FC123' =&gt; 'Log contains password'
-     }
-EOF
-</pre>
-
-        <h3 id="writing-implement-rule">Implementing the rule</h3>
-        <p>
-            Lets use the very awesome <a href="http://pry.github.com/">Pry REPL</a> to interactively explore writing a
-            new rule, much as we might use Shef for writing Chef recipes.
-        </p>
-
-<p>
-    Run the build with <code>FC_REPL=true</code> and you will be dropped into the Pry REPL:
-</p>
-
-<pre>
-$ FC_REPL=true bundle exec cucumber features/123_check_for_log_with_password.feature:7
-</pre>
-
-    <h3 id="writing-add-rule">Add a new rule</h3>
-        <p>
-            First define a new placeholder rule:
-        </p>
-<pre>
-pry&gt; rule "FC123", "Log contains password" do
-  recipe do |ast|
-    binding.pry
-  end
-end
-</pre>
-
-<p>
-    Check that it has been added to the list of rules:
-</p>
-<pre>
-pry&gt; puts rules
-</pre>
-        <p>
-            And exit, to be taken to the binding you declared above:
-        </p>
-<pre>
-pry&gt; exit
-</pre>
-
-    <h3 id="writing-list-dsl-methods">Listing the available DSL methods</h3>
-
-    <p>
-        A number of pre-canned DSL methods exist to help in writing rules. You can list these by typing:
-    </p>
-<pre>
-pry&gt; Api.instance_methods.sort
-</pre>
-
-    <p>
-        To see the documentation for one method in particular (here the <code>included_recipes</code> method) type:
-    </p>
-<pre>
-pry&gt; show-doc included_recipes
-
-From: foodcritic/lib/foodcritic/api.rb @ line 133:
-Number of lines: 4
-Owner: FoodCritic::Api
-Visibility: public
-Signature: included_recipes(ast)
-
-Retrieve the recipes that are included within the given recipe AST.
-
-param [Nokogiri::XML::Node] ast The recipe AST
-return [Hash] include_recipe nodes keyed by included recipe name
-</pre>
-
-        <h3 id="writing-expression">Write an expression that matches your criteria</h3>
-        <p>
-            To view the XML representation of the AST, type:
-        </p>
-<pre>
-pry&gt; puts ast
-</pre>
-        <p>
-            You can use Nokogiri's great support for XPath or CSS selectors to match against statements within the tree.
-            Lets try and write a XPath expression that will match only the nodes you are interested in.
-        </p>
-<pre class="prettyprint">
-pry&gt; puts ast.xpath("//command[ident/@value='log']/descendant::tstring_content[contains(@value, 'password')]")
-&lt;tstring_content value="The secret password is: password1"&gt;
-  &lt;pos line="1" column="5"/&gt;
-&lt;/tstring_content&gt;
-</pre>
-
-        <h3 id="writing-flag-matches">Flagging matches</h3>
-
-        <p>
-            For foodcritic to report your warning you currently need to specify them as matches. You need to map a node
-            in the AST that has a child <code>pos</code> node which foodcritic can use to display the line number.
-        </p>
-<pre class="prettyprint">
-pry&gt; ast.xpath("//command[ident/@value='log']/descendant::tstring_content[contains(@value, 'password')]").map{|n| match(n)}
-=> [{:matched=>"tstring_content", :line=>"1", :column=>"5"}]
-</pre>
-
-        <h3 id="writing-update-rule">Update the rule definition</h3>
-
-        <p>
-            Now we have what we think is the matching expression lets update the rule definition:
-        </p>
-<pre>
-pry&gt; cd ..
-pry&gt; reset_rules
-pry&gt; rule "FC123", "Log contains password" do
-  tags %w{security}
-  recipe do |ast|
-    ast.xpath("//command[ident/@value='log']/descendant::tstring_content[contains(@value, 'password')]").map{|n| match(n)}
-  end
-end
-pry&gt; exit
-</pre>
-
-        <p>
-            And finally re-run the check against the newly redefined rule:
-        </p>
-<pre>
-pry&gt; recheck
-pry&gt; review
-=&gt; FC011: Missing README in markdown format: cookbooks/example/README.md:1
-FC123: Log contains password: cookbooks/example/recipes/default.rb:1
-
-pry&gt; exit
-pry&gt; exit
-    When I check the cookbook                                               # features/step_definitions/cookbook_steps.rb:410
-    Then the log resource includes password warning 123 should be displayed # features/step_definitions/cookbook_steps.rb:434
-
-1 scenario (1 passed)
-3 steps (3 passed)
-</pre>
-        <h3 id="writing-next-steps">Next steps</h3>
-        <p>
-            Once the step definitions have been completed you need to:
-            <ul>
-                <li>Think of other scenarios that you need to test. For this example you might consider that Chef allows you to log via direct calls to the Chef logger
-                as well and modify your scenarios and rule definition to deal with this.</li>
-                <li>Run the feature to confirm it passes on both Ruby 1.9.2 and 1.9.3 as there are AST differences between them.</li>
-                <li>Run the complete build again.</li>
-                <li>Push your changes to GitHub and open a pull request.</li>
-            </ul>
-        </p>
-
-<p>That's it - have fun. Thanks!</p>
-
-      </div>
-    </div>
-  </body>
-</html>
+---
+layout: default
+title: Foodcritic
+rules:
+  - code: FC001
+    name: Use strings in preference to symbols to access node attributes
+    tags:
+      - style
+      - attributes
+    summary: |
+      Opscode recommend that you use strings rather than symbols when referencing node attributes.
+      See [this explanation from @jtimberman](https://github.com/acrmp/foodcritic/issues/1).
+    examples:
+      - title: Uses symbols to reference attributes
+        text: This example would match the FC001 rule because the `version` attribute has been referenced with a symbol.
+        code: |
+          # Don't do this
+          package "mysql-server" do
+            version node[:mysql][:version]
+            action :install
+          end
+      - title: Modified version
+        text: 'This modified example would not match the FC001 rule:'
+        code: |
+          package "mysql-server" do
+            version node['mysql']['version']
+            action :install
+          end
+  - code: FC002
+    name: Avoid string interpolation where not required
+    tags:
+      - style
+      - strings
+    summary: |
+      When you declare a resource in your recipes you frequently want to
+      reference dynamic values such as node attributes. This warning will be
+      shown if you are unnecessarily wrapping an attribute reference in a
+      string.
+    examples:
+      - title: Unnecessary string interpolation
+        text: This example would match the FC002 rule because the `version` attribute has been unnecessarily quoted.
+        code: |
+          # Don't do this
+          package "mysql-server" do
+            version "#{node['mysql']['version']}"
+            action :install
+          end
+      - title: Modified version
+        text: 'This modified example would not match the FC002 rule:'
+        code: |
+          package "mysql-server" do
+            version node['mysql']['version']
+            action :install
+          end
+
+  - code: FC003
+    name: Check whether you are running with chef server before using server-specific features
+    tags:
+      - portability
+      - solo
+    summary: |
+      Chef Server extends the feature-set of a Chef deployment and is probably
+      the most popular configuration. It is also possible to run the Chef client
+      in a standalone mode with Chef Solo.
+      Where your cookbooks make use of features that only exist in a Chef Server
+      based setup you should check whether you are running in solo mode.
+
+      * [http://wiki.opscode.com/display/chef/Chef+Solo](http://wiki.opscode.com/display/chef/Chef+Solo)
+    examples:
+      - title: Does not check for Chef Solo
+        text: |
+          This example would match the FC003 rule because it does not check if
+          it is running in Chef Solo before using search which is a
+          server-specific feature.
+        code: |
+          nodes = search(:node, "hostname:[* TO *] AND chef_environment:#{node.chef_environment}")
+      - title: Modified version
+        text: 'This modified example would not match the FC003 rule:'
+        code: |
+          if Chef::Config[:solo]
+            Chef::Log.warn("This recipe uses search. Chef Solo does not support search.")
+          else
+            nodes = search(:node, "hostname:[* TO *] AND chef_environment:#{node.chef_environment}")
+          end
+  - code: FC004
+    name: Use a service resource to start and stop services
+    tags:
+      - style
+      - services
+    summary: |
+      This warning is shown if you are starting or stopping a service using the
+      Chef `execute` resource rather than the more idiomatic `service` resource.
+      You can read more about the service resource here:
+
+      * [http://wiki.opscode.com/display/chef/Resources#Resources-Service](http://wiki.opscode.com/display/chef/Resources#Resources-Service)
+    examples:
+      - title: Uses execute to control a service
+        text: |
+          This example would match the FC004 rule because it uses `execute` for
+          service control. There is no reason to use execute because the service
+          resource exposes the `start_command` attribute to give you full
+          control over the command issued.
+        code: |
+          # Don't do this
+          execute "start-tomcat" do
+            command "/etc/init.d/tomcat6 start"
+            action :run
+          end
+      - title: Modified version
+        text: 'This modified example would not match the FC004 rule:'
+        code: |
+          service "tomcat" do
+            action :start
+          end
+  - code: FC005
+    name: Avoid repetition of resource declarations
+    tags:
+      - style
+    summary: |
+      When writing Chef recipes you have the full power of Ruby at your
+      disposal. One of the cases where this is helpful is where you need to
+      declare a large number of resources that only differ in a single attribute
+      - the canonical example is installing a long list of packages.
+    examples:
+      - title: Unnecessarily repetitive
+        text: |
+          This example matches the FC005 rule because all the resources of type
+          `package` differ only in a single attribute - the name of the package
+          to be upgraded. This rule is very simple and looks only for resources
+          that all differ in only a single attribute. For example - if only one
+          of the packages specified the version then this rule would not match.
+        code: |
+          # You could do this
+          package "erlang-base" do
+            action :upgrade
+          end
+          package "erlang-corba" do
+            action :upgrade
+          end
+          package "erlang-crypto" do
+            action :upgrade
+          end
+          package "rabbitmq-server" do
+            action :upgrade
+          end
+      - title: Modified version
+        text: |
+          This modified example would not match the FC005 rule. It takes
+          advantage of the fact that Chef processes recipes in two distinct
+          phases:
+
+          * [http://wiki.opscode.com/display/chef/Anatomy+of+a+Chef+Run](http://wiki.opscode.com/display/chef/Anatomy+of+a+Chef+Run)
+
+          Don't worry about changing your recipe if it already does what you
+          want - the amount of Ruby syntactic sugar to apply is very much a
+          matter of personal taste. Note that this rule also isn't clever enough
+          yet to detect if your resources are wrapped in a control structure and
+          not suitable for 'rolling up' into a loop.
+        code: |
+          # It's shorter to do this
+          %w{erlang-base erlang-corba erlang-crypto rabbitmq-server}.each do |pkg|
+            package pkg do
+              action :upgrade
+            end
+          end
+  - code: FC006
+    name: Mode should be quoted or fully specified when setting file permissions
+    tags:
+      - correctness
+      - files
+    summary: |
+      When setting file or directory permissions via the mode attribute you
+      should either quote the octal number or ensure it is specified to five
+      digits. Otherwise the permissions that are set after Ruby coerces the
+      number may not match what you expect.
+    examples:
+      - title: File mode won't be interpreted correctly
+        code: |
+          # Don't do this
+          directory "/var/lib/foo" do
+            owner "root"
+            group "root"
+            mode 644
+            action :create
+          end
+      - title: Modified versions
+        text: 'These modified examples would not match the FC006 rule:'
+        code: |
+          # This is ok
+          directory "/var/lib/foo" do
+            owner "root"
+            group "root"
+            mode "644"
+            action :create
+          end
+
+          # And so is this
+          directory "/var/lib/foo" do
+            owner "root"
+            group "root"
+            mode 00644
+            action :create
+          end
+  - code: FC007
+    name: Ensure recipe dependencies are reflected in cookbook metadata
+    tags:
+      - correctness
+      - metadata
+    summary: |
+      This warning is shown when you include a recipe that is not in the current
+      cookbook and not defined as a dependency in your cookbook metadata. This
+      is potentially a big problem because things will blow up if the necessary
+      dependency cannot be found when Chef tries to converge your node. For more
+      information refer to the Chef wiki metadata page:
+
+      * [http://wiki.opscode.com/display/chef/Metadata](http://wiki.opscode.com/display/chef/Metadata)
+
+      The fix is to declare the cookbook of the recipe you are including as a
+      dependency in your `metadata.rb` file.
+
+      You may also see this warning if foodcritic has not been able to infer the
+      name of your cookbook correctly when the cookbook directory does not match
+      the name of the cookbook specified in the include.
+    examples:
+      - title: Example depency on another cookbook
+        text: |
+          Assuming you have a recipe that had the following line:
+        code: |
+          include_recipe "apache2::default"
+      - title: Adding metadata dependency for Chef
+        text: |
+          Then to remove this warning you would add the `apache2` cookbook as a
+          dependency to your own cookbook metadata in the `metadata.rb` file at
+          the root of your cookbook.
+        code: |
+          depends "apache2"
+  - code: FC008
+    name: Generated cookbook metadata needs updating
+    tags:
+      - style
+      - metadata
+    summary: |
+      This warning is shown if you used `knife cookbook create` to create a new
+      cookbook and didn't override the maintainer and maintainer email. You need
+      to set these to real values in `metadata.rb` or run knife again with the
+      real values.
+
+      * [http://wiki.opscode.com/display/chef/Managing+Cookbooks+With+Knife#ManagingCookbooksWithKnife-create](http://wiki.opscode.com/display/chef/Managing+Cookbooks+With+Knife#ManagingCookbooksWithKnife-create)
+    examples:
+      - title: Maintainer metadata is boilerplate default
+        code: |
+          # Don't do this
+          maintainer "YOUR_COMPANY_NAME"
+          maintainer_email "YOUR_EMAIL"
+          license "All rights reserved"
+          description "Installs/Configures example"
+          long_description IO.read(File.join(File.dirname(__FILE__), 'README.rdoc'))
+          version "0.0.1"
+      - title: Modified version
+        text: 'This modified example would not match the FC008 rule:'
+        code: |
+          maintainer "Example Ltd"
+          maintainer_email "postmaster@example.com"
+          license "All rights reserved"
+          description "Installs/Configures example"
+          long_description IO.read(File.join(File.dirname(__FILE__), 'README.rdoc'))
+          version "0.0.1"
+  - code: FC009
+    name: Resource attribute not recognised
+    tags:
+      - correctness
+    summary: |
+        This warning is likely to mean that your recipe will fail to run when
+        you attempt to converge. Your recipe may be syntactically valid Ruby,
+        but the attribute you have attempted to set on a built-in Chef resource
+        is not recognised. This is commonly a typo or you need to check the
+        documentation to see what the attribute you are trying to set is called:
+
+        * [http://wiki.opscode.com/display/chef/Resources](http://wiki.opscode.com/display/chef/Resources)
+    examples:
+      - title: Resource with an unrecognised attribute
+        text: |
+          This example matches the FC009 rule because `punter` is not a
+          recognised attribute for the file resource.
+        code: |
+          # Don't do this
+          file "/tmp/something" do
+            punter "root"
+            group "root"
+            mode "0755"
+            action :create
+          end
+      - title: Modified version
+        text: |
+          Checking the documentation we can see the correct attribute is
+          `owner`.
+        code: |
+          file "/tmp/something" do
+            owner "root"
+            group "root"
+            mode "0755"
+            action :create
+          end
+  - code: FC010
+    name: Invalid search syntax
+    tags:
+      - correctness
+      - search
+    summary: |
+      The search syntax used is not recognised as valid Lucene search criteria.
+      This is commonly because you have made a typo or are not escaping special
+      characters in the query syntax.
+
+      * [http://wiki.opscode.com/display/chef/Search#Search-QuerySyntax](http://wiki.opscode.com/display/chef/Search#Search-QuerySyntax)
+
+      Note that this rule will not identify syntax errors in searches composed
+      of subexpressions. It checks only for literal search strings.
+    examples:
+      - title: Unescaped search syntax
+        text: |
+          This example matches the FC010 rule because search metacharacters -
+          in this case the square brackets - have not been properly escaped.
+        code: |
+          # Don't do this
+          search(:node, 'run_list:recipe[foo::bar]') do |matching_node|
+            puts matching_node.to_s
+          end
+      - title: Modified version
+        text: |
+          With the characters escaped this will no longer match the rule.
+        code: |
+          search(:node, 'run_list:recipe\[foo\:\:bar\]') do |matching_node|
+            puts matching_node.to_s
+          end
+  - code: FC011
+    name: Missing README in markdown format
+    tags:
+      - style
+      - readme
+    summary: |
+      The [Opscode Community site](http://community.opscode.com/) will now
+      render your cookbook README documentation inline - [see this example for
+      the mysql cookbook](http://community.opscode.com/cookbooks/mysql).
+
+      Your README needs to be in
+      [Markdown format](http://daringfireball.net/projects/markdown/syntax) for
+      this to work. This rule will match any cookbook that does not have a
+      `README.md` file in the root directory.
+  - code: FC012
+    name: Use Markdown for README rather than RDoc
+    tags:
+      - style
+      - readme
+    summary: |
+      Writing cookbook documentation in RDoc has been deprecated in favour of
+      [Markdown format](http://daringfireball.net/projects/markdown/syntax).
+      This rule will match any cookbook that has a `README.rdoc` file in the
+      root directory.
+  - code: FC013
+    name: Use file_cache_path rather than hard-coding tmp paths
+    tags:
+      - style
+      - files
+    summary: |
+      This warning means that you have hard-coded a file download path in your
+      cookbook to a temporary directory. This can be a problem on boxes built
+      with a small `/tmp` mount point. Chef has its own configuration option
+      `file_cache_path` you should use instead:
+
+      * [http://wiki.opscode.com/display/chef/Chef+Configuration+Settings#ChefConfigurationSettings-filecachepath](http://wiki.opscode.com/display/chef/Chef+Configuration+Settings#ChefConfigurationSettings-filecachepath)
+    examples:
+      - title: Downloading to a hard-coded temp directory
+        text: |
+          This example matches the FC013 rule because it hard-codes the download
+          path to `/tmp`.
+        code: |
+          # Don't do this
+          remote_file "/tmp/large-file.tar.gz" do
+            source "http://www.example.org/large-file.tar.gz"
+          end
+      - title: Modified version
+        text: 'To remove this warning use the configured `file_cache_path`:'
+        code: |
+          remote_file "#{Chef::Config[:file_cache_path]}/large-file.tar.gz" do
+            source "http://www.example.org/large-file.tar.gz"
+          end
+  - code: FC014
+    name: Consider extracting long ruby_block to library
+    tags:
+      - style
+      - libraries
+    summary: |
+      Your cookbook has a fairly long `ruby_block` resource. Long `ruby_block`
+      resources are often candidates for extraction to a separate module or
+      class under the `libraries` directory.
+
+      * [http://wiki.opscode.com/display/chef/Libraries](http://wiki.opscode.com/display/chef/Libraries)
+  - code: FC015
+    name: Consider converting definition to a LWRP
+    tags:
+      - style
+      - definitions
+      - lwrp
+    summary: |
+      Chef definitions are an older approach to creating a higher-level
+      abstraction for a group of resources. Unlike LWRPs they are not first
+      class resources and cannot receive notifications. You should prefer LWRPs
+      for new development.
+
+      * [http://wiki.opscode.com/display/chef/Definitions](http://wiki.opscode.com/display/chef/Definitions)
+      * [http://wiki.opscode.com/display/chef/Lightweight+Resources+and+Providers+(LWRP)](http://wiki.opscode.com/display/chef/Lightweight+Resources+and+Providers+%28LWRP%29)
+  - code: FC016
+    name: LWRP does not declare a default action
+    tags:
+      - correctness
+      - lwrp
+    summary: |
+      This warning means that the LWRP does not declare a default action. You
+      should normally define a default action on your resource to avoid
+      confusing users. Most resources have an intuitive default action.
+
+      * [http://wiki.opscode.com/display/chef/Lightweight+Resources+and+Providers+(LWRP)#LightweightResourcesandProviders%28LWRP%29-DefaultAction](http://wiki.opscode.com/display/chef/Lightweight+Resources+and+Providers+%28LWRP%29#LightweightResourcesandProviders%28LWRP%29-DefaultAction)
+    examples:
+      - title: Resource without a default action
+        text: |
+          This example matches the FC016 rule because it does not declare a
+          default action.
+        code: |
+          # Don't do this
+          actions :create
+      - title: Modified version
+        text: |
+          With a default action of `:create` this will no longer match the rule.
+          Unfortunately the LWRP DSL doesn't yet support specifying a default
+          action, so you need to drop into Ruby.
+        code: |
+          actions :create
+          
+          def initialize(*args)
+            super
+            @action = :create
+          end
+  - code: FC017
+    name: LWRP does not notify when updated
+    tags:
+      - correctness
+      - lwrp
+    summary: |
+      This warning means that the LWRP will not currently trigger notifications
+      to other resources. This can be a source of difficult to track down bugs.
+
+      * [http://wiki.opscode.com/display/chef/Resources#Resources-Notifications](http://wiki.opscode.com/display/chef/Resources#Resources-Notifications)
+    examples:
+      - title: Provider that does not send notifications
+        text: |
+          This example matches the FC017 rule because it does not mark that its
+          state has changed and will therefore not send notifications.
+        code: |
+          # Don't do this
+          action :create do
+            # create action implementation
+          end
+      - title: Modified version
+        text: |
+          The call to `updated_by_last_action` ensures that notifications will
+          work correctly.
+        code: |
+          action :create do
+            # create action implementation
+          
+            # My state has changed so I'd better notify observers
+            new_resource.updated_by_last_action(true)
+          end
+  - code: FC018
+    name: LWRP uses deprecated notification syntax
+    tags:
+      - style
+      - lwrp
+      - deprecated
+    examples:
+      - title: Provider uses deprecated syntax
+        text: |
+          This example matches the FC018 rule because it uses the old syntax for
+          indicating it has been updated.
+        code: |
+          # Don't do this
+          action :create do
+            # create action implementation
+          
+            # My state has changed so I'd better notify observers, but I'm using
+            # a deprecated syntax
+            new_resource.updated = true
+          end
+
+          # Also don't do this
+          action :create do
+            # create action implementation
+          
+            # My state has changed so I'd better notify observers, but I'm using
+            # a deprecated syntax
+            @updated = true
+          end
+      - title: Modified version
+        text: |
+          This example uses the newer syntax and will not raise the warning.
+        code: |
+          action :create do
+            # create action implementation
+          
+            # My state has changed so I'd better notify observers
+            new_resource.updated_by_last_action(true)
+          end
+  - code: FC019
+    name: Access node attributes in a consistent manner
+    tags:
+      - style
+      - attributes
+    summary: |
+      Node attributes can be accessed in multiple ways in Chef. This warning is
+      shown when a cookbook is not consistent in the approach it uses to access
+      attributes. It is not displayed for variations between cookbooks.
+    examples:
+      - title: Recipe mixes symbols and strings for accessing node attributes
+        code: |
+          # Don't do this
+          node[:apache][:dir] = '/etc/apache2'
+          
+          directory node['apache']['dir'] do
+            owner 'apache'
+            group 'apache'
+            action :create
+          end
+      - title: Modified version
+        code: |
+          node['apache']['dir'] = '/etc/apache2'
+          
+          directory node['apache']['dir'] do
+            owner 'apache'
+            group 'apache'
+            action :create
+          end
+  - code: FC020
+    name: Conditional execution string attribute looks like Ruby
+    tags:
+      - correctness
+    summary: |
+      When specifying an `only_if` or `not_if` attribute for conditional
+      execution of your resource you have the option of either a command string
+      or Ruby block. This warning is shown when your condition is passed as a
+      string but looks like a Ruby block.
+
+      * [http://wiki.opscode.com/display/chef/Resources#Resources-ConditionalExecution](http://wiki.opscode.com/display/chef/Resources#Resources-ConditionalExecution)
+    examples:
+      - title: Passes Ruby block condition as string
+        code: |
+          # Don't do this
+          execute "my_random_command" do
+            action :run
+            not_if "::File.directory?(node[:foo])"
+          end
+      - title: Modified version
+        code: |
+          execute "my_random_command" do
+            action :run
+            not_if { ::File.directory?(node[:foo]) }
+          end
+  - code: FC021
+    name: Resource condition in provider may not behave as expected
+    tags:
+      - correctness
+      - lwrp
+    summary: |
+      A change introduced in Chef 0.10.6 means that conditions may not work as
+      expected for resources redeclared with the same name. If your LWRP defines
+      a resource and that resource:
+
+      * Has an [associated condition](http://wiki.opscode.com/display/chef/Resources#Resources-ConditionalExecution)
+        which references a resource attribute. AND
+      * The resource has a fixed name.
+
+      Then you will likely find that only the first resource will be applied. See this ticket for more background:
+
+      * [http://tickets.opscode.com/browse/CHEF-2812](http://tickets.opscode.com/browse/CHEF-2812)
+    examples:
+      - title: Resource condition will be evaluated only once
+        text: |
+          Because the `feed_pet` resource will have the same name across all
+          instances of your LWRP, the condition will only be checked for the
+          first resource.
+        code: |
+          # Don't do this
+          action :feed do
+            execute "feed_pet" do
+              command "echo 'Feeding: #{new_resource.name}'; touch '/tmp/#{new_resource.name}'"
+              not_if { ::File.exists?("/tmp/#{new_resource.name}")}
+            end
+          end
+      - title: Modified version
+        text: |
+          By making the resource name change for each unique instance of our
+          LWRP instance we avoid this behaviour.
+        code: |
+          action :feed do
+            execute "feed_pet_#{new_resource.name}" do
+              command "echo 'Feeding: #{new_resource.name}'; touch '/tmp/#{new_resource.name}'"
+              not_if { ::File.exists?("/tmp/#{new_resource.name}")}
+            end
+          end
+  - code: FC022
+    name: Resource condition within loop may not behave as expected
+    tags:
+      - correctness
+    summary: |
+      A change introduced in Chef 0.10.6 means that conditions may not work as
+      expected for resources declared within a loop. If your recipe defines a
+      resource and that resource:
+
+      * Has an [associated condition](http://wiki.opscode.com/display/chef/Resources#Resources-ConditionalExecution)
+        which references a block variable. AND
+      * The resource has a fixed name.
+
+      Then you will likely find that only the first resource will be applied. See this ticket for more background:
+
+      * [http://tickets.opscode.com/browse/CHEF-2812](http://tickets.opscode.com/browse/CHEF-2812)
+    examples:
+      - title: Resource condition will be evaluated only once
+        text: |
+          Because the feed_pet resource will have the same name for every
+          iteration of the loop, the condition will only be checked for the
+          first resource.
+        code: |
+          # Don't do this
+          %w{rover fido}.each do |pet_name|
+            execute "feed_pet" do
+              command "echo 'Feeding: #{pet_name}'; touch '/tmp/#{pet_name}'"
+              not_if { ::File.exists?("/tmp/#{pet_name}")}
+            end
+          end
+      - title: Modified version
+        text: |
+          By making the resource name change for each iteration of the loop we avoid this behaviour.
+        code: |
+          %w{rover fido}.each do |pet_name|
+            execute "feed_pet_#{pet_name}" do
+              command "echo 'Feeding: #{pet_name}'; touch '/tmp/#{pet_name}'"
+              not_if { ::File.exists?("/tmp/#{pet_name}")}
+            end
+          end
+  - code: FC023
+    name: Prefer conditional attributes
+    tags:
+      - style
+    summary: |
+      This warning means you have surrounded a resource with an `if` or `unless`
+      rather than defining the condition directly on the resource itself. Note
+      that this warning is only raised for single resources as you could
+      reasonably enclose multiple resources in a condition like this for
+      brevity.
+    examples:
+      - title: Resource enclosed in a condition
+        text: |
+          This example matches the FC023 rule because it encloses a rule within
+          a condition, rather than using the built-in Chef `not_if` or `only_if`
+          conditional execution attributes.
+
+          * [http://wiki.opscode.com/display/chef/Resources#Resources-ConditionalExecution](http://wiki.opscode.com/display/chef/Resources#Resources-ConditionalExecution)
+        code: |
+          # Don't do this
+          if node['foo'] == 'bar'
+            service "apache" do
+              action :enable
+            end
+          end
+      - title: Modified version
+        text: |
+          You can avoid the warning above with more idiomatic Chef that
+          specifies the condition above as an attribute on the resource:
+        code: |
+          service "apache" do
+            action :enable
+            only_if { node['foo'] == 'bar'}
+          end
+api_methods: 
+  - name: attribute_access
+    description: |
+      Find attributes accesses by type.
+
+      You might use this method to enforce local style rules on how attributes
+      are accessed.
+    examples: |
+      # All references to attributes using strings
+      # For example: node['foo']
+      attribute_access(ast, :type => :string)
+      
+      # All references to attributes using symbols
+      # For example: node[:foo]
+      attribute_access(ast, :type => :symbol)
+      
+      # All references to attributes using dots (vivified methods)
+      # For example: node.foo
+      attribute_access(ast, :type => :symbol)
+    signature:
+      - category: param
+        type: 'Nokogiri::XML::Node'
+        name: ast
+        description: The AST of the cookbook recipe to check
+      - category: param
+        type: Hash
+        name: options
+        description: The options hash (see allowed values below)
+      - category: option
+        type: Symbol
+        name: ':type'
+        description: |
+          The approach used to access the attributes. One of `:string`,
+          `:symbol` or `:vivified`.
+      - category: option
+        type: Boolean
+        name: ':ignore_calls'
+        description: |
+          Exclude attribute accesses that mix strings/symbols with dot notation.
+          Defaults to `false`.
+      - category: return
+        type: Array
+        description: The matching nodes if any
+  - name: checks_for_chef_solo?
+    description: |
+      Does the specified recipe check for
+      [Chef Solo](http://wiki.opscode.com/display/chef/Chef+Solo)?
+
+      You can use this to check for the portability of the recipe between
+      Chef Server and Chef Solo.
+    examples: |
+      # Returns true if the recipe checks for Chef Solo before using
+      # server-specific functionality.
+      checks_for_chef_solo?(ast)
+    signature:
+      - category: param
+        type: 'Nokogiri::XML::Node'
+        name: ast
+        description: The AST of the cookbook recipe to check
+      - category: return
+        type: Boolean
+        description: |
+          True if there is a test for `Chef::Config[:solo]` in the recipe
+  - name: chef_dsl_methods
+    description: |
+      The set of methods in the Chef DSL.
+
+      You can use this to see if a method reference is part of the Chef DSL or
+      defined in a cookbook.
+    examples: |
+      # Is search a method in the Chef DSL?
+      chef_dsl_methods.include?(:search)
+      => true
+    signature:
+      - category: return
+        type: Array
+        description: |
+          Array of method symbols
+  - name: chef_solo_search_supported?
+    description: |
+      Is the [chef-solo-search](https://github.com/edelight/chef-solo-search) library available?
+
+      Will return `true` if any cookbook in the cookbook tree relative to the
+      specified recipe includes the chef-solo-search library. You can use this
+      to see if search is available in Chef Solo mode.
+    examples: |
+      # True if chef_solo_search is supported
+      chef_solo_search_supported?('foo/recipes/default.rb')
+    signature:
+      - category: param
+        type: String
+        name: recipe_path
+        description: The path to the current recipe
+      - category: return
+        type: Boolean
+        description: True if the chef-solo-search library is available.
+  - name: cookbook_name
+    description: |
+      The name of the cookbook containing the specified file.
+      Note that this method does not currently check the cookbook metadata
+      where the
+      [cookbook name could be overridden](http://wiki.opscode.com/display/chef/Metadata#Metadata-name).
+
+      You can use this method in rules that need to work out if recipe code
+      refers to the current cookbook: for example when looking at
+      `included_recipe` statements or LWRP usage.
+    examples: |
+      cookbook_name('foo/recipes/default.rb')
+      => "foo"
+    signature:
+      - category: param
+        type: String
+        name: file
+        description: The file in the cookbook
+      - category: return
+        type: String
+        description: The name of the containing cookbook
+  - name: declared_dependencies
+    description: |
+      The dependencies declared in cookbook metadata.
+
+      You can use this to check if all dependencies have been declared
+      correctly or to find all cookbooks that share a common dependency.
+    examples: |
+      ast = read_ast('postgresql/metadata.rb')
+      declared_dependencies(ast)
+      => ["openssl"]
+    signature:
+      - category: param
+        type: Nokogiri::XML::Node
+        name: ast
+        description: The metadata rb AST
+      - category: return
+        type: Array
+        description: List of cookbooks depended on
+  - name: file_match
+    description: |
+      Create a match for a specified file. Use this if the presence of the file
+      triggers the warning rather than content.
+
+      This is an alternative to `match` where you don't have a specific AST
+      element to associate the warning with. The call to `file_match` will
+      typically be the last line in your rule.
+    examples: |
+      file_match('foo/recipes/default.rb')
+      => {:filename=>"foo/recipes/default.rb",
+       :matched=>"foo/recipes/default.rb",
+       :line=>1,
+       :column=>1}
+    signature:
+      - category: param
+        type: String
+        name: file
+        description: The filename to create a match for
+      - category: return
+        type: Hash
+        description: Hash with the match details
+  - name: find_resources
+    description: |
+      Find Chef resources of the specified type.
+
+      Note that currently this method does not return blockless resources.
+    examples: |
+      # Returns all resources in the AST
+      find_resources(ast)
+
+      # Returns just the packages
+      find_resources(ast, :type => :package)
+    signature:
+      - category: param
+        type: 'Nokogiri::XML::Node'
+        name: ast
+        description: The AST of the cookbook recipe to check
+      - category: param
+        type: Hash
+        name: options
+        description: The options hash (see allowed values below)
+      - category: option
+        type: Symbol
+        name: ':type'
+        description: |
+          The type of resource to look for (or `:any` for all resources)
+      - category: return
+        type: Array
+        description: AST nodes of Chef resources.
+  - name: included_recipes
+    description: |
+      Retrieve the recipes that are included within the given recipe AST.
+
+      You can use this method to determine (and validate) recipe runtime
+      dependencies.
+    examples: |
+      # Find all include_recipe statements, discarding the AST nodes to just
+      # show the recipe names.
+      included_recipes(ast).keys
+      => ["postgresql::client"]
+    signature:
+      - category: param
+        type: 'Nokogiri::XML::Node'
+        name: ast
+        description: The recipe AST
+      - category: return
+        type: Hash
+        description: |
+          Hash keyed by included recipe name where the value is the AST node  
+          of the `include_recipe` statement.
+  - name: literal_searches
+    description: |
+      Searches performed by the specified recipe that are literal strings.
+      Searches with a query formed from a subexpression will be ignored.
+    examples: |
+      ast = read_ast('zenoss/recipes/server.rb')
+      literal_searches(ast).size
+      => 3
+    signature:
+      - category: param
+        type: 'Nokogiri::XML::Node'
+        name: ast
+        description: The AST of the cookbook recipe to check
+      - category: return
+        type: Array
+        description: The matching nodes
+  - name: match
+    description: |
+      Create a match from the specified node.
+
+      Return matches when a rule has matched against a recipe. A call to `match`
+      is typically the last line of your rule.
+
+      Ensure that the AST node you are passing to this method has a descendant
+      `pos` node so that the match can be associated with a line in the file.
+    examples: |
+      # You will frequently use map to apply the match function to an array of
+      # nodes that you consider matches for your rule.
+      attribute_access(ast, :type => :string).map{|s| match(s)}
+    signature:
+      - category: param
+        type: 'Nokogiri::XML::Node'
+        name: node
+        description: The node to create a match for
+      - category: return
+        type: Hash
+        description: |
+          Hash with the matched node name and position with the recipe
+  - name: os_command?
+    description: |
+      Does the provided string look like an Operating System command? This is a
+      rough heuristic to be taken with a pinch of salt.
+    signature:
+      - category: param
+        type: String
+        name: str
+        description: The string to check
+      - category: return
+        type: Boolean
+        description: |
+          True if this string might be an OS command
+  - name: read_ast
+    description: |
+      Read the AST for the given Ruby source file.
+
+      Many of the other functions documented here take an `ast` as an argument.
+      You can also use Nokogiri's support querying the AST with XPath or CSS
+      to implement your own rules.
+    examples: |
+      # Normally the recipe AST will be passed in to your rule without you
+      # needing to use read_ast.
+
+      # However if you need to you can read in the AST for a cookbook recipe
+      # directly.
+      ast = read_ast('apache2/recipes/default.rb')
+    signature:
+      - category: param
+        type: String
+        name: file
+        description: The file to read
+      - category: return
+        type: 'Nokogiri::XML::Node'
+        description: |
+          The recipe AST
+  - name: resource_attribute
+    description: |
+      Retrieve a single-valued attribute from the specified resource.
+    examples: |
+      # Given resource is a package
+      resource_attribute(resource, 'action')
+      => :install
+    signature:
+      - category: param
+        type: 'Nokogiri::XML::Node'
+        name: resource
+        description: The resource AST to lookup the attribute under
+      - category: param
+        type: String
+        name: name
+        description: The attribute name
+      - category: return
+        type: String
+        description: |
+          The attribute value for the specified attribute
+  - name: resource_attribute?
+    description: |
+      Is the specified attribute valid for the type of resource? Note that this
+      method will return true if the `resource_type` is not recognised.
+    examples: |
+      resource_attribute?(:file, :mode) 
+      => true
+
+      resource_attribute?(:file, :size) 
+      => false
+
+      # If the resource is not a Chef built-in then the attribute is always
+      # valid
+      resource_attribute?(:my_custom_resource, :whatever) 
+      => true
+    signature:
+      - category: param
+        type: Symbol
+        name: resource_type
+        description: The type of Chef resource
+      - category: param
+        type: Symbol
+        name: attribute_name
+        description: The attribute name
+      - category: return
+        type: Boolean
+        description: |
+          True if the attribute is valid for this type of resource
+  - name: resource_attributes
+    description: |
+      Retrieve all attributes from the specified resource.
+
+      Use this method for convenient access to the resource attributes without
+      needing to query the AST.
+    examples: |
+      resource_attributes(resource)
+      => {:name=>"zenoss", "arch"=>"kernel", "action"=>:install}
+    signature:
+      - category: param
+        type: 'Nokogiri::XML::Node'
+        name: resource
+        description: The resource AST
+      - category: return
+        type: Hash
+        description: |
+          The resource attributes
+  - name: resource_attributes_by_type
+    description: |
+      Retrieve the attributes as a hash for all resources of a given type.
+
+      Use this if you want to compare the attributes and values used by
+      resources of the same type.
+    examples: |
+      # The values of the Hash (ignored here) are arrays of resource ASTs.
+      resource_attributes_by_type(ast).keys.sort
+      => ["apt_package",
+       "apt_repository",
+       "execute",
+       "package",
+       "ruby_block"]
+    signature:
+      - category: param
+        type: 'Nokogiri::XML::Node'
+        name: ast
+        description: The recipe AST
+      - category: return
+        type: Hash
+        description: |
+          Resources keyed by type, with an array for each
+  - name: resource_name
+    description: |
+      Retrieve the name attribute associated with the specified resource.
+    examples: |
+      resource_name(resource)
+      => "zenoss"
+    signature:
+      - category: param
+        type: 'Nokogiri::XML::Node'
+        name: resource
+        description: The resource AST to lookup the name attribute under
+      - category: return
+        type: String
+        description: |
+          The name attribute value
+  - name: resource_type
+    description: |
+      Return the type, e.g. 'package' of a given resource.
+
+      You could use this if you wanted to take different action in your rule
+      based on the resource type.
+    examples: |
+      resource_type(resource)
+      => "yum_package"
+    signature:
+      - category: param
+        type: 'Nokogiri::XML::Node'
+        name: resource
+        description: The resource AST
+      - category: return
+        type: String
+        description: |
+          The type of resource
+  - name: resources_by_type
+    description: |
+      Retrieve all resources of a given type.
+
+      The key of the hash is the type of resource (as a string). The value is
+      an array of Hashes.
+    examples: |
+      resources_by_type(ast).keys
+      => ["yum_key",
+       "yum_repository",
+       "package",
+       "service",
+       "yum_package",
+       "apt_repository",
+       "apt_package"]
+    signature:
+      - category: param
+        type: 'Nokogiri::XML::Node'
+        name: ast
+        description: The recipe AST
+      - category: return
+        type: Hash
+        description: |
+          The matching resources
+  - name: ruby_code?
+    description: |
+      Does the provided string look like ruby code?
+      This does not evaluate the expression, instead only checking that it
+      appears syntactically valid.
+
+      You can use this method to check that `ruby_block` resources and recipes
+      themselves look like Ruby code.
+    examples: |
+      # Lots of strings are well-formed Ruby statements, including some strings
+      # you might not expect:
+      ruby_code?('System.out.println("hello world");')
+      => true
+
+      # This operating system command doesn't look like valid Ruby but others
+      # might.
+      ruby_code?('find -type f -print')
+      => false
+    signature:
+      - category: param
+        type: String
+        name: str
+        description: The string to check for rubiness
+      - category: return
+        type: Boolean
+        description: |
+          `True` if this string could be syntactically valid Ruby
+  - name: searches
+    description: |
+      Searches performed by the specified recipe.
+      In contrast to `literal_searches` this method returns all searches.
+
+      You could use this method to identify all searches that search for a
+      particular type of object, or to identify searches that are valid
+      for a particular Chef version.
+    signature:
+      - category: param
+        type: 'Nokogiri::XML::Node'
+        name: ast
+        description: The AST of the cookbook recipe to check.
+      - category: return
+        type: Array
+        description: |
+          The AST nodes in the recipe where searches are performed
+  - name: standard_cookbook_subdirs
+    description: |
+      The list of standard cookbook sub-directories.
+
+      You can use this method when you need to traverse cookbooks manually
+      yourself in order to determine directories to descend into.
+    examples: |
+      standard_cookbook_subdirs
+      => ["attributes",
+       "definitions",
+       "files",
+       "libraries",
+       "providers",
+       "recipes",
+       "resources",
+       "templates"]
+    signature:
+      - category: return
+        type: Array
+        description: |
+          The standard list of directories.
+  - name: valid_query?
+    description: |
+      Is this a valid Lucene query?
+
+      Use this method when acting on searches in a recipe in order to check that
+      they are valid before continuing with the rest of your rule.
+    examples: |
+      valid_query?('run_list:recipe[foo::bar]')
+      => false
+
+      valid_query?('run_list:recipe\[foo\:\:bar\]')
+      => true
+    signature:
+      - category: param
+        type: String
+        name: query
+        description: The query to check for syntax errors
+      - category: return
+        type: Boolean
+        description: |
+          `True` if the query is well-formed
+---
+<div class="container">
+{% include masthead.html %}
+<div class="page-header">
+  <h1 id="why">Why? <small>What's all this about?</small></h1>
+</div>
+{% capture why %}{% include why.md %}{% endcapture %}{{ why | markdownify }}
+{% include getting-started.html %}
+{% include rules.html %}
+<div class="page-header">
+  <h1 id="faq">FAQ <small>Frequently Asked Questions</small></h1>
+</div>
+{% capture faq %}{% include faq.md %}{% endcapture %}{{ faq | markdownify }}
+<div class="page-header">
+  <h1 id="ci">Continuous Integration <small>Configuring Jenkins to run foodcritic</small></h1>
+</div>
+{% capture ci %}{% include ci.md %}{% endcapture %}{{ ci | markdownify }}
+<div class="page-header">
+  <h1 id="writing-a-new-rule">Extending foodcritic <small>Writing a new rule</small></h1>
+</div>
+{% capture newrule %}{% include new-rule.md %}{% endcapture %}{{ newrule | markdownify }}
+{% include api.html %}
+</div>

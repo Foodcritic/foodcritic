@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Foodcritic - A lint tool for your Opscode Chef cookbooks</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="Andrew Crump">
+
+    <link href="assets/css/bootstrap.css" rel="stylesheet">
+    <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="assets/css/pygments.css" rel="stylesheet">
+    <link href="assets/css/foodcritic.css" rel="stylesheet">
+
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <link rel="shortcut icon" href="assets/ico/favicon.ico">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="assets/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="assets/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href="assets/ico/apple-touch-icon-57-precomposed.png">
+  </head>
+
+  <body>
+
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container-fluid">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <div class="brand">Foodcritic</div>
+          <div class="nav-collapse">
+            <ul class="nav">
+              <li class="">
+                <a href="https://github.com/acrmp/foodcritic">Code</a>
+              </li>
+              <li class="active">
+                <a href="#">Documentation</a>
+              </li>
+              <li class="">
+                <a href="http://travis-ci.org/acrmp/foodcritic">Travis CI</a>
+              </li>
+              <li class="">
+                <a href="https://github.com/acrmp/foodcritic/issues?sort=created&direction=desc&state=open">Issues</a>
+              </li>
+              <li class="">
+                <a href="https://github.com/acrmp/foodcritic/blob/master/CHANGELOG.md">Changelog</a>
+              </li>
+              <li class="">
+                <a href="https://raw.github.com/acrmp/foodcritic/master/LICENSE">License</a>
+              </li>
+            </ul>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+<div class="container-fluid">
+  <div class="row-fluid">
+    <div class="span12">
+      <!--Body content-->
+           {{content}}
+    </div>
+  </div>
+</div>
+
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="assets/js/jquery.js"></script>
+    <script src="assets/js/bootstrap-dropdown.js"></script>
+
+  </body>
+</html>
+

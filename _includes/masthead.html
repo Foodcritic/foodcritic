@@ -1,0 +1,35 @@
+     <header class="jumbotron subhead" id="overview">
+        <h1>Foodcritic</h1>
+        <p class="lead">A lint tool for your Opscode Chef cookbooks.</p>
+        <div class="subnav">
+          <ul class="nav nav-pills">
+            <li><a href="#why">Why?</a></li>
+            <li><a href="#getting-started">Getting Started</a></li>
+            <li class="dropdown" id="rules">
+              <a class="dropdown-toggle" data-toggle="dropdown" href="#rules">
+                Rules
+                <b class="caret"></b>
+              </a>
+              <ul class="dropdown-menu">
+              {% for rule in page.rules %}
+                <li><a href="#{{ rule.code }}">{{rule.code}}: {{ rule.name}}</a></li>
+              {% endfor %}
+              </ul>
+            </li>
+            <li><a href="#faq">FAQ</a></li>
+            <li><a href="#ci">Continuous Integration</a></li>
+            <li><a href="#writing-a-new-rule">Writing a new rule</a></li>
+            <li class="dropdown" id="api">
+              <a class="dropdown-toggle" data-toggle="dropdown" href="#api">
+                Rule API
+                <b class="caret"></b>
+              </a>
+              <ul class="dropdown-menu">
+              {% for method in page.api_methods %}
+                <li><a href="#{{ method.name }}">{{method.name}}</a></li>
+              {% endfor %}
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </header>

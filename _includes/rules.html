@@ -1,0 +1,53 @@
+<div class="page-header">
+  <h1 id="rules">Rules <small>Cultivating a refined palate</small></h1>
+</div>
+
+<div class="row">
+  <div class="span6">
+    <ul>
+    {% for rule in page.rules %}
+      <li><a href="#{{ rule.code }}">{{rule.code}}: {{ rule.name}}</a></li>
+      {% if forloop.index == 12 %}
+        </ul></div><div class="span6">
+      {% endif %}
+    {% endfor %}
+    </ul>
+  </div>
+</div>
+
+{% for rule in page.rules %}
+<section id="{{ rule.code }}">
+  <div class="page-header">
+    <h2>{{ rule.code }}: <small>{{ rule.name }}</small></h2>
+  </div>
+  <div class="row">
+    <div class="span12">
+      <p>
+      {% for tag in rule.tags %}
+        <code>{{ tag }}</code>
+      {% endfor %}
+      </p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="span12">
+    {{ rule.summary | unindent | markdownify }}
+    </div>
+    {% for example in rule.examples %}
+      <div class="span6">
+      <strong>{{ example.title }}</strong>
+{{ example.text | unindent | markdownify }}
+      </div>
+    {% endfor %}
+</div>
+<div class="row">
+    {% for example in rule.examples %}
+      <div class="span6">
+{% highlight ruby %}
+{{ example.code | unindent }}
+{% endhighlight %}
+      </div>
+    {% endfor %}
+  </div>
+</section>
+{% endfor %}
