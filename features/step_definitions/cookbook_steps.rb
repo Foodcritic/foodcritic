@@ -599,16 +599,14 @@ end
 
 When /^I run it on the command line including a file which does not contain Ruby code$/ do
   write_file 'rules/invalid_rules.rb', 'echo "not ruby"'
-  begin
+  capture_error do
     run_lint(['-I', 'rules/invalid_rules.rb', 'cookbooks/example'])
-  rescue => @error
   end
 end
 
 When /^I run it on the command line including a missing custom rule file$/ do
-  begin
+  capture_error do
     run_lint(['-I', 'rules/missing_rules.rb', 'cookbooks/example'])
-  rescue => @error
   end
 end
 
@@ -637,7 +635,7 @@ Then 'a warning for the custom rule should be displayed' do
 end
 
 Then /^an? '([^']+)' error should be displayed$/ do |expected_error|
-  @error.message.should include expected_error
+  last_error.should include expected_error
 end
 
 Then 'I should be able to see the AST from inside the rule' do

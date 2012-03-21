@@ -37,6 +37,22 @@ module FoodCritic
       ! (ENV.has_key?('FC_FORK_PROCESS') and ENV['FC_FORK_PROCESS'] == true.to_s)
     end
 
+    # Capture an error expected when calling a command.
+    def capture_error
+      begin
+        yield
+        @error = all_output unless last_exit_status == 0
+      rescue => @error
+      end
+    end
+
+    # Return the last error captured
+    #
+    # @return [String] The last error captured
+    def last_error
+      @error.respond_to?(:message) ? @error.message : @error
+    end
+
     # Expect a warning to be included in the command output.
     #
     # @param [String] code The warning code to check for.
