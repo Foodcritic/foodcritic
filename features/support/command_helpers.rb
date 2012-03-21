@@ -53,6 +53,14 @@ module FoodCritic
       @error.respond_to?(:message) ? @error.message : @error
     end
 
+    # Expect a line of context
+    #
+    # @param [Number] line_no The line number
+    # @param [String] text The text of the matching line
+    def expect_line_shown(line_no, text)
+      expect_output %r{^ +#{Regexp.escape(line_no.to_s)}\|#{Regexp.escape(text)}$}
+    end
+
     # Expect a warning to be included in the command output.
     #
     # @param [String] code The warning code to check for.
@@ -69,7 +77,11 @@ module FoodCritic
                           :resource => 'resources/site.rb'}[options[:file_type]]
       end
       options = {:line => 1, :expect_warning => true, :file => 'recipes/default.rb'}.merge!(options)
-      warning = "#{code}: #{WARNINGS[code]}: cookbooks/example/#{options[:file]}:#{options[:line]}#{"\n" if ! options[:line].nil?}"
+      if options[:warning_only]
+        warning = "#{code}: #{WARNINGS[code]}"
+      else
+        warning = "#{code}: #{WARNINGS[code]}: cookbooks/example/#{options[:file]}:#{options[:line]}#{"\n" if ! options[:line].nil?}"
+      end
       options[:expect_warning] ? expect_output(warning) : expect_no_output(warning)
     end
 
@@ -152,8 +164,16 @@ module FoodCritic
     def run_lint(cmd_args)
       cmd_args.unshift '--repl' if with_repl?
       in_current_dir do
+        show_context = cmd_args.include?('-C')
         review, @status = FoodCritic::Linter.check(CommandLine.new(cmd_args))
-        @review = review.nil? || (review.respond_to?(:warnings) && review.warnings.empty?) ? '' : "#{review.to_s}\n"
+        @review =
+          if review.nil? || (review.respond_to?(:warnings) && review.warnings.empty?)
+            ''
+          elsif show_context
+            ContextOutput.new.output(review)
+          else
+            "#{review.to_s}\n"
+          end
       end
     end
 
@@ -202,6 +222,7 @@ module FoodCritic
     #
     # @param [Array] cmd_args The command line arguments.
     def run_lint(cmd_args)
+      set_env 'RAK_TEST', true.to_s
       run_simple(unescape("foodcritic #{cmd_args.join(' ')}"), false)
     end
   end

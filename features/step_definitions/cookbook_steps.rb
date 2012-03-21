@@ -571,8 +571,10 @@ Given 'I have started the lint tool with the REPL enabled' do
   }
 end
 
-When /^I check the cookbook( tree)?(?: specifying tags(.*))?$/ do |whole_tree, tags|
-  run_lint((tags.nil? ? [] : tags.split(' ')) + ["cookbooks/#{whole_tree.nil? ? 'example' : ''}"])
+When /^I check the cookbook( tree)?(?: specifying tags(.*))?(, specifying that context should be shown)?$/ do |whole_tree, tags, context|
+  options = tags.nil? ? [] : tags.split(' ')
+  options += ['-C'] unless context.nil?
+  run_lint(options + ["cookbooks/#{whole_tree.nil? ? 'example' : ''}"])
 end
 
 When /^I define a new rule( and reset the list of rules| that includes a binding)?$/ do |qualifier|
@@ -675,7 +677,7 @@ Then 'no error should have occurred' do
   assert_no_error_occurred
 end
 
-Then /^the (?:[a-zA-Z \-]+) warning ([0-9]+) should (not )?be displayed(?: against the (attributes|definition|metadata|provider|resource|README.md|README.rdoc) file)?$/ do |code, no_display, file|
+Then /^the (?:[a-zA-Z \-]+) warning ([0-9]+) should (not )?be displayed(?: against the (attributes|definition|metadata|provider|resource|README.md|README.rdoc) file)?( below)?$/ do |code, no_display, file, warning_only|
   options = {}
   options[:expect_warning] = no_display != 'not '
   unless file.nil?
@@ -687,6 +689,7 @@ Then /^the (?:[a-zA-Z \-]+) warning ([0-9]+) should (not )?be displayed(?: again
   end
   options[:line] = 3 if code == '018' and options[:expect_warning]
   options[:line] = 2 if ['021', '022'].include?(code)
+  options[:warning_only] = ! warning_only.nil?
   expect_warning("FC#{code}", options)
 end
 
@@ -722,6 +725,15 @@ Then /^the file mode warning 006 should be (valid|invalid)$/ do |valid|
   valid == 'valid' ? expect_no_warning('FC006') : expect_warning('FC006')
 end
 
+Then /^the line number and line of code that triggered the warning(s)? should be displayed$/ do |multiple|
+  if multiple.nil?
+    expect_line_shown 1, "log node[:foo]"
+  else
+    expect_line_shown 1, "node[:foo] = 'bar'"
+    expect_line_shown 2, "    node[:testing] = 'bar'"
+  end
+end
+
 Then 'the node access warning 001 should be displayed for each match' do
   expect_warning('FC001', :line => 1)
   expect_warning('FC001', :line => 2)
@@ -736,6 +748,10 @@ Then 'the node access warning 001 should warn on lines 2 and 10 in that order' d
     "FC001: Use strings in preference to symbols to access node attributes: cookbooks/example/recipes/default.rb:#{line}"
   end
   expect_output(expected_warnings.join("\n"))
+end
+
+Then 'the recipe filename should be displayed' do
+  expect_output "cookbooks/example/recipes/default.rb"
 end
 
 Then 'the review should include the matching rules' do
