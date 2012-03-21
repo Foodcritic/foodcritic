@@ -29,7 +29,8 @@ module FoodCritic
       'FC020' => 'Conditional execution string attribute looks like Ruby',
       'FC021' => 'Resource condition in provider may not behave as expected',
       'FC022' => 'Resource condition within loop may not behave as expected',
-      'FC023' => 'Prefer conditional attributes'
+      'FC023' => 'Prefer conditional attributes',
+      'FC024' => 'Consider adding platform equivalents'
     }
 
     # If the cucumber features should run foodcritic in the same process or spawn a separate process.

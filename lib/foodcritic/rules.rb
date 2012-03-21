@@ -301,3 +301,23 @@ rule "FC023", "Prefer conditional attributes" do
       [count(stmts_add/stmts_add) = 0]})
   end
 end
+
+rule "FC024", "Consider adding platform equivalents" do
+  tags %w{portability}
+  RHEL = %w{amazon centos redhat scientific}
+  recipe do |ast|
+    ['//method_add_arg[fcall/ident/@value="platform?"]/arg_paren/args_add_block',
+     "//when"].map do |expr|
+      ast.xpath(expr).map do |whn|
+        platforms = whn.xpath("args_add/descendant::tstring_content").map do |p|
+          p['value']
+        end
+        unless platforms.size == 1 || (RHEL & platforms).empty?
+          unless (RHEL - platforms).empty?
+            whn
+          end
+        end
+      end.compact
+    end.flatten
+  end
+end

@@ -237,6 +237,51 @@ Given 'a cookbook recipe that uses execute with a name attribute to start a serv
   }
 end
 
+Given 'a cookbook recipe with a case condition unrelated to platform' do
+  write_recipe %Q{
+    case day_of_week
+      when "Monday", "Tuesday"
+        package "foo" do
+          action :install
+        end
+      when "Wednesday", "Thursday"
+        package "bar" do
+          action :install
+      end
+    end
+  }.strip
+end
+
+Given /^a cookbook recipe with a '([^']+)' condition for flavours (.*)$/ do |type,flavours|
+  platforms = %Q{"#{flavours.split(',').join('","')}"}
+  if type == 'case'
+    @expected_line = 6
+    write_recipe %Q{
+      case node[:platform]
+        when "debian", "ubuntu"
+          package "foo" do
+            action :install
+          end
+        when #{platforms}
+          package "bar" do
+            action :install
+        end
+      end
+    }.strip
+  elsif type == 'platform?'
+    @expected_line = 1
+    write_recipe %Q{
+      if platform?(#{platforms})
+        package "bar" do
+          action :install
+        end
+      end
+    }.strip
+  else
+    fail "Unrecognised type: #{type}"
+  end
+end
+
 Given /^a cookbook that contains a (short|long) ruby block$/ do |length|
   recipe_with_ruby_block(length == 'short')
 end
@@ -711,6 +756,10 @@ end
 
 Then 'the check for server warning 003 should not be displayed given we have checked' do
   expect_warning("FC003", :line => 4, :expect_warning => false)
+end
+
+Then /^the consider adding platform warning 024 should( not)? be shown$/ do |should_not|
+  expect_warning('FC024', :line => should_not.nil? ? @expected_line : nil, :expect_warning => should_not.nil?)
 end
 
 Then /^the conditional string looks like ruby warning 020 should be (shown|not shown)$/ do |show_warning|
