@@ -76,7 +76,7 @@ module FoodCritic
     def declared_dependencies(ast)
       raise_unless_xpath!(ast)
       deps = ast.xpath(%q{//command[ident/@value='depends']/
-        descendant::args_add/descendant::tstring_content})
+        descendant::args_add/descendant::tstring_content[1]})
       # handle quoted word arrays
       var_ref = ast.xpath(%q{//command[ident/@value='depends']/
         descendant::var_ref/ident})

@@ -94,6 +94,39 @@ describe FoodCritic::Api do
       ast = MiniTest::Mock.new.expect :xpath, [], [String]
       api.declared_dependencies(ast).must_be_empty
     end
+    it "includes only cookbook names in the returned array" do
+      ast = Nokogiri::XML(%q{
+            <command>
+              <ident value="depends">
+                <pos line="14" column="0"/>
+              </ident>
+              <args_add_block value="false">
+                <args_add>
+                  <args_add>
+                    <args_new/>
+                    <string_literal>
+                      <string_add>
+                        <string_content/>
+                        <tstring_content value="mysql">
+                          <pos line="14" column="9"/>
+                        </tstring_content>
+                      </string_add>
+                    </string_literal>
+                  </args_add>
+                  <string_literal>
+                    <string_add>
+                      <string_content/>
+                      <tstring_content value="&gt;= 1.2.0">
+                        <pos line="14" column="18"/>
+                      </tstring_content>
+                    </string_add>
+                  </string_literal>
+                </args_add>
+              </args_add_block>
+            </command>
+      })
+      api.declared_dependencies(ast).must_equal ['mysql']
+    end
   end
 
   describe "#file_match" do
