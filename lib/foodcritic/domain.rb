@@ -71,6 +71,10 @@ module FoodCritic
       @tags = [code]
     end
 
+    # The tags associated with this rule.
+    # A rule is always tagged with the tags 'any' and the rule code.
+    #
+    # @return [Array] The tags associated.
     def tags
       ['any'] + @tags
     end

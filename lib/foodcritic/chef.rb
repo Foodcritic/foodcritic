@@ -16,6 +16,7 @@ module FoodCritic
     #
     # @param [Symbol] resource_type The type of Chef resource
     # @param [Symbol] attribute_name The attribute name
+    # @return [Boolean] False if the attribute is known not to be valid
     def resource_attribute?(resource_type, attribute_name)
       if resource_type.to_s.empty? || attribute_name.to_s.empty?
         raise ArgumentError, "Arguments cannot be nil or empty."
@@ -84,6 +85,9 @@ module FoodCritic
         ! @search_parser.nil?
       end
 
+      # The search parser
+      #
+      # @return [LuceneParser] The search parser
       def parser
         @search_parser
       end
