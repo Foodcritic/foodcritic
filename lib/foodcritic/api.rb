@@ -66,6 +66,12 @@ module FoodCritic
         file = File.absolute_path(File.dirname(file.to_s))
       end
       file = File.dirname(file) unless File.extname(file).empty?
+      md_path = File.join(file, 'metadata.rb')
+      if File.exists?(md_path)
+        name = read_ast(md_path).xpath("//stmts_add/
+          command[ident/@value='name']/descendant::tstring_content/@value").to_s
+        return name unless name.empty?
+      end
       File.basename(file)
     end
 

@@ -174,12 +174,13 @@ Given 'a cookbook recipe that has a wrapping condition containing a resource wit
   }
 end
 
-Given 'a cookbook recipe that includes a local recipe' do
-  write_recipe %q{
-    include_recipe 'example::server'
+Given /^a cookbook recipe that includes a local recipe(.*)$/ do |diff_name|
+  cookbook = diff_name.empty? ? 'example' : 'foo'
+  write_recipe %Q{
+    include_recipe '#{cookbook}::server'
   }
-  write_metadata %q{
-    name 'example'
+  write_metadata %Q{
+    name '#{cookbook}'
   }
 end
 

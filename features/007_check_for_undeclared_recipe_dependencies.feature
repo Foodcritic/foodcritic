@@ -49,6 +49,11 @@ Feature: Check for undeclared recipe dependencies
     When I check the cookbook
     Then the undeclared dependency warning 007 should not be displayed
 
+  Scenario: Cookbook includes local recipe - name in metadata
+    Given a cookbook recipe that includes a local recipe where the directory is differently named
+    When I check the cookbook
+    Then the undeclared dependency warning 007 should not be displayed
+
   Scenario: Cookbook has no metadata file
     Given a cookbook that does not have defined metadata
     When I check the cookbook
