@@ -350,8 +350,15 @@ Given 'a cookbook that contains a LWRP with multiple notifications' do
   })
 end
 
-Given /^a cookbook that contains a LWRP with (no|a) default action$/ do |has_default_action|
-  cookbook_with_lwrp({:default_action => has_default_action == 'no' ? :no_default_action : :ruby_default_action,
+Given /^a cookbook that contains a LWRP with (no|a) default action( defined via a constructor)?$/ do |has_default_action,no_dsl|
+  default_action = if has_default_action == 'no'
+    :no_default_action
+  elsif no_dsl.nil?
+    :dsl_default_action
+  else
+    :ruby_default_action
+  end
+  cookbook_with_lwrp({:default_action => default_action,
                       :notifies => :does_notify})
 end
 

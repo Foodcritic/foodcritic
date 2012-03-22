@@ -62,11 +62,11 @@ module FoodCritic
     # Create a cookbook with a LRWP
     #
     # @param [Hash] lwrp The options to use for the created LWRP
-    # @option lwrp [Symbol] :default_action One of :no_default_action, :ruby_default_action
+    # @option lwrp [Symbol] :default_action One of :no_default_action, :ruby_default_action, :dsl_default_action
     # @option lwrp [Symbol] :notifies One of :does_not_notify, :does_notify, :deprecated_syntax, :class_variable
     def cookbook_with_lwrp(lwrp)
       lwrp = {:default_action => false, :notifies => :does_not_notify}.merge!(lwrp)
-      default_action = %q{
+      ruby_default_action = %q{
         def initialize(*args)
           super
           @action = :create
@@ -75,7 +75,8 @@ module FoodCritic
       write_resource("site", %Q{
         actions :create
         attribute :name, :kind_of => String, :name_attribute => true
-        #{default_action if lwrp[:default_action] == :ruby_default_action}
+        #{ruby_default_action if lwrp[:default_action] == :ruby_default_action}
+        #{'default_action :create' if lwrp[:default_action] == :dsl_default_action}
       })
       notifications = {:does_notify => 'new_resource.updated_by_last_action(true)',
                        :deprecated_syntax => 'new_resource.updated = true',
