@@ -430,12 +430,16 @@ rules:
           actions :create
       - title: Modified version
         text: |
-          With a default action of `:create` this will no longer match the rule.
-          Unfortunately the LWRP DSL doesn't yet support specifying a default
-          action, so you need to drop into Ruby.
+          With a default action specified this warning will no longer be
+          displayed.
         code: |
           actions :create
+
+          # Chef 0.10.10 or greater
+          default_action :create
           
+          # In earlier versions of Chef the LWRP DSL doesn't support specifying
+          # a default action, so you need to drop into Ruby.
           def initialize(*args)
             super
             @action = :create
