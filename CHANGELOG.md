@@ -1,3 +1,29 @@
+## 1.1.0 (25th March, 2012)
+
+Features:
+
+  - [FC024: Consider adding platform equivalents](http://acrmp.github.com/foodcritic/#FC024) rule added.
+  - When writing new rules it is no longer necessary to explicitly map
+    matching AST nodes to matches. You can now just return the AST nodes.
+
+Bugfixes:
+
+  - The `cookbook_name` method now reflects the cookbook name if specified in
+    metadata. This prevents a warning from being shown by
+    [FC007: Ensure recipe dependencies are reflected in cookbook metadata](http://acrmp.github.com/foodcritic/#FC016)
+    if the cookbook is in a differently named directory.
+  - The `declared_dependencies` method previously would intermix version strings
+    in the list of cookbook names.
+
+Other:
+
+  - Chef 0.10.10 will include a new DSL method for defining a `default_action`
+    for resources. Rule
+    [FC016: LWRP does not declare a default action](http://acrmp.github.com/foodcritic/#FC016)
+    has been updated to recognise the DSL change.
+  - Nokogiri dependency constraint changed to no longer lock to 1.5.0 as their
+    next release should include the fix for custom XPath functions.
+
 ## 1.0.1 (15th March, 2012)
 
 Bugfixes:
