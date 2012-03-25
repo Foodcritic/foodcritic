@@ -680,6 +680,60 @@ rules:
             action :enable
             only_if { node['foo'] == 'bar'}
           end
+  - code: FC024
+    name: Consider adding platform equivalents
+    tags:
+      - portability
+    summary: |
+      This warning is shown when:
+
+      * you have a conditional statement in your cookbook based on the platform
+        of the node
+      * and at least two platforms are included as equivalent in your
+        conditional
+      * and the conditional does not include a platform known to belong to the
+        same family
+
+      If you are using
+      [Ohai 0.6.12](http://www.opscode.com/blog/2012/03/22/ohai-0-6-12-released/)
+      or greater you should probably use `platform_family` instead. Otherwise
+      for the greatest portability consider adding the missing platforms to
+      your conditional.
+    examples:
+      - title: Case statement has a subset of platform flavours
+        text: |
+          This example matches the FC024 rule because it includes a `case`
+          statement that matches more than one flavour of a platform family
+          but omits other popular flavours from the same family.
+        code: |
+          # The RHEL platforms branch below omits popular distributions
+          # including Amazon Linux.
+          case node[:platform]
+            when "debian", "ubuntu"
+              package "foo" do
+                action :install
+              end
+            when "centos", "redhat"
+              package "bar" do
+                action :install
+              end
+            end
+          end
+      - title: Modified version
+        text: |
+          This warning is no longer raised when the other common equivalent
+          RHEL-based distributions have been added to the `when`.
+        code: |
+          case node[:platform]
+            when "debian", "ubuntu"
+              package "foo" do
+                action :install
+              end
+            when "centos", "redhat", "amazon", "scientific"
+              package "bar" do
+                action :install
+              end
+            end
 api_methods: 
   - name: attribute_access
     description: |
