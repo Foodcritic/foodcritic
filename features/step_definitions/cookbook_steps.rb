@@ -216,6 +216,20 @@ Given /^a cookbook recipe that includes several declared recipe dependencies - (
   cookbook_declares_dependencies(brace_or_block.to_sym)
 end
 
+Given /a cookbook recipe that (install|upgrade)s (a gem|multiple gems)(.*)$/ do |action, arity, approach|
+  if arity == 'a gem'
+    if approach.empty?
+      recipe_installs_gem(:simple, action.to_sym)
+    else
+      recipe_installs_gem(:compile_time, action.to_sym)
+    end
+  elsif approach.include? 'array'
+    recipe_installs_gem(:compile_time_from_array, action.to_sym)
+  else
+    recipe_installs_gem(:compile_time_from_word_list, action.to_sym)
+  end
+end
+
 Given /^a cookbook recipe that uses execute to (sleep and then )?start a service via (.*)$/ do |sleep, method|
   method = 'service' if method == 'the service command'
   recipe_starts_service(method.include?('full path') ? :service_full_path : method.gsub(/[^a-z_]/, '_').to_sym, sleep)
@@ -730,7 +744,7 @@ Then 'no error should have occurred' do
   assert_no_error_occurred
 end
 
-Then /^the (?:[a-zA-Z \-]+) warning ([0-9]+) should (not )?be displayed(?: against the (attributes|definition|metadata|provider|resource|README.md|README.rdoc) file)?( below)?$/ do |code, no_display, file, warning_only|
+Then /^the (?:[a-zA-Z \-_]+) warning ([0-9]+) should (not )?be displayed(?: against the (attributes|definition|metadata|provider|resource|README.md|README.rdoc) file)?( below)?$/ do |code, no_display, file, warning_only|
   options = {}
   options[:expect_warning] = no_display != 'not '
   unless file.nil?
@@ -805,6 +819,10 @@ Then 'the node access warning 001 should warn on lines 2 and 10 in that order' d
     "FC001: Use strings in preference to symbols to access node attributes: cookbooks/example/recipes/default.rb:#{line}"
   end
   expect_output(expected_warnings.join("\n"))
+end
+
+Then 'the prefer chef_gem to manual install warning 025 should be shown' do
+  expect_warning('FC025', :line => nil)
 end
 
 Then 'the recipe filename should be displayed' do

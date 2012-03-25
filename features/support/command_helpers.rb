@@ -30,7 +30,8 @@ module FoodCritic
       'FC021' => 'Resource condition in provider may not behave as expected',
       'FC022' => 'Resource condition within loop may not behave as expected',
       'FC023' => 'Prefer conditional attributes',
-      'FC024' => 'Consider adding platform equivalents'
+      'FC024' => 'Consider adding platform equivalents',
+      'FC025' => 'Prefer chef_gem to compile-time gem install'
     }
 
     # If the cucumber features should run foodcritic in the same process or spawn a separate process.

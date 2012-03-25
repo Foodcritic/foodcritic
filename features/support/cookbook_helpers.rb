@@ -130,6 +130,51 @@ module FoodCritic
       }
     end
 
+    # Install a gem using the specified approach.
+    #
+    # @param [Symbol] type The type of approach, one of :simple, :compile_time,
+    #   :compile_time_from_array, :compile_time_from_word_list
+    # @param [Symbol] action Either :install or :upgrade
+    def recipe_installs_gem(type, action = :install)
+      case type
+        when :simple
+          write_recipe %Q{
+            gem_package "bluepill" do
+              action :#{action}
+             end
+          }.strip
+        when :compile_time
+          write_recipe %Q{
+            r = gem_package "mysql" do
+              action :nothing
+            end
+
+            r.run_action(:#{action})
+            Gem.clear_paths
+          }.strip
+        when :compile_time_from_array
+          write_recipe %Q{
+            ['foo', 'bar', 'baz'].each do |pkg|
+              r = gem_package pkg do
+                action :nothing
+              end
+              r.run_action(:#{action})
+            end
+          }.strip
+        when :compile_time_from_word_list
+          write_recipe %Q{
+            %w{foo bar baz}.each do |pkg|
+              r = gem_package pkg do
+                action :nothing
+              end
+              r.run_action(:#{action})
+            end
+          }.strip
+        else
+          fail "Unrecognised type: #{type}"
+      end
+    end
+
     # Create a recipe that declares a resource with the specified file mode.
     #
     # @param [String] type The type of resource (file, template)
