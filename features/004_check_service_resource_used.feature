@@ -9,10 +9,18 @@ Feature: Check for service commands within execute resources
     When I check the cookbook
     Then the service resource warning 004 should be displayed
 
-  Scenario: Execute resource starting a service via service command
-    Given a cookbook recipe that uses execute to start a service via the service command
+  Scenario Outline: Execute resource controlling a service via the service command
+    Given a cookbook recipe that uses execute to <action> a service via the service command
     When I check the cookbook
-    Then the service resource warning 004 should be displayed
+    Then the service resource warning 004 <warning>
+
+  Examples:
+    | action  | warning                 |
+    | start   | should be displayed     |
+    | stop    | should be displayed     |
+    | restart | should be displayed     |
+    | reload  | should be displayed     |
+    | initdb  | should not be displayed |
 
   Scenario: Execute resource starting a service via upstart
     Given a cookbook recipe that uses execute to start a service via upstart

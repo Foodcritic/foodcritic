@@ -230,9 +230,9 @@ Given /a cookbook recipe that (install|upgrade)s (a gem|multiple gems)(.*)$/ do 
   end
 end
 
-Given /^a cookbook recipe that uses execute to (sleep and then )?start a service via (.*)$/ do |sleep, method|
+Given /^a cookbook recipe that uses execute to (sleep and then )?([^ ]+) a service via (.*)$/ do |sleep, action, method|
   method = 'service' if method == 'the service command'
-  recipe_starts_service(method.include?('full path') ? :service_full_path : method.gsub(/[^a-z_]/, '_').to_sym, sleep)
+  recipe_controls_service(method.include?('full path') ? :service_full_path : method.gsub(/[^a-z_]/, '_').to_sym, sleep, action)
 end
 
 Given 'a cookbook recipe that uses execute to list a directory' do

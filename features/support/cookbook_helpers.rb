@@ -192,15 +192,16 @@ module FoodCritic
       }
     end
 
-    # Create a recipe that starts a service using the specified method.
+    # Create a recipe that controls a service using the specified method.
     #
     # @param [Symbol] method How to start the service, one of: :init_d, :invoke_rc_d, :upstart, :service, :service_full_path.
     # @param [Boolean] do_sleep Whether to prefix the service cmd with a bash sleep
-    def recipe_starts_service(method = :service, do_sleep = false)
-      cmds = {:init_d => '/etc/init.d/foo start', :invoke_rc_d => 'invoke-rc.d foo start', :upstart => 'start foo',
-              :service => 'service foo start', :service_full_path => '/sbin/service foo start'}
+    # @param [Symbol] action The action to take (start, stop, reload, restart)
+    def recipe_controls_service(method = :service, do_sleep = false, action = :start)
+      cmds = {:init_d => "/etc/init.d/foo #{action}", :invoke_rc_d => "invoke-rc.d foo #{action}", :upstart => "#{action} foo",
+              :service => "service foo #{action}", :service_full_path => "/sbin/service foo #{action}"}
       write_recipe %Q{
-        execute "start-foo-service" do
+        execute "#{action}-foo-service" do
           command "#{do_sleep ? 'sleep 5; ' : ''}#{cmds[method]}"
           action :run
         end
