@@ -28,3 +28,8 @@ Feature: Check for resource repetition
     Given a cookbook recipe that declares non contiguous package resources mixed with other resources
     When I check the cookbook
     Then the service resource warning 005 should not be displayed
+
+  Scenario: Execute resources branching in provider actions
+    Given a cookbook provider that declares execute resources varying only in the command in separate actions
+    When I check the cookbook
+    Then the service resource warning 005 should not be displayed

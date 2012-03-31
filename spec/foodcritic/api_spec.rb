@@ -153,19 +153,22 @@ describe FoodCritic::Api do
     end
     it "restricts by resource type when provided" do
       ast.expect :xpath, ['method_add_block'],
-        ["//method_add_block[command/ident[@value='file']]"]
+        ["//method_add_block[command/ident[@value='file']]" +
+         "[command/ident/@value != 'action']"]
       api.find_resources(ast, :type => 'file')
       ast.verify
     end
     it "does not restrict by resource type when not provided" do
       ast.expect :xpath, ['method_add_block'],
-                         ["//method_add_block[command/ident]"]
+                         ["//method_add_block[command/ident]" +
+                          "[command/ident/@value != 'action']"]
       api.find_resources(ast)
       ast.verify
     end
     it "allows resource type to be specified as :any" do
       ast.expect :xpath, ['method_add_block'],
-                         ["//method_add_block[command/ident]"]
+                         ["//method_add_block[command/ident]" +
+                          "[command/ident/@value != 'action']"]
       api.find_resources(ast, :type => :any)
       ast.verify
     end

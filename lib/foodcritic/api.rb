@@ -117,7 +117,9 @@ module FoodCritic
       return [] unless ast.respond_to?(:xpath)
       scope_type = ''
       scope_type = "[@value='#{options[:type]}']" unless options[:type] == :any
-      ast.xpath("//method_add_block[command/ident#{scope_type}]")
+      # XXX: include nested resources (provider actions)
+      no_actions = "[command/ident/@value != 'action']"
+      ast.xpath("//method_add_block[command/ident#{scope_type}]#{no_actions}")
     end
 
     # Retrieve the recipes that are included within the given recipe AST.

@@ -2,6 +2,23 @@ Given /^a ([a-z_])+ resource declared with the mode (.*)$/ do |resource,mode|
   recipe_resource_with_mode(resource, mode)
 end
 
+Given 'a cookbook provider that declares execute resources varying only in the command in separate actions' do
+  write_recipe %q{
+    action :start do
+      execute "foo"
+      new_resource.updated_by_last_action(true)
+    end
+    action :stop do
+      execute "bar"
+      new_resource.updated_by_last_action(true)
+    end
+    action :restart do
+      execute "baz"
+      new_resource.updated_by_last_action(true)
+    end
+  }.strip
+end
+
 Given /^a cookbook recipe that attempts to perform a search with (.*)$/ do |search_type|
   recipe_with_search(search_type.include?('subexpression') ? :with_subexpression : search_type.gsub(' ', '_').to_sym)
 end
