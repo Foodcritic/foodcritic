@@ -29,6 +29,11 @@ Feature: Check Node Access
     When I check the cookbook
     Then the node access warning 001 should not be displayed
 
+  Scenario: Cookbook recipe access attributes via strings and searches
+    Given a cookbook with a single recipe that searches based on a node attribute accessed via strings
+    When I check the cookbook
+    Then the node access warning 001 should not be displayed
+
   Scenario: Cookbook recipe sets default attributes via symbols
     Given a cookbook that declares default attributes via symbols
     When I check the cookbook

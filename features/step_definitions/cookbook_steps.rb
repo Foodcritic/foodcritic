@@ -486,6 +486,12 @@ Given /a(nother)? cookbook with a single recipe that (reads|updates|ignores)(nes
 
 end
 
+Given 'a cookbook with a single recipe that searches based on a node attribute accessed via strings' do
+  write_recipe %q{
+    remote = search(:node, "name:#{node['drbd']['remote_host']}")[0]
+  }.strip
+end
+
 Given 'a cookbook with a single recipe which accesses node attributes with symbols on lines 2 and 10' do
   write_recipe %q{
     # Here we access the node attributes via a symbol

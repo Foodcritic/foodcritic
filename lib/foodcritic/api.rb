@@ -349,6 +349,9 @@ module FoodCritic
       expr += '[is_att_type(descendant::ident'
       expr += '[not(ancestor::aref/call)]' if options[:ignore_calls]
       expr += "/@value)]/descendant::#{type}"
+      if type == :symbol
+        expr += "[count(ancestor::method_add_arg[position() = 1]/fcall) = 0]"
+      end
       ast.xpath(expr, AttFilter.new).sort
     end
 
