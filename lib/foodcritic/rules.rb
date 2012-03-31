@@ -301,7 +301,8 @@ rule "FC023", "Prefer conditional attributes" do
       [@value='only_if' or @value='not_if']) = 0]/ancestor::*[self::if or
       self::unless][count(descendant::method_add_block[command/ident]) = 1]
       [count(stmts_add/method_add_block/call) = 0]
-      [count(stmts_add/stmts_add) = 0]})
+      [count(stmts_add/stmts_add) = 0]
+      [count(descendant::*[self::else or self::elsif]) = 0]})
   end
 end
 

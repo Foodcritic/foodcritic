@@ -18,6 +18,10 @@ Feature: Check for condition around resource
       | wrapping_condition | condition_attribute    | warning                 |
       | if                 | no condition attribute | should be displayed     |
       | unless             | no condition attribute | should be displayed     |
+      | if_else            | no condition attribute | should not be displayed |
+      | unless_else        | no condition attribute | should not be displayed |
+      | if_elsif           | no condition attribute | should not be displayed |
+      | if_elsif_else      | no condition attribute | should not be displayed |
       | if                 | only_if block          | should not be displayed |
       | if                 | only_if string         | should not be displayed |
       | unless             | only_if block          | should not be displayed |

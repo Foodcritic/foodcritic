@@ -34,11 +34,12 @@ Given /^a cookbook recipe that declares a resource called ([^ ]+) with the condi
   }
 end
 
-Given /^a cookbook recipe that declares (a resource|multiple resources) nested in a (if|unless) condition with (.*)$/ do |arity, wrapping_condition, condition_attribute|
+Given /^a cookbook recipe that declares (a resource|multiple resources) nested in a ([a-z_]+) condition with (.*)$/ do |arity, wrapping_condition, condition_attribute|
   blk = "{ File.exists?('/etc/passwd') }"
   str = "'test -f /etc/passwd'"
+  conds = wrapping_condition.split('_')
   write_recipe %Q{
-    #{wrapping_condition} node['foo'] == 'bar'
+    #{conds.first} node['foo'] == 'bar'
       service "apache" do
         action :enable
         #{
@@ -51,6 +52,8 @@ Given /^a cookbook recipe that declares (a resource|multiple resources) nested i
       #{%q{service "httpd" do
         action :enable
       end} if arity.include?('multiple')}
+    #{"elsif true\nlog 'bar'" if conds.include? 'elsif'}
+    #{"else\nlog 'foo'" if conds.include? 'else'}
     end
   }
 end
