@@ -201,11 +201,17 @@ Given /^a cookbook recipe that includes a local recipe(.*)$/ do |diff_name|
   }
 end
 
-Given 'a cookbook recipe that includes a recipe name from an expression' do
-  # deliberately not evaluated
-  write_recipe %q{
-    include_recipe "foo::#{node['foo']['fighter']}"
-  }
+Given /^a cookbook recipe that includes a recipe name from an( embedded)? expression$/ do |embedded|
+  if embedded
+    # deliberately not evaluated
+    write_recipe %q{
+      include_recipe "foo::#{node['foo']['fighter']}"
+    }
+  else
+    write_recipe %q{
+      include_recipe node['foo']['bar']
+    }
+  end
   write_metadata %q{
     depends "foo"
   }

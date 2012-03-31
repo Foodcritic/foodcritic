@@ -19,6 +19,11 @@ Feature: Check for undeclared recipe dependencies
     When I check the cookbook
     Then the undeclared dependency warning 007 should not be displayed
 
+  Scenario: Cookbook includes recipe via expression (embedded)
+    Given a cookbook recipe that includes a recipe name from an embedded expression
+    When I check the cookbook
+    Then the undeclared dependency warning 007 should not be displayed
+
   Scenario: Cookbook includes declared recipe dependency
     Given a cookbook recipe that includes a declared recipe dependency
     When I check the cookbook
