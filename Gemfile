@@ -6,11 +6,11 @@ group :test do
   gem 'aruba', '~> 0.4.11'
   gem 'cucumber', '~> 1.1.8'
   gem 'minitest', '~> 2.11.2'
-  gem 'simplecov', '~> 0.5.4'
+  gem 'simplecov', '~> 0.6.1'
 end
 
 group :development do
-  gem 'cane', '~> 1.0.0'
+  gem 'cane', '~> 1.2.0'
   gem 'chef', '~> 0.10.8'
   gem 'guard', '~> 1.0.0'
   gem 'guard-cucumber', '~> 0.7.5'
