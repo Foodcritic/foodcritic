@@ -34,6 +34,11 @@ Feature: Check Node Access
     When I check the cookbook
     Then the node access warning 001 should not be displayed
 
+  Scenario: Cookbook recipe access attributes via symbols for template
+    Given a cookbook with a single recipe that passes node attributes accessed via symbols to a template
+    When I check the cookbook
+    Then the node access warning 001 should be displayed against the variables
+
   Scenario: Cookbook recipe sets default attributes via symbols
     Given a cookbook that declares default attributes via symbols
     When I check the cookbook

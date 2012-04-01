@@ -319,9 +319,20 @@ module FoodCritic
             xml_node.add_child(pos)
           else
             if child.respond_to?(:first)
-              n = Nokogiri::XML::Node.new(
-                child.first.to_s.gsub(/[^a-z_]/, ''), doc)
-              xml_node.add_child(build_xml(child, doc, n))
+              if child.first.respond_to?(:first) and
+                 child.first.first == :assoc_new
+                child.each do |c|
+                  n = Nokogiri::XML::Node.new(
+                    c.first.to_s.gsub(/[^a-z_]/, ''), doc)
+                  c.drop(1).each do |a|
+                    xml_node.add_child(build_xml(a, doc, n))
+                  end
+                end
+              else
+                n = Nokogiri::XML::Node.new(
+                  child.first.to_s.gsub(/[^a-z_]/, ''), doc)
+                xml_node.add_child(build_xml(child, doc, n))
+              end
             else
               xml_node['value'] = child.to_s unless child.nil?
             end
@@ -352,9 +363,7 @@ module FoodCritic
       expr += '[is_att_type(descendant::ident'
       expr += '[not(ancestor::aref/call)]' if options[:ignore_calls]
       expr += "/@value)]/descendant::#{type}"
-      if type == :symbol
-        expr += "[count(ancestor::method_add_arg[position() = 1]/fcall) = 0]"
-      end
+      expr += "[ident/@value != 'node']" if type == :symbol
       ast.xpath(expr, AttFilter.new).sort
     end
 

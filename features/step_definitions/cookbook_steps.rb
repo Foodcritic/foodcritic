@@ -484,6 +484,18 @@ Given 'a cookbook with a single recipe that accesses nested node attributes via 
   write_recipe %q{node[:foo][:foo2] = 'bar'}
 end
 
+Given 'a cookbook with a single recipe that passes node attributes accessed via symbols to a template' do
+  write_recipe %q{
+    template "/etc/foo" do
+      source "foo.erb"
+      variables({
+        :port => node[:foo][:port],
+        :user => node[:foo][:user]
+      })
+    end
+  }.strip
+end
+
 Given /a(nother)? cookbook with a single recipe that (reads|updates|ignores)(nested)? node attributes via ([a-z,]*)(?:(?: and calls node\.)?([a-z_?]+)?| with (.*)?)(?: only)?$/ do |more_than_one,op,nested,types,method,expr|
   cookbook_name = more_than_one.nil? ? 'example' : 'another_example'
 
@@ -840,6 +852,11 @@ end
 Then 'the node access warning 001 should be displayed for each match' do
   expect_warning('FC001', :line => 1)
   expect_warning('FC001', :line => 2)
+end
+
+Then 'the node access warning 001 should be displayed against the variables' do
+  expect_warning('FC001', :line => 4)
+  expect_warning('FC001', :line => 5)
 end
 
 Then 'the node access warning 001 should be displayed twice for the same line' do
