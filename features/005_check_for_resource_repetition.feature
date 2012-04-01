@@ -29,6 +29,16 @@ Feature: Check for resource repetition
     When I check the cookbook
     Then the service resource warning 005 should not be displayed
 
+  Scenario: Execute resources branching
+    Given a cookbook recipe that declares execute resources varying only in the command in branching conditionals
+    When I check the cookbook
+    Then the service resource warning 005 should not be visible
+
+  Scenario: Execute resources branching - too many
+    Given a cookbook recipe that declares too many execute resources varying only in the command in branching conditionals
+    When I check the cookbook
+    Then the service resource warning 005 should be visible
+
   Scenario: Execute resources branching in provider actions
     Given a cookbook provider that declares execute resources varying only in the command in separate actions
     When I check the cookbook

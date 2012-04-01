@@ -2,6 +2,29 @@ Given /^a ([a-z_])+ resource declared with the mode (.*)$/ do |resource,mode|
   recipe_resource_with_mode(resource, mode)
 end
 
+Given /^a cookbook recipe that declares (too many )?execute resources varying only in the command in branching conditionals$/ do |too_many|
+  extra_resource = %q{
+    execute "bing" do
+      action :run
+    end
+  }
+  write_recipe %Q{
+    if true
+      execute "foo" do
+        action :run
+      end
+    else
+      #{extra_resource if too_many}
+      execute "bar" do
+        action :run
+      end
+      execute "baz" do
+        action :run
+      end
+    end
+  }.strip
+end
+
 Given 'a cookbook provider that declares execute resources varying only in the command in separate actions' do
   write_provider 'site', %q{
     action :start do
@@ -907,6 +930,10 @@ end
 
 Then /^the rule should (not )?be visible in the list of rules$/ do |invisible|
   repl_rule_exists?(@rule_code, @rule_name).should == invisible.nil?
+end
+
+Then /^the service resource warning 005 should( not)? be visible$/ do |dont_show|
+  expect_warning('FC005', :line => dont_show ? 2 : 7, :expect_warning => ! dont_show)
 end
 
 Then /^the service resource warning 005 should( not)? be shown$/ do |dont_show|

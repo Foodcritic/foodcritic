@@ -47,6 +47,9 @@ rule "FC005", "Avoid repetition of resource declarations" do
                                       :ast => res})
     end.chunk do |res|
       res[:type] +
+      res[:ast].xpath("ancestor::*[self::if | self::unless | self::elsif |
+        self::else | self::when | self::method_add_block/call][position() = 1]/
+        descendant::pos[position() = 1]").to_s +
       res[:ast].xpath("ancestor::method_add_block/command[
         ident/@value='action']/args_add_block/descendant::ident/@value").to_s
     end.reject{|res| res[1].size < 3}
