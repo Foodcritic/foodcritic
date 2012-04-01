@@ -32,4 +32,9 @@ Feature: Check for resource repetition
   Scenario: Execute resources branching in provider actions
     Given a cookbook provider that declares execute resources varying only in the command in separate actions
     When I check the cookbook
-    Then the service resource warning 005 should not be displayed
+    Then the service resource warning 005 should not be shown
+
+  Scenario: Execute resources in the same provider action
+    Given a cookbook provider that declares execute resources varying only in the command in the same action
+    When I check the cookbook
+    Then the service resource warning 005 should be shown

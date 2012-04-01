@@ -3,17 +3,40 @@ Given /^a ([a-z_])+ resource declared with the mode (.*)$/ do |resource,mode|
 end
 
 Given 'a cookbook provider that declares execute resources varying only in the command in separate actions' do
-  write_recipe %q{
+  write_provider 'site', %q{
     action :start do
-      execute "foo"
+      execute "foo" do
+        action :run
+      end
       new_resource.updated_by_last_action(true)
     end
     action :stop do
-      execute "bar"
+      execute "bar" do
+        action :run
+      end
       new_resource.updated_by_last_action(true)
     end
     action :restart do
-      execute "baz"
+      execute "baz" do
+        action :run
+      end
+      new_resource.updated_by_last_action(true)
+    end
+  }.strip
+end
+
+Given 'a cookbook provider that declares execute resources varying only in the command in the same action' do
+  write_provider 'site', %q{
+    action :start do
+      execute "foo" do
+        action :run
+      end
+      execute "bar" do
+        action :run
+      end
+      execute "baz" do
+        action :run
+      end
       new_resource.updated_by_last_action(true)
     end
   }.strip
@@ -884,6 +907,11 @@ end
 
 Then /^the rule should (not )?be visible in the list of rules$/ do |invisible|
   repl_rule_exists?(@rule_code, @rule_name).should == invisible.nil?
+end
+
+Then /^the service resource warning 005 should( not)? be shown$/ do |dont_show|
+  expect_warning('FC005', :line => 2, :file_type => :provider,
+                 :expect_warning => ! dont_show)
 end
 
 Then /^the simple usage text should be displayed along with a (non-)?zero exit code$/ do |non_zero|

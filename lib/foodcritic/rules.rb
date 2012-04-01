@@ -45,7 +45,11 @@ rule "FC005", "Avoid repetition of resource declarations" do
     resources = find_resources(ast).map do |res|
       resource_attributes(res).merge({:type => resource_type(res),
                                       :ast => res})
-    end.chunk{|res| res[:type]}.reject{|res| res[1].size < 3}
+    end.chunk do |res|
+      res[:type] +
+      res[:ast].xpath("ancestor::method_add_block/command[
+        ident/@value='action']/args_add_block/descendant::ident/@value").to_s
+    end.reject{|res| res[1].size < 3}
     resources.map do |cont_res|
       first_resource = cont_res[1][0][:ast]
       # we have contiguous resources of the same type, but do they share the
