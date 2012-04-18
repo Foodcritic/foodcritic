@@ -182,6 +182,7 @@ end
 
 rule "FC015", "Consider converting definition to a LWRP" do
   tags %w{style definitions lwrp}
+  applies_to {|version| version >= gem_version("0.7.12")}
   cookbook do |dir|
     Dir[File.join(dir, 'definitions', '*.rb')].reject do |entry|
       ['.', '..'].include? entry
@@ -191,6 +192,7 @@ end
 
 rule "FC016", "LWRP does not declare a default action" do
   tags %w{correctness lwrp}
+  applies_to {|version| version >= gem_version("0.7.12")}
   resource do |ast, filename|
     unless ["//ident/@value='default_action'",
      "//def/bodystmt/descendant::assign/
@@ -202,6 +204,9 @@ end
 
 rule "FC017", "LWRP does not notify when updated" do
   tags %w{correctness lwrp}
+  applies_to do |version|
+    version >= gem_version("0.7.12") && version < gem_version("0.10.10")
+  end
   provider do |ast, filename|
     if ast.xpath(%q{//call/*[self::vcall or self::var_ref/ident/
                  @value='new_resource']/../
@@ -213,6 +218,7 @@ end
 
 rule "FC018", "LWRP uses deprecated notification syntax" do
   tags %w{style lwrp deprecated}
+  applies_to {|version| version >= gem_version("0.9.10")}
   provider do |ast|
     ast.xpath("//assign/var_field/ivar[@value='@updated']").map do |class_var|
       match(class_var)
@@ -248,6 +254,7 @@ end
 
 rule "FC020", "Conditional execution string attribute looks like Ruby" do
   tags %w{correctness}
+  applies_to {|version| version >= gem_version("0.7.4")}
   recipe do |ast, filename|
     conditions = ast.xpath(%q{//command[(ident/@value='only_if' or ident/
       @value='not_if') and descendant::tstring_content]}).map{|m| match(m)}
@@ -267,6 +274,7 @@ end
 
 rule "FC021", "Resource condition in provider may not behave as expected" do
   tags %w{correctness lwrp}
+  applies_to {|version| version >= gem_version("0.10.6")}
   provider do |ast|
     find_resources(ast).map do |resource|
       condition = resource.xpath(%q{//method_add_block/
@@ -281,6 +289,7 @@ end
 
 rule "FC022", "Resource condition within loop may not behave as expected" do
   tags %w{correctness}
+  applies_to {|version| version >= gem_version("0.10.6")}
   recipe do |ast|
     ast.xpath("//call[ident/@value='each']/../do_block").map do |loop|
       block_vars = loop.xpath("block_var/params/child::*").map do |n|
@@ -335,6 +344,7 @@ end
 
 rule "FC025", "Prefer chef_gem to compile-time gem install" do
   tags %w{style deprecated}
+  applies_to {|version| version >= gem_version("0.10.10")}
   recipe do |ast|
     gem_install = ast.xpath("//stmts_add/assign[method_add_block[command/ident/
       @value='gem_package'][do_block/stmts_add/command[ident/@value='action']
