@@ -29,6 +29,13 @@ module FoodCritic
       rules.last.tags += tags
     end
 
+    # Limit the versions that this rule can be seen to apply to.
+    #
+    # @param [block] block Your version constraint logic.
+    def applies_to(&block)
+      rules.last.applies_to = block
+    end
+
     # Define a matcher that will be passed the AST with this method.
     #
     # @param [block] block Your implemented matcher that returns a match Hash.

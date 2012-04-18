@@ -122,6 +122,14 @@ module FoodCritic
       ast.xpath("//method_add_block[command/ident#{scope_type}]#{no_actions}")
     end
 
+    # Helper to return a comparable version for a string.
+    #
+    # @param [String] version The version
+    # @return [Gem::Version] The comparable version
+    def gem_version(version)
+      Gem::Version.create(version)
+    end
+
     # Retrieve the recipes that are included within the given recipe AST.
     #
     # @param [Nokogiri::XML::Node] ast The recipe AST

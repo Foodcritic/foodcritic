@@ -1,5 +1,6 @@
 require 'optparse'
 require 'ripper'
+require 'rubygems'
 require 'gherkin/tag_expression'
 require 'set'
 
@@ -9,6 +10,9 @@ module FoodCritic
   class Linter
 
     include FoodCritic::Api
+
+    # The default version that will be used to determine relevant rules
+    DEFAULT_CHEF_VERSION = "0.10.8"
 
     # Perform option parsing from the provided arguments and do a lint check
     # based on those arguments.
@@ -51,8 +55,10 @@ module FoodCritic
       load_rules unless defined? @rules
       warnings = []; last_dir = nil; matched_rule_tags = Set.new
 
-      active_rules = @rules.select{|rule| matching_tags?(options[:tags],
-        rule.tags)}
+      active_rules = @rules.select do |rule|
+        matching_tags?(options[:tags], rule.tags) and
+        applies_to_version?(rule, options[:chef_version] || DEFAULT_CHEF_VERSION)
+      end
       files_to_process(cookbook_path).each do |file|
         cookbook_dir = Pathname.new(
           File.join(File.dirname(file), '..')).cleanpath
@@ -106,6 +112,16 @@ module FoodCritic
     end
 
     private
+
+    # Some rules are version specific.
+    #
+    # @param [FoodCritic::Rule] rule The rule determine applicability for
+    # @param [String] version The version of Chef
+    # @return [Boolean] True if the rule applies to this version of Chef
+    def applies_to_version?(rule, version)
+      return true unless version
+      rule.applies_to.yield(Gem::Version.create(version))
+    end
 
     # Invoke the DSL method with the provided parameters.
     #

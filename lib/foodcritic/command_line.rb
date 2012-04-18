@@ -24,6 +24,10 @@ module FoodCritic
           "Fail the build if any of the specified tags are matched.") do |t|
           options[:fail_tags] << t
         end
+        opts.on("-c", "--chef-version VERSION",
+          "Only check against rules valid for this version of Chef.") do |c|
+          options[:chef_version] = c
+        end
         opts.on("-C", "--[no-]context",
           "Show lines matched against rather than the default summary.") do |c|
           options[:context] = c
@@ -37,7 +41,7 @@ module FoodCritic
           options[:search_grammar] = s
         end
         opts.on("-V", "--version",
-          "Display version.") do |v|
+          "Display the foodcritic version.") do |v|
           options[:version] = true
         end
       end

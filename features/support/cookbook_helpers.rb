@@ -311,6 +311,40 @@ module FoodCritic
       }
     end
 
+    # Create a rule with the specified Chef version constraints
+    #
+    # @param [String] from_version The from version
+    # @param [String] to_version The to version
+    def rule_with_version_constraint(from_version, to_version)
+      constraint = if from_version && to_version
+        %Q{
+          applies_to do |version|
+            version >= gem_version("#{from_version}") && version <= gem_version("#{to_version}")
+          end
+        }
+      elsif from_version
+        %Q{
+          applies_to do |version|
+            version >= gem_version("#{from_version}")
+          end
+        }
+      elsif to_version
+        %Q{
+          applies_to do |version|
+            version <= gem_version("#{to_version}")
+          end
+        }
+      end
+      write_rule %Q{
+        rule "FCTEST001", "Test Rule" do
+          #{constraint}
+          recipe do |ast, filename|
+            [file_match(filename)]
+          end
+        end
+      }
+    end
+
     # Return the provided string or nil if 'unspecified'
     #
     # @param [String] str The string
@@ -333,6 +367,13 @@ module FoodCritic
     # @param [String] cookbook_name Optional name of the cookbook.
     def write_recipe(content, cookbook_name = 'example')
       write_file "cookbooks/#{cookbook_name}/recipes/default.rb", content.strip
+    end
+
+    # Create a rule with the provided content.
+    #
+    # @param [String] content The rule content.
+    def write_rule(content)
+      write_file "rules/test.rb", content.strip
     end
 
     # Create attributes with the provided content.

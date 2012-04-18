@@ -519,6 +519,14 @@ Given /^a cookbook that matches rules (.*)$/ do |rules|
   cookbook_that_matches_rules(rules.split(','))
 end
 
+Given 'a cookbook that matches that rule' do
+  write_recipe %q{
+    execute "bar" do
+      action :run
+    end
+  }
+end
+
 Given 'a cookbook with a single recipe that accesses multiple node attributes via symbols' do
   write_recipe %q{
     node[:foo] = 'bar'
@@ -691,6 +699,18 @@ Given 'a recipe that declares multiple resources of the same type of which one h
   }
 end
 
+Given /^a rule that (declares|does not declare) a version constraint(?: of ([^ ]+)? to ([^ ]+)?)?$/ do |constraint, from, to|
+  if from || to
+    rule_with_version_constraint(from, to)
+  else
+    from_version = case constraint
+      when /not/ then nil
+      else '0.10.6'
+    end
+    rule_with_version_constraint(from_version, nil)
+  end
+end
+
 Given /^another cookbook that has (an older )?chef-solo-search installed$/ do |older|
   if older.nil?
     write_library 'search', %q{
@@ -728,10 +748,26 @@ Given 'I have started the lint tool with the REPL enabled' do
   }
 end
 
+Given /^the current stable version of Chef (falls|does not fall) within it$/ do |falls_within|
+  rule_with_version_constraint("98.10", nil) unless falls_within.include?('falls')
+end
+
+When /^I check the cookbook specifying ([^ ]+) as the Chef version$/ do |version|
+  options = ['-c', version, 'cookbooks/example']
+  in_current_dir do
+    options = ['-I', 'rules/test.rb'] + options if Dir.exists?('rules')
+  end
+  run_lint(options)
+end
+
 When /^I check the cookbook( tree)?(?: specifying tags(.*))?(, specifying that context should be shown)?$/ do |whole_tree, tags, context|
   options = tags.nil? ? [] : tags.split(' ')
   options += ['-C'] unless context.nil?
   run_lint(options + ["cookbooks/#{whole_tree.nil? ? 'example' : ''}"])
+end
+
+When 'I check the cookbook without specifying a Chef version' do
+  run_lint(['-I', 'rules/test.rb', 'cookbooks/example'])
 end
 
 When /^I define a new rule( and reset the list of rules| that includes a binding)?$/ do |qualifier|
@@ -811,6 +847,7 @@ Then 'I should be able to see the full list of DSL methods from inside the rule'
     :declared_dependencies,
     :file_match,
     :find_resources,
+    :gem_version,
     :included_recipes,
     :literal_searches,
     :match,
@@ -832,6 +869,10 @@ end
 
 Then 'no error should have occurred' do
   assert_no_error_occurred
+end
+
+Then /^the warning should (not )?be displayed$/ do |should_not|
+  expect_warning 'FCTEST001', {:expect_warning => should_not.nil?}
 end
 
 Then /^the (?:[a-zA-Z \-_]+) warning ([0-9]+) should (not )?be displayed(?: against the (attributes|definition|metadata|provider|resource|README.md|README.rdoc) file)?( below)?$/ do |code, no_display, file, warning_only|
