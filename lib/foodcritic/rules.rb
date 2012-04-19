@@ -9,9 +9,9 @@ end
 rule "FC002", "Avoid string interpolation where not required" do
   tags %w{style strings}
   recipe do |ast|
-    ast.xpath(%q{//string_literal[count(descendant::string_embexpr) = 1 and
-      count(string_add/tstring_content|string_add/string_add/tstring_content)
-      = 0]})
+    ast.xpath(%q{//*[self::string_literal | self::assoc_new]/string_add[
+      count(descendant::string_embexpr) = 1 and
+      count(tstring_content|string_add/tstring_content) = 0]})
   end
 end
 

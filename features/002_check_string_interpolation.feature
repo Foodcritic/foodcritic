@@ -33,3 +33,13 @@ Feature: Check String Interpolation
     Given a cookbook with a single recipe that creates a directory resource with an interpolated variable and a literal
     When I check the cookbook
     Then the string interpolation warning 002 should not be displayed
+
+  Scenario: String interpolation in first Hash key
+    Given a cookbook with a single recipe for which the first hash key is an interpolated string
+     When I check the cookbook
+     Then the string interpolation warning 002 should be displayed
+
+  Scenario: String interpolation in first Hash value
+    Given a cookbook with a single recipe for which the first hash value is an interpolated string
+     When I check the cookbook
+     Then the string interpolation warning 002 should be displayed

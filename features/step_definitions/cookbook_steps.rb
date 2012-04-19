@@ -527,6 +527,13 @@ Given 'a cookbook that matches that rule' do
   }
 end
 
+Given /^a cookbook with a single recipe for which the first hash (key|value) is an interpolated string$/ do |key_or_value|
+  write_recipe case key_or_value
+    when 'key' then %q{{"#{foo}" => 'bar', 'bar' => 'foo'}}
+    when 'value' then %q{{'foo' => "#{bar}", 'bar' => 'foo'}}
+  end
+end
+
 Given 'a cookbook with a single recipe that accesses multiple node attributes via symbols' do
   write_recipe %q{
     node[:foo] = 'bar'
