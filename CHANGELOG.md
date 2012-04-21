@@ -1,3 +1,39 @@
+## 1.2.0 (21st April, 2012)
+
+Features:
+
+  - [FC025: Prefer chef_gem to compile-time gem install](http://acrmp.github.com/foodcritic/#FC025)
+    rule added.
+  - Rules can now declare which versions of Chef they `apply_to`. The new
+    command line argument `-c` (`--chef-version`) should be used to specify the
+    effective Chef version.
+
+Bugfixes:
+
+  - [FC001: Use strings in preference to symbols to access node attributes](http://acrmp.github.com/foodcritic/#FC001)
+    could show false positives when using Chef search.
+  - [FC001: Use strings in preference to symbols to access node attributes](http://acrmp.github.com/foodcritic/#FC001)
+    would overlook the use of symbols to access node attributes when passing
+    template variables.
+  - [FC002: Avoid string interpolation where not required](http://acrmp.github.com/foodcritic/#FC002)
+    fixed to no longer ignore the first keypair in a Hash
+    ([related issue](https://github.com/acrmp/foodcritic/issues/24)).
+    Thanks @Ips1975.
+  - [FC004: Use a service resource to start and stop services](http://acrmp.github.com/foodcritic/#FC004)
+    modified not to warn if the action is not supported by the `service`
+    resource.
+  - [FC005: Avoid repetition of resource declarations](http://acrmp.github.com/foodcritic/#FC005)
+    modified not to warn when resources are branched within conditionals or
+    provider actions.
+  - [FC007: Ensure recipe dependencies are reflected in cookbook metadata](http://acrmp.github.com/foodcritic/#FC007)
+    modified to ignore the use of `include_recipe` with embedded expressions.
+  - [FC023: Prefer conditional attributes](http://acrmp.github.com/foodcritic/#FC023)
+    modified not to warn if the conditional expression has an `else`.
+  - The `resource_attributes` API method has been updated to return block
+    attributes which were previously ignored
+    ([related issue](https://github.com/acrmp/foodcritic/issues/23)).
+    Thanks @jonlives.
+
 ## 1.1.0 (25th March, 2012)
 
 Features:
