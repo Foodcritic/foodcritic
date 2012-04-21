@@ -205,7 +205,7 @@ end
 rule "FC017", "LWRP does not notify when updated" do
   tags %w{correctness lwrp}
   applies_to do |version|
-    version >= gem_version("0.7.12") && version < gem_version("0.10.10")
+    version >= gem_version("0.7.12")
   end
   provider do |ast, filename|
     if ast.xpath(%q{//call/*[self::vcall or self::var_ref/ident/
