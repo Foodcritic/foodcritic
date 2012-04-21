@@ -738,6 +738,36 @@ rules:
                 action :install
               end
             end
+  - code: FC025
+    name: Prefer chef_gem to compile-time gem install
+    tags:
+      - style
+      - deprecated
+    summary: |
+      This warning is shown if:
+      * you have a cookbook that installs a Rubygem for use from Chef
+      * the cookbook uses the
+        [compile-time gem install trick](http://www.opscode.com/blog/2009/06/01/cool-chef-tricks-install-and-use-rubygems-in-a-chef-run/)
+        which is deprecated from Chef 0.10.10 and is replaced by the first class
+        `chef_gem` resource.
+    examples:
+      - title: Manual compile-time installation
+        text: |
+          This example matches the FC025 rule because it uses the older
+          approach for installing a gem so that it is available in the current
+          run.
+        code: |
+          r = gem_package "mysql" do
+            action :nothing
+          end
+
+          r.run_action(:install)
+          Gem.clear_paths
+      - title: Modified version
+        text: |
+          Use `chef_gem` to install the gem to avoid this warning.
+        code: |
+          chef_gem "mysql"
 api_methods: 
   - name: attribute_access
     description: |
