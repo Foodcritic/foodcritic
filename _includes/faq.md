@@ -22,3 +22,8 @@ are using RVM you can follow the instructions on the RVM site to resolve this:
 
 * [http://beginrescueend.com/packages/readline/](http://beginrescueend.com/packages/readline/)
 
+### I'm using foodcritic in my CI build or commit hook and I want it to fail if errors are shown
+
+You can tell foodcritic which warnings you want it to fail the build on with the
+`-f` option. See the [Failing the build](#failing_the_build) section for more
+detail.
