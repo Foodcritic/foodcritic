@@ -325,6 +325,79 @@ describe FoodCritic::Api do
       resource = MiniTest::Mock.new.expect :xpath, [], [String]
       api.resource_attributes(resource).must_equal({})
     end
+    describe "block attributes" do
+      def str_to_atts(str)
+        ast = api.send(:build_xml, Ripper::SexpBuilder.new(str).parse)
+        api.resource_attributes(api.find_resources(ast).first)
+      end
+      it "includes attributes with brace block values in the result" do
+        atts = str_to_atts(%q{
+          file "/etc/foo" do
+            mode "0600"
+            action :create
+            only_if { File.exists?("/etc/bar") }
+          end
+        })
+        atts['only_if'].wont_be_nil
+        atts['only_if'].must_respond_to :xpath
+        atts['only_if'].name.must_equal 'brace_block'
+      end
+      it "includes attributes with do block values in the result" do
+        atts = str_to_atts(%q{
+          file "/etc/foo" do
+            mode "0600"
+            action :create
+            only_if do
+              !File.exists?(foo) || (File.exists?(bar) &&
+                File.mtime(baz) < last_changedate)
+            end
+          end
+        })
+        atts['only_if'].wont_be_nil
+        atts['only_if'].must_respond_to :xpath
+        atts['only_if'].name.must_equal 'do_block'
+      end
+      it "supports multiple block attributes" do
+        atts = str_to_atts(%q{
+          file "/etc/foo" do
+            mode "0600"
+            action :create
+            only_if { false }
+            not_if { true }
+          end
+        })
+        atts['only_if'].wont_be_nil
+        atts['only_if'].must_respond_to :xpath
+        atts['only_if'].name.must_equal 'brace_block'
+        atts['not_if'].wont_be_nil
+        atts['not_if'].must_respond_to :xpath
+        atts['not_if'].name.must_equal 'brace_block'
+      end
+      it "includes top-level blocks only" do
+        atts = str_to_atts(%q{
+          ruby_block "example" do
+            block do
+              foo do |bar|
+                Chef::Log.info(bar)
+              end
+            end
+            only_if { true }
+            not_if { false }
+          end
+        })
+        atts.keys.wont_include 'foo'
+        atts['block'].wont_be_nil
+        atts['block'].must_respond_to :xpath
+        atts['block'].name.must_equal 'do_block'
+        atts['only_if'].wont_be_nil
+        atts['only_if'].must_respond_to :xpath
+        atts['only_if'].name.must_equal 'brace_block'
+        atts['not_if'].wont_be_nil
+        atts['not_if'].must_respond_to :xpath
+        atts['not_if'].name.must_equal 'brace_block'
+      end
+
+    end
   end
 
   describe "#resource_attributes_by_type" do

@@ -224,6 +224,13 @@ module FoodCritic
         end
         atts[att.xpath('string(ident/@value)')] = att_value
       end
+      resource.xpath("do_block/descendant::method_add_block[
+        count(ancestor::do_block) = 1][brace_block | do_block]").each do |batt|
+          att_name = batt.xpath('string(method_add_arg/fcall/ident/@value)')
+          if att_name and ! att_name.empty? and batt.children.length > 1
+            atts[att_name] = batt.children[1]
+          end
+      end
       atts
     end
 
