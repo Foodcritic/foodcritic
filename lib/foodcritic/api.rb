@@ -23,7 +23,7 @@ module FoodCritic
       end
 
       if options[:type] == :vivified
-        vivified_attribute_access(ast)
+        vivified_attribute_access(ast, options[:cookbook_dir])
       else
         standard_attribute_access(ast, options)
       end
@@ -357,6 +357,21 @@ module FoodCritic
       xml_node
     end
 
+    def node_method?(meth, cookbook_dir)
+      chef_dsl_methods.include?(meth) || patched_node_method?(meth, cookbook_dir)
+    end
+
+    def patched_node_method?(meth, cookbook_dir)
+      return false if cookbook_dir.nil? || ! Dir.exists?(cookbook_dir)
+      cbk_tree_path = Pathname.new(File.join(cookbook_dir, '..'))
+      libs = Dir[File.join(cbk_tree_path.realpath, '*/libraries/*.rb')]
+      libs.any? do |lib|
+        ! read_ast(lib).xpath(%Q{//class[count(descendant::const[@value='Chef'])
+          > 0][count(descendant::const[@value='Node']) > 0]/descendant::def/
+          ident[@value='#{meth.to_s}']}).empty?
+      end
+    end
+
     # If the provided node is the line / column information.
     #
     # @param [Nokogiri::XML::Node] node A node within the AST
@@ -382,14 +397,14 @@ module FoodCritic
       ast.xpath(expr, AttFilter.new).sort
     end
 
-    def vivified_attribute_access(ast)
+    def vivified_attribute_access(ast, cookbook_dir)
       calls = ast.xpath(%q{//*[self::call or self::field]
         [is_att_type(vcall/ident/@value) or
         is_att_type(var_ref/ident/@value)][@value='.']}, AttFilter.new)
       calls.select do |call|
         call.xpath("aref/args_add_block").size == 0 and
           (call.xpath("descendant::ident").size > 1 and
-            ! chef_dsl_methods.include?(call.xpath("ident/@value").to_s.to_sym))
+            ! node_method?(call.xpath("ident/@value").to_s.to_sym, cookbook_dir))
       end.sort
     end
 

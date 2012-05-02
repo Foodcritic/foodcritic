@@ -235,8 +235,8 @@ rule "FC019", "Access node attributes in a consistent manner" do
     end
     types = [:string, :symbol, :vivified].map do |type|
       {:access_type => type, :count => files.map do |file|
-        attribute_access(file[:ast], :type => type,
-                         :ignore_calls => true).tap do |ast|
+        attribute_access(file[:ast], :type => type, :ignore_calls => true,
+                          :cookbook_dir => cookbook_dir).tap do |ast|
           if (! ast.empty?) and (! asts.has_key?(type))
             asts[type] = {:ast => ast, :path => file[:path]}
           end

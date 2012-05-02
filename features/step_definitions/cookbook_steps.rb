@@ -545,6 +545,23 @@ Given 'a cookbook with a single recipe that accesses nested node attributes via 
   write_recipe %q{node[:foo][:foo2] = 'bar'}
 end
 
+Given 'a cookbook with a single recipe that calls a patched node method' do
+  write_library 'search', %q{
+    class Chef
+      class Node
+        def in_tier?(*tier)
+           tier.flatten.include?(node['tier'])
+        end
+      end
+    end
+  }
+  write_recipe %q{
+    if node['something']['bar'] || node.in_tier?('foof')
+      Chef::Log.info("Node has been patched")
+    end
+  }
+end
+
 Given 'a cookbook with a single recipe that passes node attributes accessed via symbols to a template' do
   write_recipe %q{
     template "/etc/foo" do

@@ -63,6 +63,11 @@ Feature: Check for consistency in node access
       | updates  | strings          | foo = node[:foo].strip            | shown        |
       | updates  | symbols          | node['foo'].strip                 | shown        |
 
+  Scenario: Ignore method calls on patched node values
+    Given a cookbook with a single recipe that calls a patched node method
+     When I check the cookbook
+     Then the attribute consistency warning 019 should be not shown
+
   Scenario: Two cookbooks with differing approaches
     Given a cookbook with a single recipe that reads node attributes via strings only
       And another cookbook with a single recipe that reads node attributes via symbols only
