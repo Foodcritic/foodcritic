@@ -8,3 +8,5 @@ pkg
 *.swp
 tmp
 Gemfile.lock
+.DS_Store
+.rvmrc
