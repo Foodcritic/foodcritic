@@ -636,12 +636,12 @@ Given /^a cookbook with a single recipe that creates a directory resource with (
                         'a literal and interpolated variable' => :literal_and_interpolated_symbol}[path_type])
 end
 
-Given 'a cookbook with a single recipe that searches but checks first to see if this is server' do
-  write_recipe %q{
-    if Chef::Config[:solo]
+Given /^a cookbook with a single recipe that searches but checks first( \(string\))? to see if this is server$/ do |str|
+  write_recipe %Q{
+    if Chef::Config[#{str ? "'solo'" : ":solo"}]
       Chef::Log.warn("This recipe uses search. Chef Solo does not support search.")
     else
-      nodes = search(:node, "hostname:[* TO *] AND chef_environment:#{node.chef_environment}")
+      nodes = search(:node, "hostname:[* TO *] AND chef_environment:#\{node.chef_environment\}")
     end
   }
 end
