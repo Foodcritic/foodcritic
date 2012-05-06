@@ -32,13 +32,17 @@ module FoodCritic
     # Does the specified recipe check for Chef Solo?
     #
     # @param [Nokogiri::XML::Node] ast The AST of the cookbook recipe to check.
-    # @return [Boolean] True if there is a test for Chef::Config[:solo] in the
-    #   recipe
+    # @return [Boolean] True if there is a test for Chef::Config[:solo],
+    #   Chef::Config['solo'] in the recipe
     def checks_for_chef_solo?(ast)
       raise_unless_xpath!(ast)
       ! ast.xpath(%q{//if/aref[count(descendant::const[@value = 'Chef' or
           @value = 'Config']) = 2
-          and count(descendant::ident[@value='solo']) > 0]}).empty?
+          and
+            (   count(descendant::ident[@value='solo']) > 0
+            or  count(descendant::tstring_content[@value='solo']) > 0
+            )
+          ]}).empty?
     end
 
     # Is the chef-solo-search library available?
