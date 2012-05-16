@@ -79,7 +79,7 @@ module FoodCritic
     # If the cookbook path provided is valid
     #
     # @return [Boolean] True if the path exists.
-    def valid_path?
+    def valid_paths?
       @args.length == 1 and File.exists?(@args[0])
     end
 

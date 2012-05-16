@@ -25,7 +25,7 @@ module FoodCritic
       return [cmd_line.version, 0] if cmd_line.show_version?
       if ! cmd_line.valid_grammar?
         [cmd_line.help, 4]
-      elsif cmd_line.valid_path?
+      elsif cmd_line.valid_paths?
         review = FoodCritic::Linter.new.check(cmd_line.cookbook_path,
           cmd_line.options)
         [review, review.failed? ? 3 : 0]
