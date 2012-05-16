@@ -849,10 +849,6 @@ When 'I run it on the command line with the unimplemented verbose option' do
   run_lint(['-v'])
 end
 
-When 'I run it on the command line with too many arguments' do
-  run_lint(['example', 'example'])
-end
-
 Then 'a warning for the custom rule should be displayed' do
   expect_output('BAR001: Use symbols in preference to strings to access node attributes: cookbooks/example/recipes/default.rb:1')
 end
