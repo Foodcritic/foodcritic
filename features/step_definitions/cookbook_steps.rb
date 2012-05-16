@@ -790,6 +790,10 @@ When /^I check the cookbook( tree)?(?: specifying tags(.*))?(, specifying that c
   run_lint(options + ["cookbooks/#{whole_tree.nil? ? 'example' : ''}"])
 end
 
+When 'I check both cookbooks' do
+  run_lint(["cookbooks/another_example", "cookbooks/example"])
+end
+
 When 'I check the cookbook without specifying a Chef version' do
   run_lint(['-I', 'rules/test.rb', 'cookbooks/example'])
 end
