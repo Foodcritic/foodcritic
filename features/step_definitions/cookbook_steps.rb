@@ -790,12 +790,16 @@ When /^I check the cookbook( tree)?(?: specifying tags(.*))?(, specifying that c
   run_lint(options + ["cookbooks/#{whole_tree.nil? ? 'example' : ''}"])
 end
 
-When 'I check the recipe' do
-  run_lint(["cookbooks/example/recipes/default.rb"])
+When 'I check both cookbooks' do
+  run_lint(["cookbooks/another_example", "cookbooks/example"])
 end
 
 When 'I check the cookbook without specifying a Chef version' do
   run_lint(['-I', 'rules/test.rb', 'cookbooks/example'])
+end
+
+When 'I check the recipe' do
+  run_lint(["cookbooks/example/recipes/default.rb"])
 end
 
 When /^I define a new rule( and reset the list of rules| that includes a binding)?$/ do |qualifier|
@@ -847,10 +851,6 @@ end
 
 When 'I run it on the command line with the unimplemented verbose option' do
   run_lint(['-v'])
-end
-
-When 'I run it on the command line with too many arguments' do
-  run_lint(['example', 'example'])
 end
 
 Then 'a warning for the custom rule should be displayed' do

@@ -11,7 +11,7 @@ module FoodCritic
       @original_args = args.dup
       @options = {:fail_tags => [], :tags => [], :include_rules => []}
       @parser = OptionParser.new do |opts|
-        opts.banner = 'foodcritic [cookbook_path]'
+        opts.banner = 'foodcritic [cookbook_paths]'
         opts.on("-r", "--[no-]repl",
           "Drop into a REPL for interactive rule editing.") do |r|
           options[:repl] = r
@@ -76,18 +76,18 @@ module FoodCritic
       "foodcritic #{FoodCritic::VERSION}"
     end
 
-    # If the cookbook path provided is valid
+    # If the cookbook paths provided are valid
     #
-    # @return [Boolean] True if the path exists.
-    def valid_path?
-      @args.length == 1 and File.exists?(@args[0])
+    # @return [Boolean] True if the paths exist.
+    def valid_paths?
+      @args.any? && @args.all? {|path| File.exists?(path) }
     end
 
-    # The cookbook path
+    # The cookbook paths
     #
-    # @return [String] Path to the cookbook(s) being checked.
-    def cookbook_path
-      @args[0]
+    # @return [Array<String>] Path(s) to the cookbook(s) being checked.
+    def cookbook_paths
+      @args
     end
 
     # Is the search grammar specified valid?

@@ -9,11 +9,6 @@ Feature: Command line help
      When I run it on the command line with no arguments
      Then the simple usage text should be displayed along with a non-zero exit code
 
-  Scenario: Too many arguments
-    Given I have installed the lint tool
-     When I run it on the command line with too many arguments
-     Then the simple usage text should be displayed along with a non-zero exit code
-
   Scenario: Non-existent cookbook directory
     Given I have installed the lint tool
      When I run it on the command line specifying a cookbook that does not exist

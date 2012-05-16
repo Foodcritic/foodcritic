@@ -109,7 +109,7 @@ module FoodCritic
     #
     # @param [Boolean] is_exit_zero The exit code to check for.
     def usage_displayed(is_exit_zero)
-      expect_output 'foodcritic [cookbook_path]'
+      expect_output 'foodcritic [cookbook_paths]'
       expect_usage_option('c', 'chef-version VERSION', 'Only check against rules valid for this version of Chef.')
       expect_usage_option('f', 'epic-fail TAGS', 'Fail the build if any of the specified tags are matched.')
       expect_usage_option('r', '[no-]repl', 'Drop into a REPL for interactive rule editing.')

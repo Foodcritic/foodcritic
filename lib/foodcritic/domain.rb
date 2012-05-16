@@ -20,16 +20,16 @@ module FoodCritic
   # The collected warnings (if any) raised against a cookbook tree.
   class Review
 
-    attr_reader :cookbook_path, :warnings
+    attr_reader :cookbook_paths, :warnings
 
     # Create a new review
     #
-    # @param [String] cookbook_path The path this review was performed against
+    # @param [String] cookbook_paths The path this review was performed against
     # @param [Array] warnings The warnings raised in this review
     # @param [Boolean] is_failed Have warnings been raised that mean this
     #   should be considered failed?
-    def initialize(cookbook_path, warnings, is_failed)
-      @cookbook_path = cookbook_path
+    def initialize(cookbook_paths, warnings, is_failed)
+      @cookbook_paths = cookbook_paths
       @warnings = warnings
       @is_failed = is_failed
     end
