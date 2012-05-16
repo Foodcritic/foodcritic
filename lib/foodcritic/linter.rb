@@ -42,15 +42,15 @@ module FoodCritic
     # Review the cookbooks at the provided path, identifying potential
     # improvements.
     #
-    # @param [String] cookbook_paths The file path to an individual cookbook
-    #   directory
+    # @param [String] cookbook_paths The file path(s) to an individual
+    #   cookbook(s) being checked
     # @param [Hash] options Options to apply to the linting
     # @option options [Array] tags The tags to filter rules based on
     # @option options [Array] fail_tags The tags to fail the build on
     # @return [FoodCritic::Review] A review of your cookbooks, with any
     #   warnings issued.
     def check(cookbook_paths, options)
-      raise ArgumentError, "Cookbook path is required" if cookbook_paths.nil?
+      raise ArgumentError, "Cookbook paths are required" if cookbook_paths.nil?
       @last_cookbook_paths, @last_options = cookbook_paths, options
       load_rules unless defined? @rules
       warnings = []; last_dir = nil; matched_rule_tags = Set.new
@@ -146,14 +146,23 @@ module FoodCritic
     # Return the files within a cookbook tree that we are interested in trying
     # to match rules against.
     #
-    # @param [String] dir The cookbook directory
-    # @return [Array] The files underneath the provided directory to be
+    # @param [Array<String>] dirs The cookbook path(s)
+    # @return [Array] The files underneath the provided paths to be
     #   processed.
-    def files_to_process(dir)
-      return [dir] unless File.directory? dir
-      cookbook_glob = '{attributes,providers,recipes,resources}/*.rb'
-      Dir.glob(File.join(dir, cookbook_glob)) +
-        Dir.glob(File.join(dir, "*/#{cookbook_glob}"))
+    def files_to_process(dirs)
+      files = []
+
+      dirs.each do |dir|
+        if File.directory? dir
+          cookbook_glob = '{attributes,providers,recipes,resources}/*.rb'
+          files += Dir.glob(File.join(dir, cookbook_glob)) +
+            Dir.glob(File.join(dir, "*/#{cookbook_glob}"))
+        else
+          files << dir
+        end
+      end
+
+      files
     end
 
     # Whether to fail the build.
