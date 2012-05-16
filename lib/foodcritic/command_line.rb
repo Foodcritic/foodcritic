@@ -86,7 +86,7 @@ module FoodCritic
     # The cookbook path
     #
     # @return [String] Path to the cookbook(s) being checked.
-    def cookbook_path
+    def cookbook_paths
       @args[0]
     end
 

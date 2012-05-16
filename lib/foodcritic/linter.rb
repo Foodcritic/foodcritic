@@ -26,7 +26,7 @@ module FoodCritic
       if ! cmd_line.valid_grammar?
         [cmd_line.help, 4]
       elsif cmd_line.valid_paths?
-        review = FoodCritic::Linter.new.check(cmd_line.cookbook_path,
+        review = FoodCritic::Linter.new.check(cmd_line.cookbook_paths,
           cmd_line.options)
         [review, review.failed? ? 3 : 0]
       else
@@ -42,16 +42,16 @@ module FoodCritic
     # Review the cookbooks at the provided path, identifying potential
     # improvements.
     #
-    # @param [String] cookbook_path The file path to an individual cookbook
+    # @param [String] cookbook_paths The file path to an individual cookbook
     #   directory
     # @param [Hash] options Options to apply to the linting
     # @option options [Array] tags The tags to filter rules based on
     # @option options [Array] fail_tags The tags to fail the build on
     # @return [FoodCritic::Review] A review of your cookbooks, with any
     #   warnings issued.
-    def check(cookbook_path, options)
-      raise ArgumentError, "Cookbook path is required" if cookbook_path.nil?
-      @last_cookbook_path, @last_options = cookbook_path, options
+    def check(cookbook_paths, options)
+      raise ArgumentError, "Cookbook path is required" if cookbook_paths.nil?
+      @last_cookbook_paths, @last_options = cookbook_paths, options
       load_rules unless defined? @rules
       warnings = []; last_dir = nil; matched_rule_tags = Set.new
 
@@ -59,7 +59,7 @@ module FoodCritic
         matching_tags?(options[:tags], rule.tags) and
         applies_to_version?(rule, options[:chef_version] || DEFAULT_CHEF_VERSION)
       end
-      files_to_process(cookbook_path).each do |file|
+      files_to_process(cookbook_paths).each do |file|
         cookbook_dir = Pathname.new(
           File.join(File.dirname(file), '..')).cleanpath
         ast = read_ast(file)
@@ -82,7 +82,7 @@ module FoodCritic
         last_dir = cookbook_dir
       end
 
-      @review = Review.new(cookbook_path, warnings,
+      @review = Review.new(cookbook_paths, warnings,
                   should_fail_build?(options[:fail_tags], matched_rule_tags))
 
       binding.pry if options[:repl]
@@ -92,7 +92,7 @@ module FoodCritic
     # Convenience method to repeat the last check. Intended to be used from the
     # REPL.
     def recheck
-      check(@last_cookbook_path, @last_options)
+      check(@last_cookbook_paths, @last_options)
     end
 
     # Load the rules from the (fairly unnecessary) DSL.
