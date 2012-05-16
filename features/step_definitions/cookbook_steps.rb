@@ -790,6 +790,10 @@ When /^I check the cookbook( tree)?(?: specifying tags(.*))?(, specifying that c
   run_lint(options + ["cookbooks/#{whole_tree.nil? ? 'example' : ''}"])
 end
 
+When 'I check the recipe' do
+  run_lint(["cookbooks/example/recipes/default.rb"])
+end
+
 When 'I check the cookbook without specifying a Chef version' do
   run_lint(['-I', 'rules/test.rb', 'cookbooks/example'])
 end
@@ -979,6 +983,14 @@ Then 'the node access warning 001 should warn on lines 2 and 10 in that order' d
     "FC001: Use strings in preference to symbols to access node attributes: cookbooks/example/recipes/default.rb:#{line}"
   end
   expect_output(expected_warnings.join("\n"))
+end
+
+Then 'the node access warning 001 should be displayed for the recipe' do
+  expect_warning('FC001')
+end
+
+Then 'the node access warning 001 should not be displayed for the attributes' do
+  expect_warning("FC001", :file_type => :attributes, :line => 1, :expect_warning => false)
 end
 
 Then 'the prefer chef_gem to manual install warning 025 should be shown' do
