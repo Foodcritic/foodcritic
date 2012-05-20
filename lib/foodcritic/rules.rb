@@ -362,3 +362,19 @@ rule "FC025", "Prefer chef_gem to compile-time gem install" do
     end
   end
 end
+
+rule "FC026", "Conditional execution block attribute contains only string" do
+  tags %w{correctness}
+  applies_to {|version| version >= gem_version("0.7.4")}
+  recipe do |ast|
+    find_resources(ast).map{|r| resource_attributes(r)}.map do |resource|
+      [resource['not_if'], resource['only_if']]
+    end.flatten.compact.select do |condition|
+      condition.respond_to?(:xpath) and
+      ! condition.xpath('descendant::string_literal').empty? and
+        ! condition.xpath('stmts_add/string_literal').empty? and
+        condition.xpath('descendant::stmts_add[count(ancestor::
+          string_literal) = 0]').size == 1
+    end
+  end
+end

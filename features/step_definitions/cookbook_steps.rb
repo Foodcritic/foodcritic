@@ -943,6 +943,10 @@ Then /^the consider adding platform warning 024 should( not)? be shown$/ do |sho
   expect_warning('FC024', :line => should_not.nil? ? @expected_line : nil, :expect_warning => should_not.nil?)
 end
 
+Then /^the conditional block contains only string warning 026 should be (shown|not shown)$/ do |show_warning|
+  expect_warning('FC026', :line => nil, :expect_warning => show_warning == 'shown')
+end
+
 Then /^the conditional string looks like ruby warning 020 should be (shown|not shown)$/ do |show_warning|
   expect_warning('FC020', :line => nil, :expect_warning => show_warning == 'shown')
 end
