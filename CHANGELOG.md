@@ -1,3 +1,47 @@
+## 1.3.0 (21st May, 2012)
+
+Features:
+
+  - [FC026: Conditional execution block attribute contains only string](http://acrmp.github.com/foodcritic/#FC026)
+    rule added
+    ([related issue](https://github.com/acrmp/foodcritic/issues/30)).
+    Thanks to @mkocher for proposing this rule.
+  - Foodcritic now accepts multiple cookbook paths as arguments and supports
+    linting of individual files only. Big thanks to @cgriego for these changes.
+    These lay the groundwork for his new
+    [guard-foodcritic](https://github.com/cgriego/guard-foodcritic) project.
+
+Bugfixes:
+
+  - [FC003: Check whether you are running with chef server before using server-specific features](http://acrmp.github.com/foodcritic/#FC003)
+    would still warn if solo was checked for as a string
+    ([related issue](https://github.com/acrmp/foodcritic/issues/26)).
+    Thanks to @miketheman for identifying and fixing this issue.
+  - [FC019: Access node attributes in a consistent manner](http://acrmp.github.com/foodcritic/#FC019)
+    would warn when the node object had been re-opened for extension
+    ([related issue](https://github.com/acrmp/foodcritic/issues/22)).
+    Thanks @jaymzh.
+  - [FC020: Conditional execution string attribute looks like Ruby](http://acrmp.github.com/foodcritic/#FC020)
+    updated to not warn against strings that appear to contain file paths or Windows `net use`
+    ([related issue](https://github.com/acrmp/foodcritic/issues/30)).
+    Thanks @eherot and @mconigliaro.
+  - [FC022: Resource condition within loop may not behave as expected](http://acrmp.github.com/foodcritic/#FC022)
+    would warn incorrectly if the resource name was set directly to the block
+    variable rather than being a string expression
+    ([related issue](https://github.com/acrmp/foodcritic/issues/29)).
+    Thanks @eherot.
+  - The [resource_attributes](http://acrmp.github.com/foodcritic/#resource_attributes)
+    API method has been updated to return the AST for resource notifications
+    ([related issue](https://github.com/acrmp/foodcritic/issues/31)).
+    Thanks @jonlives.
+
+Other:
+
+  - [Etsy have open-sourced their Foodcritic rules](https://github.com/etsy/foodcritic-rules).
+    You should definitely check these out.
+  - The effective Chef version for determining the rules to apply has been
+    bumped to 0.10.10.
+
 ## 1.2.0 (21st April, 2012)
 
 Features:
