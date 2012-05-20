@@ -22,3 +22,5 @@ Feature: Check for conditional attributes that look like Ruby
     | only_if "foo --bar"                                        | not shown    |
     | not_if 'ls -1 \| grep foo'                                 | not shown    |
     | not_if '::File.directory?(node[:foo])'                     | shown        |
+    | only_if "/usr/bin/id #{user_to_delete} > /dev/null"        | not shown    |
+    | not_if "/usr/sbin/groupmod #{jetty_settings['group']}"     | not shown    |

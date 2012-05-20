@@ -187,6 +187,7 @@ module FoodCritic
     def os_command?(str)
       str.start_with?('grep ', 'which ') or # common commands
       str.include?('|') or                  # a pipe, could be alternation
+      str.include?('/') or                  # file path delimiter
       str.match(/^[\w]+$/) or               # command name only
       str.match(/ --?[a-z]/i)               # command-line flag
     end
