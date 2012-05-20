@@ -12,7 +12,7 @@ module FoodCritic
     include FoodCritic::Api
 
     # The default version that will be used to determine relevant rules
-    DEFAULT_CHEF_VERSION = "0.10.8"
+    DEFAULT_CHEF_VERSION = "0.10.10"
 
     # Perform option parsing from the provided arguments and do a lint check
     # based on those arguments.
