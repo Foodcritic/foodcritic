@@ -24,3 +24,4 @@ Feature: Check for conditional attributes that look like Ruby
     | not_if '::File.directory?(node[:foo])'                     | shown        |
     | only_if "/usr/bin/id #{user_to_delete} > /dev/null"        | not shown    |
     | not_if "/usr/sbin/groupmod #{jetty_settings['group']}"     | not shown    |
+    | not_if "net groupmap list ntgroup='Domain Admins'"         | not shown    |

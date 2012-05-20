@@ -185,11 +185,11 @@ module FoodCritic
     # @param [String] str The string to check
     # @return [Boolean] True if this string might be an OS command
     def os_command?(str)
-      str.start_with?('grep ', 'which ') or # common commands
-      str.include?('|') or                  # a pipe, could be alternation
-      str.include?('/') or                  # file path delimiter
-      str.match(/^[\w]+$/) or               # command name only
-      str.match(/ --?[a-z]/i)               # command-line flag
+      str.start_with?('grep ', 'net ', 'which ') or # common commands
+      str.include?('|') or     # a pipe, could be alternation
+      str.include?('/') or     # file path delimiter
+      str.match(/^[\w]+$/) or  # command name only
+      str.match(/ --?[a-z]/i)  # command-line flag
     end
 
     # Read the AST for the given Ruby source file
