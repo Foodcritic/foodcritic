@@ -303,7 +303,10 @@ rule "FC022", "Resource condition within loop may not behave as expected" do
           @value='only_if']/ancestor::*[self::method_add_block or
           self::command][1]/descendant::ident/@value}).map{|a| a.value})).empty?
           c = resource.xpath('command[count(descendant::string_embexpr) = 0]')
-          resource unless c.empty?
+          resource unless c.empty? || block_vars.any? do |var|
+            ! resource.xpath(%Q{command/args_add_block/args_add/
+              var_ref/ident[@value='#{var}']}).empty?
+          end
         end
       end
     end.flatten.compact

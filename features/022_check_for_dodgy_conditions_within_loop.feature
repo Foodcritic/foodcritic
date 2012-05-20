@@ -25,3 +25,4 @@ Feature: Check for dodgy resource conditions within a loop
     | "feed_pet"             | not_if { ::File.exists?("/tmp/#{unrelated_var}")} | should not   |
     | "feed_pet"             | only_if "[ -f \"/tmp/#{pet_name}\" ]"             | should       |
     | "feed_pet_#{pet_name}" | not_if "[ -f \"/tmp/#{pet_name}\" ]"              | should not   |
+    | pet_name               | not_if "[ -f \"/tmp/#{pet_name}\" ]"              | should not   |
