@@ -768,6 +768,38 @@ rules:
           Use `chef_gem` to install the gem to avoid this warning.
         code: |
           chef_gem "mysql"
+  - code: FC026
+    name: Conditional execution block attribute contains only string
+    tags:
+      - correctness
+    summary: |
+      This warning is shown if you have a conditional attribute declared on a
+      resource as a block that contains only a single string.
+    examples:
+      - title: Conditional attribute returns a string
+        text: |
+          This example matches the FC026 rule because it returns a string from
+          the block. This will always evalute to true, and often indicates that
+          you are trying to run a command rather than execute a Ruby block as
+          your condition.
+        code: |
+          # Don't do this
+          template "/etc/foo" do
+            mode "0644"
+            source "foo.erb"
+            not_if { "test -f /etc/foo" }
+          end
+      - title: Modified version
+        text: |
+          If the intention is to run the string as an operating system command
+          then remove the block surrounding the command.
+        code: |
+          template "/etc/foo" do
+            mode "0644"
+            source "foo.erb"
+            not_if "test -f /etc/foo"
+          end
+
 api_methods: 
   - name: attribute_access
     description: |
