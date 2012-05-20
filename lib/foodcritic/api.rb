@@ -221,12 +221,14 @@ module FoodCritic
       atts[:name] = name unless name.empty?
       resource.xpath('do_block/descendant::command
                      [count(ancestor::do_block) = 1]').each do |att|
-        if att.xpath('descendant::symbol').empty?
-          att_value = att.xpath('string(descendant::tstring_content/@value)')
-        else
-          att_value =
+        att_value =
+          if ! att.xpath('args_add_block[count(descendant::args_add)>1]').empty?
+            att.xpath('args_add_block').first
+          elsif att.xpath('descendant::symbol').empty?
+            att.xpath('string(descendant::tstring_content/@value)')
+          else
             att.xpath('string(descendant::symbol/ident/@value)').to_sym
-        end
+          end
         atts[att.xpath('string(ident/@value)')] = att_value
       end
       resource.xpath("do_block/descendant::method_add_block[

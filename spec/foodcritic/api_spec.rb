@@ -396,7 +396,26 @@ describe FoodCritic::Api do
         atts['not_if'].must_respond_to :xpath
         atts['not_if'].name.must_equal 'brace_block'
       end
-
+      it "includes notifications in the result" do
+        atts = str_to_atts(%q{
+          template "/etc/httpd.conf" do
+            notifies :restart, "service[apache]"
+          end
+        })
+        atts['notifies'].wont_be_nil
+        atts['notifies'].must_respond_to :xpath
+        atts['notifies'].name.must_equal 'args_add_block'
+      end
+      it "includes old-style notifications in the result" do
+        atts = str_to_atts(%q{
+          template "/etc/httpd.conf" do
+            notifies :restart, resources(:service => "apache")
+          end
+        })
+        atts['notifies'].wont_be_nil
+        atts['notifies'].must_respond_to :xpath
+        atts['notifies'].name.must_equal 'args_add_block'
+      end
     end
   end
 
