@@ -5,7 +5,7 @@ end
 
 require 'aruba/cucumber'
 require 'pry'
-require 'foodcritic'
+require_relative '../../lib/foodcritic'
 
 Before do
   @aruba_timeout_seconds = 300
