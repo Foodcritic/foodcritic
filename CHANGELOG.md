@@ -90,7 +90,7 @@ Bugfixes:
 
   - The `cookbook_name` method now reflects the cookbook name if specified in
     metadata. This prevents a warning from being shown by
-    [FC007: Ensure recipe dependencies are reflected in cookbook metadata](http://acrmp.github.com/foodcritic/#FC016)
+    [FC007: Ensure recipe dependencies are reflected in cookbook metadata](http://acrmp.github.com/foodcritic/#FC007)
     if the cookbook is in a differently named directory.
   - The `declared_dependencies` method previously would intermix version strings
     in the list of cookbook names.
