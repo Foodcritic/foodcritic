@@ -36,7 +36,7 @@ module FoodCritic
     #   Chef::Config['solo'] in the recipe
     def checks_for_chef_solo?(ast)
       raise_unless_xpath!(ast)
-      ! ast.xpath(%q{//if/aref[count(descendant::const[@value = 'Chef' or
+      ! ast.xpath(%q{//if/*[self::aref or self::call][count(descendant::const[@value = 'Chef' or
           @value = 'Config']) = 2
           and
             (   count(descendant::ident[@value='solo']) > 0

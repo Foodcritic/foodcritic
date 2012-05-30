@@ -646,6 +646,16 @@ Given /^a cookbook with a single recipe that searches but checks first( \(string
   }
 end
 
+Given /^a cookbook with a single recipe that searches but checks first \(method\) to see if this is server$/ do
+  write_recipe %Q{
+    if Chef::Config.solo
+      Chef::Log.warn("This recipe uses search. Chef Solo does not support search.")
+    else
+      nodes = search(:node, "hostname:[* TO *] AND chef_environment:#\{node.chef_environment\}")
+    end
+  }
+end
+
 Given 'a cookbook with a single recipe that searches without checking if this is server' do
   write_recipe %q{nodes = search(:node, "hostname:[* TO *] AND chef_environment:#{node.chef_environment}")}
 end
