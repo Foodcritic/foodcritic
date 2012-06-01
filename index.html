@@ -1323,6 +1323,10 @@ api_methods:
 </div>
 {% capture faq %}{% include faq.md %}{% endcapture %}{{ faq | markdownify }}
 <div class="page-header">
+  <h1 id="style">Style <small>Ruby styling with Tailor</small></h1>
+</div>
+{% capture style %}{% include style.md %}{% endcapture %}{{ style | markdownify }}
+<div class="page-header">
   <h1 id="ci">Continuous Integration <small>Configuring Jenkins to run foodcritic</small></h1>
 </div>
 {% capture ci %}{% include ci.md %}{% endcapture %}{{ ci | markdownify }}
@@ -1331,8 +1335,4 @@ api_methods:
 </div>
 {% capture newrule %}{% include new-rule.md %}{% endcapture %}{{ newrule | markdownify }}
 {% include api.html %}
-<div class="page-header">
-  <h1 id="style">Style<small>Ruby styling with Tailor</small></h1>
-</div>
-{% capture style %}{% include style.md %}{% endcapture %}{{ style | markdownify }}
 </div>

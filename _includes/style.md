@@ -1,21 +1,22 @@
 Because Chef cookbooks are simply Ruby, you don't need a Chef-specific style
 tool to check your style.  As such, some foodcritic users use
-[tailor](http://rubygems.org/gems/tailor) for assessing style of their cookbooks.
+[tailor](http://rubygems.org/gems/tailor) for assessing the style of their
+cookbooks.
 You can check [the docs](http://rdoc.info/gems/tailor/frames) for more details,
-but here's a quick getting-starded.
+but here's a quick getting-started guide.
 
 1. Install tailor:
 
        $ gem install tailor
 
-1. Create a .tailor configuration file in the root of your project.  What you
+1. Create a `.tailor` configuration file in the root of your project.  What you
    consider to be the "root" is really up to you; if you intend to use the same
    style rules for all of your cookbooks, put it at the root of your cookbooks.
    Use tailor to create a default config file for you:
 
        $ tailor --create-config
 
-1. View the .tailor file with your favorite text editor, and you'll see
+1. View the `.tailor` file with your favorite text editor, and you'll see
    something like (minus documentation at the top):
 
        Tailor.config do |config|
