@@ -224,6 +224,10 @@ module FoodCritic
         att_value =
           if ! att.xpath('args_add_block[count(descendant::args_add)>1]').empty?
             att.xpath('args_add_block').first
+          elsif ! att.xpath('args_add_block/args_add/
+            var_ref/kw[@value="true" or @value="false"]').empty?
+            att.xpath('string(args_add_block/args_add/
+              var_ref/kw/@value)') == 'true'
           elsif att.xpath('descendant::symbol').empty?
             att.xpath('string(descendant::tstring_content/@value)')
           else

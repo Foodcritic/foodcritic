@@ -318,6 +318,10 @@ describe FoodCritic::Api do
   end
 
   describe "#resource_attributes" do
+    def str_to_atts(str)
+      ast = api.send(:build_xml, Ripper::SexpBuilder.new(str).parse)
+      api.resource_attributes(api.find_resources(ast).first)
+    end
     it "raises if the resource does not support XPath" do
       lambda{api.resource_attributes(nil)}.must_raise ArgumentError
     end
@@ -325,11 +329,34 @@ describe FoodCritic::Api do
       resource = MiniTest::Mock.new.expect :xpath, [], [String]
       api.resource_attributes(resource).must_equal({})
     end
+    it "returns a string value for a literal string" do
+      atts = str_to_atts(%q{
+        directory "/foo/bar" do
+          owner "root"
+        end
+      })
+      atts['owner'].wont_be_nil
+      atts['owner'].must_equal 'root'
+    end
+    it "returns a truthy value for a literal true" do
+      atts = str_to_atts(%q{
+        directory "/foo/bar" do
+          recursive true
+        end
+      })
+      atts['recursive'].wont_be_nil
+      atts['recursive'].must_equal true
+    end
+    it "returns a truthy value for a literal false" do
+      atts = str_to_atts(%q{
+        directory "/foo/bar" do
+          recursive false
+        end
+      })
+      atts['recursive'].wont_be_nil
+      atts['recursive'].must_equal false
+    end
     describe "block attributes" do
-      def str_to_atts(str)
-        ast = api.send(:build_xml, Ripper::SexpBuilder.new(str).parse)
-        api.resource_attributes(api.find_resources(ast).first)
-      end
       it "includes attributes with brace block values in the result" do
         atts = str_to_atts(%q{
           file "/etc/foo" do
