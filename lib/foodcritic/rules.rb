@@ -378,3 +378,13 @@ rule "FC026", "Conditional execution block attribute contains only string" do
     end
   end
 end
+
+rule "FC027", "Resource sets internal attribute" do
+  tags %w{correctness}
+  recipe do |ast|
+    find_resources(ast, :type => :service).map do |service|
+      service unless (resource_attributes(service).keys &
+                        ['enabled', 'running']).empty?
+    end.compact
+  end
+end

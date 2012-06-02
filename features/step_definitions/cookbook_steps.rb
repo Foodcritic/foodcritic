@@ -25,6 +25,14 @@ Given /^a cookbook recipe that declares (too many )?execute resources varying on
   }.strip
 end
 
+Given /^a cookbook recipe that declares a ([^ ]+) resource with the ([^ ]+) attribute set to (.*)$/ do |resource, attribute, value|
+  write_recipe %Q{
+    #{resource} "foo" do
+      #{attribute} #{value}
+    end
+  }
+end
+
 Given 'a cookbook provider that declares execute resources varying only in the command in separate actions' do
   write_provider 'site', %q{
     action :start do
@@ -1013,6 +1021,10 @@ end
 
 Then 'the recipe filename should be displayed' do
   expect_output "cookbooks/example/recipes/default.rb"
+end
+
+Then /^the resource sets internal attribute warning 027 should be (not )?shown$/ do |should_not|
+  expect_warning('FC027', :line => nil, :expect_warning => should_not.nil?)
 end
 
 Then 'the review should include the matching rules' do

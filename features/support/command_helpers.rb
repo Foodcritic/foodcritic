@@ -33,6 +33,7 @@ module FoodCritic
       'FC024' => 'Consider adding platform equivalents',
       'FC025' => 'Prefer chef_gem to compile-time gem install',
       'FC026' => 'Conditional execution block attribute contains only string',
+      'FC027' => 'Resource sets internal attribute',
       'FCTEST001' => 'Test Rule'
     }
 
