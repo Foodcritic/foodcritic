@@ -596,6 +596,14 @@ Given 'a cookbook with a single recipe that calls a patched node method' do
   }
 end
 
+Given /^a cookbook with a single recipe that explicitly calls a node method( with multiple arguments)?$/ do |multi|
+  write_recipe %Q{
+    if node[:bar] and node.foo(#{multi ? 'bar, baz' : ''})
+      Chef::Log.info('Explicit node method call should be ignored')
+    end
+  }
+end
+
 Given 'a cookbook with a single recipe that passes node attributes accessed via symbols to a template' do
   write_recipe %q{
     template "/etc/foo" do

@@ -68,6 +68,16 @@ Feature: Check for consistency in node access
      When I check the cookbook
      Then the attribute consistency warning 019 should be not shown
 
+  Scenario: Ignore explicit method calls (zero-arg)
+    Given a cookbook with a single recipe that explicitly calls a node method
+     When I check the cookbook
+     Then the attribute consistency warning 019 should be not shown
+
+  Scenario: Ignore explicit method calls (multiple arguments)
+    Given a cookbook with a single recipe that explicitly calls a node method with multiple arguments
+     When I check the cookbook
+     Then the attribute consistency warning 019 should be not shown
+
   Scenario: Two cookbooks with differing approaches
     Given a cookbook with a single recipe that reads node attributes via strings only
       And another cookbook with a single recipe that reads node attributes via symbols only

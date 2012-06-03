@@ -410,8 +410,8 @@ module FoodCritic
 
     def vivified_attribute_access(ast, cookbook_dir)
       calls = ast.xpath(%q{//*[self::call or self::field]
-        [is_att_type(vcall/ident/@value) or
-        is_att_type(var_ref/ident/@value)][@value='.']}, AttFilter.new)
+        [is_att_type(vcall/ident/@value) or is_att_type(var_ref/ident/@value)]
+        [@value='.'][count(following-sibling::arg_paren) = 0]}, AttFilter.new)
       calls.select do |call|
         call.xpath("aref/args_add_block").size == 0 and
           (call.xpath("descendant::ident").size > 1 and
