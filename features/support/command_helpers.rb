@@ -35,6 +35,7 @@ module FoodCritic
       'FC026' => 'Conditional execution block attribute contains only string',
       'FC027' => 'Resource sets internal attribute',
       'FC028' => 'Incorrect #platform? usage',
+      'FC029' => 'No leading cookbook name in recipe metadata',
       'FCTEST001' => 'Test Rule'
     }
 

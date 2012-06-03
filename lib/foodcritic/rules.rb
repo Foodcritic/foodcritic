@@ -397,3 +397,20 @@ rule "FC028", "Incorrect #platform? usage" do
       [ident/@value="platform?"]})
   end
 end
+
+rule "FC029", "No leading cookbook name in recipe metadata" do
+  tags %w{correctness metadata}
+  cookbook do |filename|
+    metadata_path = Pathname.new(File.join(filename, 'metadata.rb')).cleanpath
+    next unless File.exists? metadata_path
+    read_ast(metadata_path).xpath('//command[ident/@value="recipe"]').map do |declared_recipe|
+      next unless declared_recipe.xpath('count(//vcall|//var_ref)').to_i == 0
+      recipe_name = declared_recipe.xpath('args_add_block/
+        descendant::tstring_content[1]/@value').to_s
+      unless recipe_name.empty? ||
+        recipe_name.split('::').first == cookbook_name(filename.to_s)
+          declared_recipe
+      end
+    end.compact.map {|m| match(m).merge(:filename => metadata_path.to_s) }
+  end
+end

@@ -676,6 +676,11 @@ Given 'a cookbook with a single recipe that searches without checking if this is
   write_recipe %q{nodes = search(:node, "hostname:[* TO *] AND chef_environment:#{node.chef_environment}")}
 end
 
+Given /^a cookbook with metadata that declares a recipe with (.*)$/ do |declaration|
+  write_metadata declaration
+  write_recipe ""
+end
+
 Given 'a file resource declared without a mode' do
   write_recipe %q{
     file "/tmp/something" do
@@ -996,6 +1001,10 @@ Then /^the line number and line of code that triggered the warning(s)? should be
     expect_line_shown 1, "node[:foo] = 'bar'"
     expect_line_shown 2, "    node[:testing] = 'bar'"
   end
+end
+
+Then /^the no leading cookbook name warning 029 should be (not )?shown$/ do |should_not|
+  expect_warning('FC029', :line => 1, :expect_warning => should_not.nil?, :file => 'metadata.rb')
 end
 
 Then 'the node access warning 001 should be displayed for each match' do
