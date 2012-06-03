@@ -33,6 +33,14 @@ Given /^a cookbook recipe that declares a ([^ ]+) resource with the ([^ ]+) attr
   }
 end
 
+Given /^a cookbook recipe that wraps a platform\-specific resource in a (.*) conditional$/ do |conditional|
+  write_recipe %Q{
+    if #{conditional}
+      Chef::Log.info('We matched the platform')
+    end
+  }
+end
+
 Given 'a cookbook provider that declares execute resources varying only in the command in separate actions' do
   write_provider 'site', %q{
     action :start do
@@ -975,6 +983,10 @@ end
 
 Then /^the file mode warning 006 should be (valid|invalid)$/ do |valid|
   valid == 'valid' ? expect_no_warning('FC006') : expect_warning('FC006')
+end
+
+Then /^the incorrect platform usage warning 028 should be (not )?shown$/ do |should_not|
+  expect_warning('FC028', :line => nil, :expect_warning => should_not.nil?)
 end
 
 Then /^the line number and line of code that triggered the warning(s)? should be displayed$/ do |multiple|
