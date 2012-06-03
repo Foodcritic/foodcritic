@@ -69,7 +69,7 @@ module FoodCritic
             rule_matches += matches(rule.provider, ast, file)
           end
           if File.basename(File.dirname(file)) == 'resources'
-          rule_matches += matches(rule.resource, ast, file)
+            rule_matches += matches(rule.resource, ast, file)
           end
           if last_dir != cookbook_dir
             rule_matches += matches(rule.cookbook, cookbook_dir)

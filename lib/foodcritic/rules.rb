@@ -414,3 +414,23 @@ rule "FC029", "No leading cookbook name in recipe metadata" do
     end.compact.map {|m| match(m).merge(:filename => metadata_path.to_s) }
   end
 end
+
+rule "FC030", "Cookbook contains debugger breakpoints" do
+  tags %w{annoyances}
+  cookbook do |cookbook_dir|
+    Dir[cookbook_dir + '**/*.rb'].map do |ruby_file|
+      read_ast(ruby_file).xpath('//call[(vcall|var_ref)/ident/@value="binding"]
+        [ident/@value="pry"]').map do |bp|
+        match(bp).merge({:filename => ruby_file})
+      end
+    end +
+    Dir[cookbook_dir + 'templates/**/*.erb'].map do |template_file|
+      IO.read(template_file).lines.with_index(1).map do |line, line_number|
+        # Not properly parsing the template
+        if line =~ /binding\.pry/
+          {:filename => template_file, :line => line_number}
+        end
+      end.compact
+    end
+  end
+end

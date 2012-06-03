@@ -543,6 +543,24 @@ Given 'a cookbook that matches that rule' do
   }
 end
 
+Given /^a cookbook with a ([^ ]+) that (includes|does not include) a breakpoint$/ do |component,includes|
+  content = case component
+    when 'template' then includes == 'includes' ? "Hello <% require 'pry'; binding.pry %>" : 'Hello World'
+    else includes == 'includes' ? 'binding.pry' : '# No breakpoint'
+  end
+  write_recipe ''
+  case component
+    when 'library' then write_library 'foo', content
+    when 'metadata' then write_metadata content
+    when 'provider' then write_provider 'foo', content
+    when 'recipe' then write_recipe content
+    when 'resource' then write_resource 'foo', content
+    when 'template' then write_file 'cookbooks/example/templates/default/foo.erb',
+      content
+    else fail "Unrecognised component: #{component}"
+  end
+end
+
 Given /^a cookbook with a single recipe for which the first hash (key|value) is an interpolated string$/ do |key_or_value|
   write_recipe case key_or_value
     when 'key' then %q{{"#{foo}" => 'bar', 'bar' => 'foo'}}
@@ -984,6 +1002,18 @@ end
 
 Then 'the current version should be displayed' do
   expect_output("foodcritic #{FoodCritic::VERSION}")
+end
+
+Then /^the debugger breakpoint warning 030 should be (not )?shown against the (.*)$/ do |should_not, component|
+  filename = case component
+    when 'library' then 'libraries/foo.rb'
+    when 'metadata' then 'metadata.rb'
+    when 'provider' then 'providers/foo.rb'
+    when 'recipe' then 'recipes/default.rb'
+    when 'resource' then 'resources/foo.rb'
+    when 'template' then 'templates/default/foo.erb'
+  end
+  expect_warning('FC030', :line => nil, :expect_warning => should_not.nil?, :file => filename)
 end
 
 Then /^the file mode warning 006 should be (valid|invalid)$/ do |valid|

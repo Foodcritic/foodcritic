@@ -36,6 +36,7 @@ module FoodCritic
       'FC027' => 'Resource sets internal attribute',
       'FC028' => 'Incorrect #platform? usage',
       'FC029' => 'No leading cookbook name in recipe metadata',
+      'FC030' => 'Cookbook contains debugger breakpoints',
       'FCTEST001' => 'Test Rule'
     }
 
