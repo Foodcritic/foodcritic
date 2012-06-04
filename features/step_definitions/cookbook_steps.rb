@@ -936,6 +936,7 @@ Then 'I should be able to see the full list of DSL methods from inside the rule'
     :included_recipes,
     :literal_searches,
     :match,
+    :notifications,
     :os_command?,
     :read_ast,
     :resource_attribute,

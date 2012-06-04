@@ -274,6 +274,51 @@ describe FoodCritic::Api do
     end
   end
 
+  describe "#notifications" do
+    def parse_ast(str)
+      ast = api.send(:build_xml, Ripper::SexpBuilder.new(str).parse)
+    end
+    it "returns empty if the provided AST does not support XPath" do
+      api.notifications(nil).must_be_empty
+    end
+    it "understands the old-style notifications" do
+      api.notifications(parse_ast(%q{
+        template "/etc/nscd.conf" do
+          source "nscd.conf"
+          owner "root"
+          group "root"
+          notifies :restart, resources(:service => "nscd")
+        end
+      })).must_equal(
+        [{
+          :type => :notifies,
+          :action => :restart,
+          :resource_type => :service,
+          :resource_name => 'nscd',
+          :notification_timing => :delayed
+        }]
+      )
+    end
+    it "understands old-style notifications for an execute resource" do
+      api.notifications(parse_ast(%q{
+        template "/tmp/foo.bar" do
+          source "foo.bar.erb"
+          notifies :run, resources(:execute => "foo")
+        end
+      })).must_equal(
+        [{:type => :notifies, :action => :run, :resource_type => :execute,
+         :resource_name => 'foo', :notification_timing => :delayed}]
+      )
+    end
+    it "sets the notification timing appropriately" do
+      api.notifications(parse_ast(%q{
+        template "/etc/foo.conf" do
+          notifies :run, resources(execute => "robespierre"), :immediately
+        end
+      })).first[:notification_timing].must_equal(:immediately)
+    end
+  end
+
   describe "#os_command?" do
     it "identifies grep as an os command" do
       assert api.os_command?('grep pattern file')

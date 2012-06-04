@@ -179,6 +179,26 @@ module FoodCritic
        :line => pos['line'].to_i, :column => pos['column'].to_i}
     end
 
+    def notifications(ast)
+      return [] unless ast.respond_to?(:xpath)
+      ast.xpath('//command[ident/@value="notifies"]').map do |notifies|
+        params = notifies.xpath('descendant::method_add_arg[fcall/ident/
+          @value="resources"]/descendant::assoc_new')
+        timing = notifies.xpath('args_add_block/args_add/symbol_literal[last()]/symbol/ident[1]/@value')
+        {
+          :type =>
+            :notifies,
+          :action =>
+            notifies.xpath('descendant::symbol[1]/ident/@value').to_s.to_sym,
+          :resource_type =>
+            params.xpath('symbol[1]/ident/@value').to_s.to_sym,
+          :resource_name =>
+            params.xpath('string_add[1]/tstring_content/@value').to_s,
+          :notification_timing => timing.empty? ? :delayed : timing.first.to_s.to_sym
+        }
+      end
+    end
+
     # Does the provided string look like an Operating System command? This is a
     # rough heuristic to be taken with a pinch of salt.
     #
