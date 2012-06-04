@@ -281,6 +281,81 @@ describe FoodCritic::Api do
     it "returns empty if the provided AST does not support XPath" do
       api.notifications(nil).must_be_empty
     end
+    it "returns empty if there are no notifications" do
+      api.notifications(parse_ast(%q{
+          template "/etc/nscd.conf" do
+            source "nscd.conf"
+            owner "root"
+            group "root"
+          end
+      })).must_be_empty
+    end
+    describe "malformed syntax" do
+      it "returns empty if no notifies value is provided" do
+        api.notifications(parse_ast(%q{
+          template "/etc/nscd.conf" do
+            source "nscd.conf"
+            owner "root"
+            group "root"
+            notifies
+          end
+        })).must_be_empty
+      end
+      it "returns empty if only the action is provided" do
+        api.notifications(parse_ast(%q{
+          template "/etc/nscd.conf" do
+            source "nscd.conf"
+            owner "root"
+            group "root"
+            notifies :restart
+          end
+        })).must_be_empty
+      end
+      describe "returns empty if the service name is missing" do
+        it "old-style notifications" do
+          api.notifications(parse_ast(%q{
+            template "/etc/nscd.conf" do
+              source "nscd.conf"
+              owner "root"
+              group "root"
+              notifies :restart, resources(:service)
+            end
+          })).must_be_empty
+        end
+        it "new-style notifications" do
+          api.notifications(parse_ast(%q{
+            template "/etc/nscd.conf" do
+              source "nscd.conf"
+              owner "root"
+              group "root"
+              notifies :restart, "service"
+            end
+          })).must_be_empty
+        end
+      end
+      describe "returns empty if the resource type is missing" do
+        it "old-style notifications" do
+          api.notifications(parse_ast(%q{
+            template "/etc/nscd.conf" do
+              source "nscd.conf"
+              owner "root"
+              group "root"
+              notifies :restart, resources("nscd")
+            end
+          })).must_be_empty
+        end
+        it "new-style notifications" do
+          api.notifications(parse_ast(%q{
+            template "/etc/nscd.conf" do
+              source "nscd.conf"
+              owner "root"
+              group "root"
+              notifies :restart, "nscd"
+            end
+          })).must_be_empty
+        end
+      end
+    end
     it "understands the old-style notifications" do
       api.notifications(parse_ast(%q{
         template "/etc/nscd.conf" do
@@ -299,23 +374,187 @@ describe FoodCritic::Api do
         }]
       )
     end
-    it "understands old-style notifications for an execute resource" do
+    it "understands the new-style notifications" do
       api.notifications(parse_ast(%q{
-        template "/tmp/foo.bar" do
-          source "foo.bar.erb"
-          notifies :run, resources(:execute => "foo")
+        template "/etc/nscd.conf" do
+          source "nscd.conf"
+          owner "root"
+          group "root"
+          notifies :restart, "service[nscd]"
         end
       })).must_equal(
-        [{:type => :notifies, :action => :run, :resource_type => :execute,
-         :resource_name => 'foo', :notification_timing => :delayed}]
+        [{
+          :type => :notifies,
+          :action => :restart,
+          :resource_type => :service,
+          :resource_name => 'nscd',
+          :notification_timing => :delayed
+        }]
       )
     end
-    it "sets the notification timing appropriately" do
+    it "understands the old-style notifications with timing" do
       api.notifications(parse_ast(%q{
-        template "/etc/foo.conf" do
-          notifies :run, resources(execute => "robespierre"), :immediately
+        template "/etc/nscd.conf" do
+          source "nscd.conf"
+          owner "root"
+          group "root"
+          notifies :restart, resources(:service => "nscd"), :immediately
         end
-      })).first[:notification_timing].must_equal(:immediately)
+      })).must_equal(
+        [{
+          :type => :notifies,
+          :action => :restart,
+          :resource_type => :service,
+          :resource_name => 'nscd',
+          :notification_timing => :immediately
+        }]
+      )
+    end
+    it "understands the new-style notifications with timing" do
+      api.notifications(parse_ast(%q{
+        template "/etc/nscd.conf" do
+          source "nscd.conf"
+          owner "root"
+          group "root"
+          notifies :restart, "service[nscd]", :immediately
+        end
+      })).must_equal(
+        [{
+          :type => :notifies,
+          :action => :restart,
+          :resource_type => :service,
+          :resource_name => 'nscd',
+          :notification_timing => :immediately
+        }]
+      )
+    end
+    describe "can be passed an individual resource" do
+      it "old-style notifications" do
+        api.notifications(api.find_resources(parse_ast(%q{
+          service "nscd" do
+            action :start
+          end
+          template "/etc/nscd.conf" do
+            source "nscd.conf"
+            owner "root"
+            group "root"
+            notifies :restart, resources(:service => "nscd")
+          end
+        }), :type => :template).first).must_equal([
+          {:type => :notifies, :action => :restart, :resource_type => :service,
+           :resource_name => 'nscd', :notification_timing => :delayed}
+        ])
+      end
+      it "new-style notifications" do
+        api.notifications(api.find_resources(parse_ast(%q{
+          service "nscd" do
+            action :start
+          end
+          template "/etc/nscd.conf" do
+            source "nscd.conf"
+            owner "root"
+            group "root"
+            notifies :restart, "service[nscd]"
+          end
+        }), :type => :template).first).must_equal([
+          {:type => :notifies, :action => :restart, :resource_type => :service,
+           :resource_name => 'nscd', :notification_timing => :delayed}
+        ])
+      end
+    end
+    describe "supports multiple notifications on a single resource" do
+      it "old-style notifications" do
+        api.notifications(parse_ast(%q{
+          template "/etc/nscd.conf" do
+            source "nscd.conf"
+            owner "root"
+            group "root"
+            notifies :stop, resources(:service => "nscd")
+            notifies :start, resources(:service => "nscd")
+          end
+        })).must_equal(
+          [
+            {:type => :notifies, :action => :stop, :resource_type => :service,
+             :resource_name => 'nscd', :notification_timing => :delayed},
+            {:type => :notifies, :action => :start, :resource_type => :service,
+             :resource_name => 'nscd', :notification_timing => :delayed}
+          ]
+        )
+      end
+      it "new-style notifications" do
+        api.notifications(parse_ast(%q{
+          template "/etc/nscd.conf" do
+            source "nscd.conf"
+            owner "root"
+            group "root"
+            notifies :stop, "service[nscd]"
+            notifies :start, "service[nscd]"
+          end
+        })).must_equal(
+          [
+            {:type => :notifies, :action => :stop, :resource_type => :service,
+             :resource_name => 'nscd', :notification_timing => :delayed},
+            {:type => :notifies, :action => :start, :resource_type => :service,
+             :resource_name => 'nscd', :notification_timing => :delayed}
+          ]
+        )
+      end
+    end
+    describe "understands style notifications for an execute resource" do
+      it "old-style notifications" do
+        api.notifications(parse_ast(%q{
+          template "/tmp/foo.bar" do
+            source "foo.bar.erb"
+            notifies :run, resources(:execute => "foo")
+          end
+        })).must_equal(
+          [{:type => :notifies, :action => :run, :resource_type => :execute,
+           :resource_name => 'foo', :notification_timing => :delayed}]
+        )
+      end
+      it "old-style notifications" do
+        api.notifications(parse_ast(%q{
+          template "/tmp/foo.bar" do
+            source "foo.bar.erb"
+            notifies :run, "execute[foo]"
+          end
+        })).must_equal(
+          [{:type => :notifies, :action => :run, :resource_type => :execute,
+           :resource_name => 'foo', :notification_timing => :delayed}]
+        )
+      end
+    end
+    describe "sets the notification timing to delayed if specified" do
+      it "old-style notifications" do
+        api.notifications(parse_ast(%q{
+          template "/etc/foo.conf" do
+            notifies :run, resources(execute => "robespierre"), :delayed
+          end
+        })).first[:notification_timing].must_equal(:delayed)
+      end
+      it "new-style notifications" do
+        api.notifications(parse_ast(%q{
+          template "/etc/foo.conf" do
+            notifies :run, "execute[robespierre]", :delayed
+          end
+        })).first[:notification_timing].must_equal(:delayed)
+      end
+    end
+    describe "sets the notification timing to immediately if specified" do
+      it "old-style notifications" do
+        api.notifications(parse_ast(%q{
+          template "/etc/foo.conf" do
+            notifies :run, resources(execute => "robespierre"), :immediately
+          end
+        })).first[:notification_timing].must_equal(:immediately)
+      end
+      it "new-style notifications" do
+        api.notifications(parse_ast(%q{
+          template "/etc/foo.conf" do
+            notifies :run, "execute[robespierre]", :immediately
+          end
+        })).first[:notification_timing].must_equal(:immediately)
+      end
     end
   end
 
