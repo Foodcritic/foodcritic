@@ -185,7 +185,9 @@ module FoodCritic
     # @return [Array] A flat array of notifications.
     def notifications(ast)
       return [] unless ast.respond_to?(:xpath)
-      ast.xpath('//command[ident/@value="notifies"]').map do |notifies|
+      ast.xpath('//command[ident/@value="notifies" or
+        ident/@value="subscribes"]').map do |notifies|
+
         params = notifies.xpath('descendant::method_add_arg[fcall/ident/
           @value="resources"]/descendant::assoc_new')
         timing = notifies.xpath('args_add_block/args_add/symbol_literal[last()]/
@@ -203,7 +205,7 @@ module FoodCritic
         end
         {
           :type =>
-            :notifies,
+            notifies.xpath('ident/@value[1]').to_s.to_sym,
           :resource_type => resource_type,
           :resource_name => resource_name,
           :action =>
@@ -211,6 +213,7 @@ module FoodCritic
           :notification_timing =>
             timing.empty? ? :delayed : timing.first.to_s.to_sym
         }
+
       end.compact
     end
 
