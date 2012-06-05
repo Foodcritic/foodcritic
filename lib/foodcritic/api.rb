@@ -182,7 +182,8 @@ module FoodCritic
     # Decode resource notifications.
     #
     # @param [Nokogiri::XML::Node] ast The AST to check for notifications.
-    # @return [Array] A flat array of notifications.
+    # @return [Array] A flat array of notifications. The resource_name may be
+    #   a string or a Node if the resource name is an expression.
     def notifications(ast)
       return [] unless ast.respond_to?(:xpath)
       ast.xpath('//command[ident/@value="notifies" or
@@ -194,14 +195,22 @@ module FoodCritic
           symbol/ident[1]/@value')
         if params.empty?
           target = notifies.xpath('args_add_block/args_add/
-            descendant::tstring_content[1]/@value').to_s
-          match = target.match(/^([^\[]+)\[(.+)\]$/)
+            descendant::tstring_content/@value').to_s
+          match = target.match(/^([^\[]+)\[(.*)\]$/)
           next unless match
           resource_type, resource_name =
             match.captures.tap{|m| m[0] = m[0].to_sym}
+          if notifies.xpath('descendant::string_embexpr').empty?
+            next if resource_name.empty?
+          else
+            resource_name =
+              notifies.xpath('args_add_block/args_add/string_literal')
+          end
         else
           resource_type = params.xpath('symbol[1]/ident/@value').to_s.to_sym
-          resource_name = params.xpath('string_add[1]/tstring_content/@value').to_s
+          resource_name = params.xpath('string_add[1][count(../
+            descendant::string_add) = 1]/tstring_content/@value').to_s
+          resource_name = params if resource_name.empty?
         end
         {
           :type =>

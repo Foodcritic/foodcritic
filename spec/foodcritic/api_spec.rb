@@ -415,6 +415,48 @@ describe FoodCritic::Api do
           })).must_be_empty
         end
       end
+      describe "returns empty if the resource name is missing" do
+        it "old-style notifications" do
+          api.notifications(parse_ast(%q{
+            template "/etc/nscd.conf" do
+              source "nscd.conf"
+              owner "root"
+              group "root"
+              notifies :restart, resources(:service)
+            end
+          })).must_be_empty
+        end
+        it "old-style subscriptions" do
+          api.notifications(parse_ast(%q{
+            template "/etc/nscd.conf" do
+              source "nscd.conf"
+              owner "root"
+              group "root"
+              subscribes :restart, resources(:service)
+            end
+          })).must_be_empty
+        end
+        it "new-style notifications" do
+          api.notifications(parse_ast(%q{
+            template "/etc/nscd.conf" do
+              source "nscd.conf"
+              owner "root"
+              group "root"
+              notifies :restart, "service[]"
+            end
+          })).must_be_empty
+        end
+        it "new-style subscriptions" do
+          api.notifications(parse_ast(%q{
+            template "/etc/nscd.conf" do
+              source "nscd.conf"
+              owner "root"
+              group "root"
+              subscribes :restart, "service[]"
+            end
+          })).must_be_empty
+        end
+      end
     end
     it "understands the old-style notifications" do
       api.notifications(parse_ast(%q{
@@ -858,6 +900,70 @@ describe FoodCritic::Api do
             subscribes :run, "execute[robespierre]", :immediately
           end
         })).first[:notification_timing].must_equal(:immediately)
+      end
+    end
+    describe "resource names as expressions" do
+      describe "returns the AST for an embedded string" do
+        it "old-style notifications" do
+          assert api.notifications(parse_ast(%q{
+            template "/etc/foo.conf" do
+              notifies :create, resources(:template => "/etc/bar/#{resource}.bar")
+            end
+          })).first[:resource_name].respond_to?(:xpath),
+            "Expected resource_name with string expression to respond to #xpath"
+        end
+        it "new-style notifications" do
+          assert api.notifications(parse_ast(%q{
+            template "/etc/foo.conf" do
+              notifies :create, "template[/etc/bar/#{resource}.bar]"
+            end
+          })).first[:resource_name].respond_to?(:xpath),
+            "Expected resource_name with string expression to respond to #xpath"
+        end
+        it "new-style notifications - complete resource_name" do
+          assert api.notifications(parse_ast(%q{
+            template "/etc/foo.conf" do
+              notifies :create, "template[#{template_path}]"
+            end
+          })).first[:resource_name].respond_to?(:xpath),
+            "Expected resource_name with string expression to respond to #xpath"
+        end
+      end
+      describe "returns the AST for node attribute" do
+        it "old-style notifications" do
+          assert api.notifications(parse_ast(%q{
+            template "/etc/foo.conf" do
+              notifies :restart, resources(:service => node['foo']['service'])
+            end
+          })).first[:resource_name].respond_to?(:xpath),
+            "Expected resource_name with node attribute to respond to #xpath"
+        end
+        it "new-style notifications" do
+          assert api.notifications(parse_ast(%q{
+            template "/etc/foo.conf" do
+              notifies :restart, "service[#{node['foo']['service']}]"
+            end
+          })).first[:resource_name].respond_to?(:xpath),
+            "Expected resource_name with node attribute to respond to #xpath"
+        end
+      end
+      describe "returns the AST for variable reference" do
+        it "old-style notifications" do
+          assert api.notifications(parse_ast(%q{
+            template "/etc/foo.conf" do
+              notifies :restart, resources(:service => my_service)
+            end
+          })).first[:resource_name].respond_to?(:xpath),
+            "Expected resource_name with var ref to respond to #xpath"
+        end
+        it "new-style notifications" do
+          assert api.notifications(parse_ast(%q{
+            template "/etc/foo.conf" do
+              notifies :restart, "service[#{my_service}]"
+            end
+          })).first[:resource_name].respond_to?(:xpath),
+            "Expected resource_name with var ref to respond to #xpath"
+        end
       end
     end
   end
