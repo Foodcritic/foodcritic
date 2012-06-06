@@ -57,6 +57,7 @@ module FoodCritic
       end
       write_recipe(recipe)
       write_readme('Hello World') # Don't trigger FC011
+      write_metadata('name "example"') # Don't trigger FC031
     end
 
     # Create a cookbook with a LRWP
