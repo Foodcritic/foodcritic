@@ -434,3 +434,12 @@ rule "FC030", "Cookbook contains debugger breakpoints" do
     end
   end
 end
+
+rule "FC031", "Cookbook without metadata file" do
+  tags %w{correctness metadata}
+  cookbook do |filename|
+    if ! File.exists?(File.join(filename, 'metadata.rb'))
+      [file_match(File.join(filename, 'metadata.rb'))]
+    end
+  end
+end
