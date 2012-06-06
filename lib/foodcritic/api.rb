@@ -186,7 +186,7 @@ module FoodCritic
     #   a string or a Node if the resource name is an expression.
     def notifications(ast)
       return [] unless ast.respond_to?(:xpath)
-      ast.xpath('//command[ident/@value="notifies" or
+      ast.xpath('descendant::command[ident/@value="notifies" or
         ident/@value="subscribes"]').map do |notifies|
 
         params = notifies.xpath('descendant::method_add_arg[fcall/ident/
