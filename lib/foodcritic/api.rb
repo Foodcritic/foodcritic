@@ -217,6 +217,7 @@ module FoodCritic
             notifies.xpath('ident/@value[1]').to_s.to_sym,
           :resource_type => resource_type,
           :resource_name => resource_name,
+          :style => params.empty? ? :new : :old,
           :action =>
             notifies.xpath('descendant::symbol[1]/ident/@value').to_s.to_sym,
           :notification_timing =>

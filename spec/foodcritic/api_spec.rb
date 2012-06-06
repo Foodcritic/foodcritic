@@ -472,7 +472,8 @@ describe FoodCritic::Api do
           :action => :restart,
           :resource_type => :service,
           :resource_name => 'nscd',
-          :notification_timing => :delayed
+          :notification_timing => :delayed,
+          :style => :old
         }]
       )
     end
@@ -490,7 +491,8 @@ describe FoodCritic::Api do
           :action => :restart,
           :resource_type => :service,
           :resource_name => 'nscd',
-          :notification_timing => :delayed
+          :notification_timing => :delayed,
+          :style => :old
         }]
       )
     end
@@ -508,7 +510,8 @@ describe FoodCritic::Api do
           :action => :restart,
           :resource_type => :service,
           :resource_name => 'nscd',
-          :notification_timing => :delayed
+          :notification_timing => :delayed,
+          :style => :new
         }]
       )
     end
@@ -526,7 +529,8 @@ describe FoodCritic::Api do
           :action => :restart,
           :resource_type => :service,
           :resource_name => 'nscd',
-          :notification_timing => :delayed
+          :notification_timing => :delayed,
+          :style => :new
         }]
       )
     end
@@ -546,14 +550,16 @@ describe FoodCritic::Api do
             :action => :restart,
             :resource_type => :service,
             :resource_name => 'nscd',
-            :notification_timing => :delayed
+            :notification_timing => :delayed,
+            :style => :old
           },
           {
             :type => :subscribes,
             :action => :create,
             :resource_type => :template,
             :resource_name => '/etc/nscd.conf',
-            :notification_timing => :delayed
+            :notification_timing => :delayed,
+            :style => :old
           }
         ])
       end
@@ -572,14 +578,16 @@ describe FoodCritic::Api do
             :action => :restart,
             :resource_type => :service,
             :resource_name => 'nscd',
-            :notification_timing => :delayed
+            :notification_timing => :delayed,
+            :style => :new
           },
           {
             :type => :subscribes,
             :action => :create,
             :resource_type => :template,
             :resource_name => '/etc/nscd.conf',
-            :notification_timing => :delayed
+            :notification_timing => :delayed,
+            :style => :new
           }
         ])
       end
@@ -598,7 +606,8 @@ describe FoodCritic::Api do
           :action => :restart,
           :resource_type => :service,
           :resource_name => 'nscd',
-          :notification_timing => :immediately
+          :notification_timing => :immediately,
+          :style => :old
         }]
       )
     end
@@ -616,7 +625,8 @@ describe FoodCritic::Api do
           :action => :restart,
           :resource_type => :service,
           :resource_name => 'nscd',
-          :notification_timing => :immediately
+          :notification_timing => :immediately,
+          :style => :old
         }]
       )
     end
@@ -634,7 +644,8 @@ describe FoodCritic::Api do
           :action => :restart,
           :resource_type => :service,
           :resource_name => 'nscd',
-          :notification_timing => :immediately
+          :notification_timing => :immediately,
+          :style => :new
         }]
       )
     end
@@ -652,7 +663,8 @@ describe FoodCritic::Api do
           :action => :restart,
           :resource_type => :service,
           :resource_name => 'nscd',
-          :notification_timing => :immediately
+          :notification_timing => :immediately,
+          :style => :new
         }]
       )
     end
@@ -670,7 +682,8 @@ describe FoodCritic::Api do
           end
         }), :type => :template).first).must_equal([
           {:type => :notifies, :action => :restart, :resource_type => :service,
-           :resource_name => 'nscd', :notification_timing => :delayed}
+           :resource_name => 'nscd', :notification_timing => :delayed,
+           :style => :old}
         ])
       end
       it "old-style subscriptions" do
@@ -686,7 +699,8 @@ describe FoodCritic::Api do
           end
         }), :type => :template).first).must_equal([
           {:type => :subscribes, :action => :restart, :resource_type => :service,
-           :resource_name => 'nscd', :notification_timing => :delayed}
+           :resource_name => 'nscd', :notification_timing => :delayed,
+           :style => :old}
         ])
       end
       it "new-style notifications" do
@@ -702,7 +716,8 @@ describe FoodCritic::Api do
           end
         }), :type => :template).first).must_equal([
           {:type => :notifies, :action => :restart, :resource_type => :service,
-           :resource_name => 'nscd', :notification_timing => :delayed}
+           :resource_name => 'nscd', :notification_timing => :delayed,
+           :style => :new}
         ])
       end
       it "new-style subscriptions" do
@@ -718,7 +733,8 @@ describe FoodCritic::Api do
           end
         }), :type => :template).first).must_equal([
           {:type => :subscribes, :action => :restart, :resource_type => :service,
-           :resource_name => 'nscd', :notification_timing => :delayed}
+           :resource_name => 'nscd', :notification_timing => :delayed,
+           :style => :new}
         ])
       end
     end
@@ -735,9 +751,11 @@ describe FoodCritic::Api do
         })).must_equal(
           [
             {:type => :notifies, :action => :stop, :resource_type => :service,
-             :resource_name => 'nscd', :notification_timing => :delayed},
+             :resource_name => 'nscd', :notification_timing => :delayed,
+             :style => :old},
             {:type => :notifies, :action => :start, :resource_type => :service,
-             :resource_name => 'nscd', :notification_timing => :delayed}
+             :resource_name => 'nscd', :notification_timing => :delayed,
+             :style => :old}
           ]
         )
       end
@@ -753,9 +771,11 @@ describe FoodCritic::Api do
         })).must_equal(
           [
             {:type => :subscribes, :action => :stop, :resource_type => :service,
-             :resource_name => 'nscd', :notification_timing => :delayed},
+             :resource_name => 'nscd', :notification_timing => :delayed,
+             :style => :old},
             {:type => :subscribes, :action => :start, :resource_type => :service,
-             :resource_name => 'nscd', :notification_timing => :delayed}
+             :resource_name => 'nscd', :notification_timing => :delayed,
+             :style => :old}
           ]
         )
       end
@@ -771,9 +791,11 @@ describe FoodCritic::Api do
         })).must_equal(
           [
             {:type => :notifies, :action => :stop, :resource_type => :service,
-             :resource_name => 'nscd', :notification_timing => :delayed},
+             :resource_name => 'nscd', :notification_timing => :delayed,
+             :style => :new},
             {:type => :notifies, :action => :start, :resource_type => :service,
-             :resource_name => 'nscd', :notification_timing => :delayed}
+             :resource_name => 'nscd', :notification_timing => :delayed,
+             :style => :new}
           ]
         )
       end
@@ -789,14 +811,16 @@ describe FoodCritic::Api do
         })).must_equal(
           [
             {:type => :subscribes, :action => :stop, :resource_type => :service,
-             :resource_name => 'nscd', :notification_timing => :delayed},
+             :resource_name => 'nscd', :notification_timing => :delayed,
+             :style => :new},
             {:type => :subscribes, :action => :start, :resource_type => :service,
-             :resource_name => 'nscd', :notification_timing => :delayed}
+             :resource_name => 'nscd', :notification_timing => :delayed,
+             :style => :new}
           ]
         )
       end
     end
-    describe "understands style notifications for an execute resource" do
+    describe "understands notifications for an execute resource" do
       it "old-style notifications" do
         api.notifications(parse_ast(%q{
           template "/tmp/foo.bar" do
@@ -805,7 +829,8 @@ describe FoodCritic::Api do
           end
         })).must_equal(
           [{:type => :notifies, :action => :run, :resource_type => :execute,
-           :resource_name => 'foo', :notification_timing => :delayed}]
+           :resource_name => 'foo', :notification_timing => :delayed,
+           :style => :old}]
         )
       end
       it "old-style subscriptions" do
@@ -816,7 +841,8 @@ describe FoodCritic::Api do
           end
         })).must_equal(
           [{:type => :subscribes, :action => :run, :resource_type => :execute,
-           :resource_name => 'foo', :notification_timing => :delayed}]
+           :resource_name => 'foo', :notification_timing => :delayed,
+           :style => :old}]
         )
       end
       it "old-style notifications" do
@@ -827,7 +853,8 @@ describe FoodCritic::Api do
           end
         })).must_equal(
           [{:type => :notifies, :action => :run, :resource_type => :execute,
-           :resource_name => 'foo', :notification_timing => :delayed}]
+           :resource_name => 'foo', :notification_timing => :delayed,
+           :style => :new}]
         )
       end
       it "old-style subscriptions" do
@@ -838,7 +865,8 @@ describe FoodCritic::Api do
           end
         })).must_equal(
           [{:type => :subscribes, :action => :run, :resource_type => :execute,
-           :resource_name => 'foo', :notification_timing => :delayed}]
+           :resource_name => 'foo', :notification_timing => :delayed,
+           :style => :new}]
         )
       end
     end
@@ -964,6 +992,22 @@ describe FoodCritic::Api do
           })).first[:resource_name].respond_to?(:xpath),
             "Expected resource_name with var ref to respond to #xpath"
         end
+      end
+    end
+    describe "mark style of notification" do
+      it "specifies that the notification was in the old style" do
+          assert api.notifications(parse_ast(%q{
+            template "/etc/foo.conf" do
+              notifies :restart, resources(:service => 'foo')
+            end
+          })).first[:style].must_equal :old
+      end
+      it "specifies that the notification was in the new style" do
+          assert api.notifications(parse_ast(%q{
+            template "/etc/foo.conf" do
+              notifies :restart, "service[foo]"
+            end
+          })).first[:style].must_equal :new
       end
     end
   end
