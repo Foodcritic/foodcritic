@@ -355,6 +355,14 @@ Given 'a cookbook recipe with a case condition unrelated to platform' do
   }.strip
 end
 
+Given /^a cookbook recipe with a resource that ([^ ]+) (.*)$/ do |type,notification_timing|
+  write_recipe %Q{
+    template "/etc/foo.conf" do
+      #{type} :restart, "service[foo]"#{", :#{notification_timing}" if notification_timing}
+    end
+  }
+end
+
 Given /^a cookbook recipe with a '([^']+)' condition for flavours (.*)$/ do |type,flavours|
   platforms = %Q{"#{flavours.split(',').join('","')}"}
   if type == 'case'

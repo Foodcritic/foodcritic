@@ -38,6 +38,7 @@ module FoodCritic
       'FC029' => 'No leading cookbook name in recipe metadata',
       'FC030' => 'Cookbook contains debugger breakpoints',
       'FC031' => 'Cookbook without metadata file',
+      'FC032' => 'Invalid notification timing',
       'FCTEST001' => 'Test Rule'
     }
 

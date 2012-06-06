@@ -443,3 +443,14 @@ rule "FC031", "Cookbook without metadata file" do
     end
   end
 end
+
+rule "FC032", "Invalid notification timing" do
+  tags %w{correctness notifications}
+  recipe do |ast|
+    find_resources(ast).select do |resource|
+      notifications(resource).any? do |notification|
+        ! [:delayed, :immediate].include? notification[:timing]
+      end
+    end
+  end
+end
