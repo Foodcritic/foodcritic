@@ -220,7 +220,7 @@ module FoodCritic
           :style => params.empty? ? :new : :old,
           :action =>
             notifies.xpath('descendant::symbol[1]/ident/@value').to_s.to_sym,
-          :notification_timing =>
+          :timing =>
             if timing.empty?
               :delayed
             else
