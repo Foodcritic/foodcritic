@@ -457,6 +457,26 @@ describe FoodCritic::Api do
           })).must_be_empty
         end
       end
+      it "returns empty if the left square bracket is missing" do
+        api.notifications(parse_ast(%q{
+          template "/etc/nscd.conf" do
+            source "nscd.conf"
+            owner "root"
+            group "root"
+            subscribes :restart, "servicefoo]"
+          end
+        })).must_be_empty
+      end
+      it "returns empty if the right square bracket is missing" do
+        api.notifications(parse_ast(%q{
+          template "/etc/nscd.conf" do
+            source "nscd.conf"
+            owner "root"
+            group "root"
+            subscribes :restart, "service[foo"
+          end
+        })).must_be_empty
+      end
     end
     it "understands the old-style notifications" do
       api.notifications(parse_ast(%q{
