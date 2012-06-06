@@ -221,7 +221,14 @@ module FoodCritic
           :action =>
             notifies.xpath('descendant::symbol[1]/ident/@value').to_s.to_sym,
           :notification_timing =>
-            timing.empty? ? :delayed : timing.first.to_s.to_sym
+            if timing.empty?
+              :delayed
+            else
+              case timing.first.to_s.to_sym
+                when :immediately, :immediate then :immediate
+                else timing.first.to_s.to_sym
+              end
+            end
         }
 
       end.compact

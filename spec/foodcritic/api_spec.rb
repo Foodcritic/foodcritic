@@ -626,7 +626,7 @@ describe FoodCritic::Api do
           :action => :restart,
           :resource_type => :service,
           :resource_name => 'nscd',
-          :notification_timing => :immediately,
+          :notification_timing => :immediate,
           :style => :old
         }]
       )
@@ -645,7 +645,7 @@ describe FoodCritic::Api do
           :action => :restart,
           :resource_type => :service,
           :resource_name => 'nscd',
-          :notification_timing => :immediately,
+          :notification_timing => :immediate,
           :style => :old
         }]
       )
@@ -664,7 +664,7 @@ describe FoodCritic::Api do
           :action => :restart,
           :resource_type => :service,
           :resource_name => 'nscd',
-          :notification_timing => :immediately,
+          :notification_timing => :immediate,
           :style => :new
         }]
       )
@@ -683,7 +683,7 @@ describe FoodCritic::Api do
           :action => :restart,
           :resource_type => :service,
           :resource_name => 'nscd',
-          :notification_timing => :immediately,
+          :notification_timing => :immediate,
           :style => :new
         }]
       )
@@ -920,35 +920,73 @@ describe FoodCritic::Api do
         })).first[:notification_timing].must_equal(:delayed)
       end
     end
-    describe "sets the notification timing to immediately if specified" do
+    describe "sets the notification timing to immediate if specified as immediate" do
+      it "old-style notifications" do
+        api.notifications(parse_ast(%q{
+          template "/etc/foo.conf" do
+            notifies :run, resources(execute => "robespierre"), :immediate
+          end
+        })).first[:notification_timing].must_equal(:immediate)
+      end
+      it "old-style subscriptions" do
+        api.notifications(parse_ast(%q{
+          template "/etc/foo.conf" do
+            subscribes :run, resources(execute => "robespierre"), :immediate
+          end
+        })).first[:notification_timing].must_equal(:immediate)
+      end
+      it "new-style notifications" do
+        api.notifications(parse_ast(%q{
+          template "/etc/foo.conf" do
+            notifies :run, "execute[robespierre]", :immediate
+          end
+        })).first[:notification_timing].must_equal(:immediate)
+      end
+      it "new-style subscriptions" do
+        api.notifications(parse_ast(%q{
+          template "/etc/foo.conf" do
+            subscribes :run, "execute[robespierre]", :immediate
+          end
+        })).first[:notification_timing].must_equal(:immediate)
+      end
+
+    end
+    describe "sets the notification timing to immediate if specified as immediately" do
       it "old-style notifications" do
         api.notifications(parse_ast(%q{
           template "/etc/foo.conf" do
             notifies :run, resources(execute => "robespierre"), :immediately
           end
-        })).first[:notification_timing].must_equal(:immediately)
+        })).first[:notification_timing].must_equal(:immediate)
       end
       it "old-style subscriptions" do
         api.notifications(parse_ast(%q{
           template "/etc/foo.conf" do
             subscribes :run, resources(execute => "robespierre"), :immediately
           end
-        })).first[:notification_timing].must_equal(:immediately)
+        })).first[:notification_timing].must_equal(:immediate)
       end
       it "new-style notifications" do
         api.notifications(parse_ast(%q{
           template "/etc/foo.conf" do
             notifies :run, "execute[robespierre]", :immediately
           end
-        })).first[:notification_timing].must_equal(:immediately)
+        })).first[:notification_timing].must_equal(:immediate)
       end
       it "new-style subscriptions" do
         api.notifications(parse_ast(%q{
           template "/etc/foo.conf" do
             subscribes :run, "execute[robespierre]", :immediately
           end
-        })).first[:notification_timing].must_equal(:immediately)
+        })).first[:notification_timing].must_equal(:immediate)
       end
+    end
+    it "passes unrecognised notification timings through unchanged" do
+      api.notifications(parse_ast(%q{
+        template "/etc/foo.conf" do
+          notifies :run, resources(execute => "robespierre"), :forthwith
+        end
+      })).first[:notification_timing].must_equal(:forthwith)
     end
     describe "resource names as expressions" do
       describe "returns the AST for an embedded string" do
