@@ -142,8 +142,8 @@ module FoodCritic
       raise_unless_xpath!(ast)
       # we only support literal strings, ignoring sub-expressions
       included = ast.xpath(%q{//command[ident/@value = 'include_recipe'][count(
-        descendant::args_add) = 1][descendant::args_add/string_literal]/
-        descendant::tstring_content})
+        descendant::args_add) = 1][count(descendant::string_embexpr) = 0]
+        [descendant::args_add/string_literal]/descendant::tstring_content})
       included.inject(Hash.new([])){|h, i| h[i['value']] += [i]; h}
     end
 

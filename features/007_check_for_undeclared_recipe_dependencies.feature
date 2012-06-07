@@ -19,10 +19,15 @@ Feature: Check for undeclared recipe dependencies
     When I check the cookbook
     Then the undeclared dependency warning 007 should not be displayed
 
-  Scenario: Cookbook includes recipe via expression (embedded)
-    Given a cookbook recipe that includes a recipe name from an embedded expression
+  Scenario Outline: Cookbook includes recipe via expression (embedded)
+    Given a cookbook recipe that includes a recipe name from an embedded expression <recipe_expression>
     When I check the cookbook
     Then the undeclared dependency warning 007 should not be displayed
+  Examples:
+    | recipe_expression              |
+    | foo::#{node['foo']['fighter']} |
+    | #{cookbook_name}::other        |
+    | #{cbk}_other::other            |
 
   Scenario: Cookbook includes declared recipe dependency
     Given a cookbook recipe that includes a declared recipe dependency
