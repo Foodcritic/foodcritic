@@ -24,7 +24,7 @@ module FoodCritic
 
     # Create a new review
     #
-    # @param [String] cookbook_paths The path this review was performed against
+    # @param [Array] cookbook_paths The path this review was performed against
     # @param [Array] warnings The warnings raised in this review
     # @param [Boolean] is_failed Have warnings been raised that mean this
     #   should be considered failed?
