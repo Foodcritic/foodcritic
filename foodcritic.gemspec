@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
   s.executables << 'foodcritic'
   s.add_dependency('gherkin', '~> 2.8.0')
   s.add_dependency('gist', '~> 2.0.4')
-  s.add_dependency('nokogiri', '~> 1.5.0', '!= 1.5.1', '!= 1.5.2')
+  s.add_dependency('nokogiri', '= 1.5.0')
   s.add_dependency('pry', '~> 0.9.7.4')
   s.add_dependency('pry-doc', '~> 0.3.0')
   s.add_dependency('rak', '~> 1.4')
