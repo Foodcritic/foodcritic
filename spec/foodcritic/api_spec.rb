@@ -2,6 +2,10 @@ require_relative '../spec_helper'
 
 describe FoodCritic::Api do
 
+  def parse_ast(str)
+    api.send(:build_xml, Ripper::SexpBuilder.new(str).parse)
+  end
+
   let(:api) { Object.new.extend(FoodCritic::Api) }
 
   describe "#attribute_access" do
@@ -196,6 +200,62 @@ describe FoodCritic::Api do
         [String]
       api.included_recipes(ast).values.must_equal [[{'value' => 'foo::bar'}]]
     end
+    it "correctly keys an included recipe specified as a string literal" do
+      api.included_recipes(parse_ast(%q{
+        include_recipe "foo::default"
+      })).keys.must_equal ["foo::default"]
+    end
+    describe "embedded expression - recipe name" do
+      let(:ast) do
+        parse_ast(%q{
+          include_recipe "foo::#{bar}"
+        })
+      end
+      it "returns the literal string component by default" do
+        api.included_recipes(ast).keys.must_equal ["foo::"]
+      end
+      it "returns the literal string part of the AST" do
+        api.included_recipes(ast)['foo::'].first.must_respond_to(:xpath)
+      end
+      it "returns empty if asked to exclude statements with embedded expressions" do
+        api.included_recipes(ast, :with_partial_names => false).must_be_empty
+      end
+      it "returns the literals if asked to include statements with embedded expressions" do
+        api.included_recipes(ast, :with_partial_names => true).keys.must_equal ["foo::"]
+      end
+    end
+    describe "embedded expression - cookbook name" do
+      let(:ast) do
+        parse_ast(%q{
+          include_recipe "#{foo}::bar"
+        })
+      end
+      it "returns the literal string component by default" do
+        api.included_recipes(ast).keys.must_equal ["::bar"]
+      end
+      it "returns the literal string part of the AST" do
+        api.included_recipes(ast)['::bar'].first.must_respond_to(:xpath)
+      end
+      it "returns empty if asked to exclude statements with embedded expressions" do
+        api.included_recipes(ast, :with_partial_names => false).must_be_empty
+      end
+    end
+    describe "embedded expression - partial cookbook name" do
+      let(:ast) do
+        parse_ast(%q{
+          include_recipe "#{foo}_foo::bar"
+        })
+      end
+      it "returns the literal string component by default" do
+        api.included_recipes(ast).keys.must_equal ["_foo::bar"]
+      end
+      it "returns the literal string part of the AST" do
+        api.included_recipes(ast)['_foo::bar'].first.must_respond_to(:xpath)
+      end
+      it "returns empty if asked to exclude statements with embedded expressions" do
+        api.included_recipes(ast, :with_partial_names => false).must_be_empty
+      end
+    end
   end
 
   describe :AttFilter do
@@ -275,9 +335,6 @@ describe FoodCritic::Api do
   end
 
   describe "#notifications" do
-    def parse_ast(str)
-      ast = api.send(:build_xml, Ripper::SexpBuilder.new(str).parse)
-    end
     it "returns empty if the provided AST does not support XPath" do
       api.notifications(nil).must_be_empty
     end
@@ -1115,8 +1172,7 @@ describe FoodCritic::Api do
 
   describe "#resource_attributes" do
     def str_to_atts(str)
-      ast = api.send(:build_xml, Ripper::SexpBuilder.new(str).parse)
-      api.resource_attributes(api.find_resources(ast).first)
+      api.resource_attributes(api.find_resources(parse_ast(str)).first)
     end
     it "raises if the resource does not support XPath" do
       lambda{api.resource_attributes(nil)}.must_raise ArgumentError

@@ -137,12 +137,21 @@ module FoodCritic
     # Retrieve the recipes that are included within the given recipe AST.
     #
     # @param [Nokogiri::XML::Node] ast The recipe AST
+    # @param [Hash] options Options to filter recipes to include
+    # @option [Symbol] :with_partial_names Include string literals for recipes
+    #   that have an embedded sub-expression.
     # @return [Hash] include_recipe nodes keyed by included recipe name
-    def included_recipes(ast)
+    def included_recipes(ast, options = {:with_partial_names => true})
       raise_unless_xpath!(ast)
+
+      filter = ['[count(descendant::args_add) = 1]']
+      unless options[:with_partial_names]
+        filter << '[count(descendant::string_embexpr) = 0]'
+      end
+
       # we only support literal strings, ignoring sub-expressions
-      included = ast.xpath(%q{//command[ident/@value = 'include_recipe'][count(
-        descendant::args_add) = 1][count(descendant::string_embexpr) = 0]
+      included = ast.xpath(%Q{//command[ident/@value = 'include_recipe']
+        #{filter.join}
         [descendant::args_add/string_literal]/descendant::tstring_content})
       included.inject(Hash.new([])){|h, i| h[i['value']] += [i]; h}
     end
