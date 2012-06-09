@@ -5,6 +5,21 @@ describe FoodCritic::CommandLine do
     FoodCritic::CommandLine.new([]).wont_be_nil
   end
 
+  describe "#cookbook_path" do
+    it "returns nil if no paths are specified" do
+      refute FoodCritic::CommandLine.new([]).cookbook_path
+    end
+    it "returns a cookbook path if specified" do
+      FoodCritic::CommandLine.new(["example"]).cookbook_path.must_equal "example"
+    end
+    it "ignores subsequent cookbook paths if specified" do
+      FoodCritic::CommandLine.new(["example", "another_example"]).cookbook_path.must_equal "example"
+    end
+    it "ignores known arguments" do
+      FoodCritic::CommandLine.new(["example", "--context"]).cookbook_path.must_equal "example"
+    end
+  end
+
   describe "#cookbook_paths" do
     it "returns an empty array if no paths are specified" do
       FoodCritic::CommandLine.new([]).cookbook_paths.must_be_empty
@@ -20,6 +35,20 @@ describe FoodCritic::CommandLine do
 
     it "ignores known arguments" do
       FoodCritic::CommandLine.new(["example", "--context"]).cookbook_paths.must_equal ["example"]
+    end
+  end
+
+  describe "#valid_path?" do
+    it "returns true if the specified directory exists" do
+      assert FoodCritic::CommandLine.new(["lib"]).valid_path?
+    end
+
+    it "returns false if the specified directory does not exist" do
+      refute FoodCritic::CommandLine.new(["lib2"]).valid_path?
+    end
+
+    it "returns true if the specified file exists" do
+      assert FoodCritic::CommandLine.new(["lib/foodcritic.rb"]).valid_path?
     end
   end
 

@@ -29,9 +29,15 @@ module FoodCritic
     # @param [Boolean] is_failed Have warnings been raised that mean this
     #   should be considered failed?
     def initialize(cookbook_paths, warnings, is_failed)
-      @cookbook_paths = cookbook_paths
+      @cookbook_paths = Array(cookbook_paths)
       @warnings = warnings
       @is_failed = is_failed
+    end
+
+    # Provided for backwards compatibility
+    # @deprecated Multiple cookbook paths may be provided.
+    def cookbook_path
+      @cookbook_paths.first
     end
 
     # If this review has failed or not.
