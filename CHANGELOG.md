@@ -1,3 +1,14 @@
+## 1.3.1 (9th June, 2012)
+
+Bugfixes:
+
+  - Changes made to support multiple cookbook paths in 1.3.0 broke
+    compatibility with earlier versions of the linting API. This release
+    restores compatibility with third party code that uses the linter
+    `#cookbook_path` or `#valid_path?` methods.
+  - The Nokogiri dependency constraint has been locked to 1.5.0 again as
+    Nokogiri 1.5.3 also appears to segfault in certain circumstances.
+
 ## 1.3.0 (21st May, 2012)
 
 Features:
