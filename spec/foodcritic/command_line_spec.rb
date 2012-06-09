@@ -6,7 +6,7 @@ describe FoodCritic::CommandLine do
   end
 
   describe "#cookbook_paths" do
-    it "retuns an empty array if no paths are specified" do
+    it "returns an empty array if no paths are specified" do
       FoodCritic::CommandLine.new([]).cookbook_paths.must_be_empty
     end
 

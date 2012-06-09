@@ -42,7 +42,7 @@ module FoodCritic
     # Review the cookbooks at the provided path, identifying potential
     # improvements.
     #
-    # @param [String] cookbook_paths The file path(s) to an individual
+    # @param [Array] cookbook_paths The file path(s) to the individual
     #   cookbook(s) being checked
     # @param [Hash] options Options to apply to the linting
     # @option options [Array] tags The tags to filter rules based on
