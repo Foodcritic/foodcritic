@@ -45,12 +45,21 @@ module FoodCritic
     # @param [Array] cookbook_paths The file path(s) to the individual
     #   cookbook(s) being checked
     # @param [Hash] options Options to apply to the linting
+    # @option options [Array] include_rules Paths to local rules to apply
     # @option options [Array] tags The tags to filter rules based on
     # @option options [Array] fail_tags The tags to fail the build on
     # @return [FoodCritic::Review] A review of your cookbooks, with any
     #   warnings issued.
     def check(cookbook_paths, options)
       raise ArgumentError, "Cookbook paths are required" if cookbook_paths.nil?
+      cookbook_paths = Array(cookbook_paths)
+      if cookbook_paths.empty?
+        raise ArgumentError, "Cookbook paths cannot be empty"
+      end
+
+      options = {:tags => [], :fail_tags => [],
+                 :include_rules => []}.merge(options)
+
       @last_cookbook_paths, @last_options = cookbook_paths, options
       load_rules unless defined? @rules
       warnings = []; last_dir = nil; matched_rule_tags = Set.new
