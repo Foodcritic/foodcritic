@@ -912,6 +912,17 @@ rules:
           template "/etc/foo" do
             source "foo.erb"
           end
+  - code: FC031
+    name: Cookbook without metadata file
+    tags:
+      - correctness
+      - metadata
+    summary: |
+      Chef cookbooks normally include a `metadata.rb` file which can be used
+      to express a
+      [wide range of metadata about a cookbook](http://wiki.opscode.com/display/chef/Metadata).
+      This warning is shown when a directory appears to contain a cookbook, but
+      does not include the expected `metadata.rb` file at the top-level.
 
 api_methods: 
   - name: attribute_access
