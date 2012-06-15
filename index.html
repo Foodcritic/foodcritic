@@ -1206,6 +1206,39 @@ api_methods:
         type: Hash
         description: |
           Hash with the matched node name and position with the recipe
+  - name: notifications
+    description: |
+      Provides convenient access to resource notification details.
+      You can pass either the AST for an individual resource or the entire
+      recipe to this method. Note that a resource may be registered for
+      multiple notifications / subscriptions.
+
+      While Chef permits either `:immediate` or `:immediately` to be specified
+      in cookbooks, the timing for both will be returned as `:immediate` to
+      remove the need for callers to switch on both values.
+    examples: |
+      find_resources(ast).select do |resource|
+        notifications(resource).any? do |notification|
+          ! [:delayed, :immediate].include? notification[:timing]
+        end
+      end
+    signature:
+      - category: param
+        type: 'Nokogiri::XML::Node'
+        name: ast
+        description: The AST to check for notifications.
+      - category: return
+        type: Array
+        description: |
+          A flat array of notification hashes.
+          - `:type` - Either `:notifies` or `:subscribes`
+          - `:resource_type` - The type of resource to be notified
+          - `:resource_name` - The name of the resource to be notified. This
+            can be an AST if the resource name is not a string literal.
+          - `:action` - The notification action
+          - `:timing` - Either `:delayed` or `:immediate`
+          - `:style` - The syntax used in the cookbook to define the
+            notification, either `:old` or `:new`
   - name: os_command?
     description: |
       Does the provided string look like an Operating System command? This is a
