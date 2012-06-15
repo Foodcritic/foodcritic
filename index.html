@@ -799,6 +799,34 @@ rules:
             source "foo.erb"
             not_if "test -f /etc/foo"
           end
+  - code: FC027
+    name: Resource sets internal attribute
+    tags:
+      - correctness
+    summary: |
+      This warning is shown if you set an attribute on a Chef resource that is
+      technically accessible but should not be set in normal usage.
+      To avoid this warning allow Chef to set the value of the internal
+      attribute rather than setting it yourself.
+    examples:
+      - title: Service resource sets internal attribute
+        text: |
+          This example matches the FC027 rule because it sets the `running`
+          attribute on a service resource. This attribute should normally be
+          set by the provider itself and not in normal recipe usage.
+        code: |
+          # Don't do this
+          service "foo" do
+            running true
+          end
+      - title: Modified version
+        text: |
+          In this particular example you can achieve the same effect by using
+          the service `:start` action.
+        code: |
+          service "foo" do
+            action :start
+          end
 
 api_methods: 
   - name: attribute_access
