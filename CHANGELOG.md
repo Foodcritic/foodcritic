@@ -1,3 +1,47 @@
+## 1.4.0 (15th June, 2012)
+
+Features:
+
+  - [FC027: Resource sets internal attribute](http://acrmp.github.com/foodcritic/#FC027)
+    rule added.
+    Thanks @macros.
+  - [FC028: Incorrect #platform? usage](http://acrmp.github.com/foodcritic/#FC028)
+    rule added.
+  - [FC029: No leading cookbook name in recipe metadata](http://acrmp.github.com/foodcritic/#FC029)
+    rule added.
+  - [FC030: Cookbook contains debugger breakpoints](http://acrmp.github.com/foodcritic/#FC030)
+    rule added
+    ([related issue](https://github.com/acrmp/foodcritic/issues/36)).
+    Thanks @bryanwb.
+  - [FC031: Cookbook without metadata file](http://acrmp.github.com/foodcritic/#FC031)
+    rule added
+    ([related issue](https://github.com/acrmp/foodcritic/issues/43)).
+    Thanks to @juanje for proposing and implementing this rule.
+  - [FC032: Invalid notification timing](http://acrmp.github.com/foodcritic/#FC032)
+    rule added.
+  - Added the [notifications](http://acrmp.github.com/foodcritic/#notifications)
+    API method to provide more convenient access to resource notifications
+    ([related issue](https://github.com/acrmp/foodcritic/issues/31)).
+
+Bugfixes:
+
+  - [FC003: Check whether you are running with chef server before using server-specific features](http://acrmp.github.com/foodcritic/#FC003)
+    would warn if solo was checked for with `Chef::Config.solo`
+    ([related issue](https://github.com/acrmp/foodcritic/issues/26)).
+    Thanks to @miketheman for identifying and fixing this issue.
+  - [FC007: Ensure recipe dependencies are reflected in cookbook metadata](http://acrmp.github.com/foodcritic/#FC007)
+    would incorrectly warn if the cookbook name specified for `include_recipe`
+    was dynamic
+    ([related issue](https://github.com/acrmp/foodcritic/issues/44)).
+    Thanks @markjreed.
+  - [FC019: Access node attributes in a consistent manner](http://acrmp.github.com/foodcritic/#FC019)
+    has been modified to no longer warn if the method called on node is called
+    explicitly with brackets
+    ([related issue](https://github.com/acrmp/foodcritic/issues/22)).
+    Thanks @jaymzh.
+  - The [resource_attributes](http://acrmp.github.com/foodcritic/#resource_attributes)
+    API method has been updated to return boolean values correctly.
+
 ## 1.3.1 (9th June, 2012)
 
 Bugfixes:
