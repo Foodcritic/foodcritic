@@ -923,6 +923,37 @@ rules:
       [wide range of metadata about a cookbook](http://wiki.opscode.com/display/chef/Metadata).
       This warning is shown when a directory appears to contain a cookbook, but
       does not include the expected `metadata.rb` file at the top-level.
+  - code: FC032
+    name: Invalid notification timing
+    tags:
+      - correctness
+      - notifications
+    summary: |
+      [Chef notifications](http://wiki.opscode.com/display/chef/Resources#Resources-Notifications)
+      allow a resource to define that it should be actioned when another
+      resource changes state.
+
+      Notification timing can be controlled and set to `immediate`, or `delayed`
+      until the end of the Chef run. This warning is shown when the timing
+      specified is not recognised.
+    examples:
+      - title: Notification timing is invalid
+        text: |
+          This example matches the FC032 rule because it specifies an invalid
+          notification timing.
+        code: |
+          # Don't do this
+          template "/etc/foo" do
+            notifies :restart, "service[foo]", :imediately
+          end
+      - title: Modified version
+        text: |
+          This modified example would not match the FC032 rule because the
+          mispelt timing has been corrected.
+        code: |
+          template "/etc/foo" do
+            notifies :restart, "service[foo]", :immediately
+          end
 
 api_methods: 
   - name: attribute_access
