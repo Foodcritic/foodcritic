@@ -827,6 +827,34 @@ rules:
           service "foo" do
             action :start
           end
+  - code: FC028
+    name: "Incorrect #platform? usage"
+    tags:
+      - correctness
+    summary: |
+      This warning is shown if you attempt to use the `platform?` Chef built-in
+      method as `node.platform?`. Because of the way Chef attributes work the
+      later approach will not error but will do the wrong thing which may
+      result in resources you had intended to apply only to a single platform
+      instead being applied to all platforms.
+    examples:
+      - title: Incorrect attempt to use platform? method
+        text: |
+          This example matches the FC028 rule because the `platform?` method
+          is incorrectly prefixed with `node`.
+        code: |
+          # Don't do this
+          file "/etc/foo" do
+            only_if { node.platform?("commodore64") }
+          end
+      - title: Modified version
+        text: |
+          Remove the leading `node.` from the use of `platform?` to resolve
+          this warning.
+        code: |
+          file "/etc/foo" do
+            only_if { platform?("commodore64") }
+          end
 
 api_methods: 
   - name: attribute_access
