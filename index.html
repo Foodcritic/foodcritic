@@ -880,6 +880,38 @@ rules:
           name "example"
           version "1.2.3"
           recipe "example::default", "Installs Example"
+  - code: FC030
+    name: Cookbook contains debugger breakpoints
+    tags:
+      - annoyances
+    summary: |
+      [Pry is a fantastic tool](http://pry.github.com/) for interactive
+      exploration of a running Ruby program. You can place breakpoints in your
+      cookbook code that will launch a Pry console. This warning is shown when
+      your cookbook code contains these breakpoints, as failing to remove these
+      will cause your Chef run to halt.
+
+      This rule currently only checks for use of `binding.pry` and not the Chef
+      built-in `breakpoint` resource which is never used outside of
+      [Shef](http://wiki.opscode.com/display/chef/Shef).
+    examples:
+      - title: Recipe includes breakpoint
+        text: |
+          This example matches the FC030 rule because it includes a Pry
+          breakpoint declared with `binding.pry`.
+        code: |
+          # Don't do this
+          template "/etc/foo" do
+            source "foo.erb"
+          end
+          binding.pry
+      - title: Modified version
+        text: |
+          This modified example would not match the FC030 rule:
+        code: |
+          template "/etc/foo" do
+            source "foo.erb"
+          end
 
 api_methods: 
   - name: attribute_access
