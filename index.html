@@ -1148,11 +1148,21 @@ api_methods:
       # show the recipe names.
       included_recipes(ast).keys
       => ["postgresql::client"]
+
+      included_recipes(ast, :with_partial_names => false).keys
+      => ["postgresql::client"]
     signature:
       - category: param
         type: 'Nokogiri::XML::Node'
         name: ast
         description: The recipe AST
+      - category: param
+        type: Hash
+        name: options
+        description: |
+          `:with_partial_names` - Include string literals for recipes that
+          have embedded sub-expressions. This defaults to `true` for backward
+          compatibility.
       - category: return
         type: Hash
         description: |
