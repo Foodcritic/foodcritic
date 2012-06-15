@@ -855,6 +855,31 @@ rules:
           file "/etc/foo" do
             only_if { platform?("commodore64") }
           end
+  - code: FC029
+    name: No leading cookbook name in recipe metadata
+    tags:
+      - correctness
+      - metadata
+    summary: |
+      This warning is shown if you declare a recipe in your cookbook metadata
+      without including the cookbook name as a prefix.
+    examples:
+      - title: Recipe declared without cookbook name prefix
+        text: |
+          This example matches the FC029 rule because the metadata declares a
+          recipe without prefixing it with the name of the current cookbook.
+        code: |
+          # Don't do this
+          name "example"
+          version "1.2.3"
+          recipe "default", "Installs Example"
+      - title: Modified version
+        text: |
+          This modified example would not match the FC029 rule:
+        code: |
+          name "example"
+          version "1.2.3"
+          recipe "example::default", "Installs Example"
 
 api_methods: 
   - name: attribute_access
