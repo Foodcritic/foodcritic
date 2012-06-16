@@ -6,6 +6,7 @@ module FoodCritic
   module Api
 
     include FoodCritic::Chef
+    include FoodCritic::Notifications
 
     # Find attribute accesses by type.
     #
@@ -186,61 +187,6 @@ module FoodCritic
       return nil if pos.nil?
       {:matched => node.respond_to?(:name) ? node.name : '',
        :line => pos['line'].to_i, :column => pos['column'].to_i}
-    end
-
-    # Decode resource notifications.
-    #
-    # @param [Nokogiri::XML::Node] ast The AST to check for notifications.
-    # @return [Array] A flat array of notifications. The resource_name may be
-    #   a string or a Node if the resource name is an expression.
-    def notifications(ast)
-      return [] unless ast.respond_to?(:xpath)
-      ast.xpath('descendant::command[ident/@value="notifies" or
-        ident/@value="subscribes"]').map do |notifies|
-
-        params = notifies.xpath('descendant::method_add_arg[fcall/ident/
-          @value="resources"]/descendant::assoc_new')
-        timing = notifies.xpath('args_add_block/args_add/symbol_literal[last()]/
-          symbol/ident[1]/@value')
-        if params.empty?
-          target = notifies.xpath('args_add_block/args_add/
-            descendant::tstring_content/@value').to_s
-          match = target.match(/^([^\[]+)\[(.*)\]$/)
-          next unless match
-          resource_type, resource_name =
-            match.captures.tap{|m| m[0] = m[0].to_sym}
-          if notifies.xpath('descendant::string_embexpr').empty?
-            next if resource_name.empty?
-          else
-            resource_name =
-              notifies.xpath('args_add_block/args_add/string_literal')
-          end
-        else
-          resource_type = params.xpath('symbol[1]/ident/@value').to_s.to_sym
-          resource_name = params.xpath('string_add[1][count(../
-            descendant::string_add) = 1]/tstring_content/@value').to_s
-          resource_name = params if resource_name.empty?
-        end
-        {
-          :type =>
-            notifies.xpath('ident/@value[1]').to_s.to_sym,
-          :resource_type => resource_type,
-          :resource_name => resource_name,
-          :style => params.empty? ? :new : :old,
-          :action =>
-            notifies.xpath('descendant::symbol[1]/ident/@value').to_s.to_sym,
-          :timing =>
-            if timing.empty?
-              :delayed
-            else
-              case timing.first.to_s.to_sym
-                when :immediately, :immediate then :immediate
-                else timing.first.to_s.to_sym
-              end
-            end
-        }
-
-      end.compact
     end
 
     # Does the provided string look like an Operating System command? This is a
