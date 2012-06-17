@@ -58,7 +58,7 @@ module FoodCritic
       end
 
       options = {:tags => [], :fail_tags => [],
-                 :include_rules => []}.merge(options)
+                 :include_rules => [], :exclude_paths => []}.merge(options)
 
       @last_cookbook_paths, @last_options = cookbook_paths, options
       load_rules unless defined? @rules
@@ -68,7 +68,7 @@ module FoodCritic
         matching_tags?(options[:tags], rule.tags) and
         applies_to_version?(rule, options[:chef_version] || DEFAULT_CHEF_VERSION)
       end
-      files_to_process(cookbook_paths).each do |file|
+      files_to_process(cookbook_paths, options[:exclude_paths]).each do |file|
         cookbook_dir = Pathname.new(
           File.join(File.dirname(file), '..')).cleanpath
         ast = read_ast(file)
@@ -158,19 +158,18 @@ module FoodCritic
     # @param [Array<String>] dirs The cookbook path(s)
     # @return [Array] The files underneath the provided paths to be
     #   processed.
-    def files_to_process(dirs)
+    def files_to_process(dirs, exclude_paths = [])
       files = []
-
       dirs.each do |dir|
+        exclusions = Dir.glob(exclude_paths.map{|p| File.join(dir, p)})
         if File.directory? dir
           cookbook_glob = '{attributes,providers,recipes,resources}/*.rb'
-          files += Dir.glob(File.join(dir, cookbook_glob)) +
-            Dir.glob(File.join(dir, "*/#{cookbook_glob}"))
+          files += (Dir.glob(File.join(dir, cookbook_glob)) +
+            Dir.glob(File.join(dir, "*/#{cookbook_glob}")) - exclusions)
         else
-          files << dir
+          files << dir unless exclusions.include?(dir)
         end
       end
-
       files
     end
 

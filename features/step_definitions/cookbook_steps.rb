@@ -507,6 +507,18 @@ Given /^a cookbook that downloads a file to (.*)$/ do |path|
                          'a users home directory' => :home_dir}[path])
 end
 
+Given /^a cookbook that has ([^ ]+) problems$/ do |problems|
+  cookbook_that_matches_rules(
+    problems.split(',').map do |problem|
+      case problem
+        when 'no ' then next
+        when 'style' then 'FC002'
+        when 'correctness' then 'FC006'
+      end
+    end
+  )
+end
+
 Given 'a cookbook that has a README in markdown format' do
   write_recipe %q{
     log "Hello"
@@ -722,6 +734,24 @@ Given 'a file resource declared without a mode' do
   }
 end
 
+Given /^a Rakefile that defines (no lint task|a lint task with no block|a lint task with an empty block|a lint task with a block setting options to)(.*)?$/ do |task,options|
+  rakefile(
+    case task
+      when /no block/ then :no_block
+      when /empty block/ then :empty_block
+      when /a block/ then :block
+    end,
+  options.strip.empty? ? {} : {:options => options.strip})
+end
+
+Given /^a Rakefile that defines a lint task specifying files to lint as (.*)$/ do |files|
+  rakefile(:block, :files => files)
+end
+
+Given 'a Rakefile that defines a lint task specifying a different name' do
+  rakefile(:block, :name => 'lint')
+end
+
 Given /^a recipe that declares a ([^ ]+) resource with these attributes: (.*)$/ do |type,attributes|
   recipe_with_resource(type, attributes.split(','))
 end
@@ -836,8 +866,16 @@ Given 'I have started the lint tool with the REPL enabled' do
   }
 end
 
+Given /^(?:a cookbook that has|the cookbook has) a Gemfile that includes rake and foodcritic$/ do
+  buildable_gemfile
+end
+
 Given /^the current stable version of Chef (falls|does not fall) within it$/ do |falls_within|
   rule_with_version_constraint("98.10", nil) unless falls_within.include?('falls')
+end
+
+Given 'unit tests under a top-level test directory' do
+  minitest_spec_attributes
 end
 
 When /^I check the cookbook specifying ([^ ]+) as the Chef version$/ do |version|
@@ -872,6 +910,10 @@ When /^I define a new rule( and reset the list of rules| that includes a binding
                   :reset_rules => ! /reset/.match(qualifier).nil?,
                   :with_binding => ! /binding/.match(qualifier).nil?,
                   :rule_match_string => @repl_match_string)
+end
+
+When 'I list the available build tasks' do
+  list_available_build_tasks
 end
 
 When /^I run it on the command line including a custom rule (file|directory) containing a rule that matches$/ do |path_type|
@@ -917,6 +959,10 @@ When 'I run it on the command line with the unimplemented verbose option' do
   run_lint(['-v'])
 end
 
+When 'I run the build' do
+  run_build
+end
+
 Then 'a warning for the custom rule should be displayed' do
   expect_output('BAR001: Use symbols in preference to strings to access node attributes: cookbooks/example/recipes/default.rb:1')
 end
@@ -960,8 +1006,17 @@ Then 'I should be able to see the full list of DSL methods from inside the rule'
   ]
 end
 
+Then /^the lint task will be listed( under the different name)?$/ do |diff_name|
+  expected_name = diff_name ? 'lint' : 'foodcritic'
+  build_tasks.should include([expected_name, 'Lint Chef cookbooks'])
+end
+
 Then 'no error should have occurred' do
   assert_no_error_occurred
+end
+
+Then /^no warnings will be displayed against the tests$/ do
+  assert_no_test_warnings
 end
 
 Then /^the warning should (not )?be displayed$/ do |should_not|
@@ -996,8 +1051,12 @@ Then /^the boilerplate metadata warning 008 should warn on lines (.*)$/ do |line
   end
 end
 
-Then /the build status should be (successful|failed)$/ do |build_status|
-  build_status == 'successful' ? assert_no_error_occurred : assert_error_occurred
+Then /the build status should be (successful|failed)$/ do |build_outcome|
+  build_outcome == 'successful' ? assert_no_error_occurred : assert_error_occurred
+end
+
+Then /^the build will (succeed|fail) with (?:no )?warnings(.*)$/ do |build_outcome, warnings|
+  assert_build_result(build_outcome == 'succeed', warnings.gsub(' ', '').split(','))
 end
 
 Then 'the check for server warning 003 should not be displayed given we have checked' do

@@ -47,6 +47,35 @@ module FoodCritic
       ! (ENV.has_key?('FC_FORK_PROCESS') and ENV['FC_FORK_PROCESS'] == true.to_s)
     end
 
+    # Assert the build outcome
+    #
+    # @param [Boolean] success True if the build should succeed
+    # @param [Array] warnings The warnings expected
+    def assert_build_result(success, warnings)
+      success ? assert_no_error_occurred : assert_error_occurred
+      warnings.each do |code|
+        expect_warning(code, :warning_only => true)
+      end
+    end
+
+    # Assert that warnings have not been raised against the test code which
+    # should have been excluded from linting.
+    def assert_no_test_warnings
+      all_output.split("\n").grep(/FC[0-9]+:/).map do |warn|
+        File.basename(File.dirname(warn.split(':').take(3).last.strip))
+      end.should_not include 'test'
+    end
+
+    # The available tasks for this build
+    #
+    # @return [Array] Task name and description
+    def build_tasks
+      all_output.split("\n").map do |task|
+        next unless task.start_with? 'rake'
+        task.split("#").map{|t| t.strip.sub(/^rake /, '')}
+      end.compact
+    end
+
     # Capture an error expected when calling a command.
     def capture_error
       begin
@@ -110,6 +139,27 @@ module FoodCritic
     def expect_usage_option(short_switch, long_switch, description)
       expected_switch = "-#{Regexp.escape(short_switch)}, --#{Regexp.escape(long_switch)}[ ]+#{Regexp.escape(description)}"
       expect_output(Regexp.new(expected_switch))
+    end
+
+    # List the defined Rake tasks
+    def list_available_build_tasks
+      cd 'cookbooks/example'
+      run "bundle exec rake -T"
+    end
+
+    # Create a placeholder minitest spec that would be linted due to its path
+    # unless an exclusion is specified.
+    def minitest_spec_attributes
+      write_file 'cookbooks/example/test/attributes/default_spec.rb', %q{
+        describe 'Example::Attributes::Default' do
+        end
+      }
+    end
+
+    # Run a build for a Rakefile that uses the lint rake task
+    def run_build
+      cd 'cookbooks/example'
+      run 'bundle exec rake'
     end
 
     # Assert that the usage message is displayed.

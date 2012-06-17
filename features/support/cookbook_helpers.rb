@@ -10,6 +10,14 @@ module FoodCritic
       write_attributes %Q{#{type}[:apache][:dir] = "/etc/apache2"}
     end
 
+    # Create a Gemfile for a cookbook
+    def buildable_gemfile
+      write_file 'cookbooks/example/Gemfile', %q{
+        gem 'rake'
+        gem 'foodcritic', :path => '../../../..'
+      }
+    end
+
     # Create a cookbook that declares dependencies on external recipes.
     #
     # @param [Symbol] declaration_type The type of declaration - :brace or :bracket
@@ -53,9 +61,17 @@ module FoodCritic
               action :run
             end
           }
+        elsif code == 'FC006'
+          recipe += %q{
+            directory "/var/lib/foo" do
+              mode 644
+              action :create
+            end
+          }
         end
       end
       write_recipe(recipe)
+      write_file('cookbooks/example/recipes/server.rb', '')
       write_readme('Hello World') # Don't trigger FC011
       write_metadata('name "example"') # Don't trigger FC031
     end
@@ -116,6 +132,35 @@ module FoodCritic
         long_description IO.read(File.join(File.dirname(__FILE__), 'README.rdoc'))
         version          "0.0.1"
       }
+    end
+
+    # Create a Rakefile that uses the linter rake task
+    #
+    # @param [Symbol] task Type of task
+    # @param [Hash] options Task options
+    # @option options [String] :name Task name
+    # @option options [String] :files Files to process
+    # @option options [String] :options The options to set on the rake task
+    def rakefile(task, options)
+      rakefile_content = 'task :default => []'
+      task_def = case task
+        when :no_block then 'FoodCritic::Rake::LintTask.new'
+        else %Q{
+          FoodCritic::Rake::LintTask.new do |t|
+            #{"t.name = '#{options[:name]}'" if options[:name]}
+            #{"t.files = #{options[:files]}" if options[:files]}
+            #{"t.options = #{options[:options]}" if options[:options]}
+          end
+        }
+      end
+      if task_def
+        rakefile_content = %Q{
+          require 'foodcritic'
+          task :default => [:#{options[:name] ? options[:name] : 'foodcritic'}]
+          #{task_def}
+        }
+      end
+      write_file 'cookbooks/example/Rakefile', rakefile_content
     end
 
     # Create a recipe that downloads a file
