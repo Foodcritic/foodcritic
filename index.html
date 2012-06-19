@@ -660,6 +660,12 @@ rules:
       that this warning is only raised for single resources as you could
       reasonably enclose multiple resources in a condition like this for
       brevity.
+
+      [Jay Feldblum](https://github.com/yfeldblum) has
+      [expressed criticism](http://community.opscode.com/chat/chef/2012-06-19#id-138584)
+      of this rule because the effect is that resources are defined
+      unnecessarily and ignored only at run-time. His view is that it is cleaner
+      to use standard Ruby conditionals to avoid defining them in the first place.
     examples:
       - title: Resource enclosed in a condition
         text: |
@@ -682,7 +688,7 @@ rules:
         code: |
           service "apache" do
             action :enable
-            only_if { node['foo'] == 'bar'}
+            only_if { node['foo'] == 'bar' }
           end
   - code: FC024
     name: Consider adding platform equivalents
