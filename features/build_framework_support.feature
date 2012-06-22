@@ -88,3 +88,12 @@ I want to be able to invoke the lint tool from my build
      When I run the build
      Then no warnings will be displayed against the tests
       And the build will succeed with warnings FC002
+
+  Scenario: Exclude vendored gems
+    Given a cookbook that has style problems
+      And the cookbook has a Gemfile that includes rake and foodcritic
+      And a Rakefile that defines a lint task with no block
+      And the gems have been vendored
+     When I run the build
+     Then no warnings will be displayed against the tests
+      And the build will succeed with warnings FC002

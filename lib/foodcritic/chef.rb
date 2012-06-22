@@ -3,43 +3,58 @@ module FoodCritic
   # Encapsulates functions that previously were calls to the Chef gem.
   module Chef
 
-    # The set of methods in the Chef DSL
-    #
-    # @return [Array] Array of method symbols
     def chef_dsl_methods
       load_metadata
       @dsl_metadata[:dsl_methods].map(&:to_sym)
     end
 
-    # Is the specified attribute valid for the type of resource? Note that this
-    # method will return true if the resource_type is not recognised.
-    #
-    # @param [Symbol] resource_type The type of Chef resource
-    # @param [Symbol] attribute_name The attribute name
-    # @return [Boolean] False if the attribute is known not to be valid
+    # Is the specified attribute valid for the type of resource?
     def resource_attribute?(resource_type, attribute_name)
       if resource_type.to_s.empty? || attribute_name.to_s.empty?
         raise ArgumentError, "Arguments cannot be nil or empty."
       end
+
       load_metadata
       resource_attributes = @dsl_metadata[:attributes]
+
+      # If the resource type is not recognised then it may be a user-defined
+      # resource. We could introspect these but at present we simply return
+      # true.
       return true unless resource_attributes.include?(resource_type.to_sym)
+
+      # Otherwise the resource attribute must exist in our metadata to succeed
       resource_attributes[resource_type.to_sym].include?(attribute_name.to_s)
     end
 
     # Is this a valid Lucene query?
-    #
-    # @param [String] query The query to check for syntax errors
-    # @return [Boolean] True if the query is well-formed
     def valid_query?(query)
       raise ArgumentError, "Query cannot be nil or empty" if query.to_s.empty?
+
+      # Attempt to create a search query parser
       search = FoodCritic::Chef::Search.new
       search.create_parser(search.chef_search_grammars)
-      search.parser? ? (! search.parser.parse(query.to_s).nil?) : true
+
+      if search.parser?
+        search.parser.parse(query.to_s)
+      else
+        # If we didn't manage to get a parser then we can't know if the query
+        # is valid or not.
+        true
+      end
     end
 
     private
 
+    # To avoid the runtime hit of loading the Chef gem and its dependencies
+    # we load the DSL metadata from a JSON file shipped with our gem.
+    #
+    # The DSL metadata therefore reflects the version of Chef in the gemset
+    # where foodcritic was built, rather than the version in the local user
+    # gemset.
+    #
+    # TODO: Now that the effective version of Chef to check with can be passed
+    # on the command-line we should bundle metadata for historical Chef gem
+    # versions.
     def load_metadata
       metadata_path = File.join(File.dirname(__FILE__), '..', '..',
         'chef_dsl_metadata.json')
@@ -47,14 +62,11 @@ module FoodCritic
         :symbolize_keys => true)
     end
 
-    # Chef Search
     class Search
 
       # The search grammars that ship with any Chef gems installed locally.
       # These are returned in descending version order (a newer Chef version
       #   could break our ability to load the grammar).
-      #
-      # @return [Array] File paths of Chef search grammars installed locally.
       def chef_search_grammars
         Gem.path.map do |gem_path|
           Dir["#{gem_path}/gems/chef-*/**/lucene.treetop"]
@@ -62,32 +74,26 @@ module FoodCritic
       end
 
       # Create the search parser from the first loadable grammar.
-      #
-      # @param [Array] grammar_paths Full paths to candidate treetop grammars
       def create_parser(grammar_paths)
         @search_parser ||= grammar_paths.inject(nil) do |parser,lucene_grammar|
             begin
               break parser unless parser.nil?
-              # don't instantiate custom nodes
+              # Don't instantiate custom nodes
               Treetop.load_from_string(
                 IO.read(lucene_grammar).gsub(/<[^>]+>/, ''))
               LuceneParser.new
             rescue
-              # silently swallow and try the next grammar
+              # Silently swallow and try the next grammar
             end
         end
       end
 
       # Has the search parser been loaded?
-      #
-      # @return [Boolean] True if the search parser has been loaded.
       def parser?
         ! @search_parser.nil?
       end
 
       # The search parser
-      #
-      # @return [LuceneParser] The search parser
       def parser
         @search_parser
       end

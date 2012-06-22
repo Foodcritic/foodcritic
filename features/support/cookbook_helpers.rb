@@ -13,6 +13,7 @@ module FoodCritic
     # Create a Gemfile for a cookbook
     def buildable_gemfile
       write_file 'cookbooks/example/Gemfile', %q{
+        source :rubygems
         gem 'rake'
         gem 'foodcritic', :path => '../../../..'
       }
@@ -131,6 +132,15 @@ module FoodCritic
         description      "Installs/Configures example"
         long_description IO.read(File.join(File.dirname(__FILE__), 'README.rdoc'))
         version          "0.0.1"
+      }
+    end
+
+    # Create a placeholder minitest spec that would be linted due to its path
+    # unless an exclusion is specified.
+    def minitest_spec_attributes
+      write_file 'cookbooks/example/test/attributes/default_spec.rb', %q{
+        describe 'Example::Attributes::Default' do
+        end
       }
     end
 

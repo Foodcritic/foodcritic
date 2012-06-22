@@ -874,6 +874,10 @@ Given /^the current stable version of Chef (falls|does not fall) within it$/ do 
   rule_with_version_constraint("98.10", nil) unless falls_within.include?('falls')
 end
 
+Given 'the gems have been vendored' do
+  vendor_gems
+end
+
 Given 'unit tests under a top-level test directory' do
   minitest_spec_attributes
 end

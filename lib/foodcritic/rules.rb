@@ -1,3 +1,14 @@
+# This file contains all of the rules that ship with foodcritic.
+#
+# * Foodcritic rules perform static code analysis - rather than the cookbook code
+#   being loaded by the interpreter it is parsed into a tree (AST) that is then
+#   passed to each rule.
+# * Rules can use a number of API functions that ship with foodcritic to make
+#   sense of the parse tree.
+# * Rules can also use XPath to query the AST. A rule can consist of a XPath
+#   query only, as any nodes returned from a `recipe` block will be converted
+#   into warnings.
+
 rule "FC001",
      "Use strings in preference to symbols to access node attributes" do
   tags %w{style attributes}
@@ -101,17 +112,12 @@ end
 
 rule "FC008", "Generated cookbook metadata needs updating" do
   tags %w{style metadata}
-  cookbook do |filename|
-    metadata_path = Pathname.new(File.join(filename, 'metadata.rb')).cleanpath
-    next unless File.exists? metadata_path
-    md = read_ast(metadata_path)
+  metadata do |ast,filename|
     {'maintainer' => 'YOUR_COMPANY_NAME',
      'maintainer_email' => 'YOUR_EMAIL'}.map do |field,value|
-      md.xpath(%Q{//command[ident/@value='#{field}']/
-                  descendant::tstring_content[@value='#{value}']}).map do |m|
-        match(m).merge(:filename => metadata_path)
-      end
-    end.flatten
+      ast.xpath(%Q{//command[ident/@value='#{field}']/
+                  descendant::tstring_content[@value='#{value}']})
+    end
   end
 end
 
@@ -401,10 +407,8 @@ end
 
 rule "FC029", "No leading cookbook name in recipe metadata" do
   tags %w{correctness metadata}
-  cookbook do |filename|
-    metadata_path = Pathname.new(File.join(filename, 'metadata.rb')).cleanpath
-    next unless File.exists? metadata_path
-    read_ast(metadata_path).xpath('//command[ident/@value="recipe"]').map do |declared_recipe|
+  metadata do |ast,filename|
+    ast.xpath('//command[ident/@value="recipe"]').map do |declared_recipe|
       next unless declared_recipe.xpath('count(//vcall|//var_ref)').to_i == 0
       recipe_name = declared_recipe.xpath('args_add_block/
         descendant::tstring_content[1]/@value').to_s
@@ -412,19 +416,23 @@ rule "FC029", "No leading cookbook name in recipe metadata" do
         recipe_name.split('::').first == cookbook_name(filename.to_s)
           declared_recipe
       end
-    end.compact.map {|m| match(m).merge(:filename => metadata_path.to_s) }
+    end.compact
   end
 end
 
 rule "FC030", "Cookbook contains debugger breakpoints" do
   tags %w{annoyances}
+  recipe do |ast|
+    ast.xpath('//call[(vcall|var_ref)/ident/@value="binding"]
+      [ident/@value="pry"]')
+  end
+  library do
+    recipe
+  end
+  metadata do
+    recipe
+  end
   cookbook do |cookbook_dir|
-    Dir[cookbook_dir + '**/*.rb'].map do |ruby_file|
-      read_ast(ruby_file).xpath('//call[(vcall|var_ref)/ident/@value="binding"]
-        [ident/@value="pry"]').map do |bp|
-        match(bp).merge({:filename => ruby_file})
-      end
-    end +
     Dir[cookbook_dir + 'templates/**/*.erb'].map do |template_file|
       IO.read(template_file).lines.with_index(1).map do |line, line_number|
         # Not properly parsing the template

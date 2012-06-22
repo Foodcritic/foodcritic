@@ -14,6 +14,8 @@ group :development do
   gem 'chef', '~> 0.10.8'
   gem 'guard', '~> 1.0.0'
   gem 'guard-cucumber', '~> 0.7.5'
+  gem 'fl-rocco', '~> 1.0.0'
+  gem 'guard-rocco', '~> 0.0.3'
   gem "rake", '~> 0.9.2.2'
   gem "rdiscount", '~> 1.6.8'
   gem "yard", '~> 0.7.5'
