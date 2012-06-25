@@ -9,7 +9,12 @@ module FoodCritic
     def initialize(args)
       @args = args
       @original_args = args.dup
-      @options = {:fail_tags => [], :tags => [], :include_rules => []}
+      @options = {
+        :fail_tags => [],
+        :tags => [],
+        :include_rules => [],
+        :exclude_paths => []
+      }
       @parser = OptionParser.new do |opts|
         opts.banner = 'foodcritic [cookbook_paths]'
         opts.on("-r", "--[no-]repl",
@@ -35,6 +40,10 @@ module FoodCritic
         opts.on("-I", "--include PATH",
           "Additional rule file path(s) to load.") do |i|
           options[:include_rules] << i
+        end
+        opts.on("-E", "--exclude PATH",
+          "Exclude path(s) from being linted.") do |e|
+          options[:exclude_paths] << e
         end
         opts.on("-S", "--search-grammar PATH",
           "Specify grammar to use when validating search syntax.") do |s|
