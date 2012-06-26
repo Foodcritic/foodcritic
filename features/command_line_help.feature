@@ -28,3 +28,8 @@ Feature: Command line help
     Given I have installed the lint tool
      When I run it on the command line with the unimplemented verbose option
      Then the simple usage text should be displayed along with a non-zero exit code
+
+  Scenario: Unimplemented option
+    Given I have installed the lint tool
+     When I run it on the command line with the unimplemented -Z option
+     Then the simple usage text should be displayed along with a non-zero exit code
