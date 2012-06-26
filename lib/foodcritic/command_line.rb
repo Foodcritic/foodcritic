@@ -45,7 +45,11 @@ module FoodCritic
           options[:version] = true
         end
       end
-      @parser.parse!(args) unless show_help?
+      begin
+        @parser.parse!(args) unless show_help?
+      rescue OptionParser::InvalidOption => e
+        e.recover args
+      end
     end
 
     # Show the command help to the end user?

@@ -955,12 +955,12 @@ When 'I run it on the command line with no arguments' do
   run_lint([])
 end
 
-When /^I run it on the command line with the ([^ ]+) option$/ do |long_option|
-  run_lint(["--#{long_option}"])
-end
-
-When 'I run it on the command line with the unimplemented verbose option' do
-  run_lint(['-v'])
+When /^I run it on the command line with the (?:unimplemented |)([^ ]+) option$/ do |option|
+  if option.match(/\-\w$/)
+    run_lint([option])
+  else
+    run_lint(["--#{option}"])
+  end
 end
 
 When 'I run the build' do
