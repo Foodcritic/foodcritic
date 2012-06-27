@@ -33,3 +33,11 @@ Feature: Command line help
     Given I have installed the lint tool
      When I run it on the command line with the unimplemented -Z option
      Then the simple usage text should be displayed along with a non-zero exit code
+
+  Scenario: Future verbose option plus arguments
+    Given a cookbook that has style problems
+      And I have installed the lint tool
+     When I run it on the command line with the unimplemented -v option with an argument
+     Then the simple usage text should be displayed along with a non-zero exit code
+     Then the style warning 002 should not be displayed
+      And the current version should not be displayed

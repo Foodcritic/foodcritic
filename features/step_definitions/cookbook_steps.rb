@@ -955,12 +955,15 @@ When 'I run it on the command line with no arguments' do
   run_lint([])
 end
 
-When /^I run it on the command line with the (?:unimplemented |)([^ ]+) option$/ do |option|
+When /^I run it on the command line with the (?:unimplemented |)([^ ]+) option( with an argument)?$/ do |option, with_argument|
+  options = []
   if option.match(/\-\w$/)
-    run_lint([option])
+    options << option
   else
-    run_lint(["--#{option}"])
+    options << "--#{option}"
   end
+  options << "cookbooks/example" unless with_argument.nil?
+  run_lint(options)
 end
 
 When 'I run the build' do
@@ -1079,8 +1082,13 @@ Then /^the conditional string looks like ruby warning 020 should be (shown|not s
   expect_warning('FC020', :line => nil, :expect_warning => show_warning == 'shown')
 end
 
-Then 'the current version should be displayed' do
-  expect_output("foodcritic #{FoodCritic::VERSION}")
+Then /^the current version should( not)? be displayed$/ do |no_display|
+  version_str = "foodcritic #{FoodCritic::VERSION}"
+  if no_display.nil?
+    expect_output(version_str)
+  else
+    expect_no_output(version_str)
+  end
 end
 
 Then /^the debugger breakpoint warning 030 should be (not )?shown against the (.*)$/ do |should_not, component|
