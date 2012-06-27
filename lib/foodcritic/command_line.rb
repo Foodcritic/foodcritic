@@ -45,10 +45,16 @@ module FoodCritic
           options[:version] = true
         end
       end
-      begin
-        @parser.parse!(args) unless show_help?
-      rescue OptionParser::InvalidOption => e
-        e.recover args
+      # -v is not implemented but OptionParser gives the Foodcritic's version
+      # if that flag is passed
+      if args.include? '-v'
+        help
+      else
+        begin
+          @parser.parse!(args) unless show_help?
+        rescue OptionParser::InvalidOption => e
+          e.recover args
+        end
       end
     end
 
@@ -70,7 +76,7 @@ module FoodCritic
     #
     # @return [Boolean] True if the version should be shown.
     def show_version?
-      @options.key?(:version) and @original_args != ['-v']
+      @options.key?(:version)
     end
 
     # The version string.
