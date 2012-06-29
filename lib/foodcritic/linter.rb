@@ -129,10 +129,10 @@ module FoodCritic
     # to match rules against.
     def files_to_process(dirs, exclude_paths = [])
       files = []
+      cookbook_glob = '{metadata.rb,{attributes,libraries,providers,recipes,resources}/*.rb}'
       dirs.each do |dir|
-        exclusions = Dir.glob(exclude_paths.map{|p| File.join(dir, p)})
+        exclusions = Dir.glob(exclude_paths.map{|p| File.join(dir, p, cookbook_glob)})
         if File.directory? dir
-          cookbook_glob = '{metadata.rb,{attributes,libraries,providers,recipes,resources}/*.rb}'
           files += (Dir.glob(File.join(dir, cookbook_glob)) +
             Dir.glob(File.join(dir, "*/#{cookbook_glob}")) - exclusions)
         else
