@@ -904,6 +904,11 @@ When 'I check the cookbook without specifying a Chef version' do
   run_lint(['-I', 'rules/test.rb', 'cookbooks/example'])
 end
 
+When /^I check the cookbook( without)? excluding the ([^ ]+) directory$/ do |no_exclude, dir|
+  options = no_exclude.nil? ? ['-E', dir] : []
+  run_lint(options + ['cookbooks/example'])
+end
+
 When 'I check the recipe' do
   run_lint(["cookbooks/example/recipes/default.rb"])
 end
@@ -1022,8 +1027,12 @@ Then 'no error should have occurred' do
   assert_no_error_occurred
 end
 
-Then /^no warnings will be displayed against the tests$/ do
-  assert_no_test_warnings
+Then /^(no )?warnings will be displayed against the tests$/ do |no_display|
+  if no_display.nil?
+    assert_test_warnings
+  else
+    assert_no_test_warnings
+  end
 end
 
 Then /^the warning should (not )?be displayed$/ do |should_not|

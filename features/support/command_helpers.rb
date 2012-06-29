@@ -123,6 +123,7 @@ module FoodCritic
       expect_usage_option('t', 'tags TAGS', 'Only check against rules with the specified tags.')
       expect_usage_option('C', '[no-]context', 'Show lines matched against rather than the default summary.')
       expect_usage_option('I', 'include PATH', 'Additional rule file path(s) to load.')
+      expect_usage_option('E', 'exclude PATH', 'Exclude path(s) from being linted.')
       expect_usage_option('S', 'search-grammar PATH', 'Specify grammar to use when validating search syntax.')
       expect_usage_option('V', 'version', 'Display the foodcritic version.')
       if is_exit_zero
@@ -167,6 +168,22 @@ module FoodCritic
     # Assert that no error occurred following a lint check.
     def assert_no_error_occurred
       @status.should == 0
+    end
+
+    # Assert that warnings have not been raised against the test code which
+    # should have been excluded from linting.
+    def assert_no_test_warnings
+      @review.split("\n").grep(/FC[0-9]+:/).map do |warn|
+        File.basename(File.dirname(warn.split(':').take(3).last.strip))
+      end.should_not include 'test'
+    end
+
+    # Assert that warnings have been raised against the test code which
+    # shouldn't have been excluded from linting.
+    def assert_test_warnings
+      @review.split("\n").grep(/FC[0-9]+:/).map do |warn|
+        File.basename(File.dirname(warn.split(':').take(3).last.strip))
+      end.should include 'test'
     end
 
     # Run a lint check with the provided command line arguments.
