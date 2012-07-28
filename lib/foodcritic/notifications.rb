@@ -64,8 +64,8 @@ module FoodCritic
 
       # Given `notifies :restart, "service[foo]"` the target is the
       # `"service[foo]"` string portion.
-      target = notify.xpath('args_add_block/args_add/
-        descendant::tstring_content/@value').to_s
+      target_path = 'args_add_block/args_add/descendant::tstring_content/@value'
+      target = notify.xpath("arg_paren/#{target_path} | #{target_path}").to_s
 
       # Test the target string against the standard syntax for a new-style
       # notification: `resource_type[resource_name]`.
@@ -127,12 +127,13 @@ module FoodCritic
     end
 
     def notification_nodes(ast, &block)
-      ast.xpath('descendant::command[ident/@value="notifies" or
-        ident/@value="subscribes"]')
+      type_path = '[ident/@value="notifies" or ident/@value="subscribes"]'
+      ast.xpath("descendant::command#{type_path} |
+        descendant::method_add_arg[fcall#{type_path}]")
     end
 
     def notification_type(notify)
-      notify.xpath('ident/@value[1]').to_s.to_sym
+      notify.xpath('ident/@value[1] | fcall/ident/@value[1]').to_s.to_sym
     end
 
     def resource_hash_references(ast)

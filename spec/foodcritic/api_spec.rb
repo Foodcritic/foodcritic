@@ -554,6 +554,25 @@ describe FoodCritic::Api do
         }]
       )
     end
+    it "understands old-style notifications with added parentheses" do
+      api.notifications(parse_ast(%q{
+        template "/etc/nscd.conf" do
+          source "nscd.conf"
+          owner "root"
+          group "root"
+          notifies(:restart, resources(:service => "nscd"))
+        end
+      })).must_equal(
+        [{
+          :type => :notifies,
+          :action => :restart,
+          :resource_type => :service,
+          :resource_name => 'nscd',
+          :timing => :delayed,
+          :style => :old
+        }]
+      )
+    end
     it "understands the old-style subscriptions" do
       api.notifications(parse_ast(%q{
         template "/etc/nscd.conf" do
@@ -561,6 +580,25 @@ describe FoodCritic::Api do
           owner "root"
           group "root"
           subscribes :restart, resources(:service => "nscd")
+        end
+      })).must_equal(
+        [{
+          :type => :subscribes,
+          :action => :restart,
+          :resource_type => :service,
+          :resource_name => 'nscd',
+          :timing => :delayed,
+          :style => :old
+        }]
+      )
+    end
+    it "understands old-style subscriptions with added parentheses" do
+      api.notifications(parse_ast(%q{
+        template "/etc/nscd.conf" do
+          source "nscd.conf"
+          owner "root"
+          group "root"
+          subscribes(:restart, resources(:service => "nscd"))
         end
       })).must_equal(
         [{
@@ -592,6 +630,25 @@ describe FoodCritic::Api do
         }]
       )
     end
+    it "understands new-style notifications with added parentheses" do
+      api.notifications(parse_ast(%q{
+        template "/etc/nscd.conf" do
+          source "nscd.conf"
+          owner "root"
+          group "root"
+          notifies(:restart, "service[nscd]")
+        end
+      })).must_equal(
+        [{
+          :type => :notifies,
+          :action => :restart,
+          :resource_type => :service,
+          :resource_name => 'nscd',
+          :timing => :delayed,
+          :style => :new
+        }]
+      )
+    end
     it "understands the new-style subscriptions" do
       api.notifications(parse_ast(%q{
         template "/etc/nscd.conf" do
@@ -599,6 +656,25 @@ describe FoodCritic::Api do
           owner "root"
           group "root"
           subscribes :restart, "service[nscd]"
+        end
+      })).must_equal(
+        [{
+          :type => :subscribes,
+          :action => :restart,
+          :resource_type => :service,
+          :resource_name => 'nscd',
+          :timing => :delayed,
+          :style => :new
+        }]
+      )
+    end
+    it "understands new-style subscriptions with added parentheses" do
+      api.notifications(parse_ast(%q{
+        template "/etc/nscd.conf" do
+          source "nscd.conf"
+          owner "root"
+          group "root"
+          subscribes(:restart, "service[nscd]")
         end
       })).must_equal(
         [{
