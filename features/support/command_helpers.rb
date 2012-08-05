@@ -39,6 +39,7 @@ module FoodCritic
       'FC031' => 'Cookbook without metadata file',
       'FC032' => 'Invalid notification timing',
       'FC033' => 'Missing template',
+      'FC034' => 'Unused template variables',
       'FCTEST001' => 'Test Rule'
     }
 

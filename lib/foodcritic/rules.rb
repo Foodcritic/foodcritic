@@ -443,3 +443,21 @@ rule "FC033", "Missing template" do
     end.compact
   end
 end
+
+rule "FC034", "Unused template variables" do
+  tags %w{correctness}
+  recipe do |ast,filename|
+    Array(resource_attributes_by_type(ast)['template']).select do
+      |t| t['variables'] and t['variables'].respond_to?(:xpath)
+    end.map do |resource|
+      template_paths = Dir[Pathname.new(filename).dirname.dirname +
+        'templates' + '**/*.erb']
+      template_path = template_paths.find{|p| File.basename(p) == resource['source']}
+      next unless template_path
+      passed_vars = resource['variables'].xpath('symbol/ident/@value').map{|tv| tv.to_s}
+      template_vars = read_ast(template_path).xpath('stmts_add/var_ref/ivar/
+        @value').map{|v| v.to_s.sub(/^@/, '')}
+      file_match(template_path) unless (passed_vars - template_vars).empty?
+    end.compact
+  end
+end

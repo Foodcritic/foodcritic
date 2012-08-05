@@ -220,41 +220,8 @@ module FoodCritic
       atts = {}
       name = resource_name(resource)
       atts[:name] = name unless name.empty?
-
-      # The ancestor check here ensures that nested blocks are not returned.
-      # For example a method call within a `ruby_block` would otherwise be
-      # returned as an attribute.
-      #
-      # TODO: This may need to be revisted in light of recent changes to the
-      # application cookbook which is popularising nested blocks.
-      resource.xpath('do_block/descendant::command
-                     [count(ancestor::do_block) = 1]').each do |att|
-
-        # Extract the attribute value, the paths here differ by type.
-        att_value =
-          if ! att.xpath('args_add_block[count(descendant::args_add)>1]').empty?
-            att.xpath('args_add_block').first
-          elsif ! att.xpath('args_add_block/args_add/
-            var_ref/kw[@value="true" or @value="false"]').empty?
-            att.xpath('string(args_add_block/args_add/
-              var_ref/kw/@value)') == 'true'
-          elsif att.xpath('descendant::symbol').empty?
-            att.xpath('string(descendant::tstring_content/@value)')
-          else
-            att.xpath('string(descendant::symbol/ident/@value)').to_sym
-          end
-        atts[att.xpath('string(ident/@value)')] = att_value
-      end
-
-      # The attribute value may alternatively be a block, such as the meta
-      # conditionals `not_if` and `only_if`.
-      resource.xpath("do_block/descendant::method_add_block[
-        count(ancestor::do_block) = 1][brace_block | do_block]").each do |batt|
-          att_name = batt.xpath('string(method_add_arg/fcall/ident/@value)')
-          if att_name and ! att_name.empty? and batt.children.length > 1
-            atts[att_name] = batt.children[1]
-          end
-      end
+      atts.merge!(normal_attributes(resource))
+      atts.merge!(block_attributes(resource))
       atts
     end
 
@@ -327,6 +294,20 @@ module FoodCritic
 
     private
 
+    def block_attributes(resource)
+      # The attribute value may alternatively be a block, such as the meta
+      # conditionals `not_if` and `only_if`.
+      atts = {}
+      resource.xpath("do_block/descendant::method_add_block[
+        count(ancestor::do_block) = 1][brace_block | do_block]").each do |batt|
+          att_name = batt.xpath('string(method_add_arg/fcall/ident/@value)')
+          if att_name and ! att_name.empty? and batt.children.length > 1
+            atts[att_name] = batt.children[1]
+          end
+      end
+      atts
+    end
+
     # Recurse the nested arrays provided by Ripper to create a tree we can more
     # easily apply expressions to.
     def build_xml(node, doc = nil, xml_node=nil)
@@ -355,8 +336,43 @@ module FoodCritic
       xml_node
     end
 
+    def extract_attribute_value(att)
+      if ! att.xpath('args_add_block[count(descendant::args_add)>1]').empty?
+        att.xpath('args_add_block').first
+      elsif ! att.xpath('args_add_block/args_add/
+        var_ref/kw[@value="true" or @value="false"]').empty?
+        att.xpath('string(args_add_block/args_add/
+          var_ref/kw/@value)') == 'true'
+      elsif ! att.xpath('descendant::assoc_new').empty?
+        att.xpath('descendant::assoc_new')
+      elsif att.xpath('descendant::symbol').empty?
+        att.xpath('string(descendant::tstring_content/@value)')
+      else
+        att.xpath('string(descendant::symbol/ident/@value)').to_sym
+      end
+    end
+
     def node_method?(meth, cookbook_dir)
       chef_dsl_methods.include?(meth) || patched_node_method?(meth, cookbook_dir)
+    end
+
+    def normal_attributes(resource)
+      atts = {}
+      # The ancestor check here ensures that nested blocks are not returned.
+      # For example a method call within a `ruby_block` would otherwise be
+      # returned as an attribute.
+      #
+      # TODO: This may need to be revisted in light of recent changes to the
+      # application cookbook which is popularising nested blocks.
+      resource.xpath('do_block/descendant::*[self::command or
+        self::method_add_arg][count(ancestor::do_block) = 1]').each do |att|
+
+          unless att.xpath('string(ident/@value | fcall/ident/@value)').empty?
+            atts[att.xpath('string(ident/@value | fcall/ident/@value)')] =
+              extract_attribute_value(att)
+          end
+      end
+      atts
     end
 
     def patched_node_method?(meth, cookbook_dir)

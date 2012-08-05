@@ -409,6 +409,39 @@ Given /^a cookbook recipe with a '([^']+)' condition for flavours (.*)$/ do |typ
   end
 end
 
+Given 'a cookbook template that uses all variables passed' do
+  write_recipe %q{
+    template "/tmp/config.conf" do
+      source "config.conf.erb"
+      variables(
+        :config_var => node[:configs][:config_var]
+      )
+    end
+  }
+  write_file 'cookbooks/example/templates/default/config.conf.erb', %q{
+    <%= @config_var %>
+  }
+end
+
+Given /^a cookbook that passes no variables to a template$/ do
+  write_recipe %q{
+    template "/tmp/config.conf" do
+      source "config.conf.erb"
+    end
+  }
+end
+
+Given /^a cookbook that passes variables (.*) to a template$/ do |vars|
+  write_recipe %Q{
+    template "/tmp/config.conf" do
+      source "config.conf.erb"
+      variables(
+        :#{vars.split(',').map{|v| "#{v} => node[:#{v}]"}.join(",\n:")}
+      )
+    end
+  }
+end
+
 Given /^a cookbook that contains a (short|long) ruby block$/ do |length|
   recipe_with_ruby_block(length == 'short')
 end
@@ -895,6 +928,12 @@ Given 'the gems have been vendored' do
   vendor_gems
 end
 
+Given /^the template contains the expression (.*)$/ do |expr|
+  write_file 'cookbooks/example/templates/default/config.conf.erb', %Q{
+    <%= #{expr} %>
+  }
+end
+
 Given 'unit tests under a top-level test directory' do
   minitest_spec_attributes
 end
@@ -1205,6 +1244,11 @@ Then 'the undeclared dependency warning 007 should be displayed only for the und
   expect_warning("FC007", :file => 'recipes/default.rb', :line => 1, :expect_warning => false)
   expect_warning("FC007", :file => 'recipes/default.rb', :line => 2, :expect_warning => false)
   expect_warning("FC007", :file => 'recipes/default.rb', :line => 6, :expect_warning => true)
+end
+
+Then /^the unused template variables warning 034 should (not )?be displayed against the template$/ do |not_shown|
+  expect_warning('FC034', :file => 'templates/default/config.conf.erb',
+                 :line => 1, :expect_warning => ! not_shown)
 end
 
 Then /^the unrecognised attribute warning 009 should be (true|false)$/ do |shown|
