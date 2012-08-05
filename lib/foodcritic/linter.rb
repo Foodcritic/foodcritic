@@ -120,9 +120,14 @@ module FoodCritic
       dir_mapping = {
         'libraries' => :library,
         'providers' => :provider,
-        'resources' => :resource
+        'resources' => :resource,
+        'templates' => :template
       }
-      dir_mapping[File.basename(File.dirname(file))]
+      if file.end_with? '.erb'
+        dir_mapping[File.basename(File.dirname(File.dirname(file)))]
+      else
+        dir_mapping[File.basename(File.dirname(file))]
+      end
     end
 
     # Return the files within a cookbook tree that we are interested in trying
@@ -132,7 +137,7 @@ module FoodCritic
       dirs.each do |dir|
         exclusions = Dir.glob(exclude_paths.map{|p| File.join(dir, p)})
         if File.directory? dir
-          cookbook_glob = '{metadata.rb,{attributes,libraries,providers,recipes,resources}/*.rb}'
+          cookbook_glob = '{metadata.rb,{attributes,libraries,providers,recipes,resources}/*.rb,templates/*/*.erb}'
           files += (Dir.glob(File.join(dir, cookbook_glob)) +
             Dir.glob(File.join(dir, "*/#{cookbook_glob}")) - exclusions)
         else

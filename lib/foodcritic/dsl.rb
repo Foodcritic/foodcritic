@@ -61,6 +61,7 @@ module FoodCritic
     rule_block :resource
     rule_block :provider
     rule_block :library
+    rule_block :template
 
     # Load the ruleset(s).
     def self.load(paths, with_repl)

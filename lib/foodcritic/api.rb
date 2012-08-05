@@ -200,7 +200,13 @@ module FoodCritic
 
     # Read the AST for the given Ruby source file
     def read_ast(file)
-      build_xml(Ripper::SexpBuilder.new(File.read(file)).parse)
+      source = if file.to_s.end_with? '.erb'
+        Template::ExpressionExtractor.new.extract(
+          File.read(file)).map{|e| e[:code]}.join("\n")
+      else
+        File.read(file)
+      end
+      build_xml(Ripper::SexpBuilder.new(source).parse)
     end
 
     # Retrieve a single-valued attribute from the specified resource.
