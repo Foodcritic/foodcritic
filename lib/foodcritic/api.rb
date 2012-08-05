@@ -16,15 +16,18 @@ module FoodCritic
       options = {:type => :any, :ignore_calls => false}.merge!(options)
       return [] unless ast.respond_to?(:xpath)
 
-      # TODO: This rejects `:any` which is wrong
-      unless [:string, :symbol, :vivified].include?(options[:type])
+      unless [:any, :string, :symbol, :vivified].include?(options[:type])
         raise ArgumentError, "Node type not recognised"
       end
 
-      if options[:type] == :vivified
-        vivified_attribute_access(ast, options[:cookbook_dir])
-      else
-        standard_attribute_access(ast, options)
+      case options[:type]
+        when :any then
+          vivified_attribute_access(ast, options[:cookbook_dir]) +
+          standard_attribute_access(ast, options)
+        when :vivified then
+          vivified_attribute_access(ast, options[:cookbook_dir])
+        else
+          standard_attribute_access(ast, options)
       end
     end
 
@@ -404,13 +407,19 @@ module FoodCritic
     end
 
     def standard_attribute_access(ast, options)
-      type = options[:type] == :string ? 'tstring_content' : options[:type]
-      expr = '//*[self::aref_field or self::aref]'
-      expr += '[is_att_type(descendant::ident'
-      expr += '[not(ancestor::aref/call)]' if options[:ignore_calls]
-      expr += "/@value)]/descendant::#{type}"
-      expr += "[ident/@value != 'node']" if type == :symbol
-      ast.xpath(expr, AttFilter.new).sort
+      if options[:type] == :any
+        [:string, :symbol].map do |type|
+          standard_attribute_access(ast, options.merge(:type => type))
+        end.inject(:+)
+      else
+        type = options[:type] == :string ? 'tstring_content' : options[:type]
+        expr = '//*[self::aref_field or self::aref]'
+        expr += '[is_att_type(descendant::ident'
+        expr += '[not(ancestor::aref/call)]' if options[:ignore_calls]
+        expr += "/@value)]/descendant::#{type}"
+        expr += "[ident/@value != 'node']" if type == :symbol
+        ast.xpath(expr, AttFilter.new).sort
+      end
     end
 
     def vivified_attribute_access(ast, cookbook_dir)
