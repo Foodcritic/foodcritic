@@ -1078,10 +1078,6 @@ Then /^the conditional block contains only string warning 026 should be (shown|n
   expect_warning('FC026', :line => nil, :expect_warning => show_warning == 'shown')
 end
 
-Then /^the conditional string looks like ruby warning 020 should be (shown|not shown)$/ do |show_warning|
-  expect_warning('FC020', :line => nil, :expect_warning => show_warning == 'shown')
-end
-
 Then /^the current version should( not)? be displayed$/ do |no_display|
   version_str = "foodcritic #{FoodCritic::VERSION}"
   if no_display.nil?

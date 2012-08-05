@@ -259,26 +259,6 @@ rule "FC019", "Access node attributes in a consistent manner" do
   end
 end
 
-rule "FC020", "Conditional execution string attribute looks like Ruby" do
-  tags %w{correctness}
-  applies_to {|version| version >= gem_version("0.7.4")}
-  recipe do |ast, filename|
-    conditions = ast.xpath(%q{//command[(ident/@value='only_if' or ident/
-      @value='not_if') and descendant::tstring_content]}).map{|m| match(m)}
-    unless conditions.empty?
-      lines = File.readlines(filename) # go back for the raw untokenized string
-      conditions.map do |condition|
-        line = lines[(condition[:line].to_i) -1]
-        {:match => condition,
-         :raw_string => line.strip.sub(/^(not|only)_if[\s+]["']/, '').chop}
-      end.find_all do |cond|
-        ruby_code?(cond[:raw_string]) and
-          ! os_command?(cond[:raw_string])
-      end.map{|cond| cond[:match]}
-    end
-  end
-end
-
 rule "FC021", "Resource condition in provider may not behave as expected" do
   tags %w{correctness lwrp}
   applies_to {|version| version >= gem_version("0.10.6")}
