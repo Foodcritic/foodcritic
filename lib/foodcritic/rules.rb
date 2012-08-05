@@ -461,3 +461,10 @@ rule "FC034", "Unused template variables" do
     end.compact
   end
 end
+
+rule "FC035", "Template uses node attribute directly" do
+  tags %w{style}
+  template do |ast,filename|
+    [file_match(filename)] unless attribute_access(ast).empty?
+  end
+end
