@@ -406,22 +406,9 @@ rule "FC030", "Cookbook contains debugger breakpoints" do
     ast.xpath('//call[(vcall|var_ref)/ident/@value="binding"]
       [ident/@value="pry"]')
   end
-  library do
-    recipe
-  end
-  metadata do
-    recipe
-  end
-  cookbook do |cookbook_dir|
-    Dir[cookbook_dir + 'templates/**/*.erb'].map do |template_file|
-      IO.read(template_file).lines.with_index(1).map do |line, line_number|
-        # Not properly parsing the template
-        if line =~ /binding\.pry/
-          {:filename => template_file, :line => line_number}
-        end
-      end.compact
-    end
-  end
+  library{recipe}
+  metadata{recipe}
+  template{recipe}
 end
 
 rule "FC031", "Cookbook without metadata file" do
@@ -441,5 +428,18 @@ rule "FC032", "Invalid notification timing" do
         ! [:delayed, :immediate].include? notification[:timing]
       end
     end
+  end
+end
+
+rule "FC033", "Missing template" do
+  tags %w{correctness}
+  recipe do |ast,filename|
+    find_resources(ast, :type => :template).map do |resource|
+      unless template_paths(filename).find do |path|
+        File.basename(path) == template_file(resource)
+      end or resource_attributes(resource)['local']
+        resource
+      end
+    end.compact
   end
 end

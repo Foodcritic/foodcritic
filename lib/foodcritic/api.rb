@@ -315,6 +315,16 @@ module FoodCritic
          templates}
     end
 
+    # Template filename
+    def template_file(resource)
+      resource_attributes(resource)['source']
+    end
+
+    # Templates in the current cookbook
+    def template_paths(recipe_path)
+      Dir[Pathname.new(recipe_path).dirname.dirname + 'templates' + '**/*.erb']
+    end
+
     private
 
     # Recurse the nested arrays provided by Ripper to create a tree we can more

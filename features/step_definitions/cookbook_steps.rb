@@ -317,6 +317,23 @@ Given /a cookbook recipe that (install|upgrade)s (a gem|multiple gems)(.*)$/ do 
   end
 end
 
+Given /^a cookbook recipe that refers to a (missing |local )?template$/ do |missing_or_local|
+  write_recipe %Q{
+    template "/tmp/config.conf" do
+      #{'local true' if missing_or_local == 'local '}
+      source "config.conf.erb"
+      variables({
+        :config_var => 'foo'
+      })
+    end
+  }
+  unless missing_or_local
+    write_file 'cookbooks/example/templates/default/config.conf.erb', %q{
+      <%= @config_var %>
+    }
+  end
+end
+
 Given /^a cookbook recipe that uses execute to (sleep and then )?([^ ]+) a service via (.*)$/ do |sleep, action, method|
   method = 'service' if method == 'the service command'
   recipe_controls_service(method.include?('full path') ? :service_full_path : method.gsub(/[^a-z_]/, '_').to_sym, sleep, action)
@@ -1009,6 +1026,8 @@ Then 'I should be able to see the full list of DSL methods from inside the rule'
     :ruby_code?,
     :searches,
     :standard_cookbook_subdirs,
+    :template_file,
+    :template_paths,
     :valid_query?
   ]
 end
