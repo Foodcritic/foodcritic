@@ -9,8 +9,18 @@ Feature: Check for missing template
      When I check the cookbook
      Then the missing template warning 033 should be displayed
 
+  Scenario: Missing template (inferred)
+    Given a cookbook recipe that uses a missing inferred template
+     When I check the cookbook
+     Then the missing template warning 033 should be displayed
+
   Scenario: Present template
     Given a cookbook recipe that refers to a template
+     When I check the cookbook
+     Then the missing template warning 033 should not be displayed
+
+  Scenario: Present template (inferred)
+    Given a cookbook recipe that uses an inferred template
      When I check the cookbook
      Then the missing template warning 033 should not be displayed
 

@@ -436,7 +436,7 @@ rule "FC033", "Missing template" do
   recipe do |ast,filename|
     find_resources(ast, :type => :template).map do |resource|
       unless template_paths(filename).find do |path|
-        File.basename(path) == template_file(resource)
+        File.basename(path) == template_file(resource_attributes(resource))
       end or resource_attributes(resource)['local']
         resource
       end

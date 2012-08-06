@@ -334,6 +334,21 @@ Given /^a cookbook recipe that refers to a (missing |local )?template$/ do |miss
   end
 end
 
+Given /^a cookbook recipe that uses a(?:n)? (missing )?inferred template$/ do |missing|
+  write_recipe %Q{
+    template "/tmp/config.conf" do
+      variables({
+        :config_var => 'foo'
+      })
+    end
+  }
+  unless missing
+    write_file 'cookbooks/example/templates/default/config.conf.erb', %q{
+      <%= @config_var %>
+    }
+  end
+end
+
 Given /^a cookbook recipe that uses execute to (sleep and then )?([^ ]+) a service via (.*)$/ do |sleep, action, method|
   method = 'service' if method == 'the service command'
   recipe_controls_service(method.include?('full path') ? :service_full_path : method.gsub(/[^a-z_]/, '_').to_sym, sleep, action)

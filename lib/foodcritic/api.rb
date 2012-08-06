@@ -287,7 +287,11 @@ module FoodCritic
 
     # Template filename
     def template_file(resource)
-      resource_attributes(resource)['source']
+      if resource.key?('source')
+        resource['source']
+      else
+        "#{File.basename(resource[:name])}.erb"
+      end
     end
 
     # Templates in the current cookbook
