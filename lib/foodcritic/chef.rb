@@ -8,22 +8,14 @@ module FoodCritic
       @dsl_metadata[:dsl_methods].map(&:to_sym)
     end
 
+    # Is the specified action valid for the type of resource?
+    def resource_action?(resource_type, action)
+      resource_check?(:actions, resource_type, action)
+    end
+
     # Is the specified attribute valid for the type of resource?
     def resource_attribute?(resource_type, attribute_name)
-      if resource_type.to_s.empty? || attribute_name.to_s.empty?
-        raise ArgumentError, "Arguments cannot be nil or empty."
-      end
-
-      load_metadata
-      resource_attributes = @dsl_metadata[:attributes]
-
-      # If the resource type is not recognised then it may be a user-defined
-      # resource. We could introspect these but at present we simply return
-      # true.
-      return true unless resource_attributes.include?(resource_type.to_sym)
-
-      # Otherwise the resource attribute must exist in our metadata to succeed
-      resource_attributes[resource_type.to_sym].include?(attribute_name.to_s)
+      resource_check?(:attributes, resource_type, attribute_name)
     end
 
     # Is this a valid Lucene query?
@@ -60,6 +52,23 @@ module FoodCritic
         'chef_dsl_metadata.json')
       @dsl_metadata ||= Yajl::Parser.parse(IO.read(metadata_path),
         :symbolize_keys => true)
+    end
+
+    def resource_check?(key, resource_type, field)
+      if resource_type.to_s.empty? || field.to_s.empty?
+        raise ArgumentError, "Arguments cannot be nil or empty."
+      end
+
+      load_metadata
+      resource_fields = @dsl_metadata[key]
+
+      # If the resource type is not recognised then it may be a user-defined
+      # resource. We could introspect these but at present we simply return
+      # true.
+      return true unless resource_fields.include?(resource_type.to_sym)
+
+      # Otherwise the resource field must exist in our metadata to succeed
+      resource_fields[resource_type.to_sym].include?(field.to_s)
     end
 
     class Search

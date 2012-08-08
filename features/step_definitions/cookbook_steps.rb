@@ -1103,6 +1103,7 @@ Then 'I should be able to see the full list of DSL methods from inside the rule'
     :notifications,
     :os_command?,
     :read_ast,
+    :resource_action?,
     :resource_attribute,
     :resource_attribute?,
     :resource_attributes,
