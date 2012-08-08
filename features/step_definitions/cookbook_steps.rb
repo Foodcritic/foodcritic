@@ -394,6 +394,18 @@ Given /^a cookbook recipe with a resource that ([^ ]+)(?: )?([^ ]+)?$/ do |type,
   }
 end
 
+Given /^a cookbook recipe with a resource that (notifies|subscribes) a ([^ ]+) to ([^ ]+)$/ do |type, resource, action|
+  notification = case type
+    when 'notifies' then %Q{notifies :#{action}, "#{resource}[foo]"}
+    when 'subscribes' then %Q{subscribes :#{action}, resources(:#{resource} => "foo")}
+  end
+  write_recipe %Q{
+    template "/etc/apache.conf" do
+      #{notification}
+    end
+  }
+end
+
 Given 'a cookbook recipe with a resource that notifies where the name contains a sub-expression' do
   write_recipe %q{
     template "/etc/apache.conf" do

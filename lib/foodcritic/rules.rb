@@ -488,3 +488,14 @@ rule "FC036", "Notified or subscribed resource does not exist" do
     end.map{|r| {:filename => r[:filename]}.merge(match(r[:ast]))}
   end
 end
+
+rule "FC037", "Invalid notification action" do
+  tags %w{correctness}
+  recipe do |ast|
+    find_resources(ast).select do |resource|
+      notifications(resource).any? do |n|
+        ! resource_action?(n[:resource_type], n[:action])
+      end
+    end
+  end
+end
