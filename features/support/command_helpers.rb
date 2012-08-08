@@ -41,6 +41,7 @@ module FoodCritic
       'FC033' => 'Missing template',
       'FC034' => 'Unused template variables',
       'FC035' => 'Template uses node attribute directly',
+      'FC036' => 'Notified or subscribed resource does not exist',
       'FCTEST001' => 'Test Rule'
     }
 

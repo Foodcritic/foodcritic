@@ -386,12 +386,45 @@ Given 'a cookbook recipe with a case condition unrelated to platform' do
   }.strip
 end
 
-Given /^a cookbook recipe with a resource that ([^ ]+) (.*)$/ do |type,notification_timing|
+Given /^a cookbook recipe with a resource that ([^ ]+)(?: )?([^ ]+)?$/ do |type,notification_timing|
   write_recipe %Q{
     template "/etc/foo.conf" do
       #{type} :restart, "service[foo]"#{", :#{notification_timing}" if notification_timing}
     end
   }
+end
+
+Given 'a cookbook recipe with a resource that notifies where the name contains a sub-expression' do
+  write_recipe %q{
+    template "/etc/apache.conf" do
+      notifies :reload, "service[apache_#{bar}]"
+    end
+  }
+end
+
+Given /^a cookbook recipe with a resource that ([^ ]+) using (old|new)\-style syntax ([^ ]*)$/ do |type,syntax,notification_timing|
+  resource_reference = if type.to_sym == :old
+    'resources(:service => "apache")'
+  else
+    '"service[apache]"'
+  end
+  timing = notification_timing.strip.empty? ? '' : ", :#{notification_timing.strip}"
+
+  write_recipe %Q{
+    template "/etc/apache.conf" do
+      #{type} :reload, #{resource_reference}#{timing}
+    end
+  }
+end
+
+Given /^the resource is (not )?present$/ do |not_present|
+  unless not_present
+    write_file "cookbooks/example/recipes/server.rb", %q{
+      service "apache" do
+        action :start
+      end
+    }.strip
+  end
 end
 
 Given /^a cookbook recipe with a '([^']+)' condition for flavours (.*)$/ do |type,flavours|

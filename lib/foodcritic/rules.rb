@@ -468,3 +468,23 @@ rule "FC035", "Template uses node attribute directly" do
     [file_match(filename)] unless attribute_access(ast).empty?
   end
 end
+
+rule "FC036", "Notified or subscribed resource does not exist" do
+  tags %w{correctness}
+  cookbook do |cookbook_path|
+    resources = Dir[cookbook_path + '**/*.rb'].map do |file|
+      find_resources(read_ast(file)).map do |resource|
+        {:ast => resource, :filename => file}
+      end
+    end.flatten
+    resource_list = resources.map do |r|
+      {:name => resource_name(r[:ast]), :type => resource_type(r[:ast]).to_sym}
+    end.flatten
+    resources.select do |r|
+      (!(notifications(r[:ast]).map do |n|
+        next if n[:resource_name].respond_to?(:xpath)
+        {:name => n[:resource_name], :type => n[:resource_type]}
+      end.compact - resource_list).empty?)
+    end.map{|r| {:filename => r[:filename]}.merge(match(r[:ast]))}
+  end
+end
