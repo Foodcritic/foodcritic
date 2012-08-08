@@ -3,6 +3,7 @@ require 'gherkin'
 require 'treetop'
 require 'pry'
 require 'rak'
+require 'ripper'
 require 'yajl'
 require 'erubis'
 
