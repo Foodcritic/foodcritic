@@ -26,7 +26,9 @@ describe FoodCritic::Api do
       end.must_raise(ArgumentError)
     end
     it "does not raise if the specified node type is valid" do
-      ast.expect :xpath, [], [String, FoodCritic::Api::AttFilter]
+      ast.expect :xpath, [], [/field/, FoodCritic::Api::AttFilter]
+      ast.expect :xpath, [], [/symbol/, FoodCritic::Api::AttFilter]
+      ast.expect :xpath, [], [/tstring_content/, FoodCritic::Api::AttFilter]
       [:vivified, :symbol, :string].each do |access_type|
         api.attribute_access(ast, :type => access_type)
       end
@@ -35,6 +37,7 @@ describe FoodCritic::Api do
       call = MiniTest::Mock.new
       call.expect :xpath, [], [/args_add_block/]
       call.expect :xpath, ["node", "bar"], [/ident/]
+      call.expect :xpath, ["foo"], [/@value/]
       ast.expect :xpath, [call], [String, FoodCritic::Api::AttFilter]
       api.attribute_access(ast, :type => :vivified).must_equal([call])
       ast.verify
@@ -95,7 +98,10 @@ describe FoodCritic::Api do
       lambda{api.declared_dependencies(nil)}.must_raise ArgumentError
     end
     it "returns an empty if there are no declared dependencies" do
-      ast = MiniTest::Mock.new.expect :xpath, [], [String]
+      ast = MiniTest::Mock.new
+      3.times do
+        ast.expect :xpath, [], [String]
+      end
       api.declared_dependencies(ast).must_be_empty
     end
     it "includes only cookbook names in the returned array" do
@@ -1254,7 +1260,10 @@ describe FoodCritic::Api do
       lambda{api.resource_attributes(nil)}.must_raise ArgumentError
     end
     it "returns an empty if the resource has no attributes" do
-      resource = MiniTest::Mock.new.expect :xpath, [], [String]
+      resource = MiniTest::Mock.new
+      3.times do
+        resource.expect :xpath, [], [String]
+      end
       api.resource_attributes(resource).must_equal({})
     end
     it "returns a string value for a literal string" do
