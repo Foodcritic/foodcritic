@@ -40,6 +40,10 @@ module FoodCritic
           "Specify grammar to use when validating search syntax.") do |s|
           options[:search_grammar] = s
         end
+        opts.on("-i", "--ignore-file FILE",
+          "Ignore the results listed in the specified file.") do |i|
+          options[:ignore_file] = i
+        end
         opts.on("-V", "--version",
           "Display the foodcritic version.") do |v|
           options[:version] = true

@@ -19,10 +19,18 @@ module FoodCritic
 
     attr_reader :cookbook_paths, :warnings
 
-    def initialize(cookbook_paths, warnings, is_failed)
+    def initialize(cookbook_paths, warnings, is_failed, ignore_file)
       @cookbook_paths = Array(cookbook_paths)
       @warnings = warnings
       @is_failed = is_failed
+      @ignore_file = ignore_file
+    end
+
+    # Returns a list of warnings where those that are listed in an ignore file
+    # are omitted.
+    def quieter_warnings
+      # silly modification to test the command line logic
+      [@warnings.first]
     end
 
     # Provided for backwards compatibility. Deprecated and will be removed in a
@@ -42,7 +50,8 @@ module FoodCritic
       # Sorted by filename and line number.
       #
       #     FC123: My rule name: foo/recipes/default.rb
-      @warnings.map do |w|
+      warnings_to_display = @ignore_file ? quieter_warnings : @warnings
+      warnings_to_display.map do |w|
         ["#{w.rule.code}: #{w.rule.name}: #{w.match[:filename]}",
          w.match[:line].to_i]
       end.sort do |x,y|
