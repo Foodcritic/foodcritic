@@ -483,7 +483,9 @@ end
 rule "FC036", "Notified or subscribed resource does not exist" do
   tags %w{correctness}
   cookbook do |cookbook_path|
-    resources = Dir[cookbook_path + '**/*.rb'].map do |file|
+    resources = Dir[cookbook_path +
+      '{metadata.rb,{attributes,libraries,' +
+      'providers,recipes,resources}/*.rb}'].map do |file|
       find_resources(read_ast(file)).map do |resource|
         {:ast => resource, :filename => file}
       end
