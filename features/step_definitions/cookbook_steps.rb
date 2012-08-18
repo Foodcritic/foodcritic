@@ -317,21 +317,92 @@ Given /a cookbook recipe that (install|upgrade)s (a gem|multiple gems)(.*)$/ do 
   end
 end
 
-Given /^a cookbook recipe that refers to a (missing |local )?template$/ do |missing_or_local|
+Given /^a cookbook recipe that refers to a (missing |local )?template( in a subdirectory)?$/ do |missing_or_local, sub_dir|
+  sub_dir = sub_dir ? 'sub_dir/' : ''
   write_recipe %Q{
     template "/tmp/config.conf" do
       #{'local true' if missing_or_local == 'local '}
-      source "config.conf.erb"
+      source "#{sub_dir}config.conf.erb"
       variables({
         :config_var => 'foo'
       })
     end
   }
   unless missing_or_local
-    write_file 'cookbooks/example/templates/default/config.conf.erb', %q{
+    write_file "cookbooks/example/templates/default/#{sub_dir}config.conf.erb", %q{
       <%= @config_var %>
     }
   end
+end
+
+Given 'a cookbook recipe that defines a template where name is a complex expression' do
+  write_recipe %q{
+    template ::File.join(new_resource.foo.bar, "str", new_resource.baz) do
+      variables({
+        :config_var => 'foo'
+      })
+    end
+  }
+  write_file 'cookbooks/example/templates/default/barstrbaz.conf.erb', %q{
+    <%= @config_var %>
+  }
+end
+
+Given 'a cookbook recipe that defines a template where both the name and source are complex expressions' do
+  write_recipe %q{
+    template ::File.join(new_resource.foo.bar, "str", new_resource.baz) do
+      source new_resource.foo.template
+      variables({
+        :config_var => 'foo'
+      })
+    end
+  }
+  write_file 'cookbooks/example/templates/default/barstrbaz.conf.erb', %q{
+    <%= @config_var %>
+  }
+end
+
+
+Given 'a cookbook recipe that defines a template where name and source are both simple expressions' do
+  write_recipe %q{
+    template "/tmp/config-#{foo}.conf" do
+      source "config-#{foo}.erb"
+      variables({
+        :config_var => 'foo'
+      })
+    end
+  }
+  write_file 'cookbooks/example/templates/default/config-foo.conf.erb', %q{
+    <%= @config_var %>
+  }
+end
+
+Given /^a cookbook recipe that (refers to|infers) a template with an expression$/ do |type|
+  write_attributes %q{
+    default['foo']['name'] = 'foo'
+  }
+  write_recipe case type
+    when 'infers'
+      %q{
+        template "/tmp/config-#{node['foo']['name']}.conf" do
+          variables({
+            :config_var => 'foo'
+          })
+        end
+      }
+    else
+      %q{
+        template "/tmp/config.conf" do
+          source "config-#{node['foo']['name']}.erb"
+          variables({
+            :config_var => 'foo'
+          })
+        end
+      }
+  end
+  write_file 'cookbooks/example/templates/default/config-foo.conf.erb', %q{
+    <%= @config_var %>
+  }
 end
 
 Given /^a cookbook recipe that uses a(?:n)? (missing )?inferred template$/ do |missing|

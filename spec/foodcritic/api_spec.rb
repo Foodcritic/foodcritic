@@ -1259,13 +1259,6 @@ describe FoodCritic::Api do
     it "raises if the resource does not support XPath" do
       lambda{api.resource_attributes(nil)}.must_raise ArgumentError
     end
-    it "returns an empty if the resource has no attributes" do
-      resource = MiniTest::Mock.new
-      3.times do
-        resource.expect :xpath, [], [String]
-      end
-      api.resource_attributes(resource).must_equal({})
-    end
     it "returns a string value for a literal string" do
       atts = str_to_atts(%q{
         directory "/foo/bar" do

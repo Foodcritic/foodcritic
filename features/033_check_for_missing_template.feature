@@ -19,6 +19,11 @@ Feature: Check for missing template
      When I check the cookbook
      Then the missing template warning 033 should not be displayed
 
+  Scenario: Present template
+    Given a cookbook recipe that refers to a template in a subdirectory
+     When I check the cookbook
+     Then the missing template warning 033 should not be displayed
+
   Scenario: Present template (inferred)
     Given a cookbook recipe that uses an inferred template
      When I check the cookbook
@@ -26,5 +31,30 @@ Feature: Check for missing template
 
   Scenario: Local template
     Given a cookbook recipe that refers to a local template
+     When I check the cookbook
+     Then the missing template warning 033 should not be displayed
+
+  Scenario: Template source name is an expression
+    Given a cookbook recipe that refers to a template with an expression
+     When I check the cookbook
+     Then the missing template warning 033 should not be displayed
+
+  Scenario: Template source is an expression (inferred)
+    Given a cookbook recipe that infers a template with an expression
+     When I check the cookbook
+     Then the missing template warning 033 should not be displayed
+
+  Scenario: Template name and source are expressions
+    Given a cookbook recipe that defines a template where name and source are both simple expressions
+     When I check the cookbook
+     Then the missing template warning 033 should not be displayed
+
+  Scenario: Template name is a complex expression
+    Given a cookbook recipe that defines a template where name is a complex expression
+     When I check the cookbook
+     Then the missing template warning 033 should not be displayed
+
+  Scenario: Template name and source are complex expressions
+    Given a cookbook recipe that defines a template where both the name and source are complex expressions
      When I check the cookbook
      Then the missing template warning 033 should not be displayed

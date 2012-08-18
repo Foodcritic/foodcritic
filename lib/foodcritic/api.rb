@@ -219,11 +219,11 @@ module FoodCritic
     end
 
     # Retrieve all attributes from the specified resource.
-    def resource_attributes(resource)
+    def resource_attributes(resource, options={})
       atts = {}
-      name = resource_name(resource)
+      name = resource_name(resource, options)
       atts[:name] = name unless name.empty?
-      atts.merge!(normal_attributes(resource))
+      atts.merge!(normal_attributes(resource, options))
       atts.merge!(block_attributes(resource))
       atts
     end
@@ -238,9 +238,22 @@ module FoodCritic
     end
 
     # Retrieve the name attribute associated with the specified resource.
-    def resource_name(resource)
+    def resource_name(resource, options = {})
       raise_unless_xpath!(resource)
-      resource.xpath('string(command//tstring_content/@value)')
+      options = {:return_expressions => false}.merge(options)
+      if options[:return_expressions]
+        name = resource.xpath('command/args_add_block')
+        if name.xpath('descendant::string_add').size == 1 and
+          name.xpath('descendant::string_literal').size == 1 and
+          name.xpath('descendant::*[self::call or self::string_embexpr]').empty?
+            name.xpath('descendant::tstring_content/@value').to_s
+        else
+          name
+        end
+      else
+        # Preserve existing behaviour
+        resource.xpath('string(command//tstring_content/@value)')
+      end
     end
 
     # Resources in an AST, keyed by type.
@@ -287,10 +300,14 @@ module FoodCritic
 
     # Template filename
     def template_file(resource)
-      if resource.key?('source')
+      if resource['source']
         resource['source']
-      else
-        "#{File.basename(resource[:name])}.erb"
+      elsif resource[:name]
+        if resource[:name].respond_to?(:xpath)
+          resource[:name]
+        else
+          "#{File.basename(resource[:name])}.erb"
+        end
       end
     end
 
@@ -343,7 +360,7 @@ module FoodCritic
       xml_node
     end
 
-    def extract_attribute_value(att)
+    def extract_attribute_value(att, options = {})
       if ! att.xpath('args_add_block[count(descendant::args_add)>1]').empty?
         att.xpath('args_add_block').first
       elsif ! att.xpath('args_add_block/args_add/
@@ -353,7 +370,13 @@ module FoodCritic
       elsif ! att.xpath('descendant::assoc_new').empty?
         att.xpath('descendant::assoc_new')
       elsif att.xpath('descendant::symbol').empty?
-        att.xpath('string(descendant::tstring_content/@value)')
+        if options[:return_expressions] and
+           (att.xpath('descendant::string_add').size != 1 or
+           ! att.xpath('descendant::*[self::call or self::string_embexpr]').empty?)
+          att
+        else
+          att.xpath('string(descendant::tstring_content/@value)')
+        end
       else
         att.xpath('string(descendant::symbol/ident/@value)').to_sym
       end
@@ -363,7 +386,7 @@ module FoodCritic
       chef_dsl_methods.include?(meth) || patched_node_method?(meth, cookbook_dir)
     end
 
-    def normal_attributes(resource)
+    def normal_attributes(resource, options = {})
       atts = {}
       # The ancestor check here ensures that nested blocks are not returned.
       # For example a method call within a `ruby_block` would otherwise be
@@ -376,7 +399,7 @@ module FoodCritic
 
           unless att.xpath('string(ident/@value | fcall/ident/@value)').empty?
             atts[att.xpath('string(ident/@value | fcall/ident/@value)')] =
-              extract_attribute_value(att)
+              extract_attribute_value(att, options)
           end
       end
       atts
