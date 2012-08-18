@@ -112,8 +112,12 @@ module FoodCritic
     end
 
     def cookbook_dir(file)
-      Pathname.new(
-        File.join(File.dirname(file), File.basename(file) == 'metadata.rb' ? '' : '..')).cleanpath
+      Pathname.new(File.join(File.dirname(file),
+        case File.basename(file)
+          when 'metadata.rb' then ''
+          when /\.erb$/ then '../..'
+          else '..'
+        end)).cleanpath
     end
 
     def dsl_method_for_file(file)
