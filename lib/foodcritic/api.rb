@@ -205,7 +205,7 @@ module FoodCritic
     def read_ast(file)
       source = if file.to_s.end_with? '.erb'
         Template::ExpressionExtractor.new.extract(
-          File.read(file)).map{|e| e[:code]}.join("\n")
+          File.read(file)).map{|e| e[:code]}.join(';')
       else
         File.read(file)
       end
