@@ -177,8 +177,10 @@ module FoodCritic
     #
     # @param [Symbol] path_type The type of path, one of: :tmp_dir, :chef_file_cache_dir, :home_dir
     def recipe_downloads_file(path_type)
-      download_path = {:tmp_dir => '/tmp/large-file.tar.gz', :home_dir => '/home/ernie/large-file.tar.gz',
-                       :chef_file_cache_dir => '#{Chef::Config[:file_cache_path]}/large-file.tar.gz'}[path_type]
+      download_path = {:tmp_dir => '/tmp/large-file.tar.gz',
+        :tmp_dir_expr => '/tmp/#{file}',
+        :home_dir => '/home/ernie/large-file.tar.gz',
+        :chef_file_cache_dir => '#{Chef::Config[:file_cache_path]}/large-file.tar.gz'}[path_type]
       write_recipe %Q{
         remote_file "#{download_path}" do
           source "http://www.example.org/large-file.tar.gz"

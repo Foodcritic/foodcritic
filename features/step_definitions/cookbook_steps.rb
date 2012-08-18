@@ -613,8 +613,9 @@ Given 'a cookbook that does not have defined metadata' do
 end
 
 Given /^a cookbook that downloads a file to (.*)$/ do |path|
-  recipe_downloads_file({'/tmp' => :tmp_dir, 'the Chef file cache' => :chef_file_cache_dir,
-                         'a users home directory' => :home_dir}[path])
+  recipe_downloads_file({'/tmp' => :tmp_dir, '/tmp with an expression' => :tmp_dir_expr,
+    'the Chef file cache' => :chef_file_cache_dir,
+    'a users home directory' => :home_dir}[path])
 end
 
 Given /^a cookbook that has ([^ ]+) problems$/ do |problems|

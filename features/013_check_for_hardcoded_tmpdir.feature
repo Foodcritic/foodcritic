@@ -9,6 +9,11 @@ Feature: Check for hard-coded temp directory
     When I check the cookbook
     Then the hard-coded temp directory warning 013 should be displayed
 
+  Scenario: Download to hard-coded temp directory (expression)
+    Given a cookbook that downloads a file to /tmp with an expression
+    When I check the cookbook
+    Then the hard-coded temp directory warning 013 should be displayed
+
   Scenario: Download to Chef file cache
     Given a cookbook that downloads a file to the Chef file cache
     When I check the cookbook
