@@ -28,6 +28,7 @@ Feature: Check for unused template variables
       | variables              | expression                  | displayed  |
       | config_var             | node[:configs][:config_var] | should     |
       | config_var             | @config_var                 | should not |
+      | config_var             | @config_var['foo']          | should not |
       | config_var             | node[:configs][:config_var] | should     |
       | config_var,another_var | node[:configs][:config_var] | should     |
       | config_var,another_var | @config_var                 | should     |

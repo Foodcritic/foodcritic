@@ -466,8 +466,8 @@ rule "FC034", "Unused template variables" do
       template_path = template_paths.find{|p| File.basename(p) == resource['source']}
       next unless template_path
       passed_vars = resource['variables'].xpath('symbol/ident/@value').map{|tv| tv.to_s}
-      template_vars = read_ast(template_path).xpath('stmts_add/var_ref/ivar/
-        @value').map{|v| v.to_s.sub(/^@/, '')}
+      template_vars = read_ast(template_path).xpath('//var_ref/ivar/' +
+        '@value').map{|v| v.to_s.sub(/^@/, '')}
       file_match(template_path) unless (passed_vars - template_vars).empty?
     end.compact
   end
