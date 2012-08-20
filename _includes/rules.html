@@ -29,6 +29,15 @@
       </p>
     </div>
   </div>
+  {% if rule.applies_to %}
+  <div class="row">
+    <div class="span12">
+      <p>
+        Applies to Chef versions: {{ rule.applies_to }}
+      </p>
+    </div>
+  </div>
+  {% endif %}
   <div class="row">
     <div class="span12">
     {{ rule.summary | unindent | markdownify }}

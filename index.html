@@ -7,6 +7,7 @@ rules:
     tags:
       - style
       - attributes
+    applies_to: '>= 0.7.12'
     summary: |
       Opscode recommend that you use strings rather than symbols when referencing node attributes.
       See [this explanation from @jtimberman](https://github.com/acrmp/foodcritic/issues/1).
@@ -417,6 +418,7 @@ rules:
     tags:
       - correctness
       - lwrp
+    applies_to: '>= 0.7.12'
     summary: |
       This warning means that the LWRP does not declare a default action. You
       should normally define a default action on your resource to avoid
@@ -452,6 +454,7 @@ rules:
     tags:
       - correctness
       - lwrp
+    applies_to: '>= 0.7.12'
     summary: |
       This warning means that the LWRP will not currently trigger notifications
       to other resources. This can be a source of difficult to track down bugs.
@@ -484,6 +487,7 @@ rules:
       - style
       - lwrp
       - deprecated
+    applies_to: '>= 0.9.10'
     examples:
       - title: Provider uses deprecated syntax
         text: |
@@ -576,6 +580,7 @@ rules:
     tags:
       - correctness
       - lwrp
+    applies_to: '>= 0.10.6'
     summary: |
       A change introduced in Chef 0.10.6 means that conditions may not work as
       expected for resources redeclared with the same name. If your LWRP defines
@@ -617,6 +622,7 @@ rules:
     name: Resource condition within loop may not behave as expected
     tags:
       - correctness
+    applies_to: '>= 0.10.6'
     summary: |
       A change introduced in Chef 0.10.6 means that conditions may not work as
       expected for resources declared within a loop. If your recipe defines a
@@ -752,6 +758,7 @@ rules:
     tags:
       - style
       - deprecated
+    applies_to: '>= 0.10.10'
     summary: |
       This warning is shown if:
       * you have a cookbook that installs a Rubygem for use from Chef
@@ -781,6 +788,7 @@ rules:
     name: Conditional execution block attribute contains only string
     tags:
       - correctness
+    applies_to: '>= 0.7.4'
     summary: |
       This warning is shown if you have a conditional attribute declared on a
       resource as a block that contains only a single string.
