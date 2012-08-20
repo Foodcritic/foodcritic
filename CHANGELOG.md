@@ -1,3 +1,30 @@
+## 1.5.0 (21st August, 2012)
+
+Features:
+
+  - [FC033: Missing template](http://acrmp.github.com/foodcritic/#FC033) rule
+    added.
+  - [FC034: Unused template variables](http://acrmp.github.com/foodcritic/#FC034)
+    rule added
+    ([related issue](https://github.com/acrmp/foodcritic/issues/36)).
+  - [FC035: Template uses node attribute directly](http://acrmp.github.com/foodcritic/#FC035)
+    rule added. This is a style rule that may prove controversial.
+  - [FC037: Invalid notification action](http://acrmp.github.com/foodcritic/#FC037)
+    rule added.
+  - The `#read_ast` API method now supports Erb templates.
+  - API method `#resource_action?` added.
+  - DSL extended to include `library`, `metadata` and `template`.
+
+Bugfixes:
+
+  - [FC020: Conditional execution string attribute looks like Ruby](http://acrmp.github.com/foodcritic/#FC033)
+    rule has been removed as unreliable.
+  - The `#attribute_access` API method now correctly allows a type of `:any`.
+  - The `#notifications` API method now supports notifications enclosed in braces
+    ([related issue](https://github.com/etsy/foodcritic-rules/issues/3)).
+  - Ensure command-line help is shown when an invalid option is passed. Thanks
+    to @juanje for finding and fixing this issue.
+
 ## 1.4.0 (15th June, 2012)
 
 Features:
