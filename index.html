@@ -1097,7 +1097,7 @@ api_methods:
         name: ':type'
         description: |
           The approach used to access the attributes. One of `:string`,
-          `:symbol` or `:vivified`.
+          `:symbol`, `:vivified` or `:any`.
       - category: option
         type: Boolean
         name: ':ignore_calls'
@@ -1363,7 +1363,7 @@ api_methods:
           True if this string might be an OS command
   - name: read_ast
     description: |
-      Read the AST for the given Ruby source file.
+      Read the AST for the given Ruby or Erb source file.
 
       Many of the other functions documented here take an `ast` as an argument.
       You can also use Nokogiri's support querying the AST with XPath or CSS
@@ -1384,6 +1384,25 @@ api_methods:
         type: 'Nokogiri::XML::Node'
         description: |
           The recipe AST
+  - name: resource_action?
+    description: |
+      Determine if an action is valid for the given resource type.
+    examples: |
+      resource_action?(:service, :restart)
+      => true
+    signature:
+      - category: param
+        type: Symbol
+        name: resource_type
+        description: The type of resource
+      - category: param
+        type: Symbol
+        name: action
+        description: The name of the action
+      - category: return
+        type: Boolean
+        description: |
+          True if the action is valid for this type of resource.
   - name: resource_attribute
     description: |
       Retrieve a single-valued attribute from the specified resource.
