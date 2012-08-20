@@ -555,26 +555,10 @@ rules:
     tags:
       - correctness
     summary: |
-      When specifying an `only_if` or `not_if` attribute for conditional
-      execution of your resource you have the option of either a command string
-      or Ruby block. This warning is shown when your condition is passed as a
-      string but looks like a Ruby block.
-
-      * [http://wiki.opscode.com/display/chef/Resources#Resources-ConditionalExecution](http://wiki.opscode.com/display/chef/Resources#Resources-ConditionalExecution)
-    examples:
-      - title: Passes Ruby block condition as string
-        code: |
-          # Don't do this
-          execute "my_random_command" do
-            action :run
-            not_if "::File.directory?(node[:foo])"
-          end
-      - title: Modified version
-        code: |
-          execute "my_random_command" do
-            action :run
-            not_if { ::File.directory?(node[:foo]) }
-          end
+      This rule has been deprecated due to the frequency of false positives.
+      See the discussion against
+      [issue #30](https://github.com/acrmp/foodcritic/issues/30) for more
+      detail.
   - code: FC021
     name: Resource condition in provider may not behave as expected
     tags:
