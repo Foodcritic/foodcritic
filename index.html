@@ -963,6 +963,50 @@ rules:
       This warning is shown when the erb template associated with a
       [template resource](http://wiki.opscode.com/display/chef/Resources#Resources-Template)
       cannot be found.
+  - code: FC034
+    name: Unused template variables
+    tags:
+      - correctness
+    summary: |
+      This warning is shown when one or more variables passed into a template
+      by a [template resource](http://wiki.opscode.com/display/chef/Resources#Resources-Template)
+      are not then used within the template.
+
+      This is often a sign that a template still contains hard-coded values that
+      you intended to parameterise.
+    examples:
+      - title: Unused template variables
+        text: |
+          This example matches the FC034 rule because it passes two variables
+          to the template, of which only the first is used.
+        code: |
+          template "/etc/foo/config.conf" do
+            source "config.conf.erb"
+            variables(
+              'config_var_a' => node['config']['config_var_a']
+              'config_var_b' => node['config']['config_var_b']
+            )
+          end
+
+
+          # config.conf.erb
+          var_a=<%= @config_var_a %>
+      - title: Modified version
+        text: |
+          This modified example would not match the FC034 rule becuse the
+          template has been updated to include both variables passed through.
+        code: |
+          template "/etc/foo/config.conf" do
+            source "config.conf.erb"
+            variables(
+              'config_var_a' => node['config']['config_var_a']
+              'config_var_b' => node['config']['config_var_b']
+            )
+          end
+
+          # config.conf.erb
+          var_a=<%= @config_var_a %>
+          var_b=<%= @config_var_b %>
 
 api_methods: 
   - name: attribute_access
