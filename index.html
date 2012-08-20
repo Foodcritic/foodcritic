@@ -955,6 +955,14 @@ rules:
           template "/etc/foo" do
             notifies :restart, "service[foo]", :immediately
           end
+  - code: FC033
+    name: Missing template
+    tags:
+      - correctness
+    summary: |
+      This warning is shown when the erb template associated with a
+      [template resource](http://wiki.opscode.com/display/chef/Resources#Resources-Template)
+      cannot be found.
 
 api_methods: 
   - name: attribute_access
