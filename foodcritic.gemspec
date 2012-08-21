@@ -14,7 +14,6 @@ Gem::Specification.new do |s|
   s.add_dependency('gist', '~> 3.1.0')
   s.add_dependency('nokogiri', '= 1.5.0')
   s.add_dependency('pry', '~> 0.9.8.4')
-  s.add_dependency('pry-doc', '~> 0.4.2')
   s.add_dependency('rak', '~> 1.4')
   s.add_dependency('treetop', '~> 1.4.10')
   s.add_dependency('yajl-ruby', '~> 1.1.0')
