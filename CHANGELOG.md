@@ -1,3 +1,9 @@
+## 1.5.1 (21st August, 2012)
+
+Bugfixes:
+
+  - Remove pry-doc dependency to resolve pry version conflict.
+
 ## 1.5.0 (21st August, 2012)
 
 Features:
