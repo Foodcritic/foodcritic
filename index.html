@@ -1012,30 +1012,9 @@ rules:
     tags:
       - style
     summary: |
-      When adding a template to a cookbook you may choose to either explicitly
-      pass in variables via the `variables` attribute on the
-      [template resource](http://wiki.opscode.com/display/chef/Resources#Resources-Template)
-      or access attributes directly on the node.
-
-      While it is very common to use the node object directly from within
-      templates it's often clearer within a recipe to pass just the attributes
-      that the template needs. It's also good practice to perform any
-      calculation on node attributes in the recipe rather than in the template
-      erb.
-    examples:
-      - title: Template uses node attribute directly
-        text: |
-          This example matches the FC035 rule because it accesses the node
-          attribute directly.
-        code: |
-          baz=<%= node['foo']['bar']['baz'] %>
-      - title: Modified version
-        text: |
-          This modified example would not match the FC035 rule because the
-          reference to a node attribute has been replaced to reference a
-          value passed in within the template `variables`.
-        code: |
-          baz=<%= @baz %>
+      This rule has been deprecated. See the discussion against
+      [issue #60](https://github.com/acrmp/foodcritic/issues/60) for more
+      detail.
   - code: FC037
     name: Invalid notification action
     tags:
