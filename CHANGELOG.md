@@ -1,3 +1,11 @@
+## 1.6.0 (28th August, 2012)
+
+Bugfixes:
+
+  - Removed FC035: Template uses node attribute directly. For a discussion of
+    the reasons for removal see the
+    [related issue](https://github.com/acrmp/foodcritic/issues/60).
+
 ## 1.5.1 (21st August, 2012)
 
 Bugfixes:
