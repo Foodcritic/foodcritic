@@ -40,7 +40,6 @@ module FoodCritic
       'FC032' => 'Invalid notification timing',
       'FC033' => 'Missing template',
       'FC034' => 'Unused template variables',
-      'FC035' => 'Template uses node attribute directly',
       'FC037' => 'Invalid notification action',
       'FCTEST001' => 'Test Rule'
     }

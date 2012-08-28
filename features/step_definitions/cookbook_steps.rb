@@ -1346,8 +1346,8 @@ Then 'the undeclared dependency warning 007 should be displayed only for the und
   expect_warning("FC007", :file => 'recipes/default.rb', :line => 6, :expect_warning => true)
 end
 
-Then /^the (?:unused template variables|using node attribute directly) warning (03[45]) should (not )?be displayed against the template$/ do |warning,not_shown|
-  expect_warning("FC#{warning}", :file => 'templates/default/config.conf.erb',
+Then /^the unused template variables warning 034 should (not )?be displayed against the template$/ do |not_shown|
+  expect_warning('FC034', :file => 'templates/default/config.conf.erb',
                  :line => 1, :expect_warning => ! not_shown)
 end
 
