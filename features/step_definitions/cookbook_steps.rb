@@ -442,6 +442,15 @@ Given 'a cookbook recipe that uses execute with a name attribute to start a serv
   }
 end
 
+Given /^a cookbook recipe with a ([^ ]+) resource that subscribes to ([^ ]+) when notified by a remote_file$/ do |source, action|
+  write_recipe %Q{
+    #{source} "foo" do
+      action :nothing
+      subscribes :#{action}, resources(:remote_file => "/foo/bar"), :immediately
+    end
+  }
+end
+
 Given 'a cookbook recipe with a case condition unrelated to platform' do
   write_recipe %Q{
     case day_of_week

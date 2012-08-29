@@ -478,7 +478,11 @@ rule "FC037", "Invalid notification action" do
   recipe do |ast|
     find_resources(ast).select do |resource|
       notifications(resource).any? do |n|
-        ! resource_action?(n[:resource_type], n[:action])
+        type = case n[:type]
+          when :notifies then n[:resource_type]
+          when :subscribes then resource_type(resource).to_sym
+        end
+        ! resource_action?(type, n[:action])
       end
     end
   end
