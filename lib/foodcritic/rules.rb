@@ -402,13 +402,14 @@ end
 
 rule "FC030", "Cookbook contains debugger breakpoints" do
   tags %w{annoyances}
-  recipe do |ast|
+  def pry_bindings(ast)
     ast.xpath('//call[(vcall|var_ref)/ident/@value="binding"]
       [ident/@value="pry"]')
   end
-  library{recipe}
-  metadata{recipe}
-  template{recipe}
+  recipe{|ast| pry_bindings(ast)}
+  library{|ast| pry_bindings(ast)}
+  metadata{|ast| pry_bindings(ast)}
+  template{|ast| pry_bindings(ast)}
 end
 
 rule "FC031", "Cookbook without metadata file" do
