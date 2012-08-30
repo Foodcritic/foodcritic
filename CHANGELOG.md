@@ -1,3 +1,14 @@
+## 1.6.1 (31st August, 2012)
+
+Bugfixes:
+
+  - [FC030: Cookbook contains debugger breakpoints](http://acrmp.github.com/foodcritic/#FC030)
+    could prevent other rules from processing depending on the tags passed.
+  - [FC037: Invalid notification action](http://acrmp.github.com/foodcritic/#FC037)
+    would incorrectly warn against `subscribes` notifications
+    ([related issue](https://github.com/acrmp/foodcritic/issues/65)).
+    Thanks @jtimberman.
+
 ## 1.6.0 (28th August, 2012)
 
 Bugfixes:
