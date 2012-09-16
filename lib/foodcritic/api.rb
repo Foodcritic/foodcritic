@@ -37,8 +37,8 @@ module FoodCritic
 
       # TODO: This expression is too loose, but also will fail to match other
       # types of conditionals.
-      ! ast.xpath(%q{//if/*[self::aref or self::call][count(descendant::const[@value = 'Chef' or
-          @value = 'Config']) = 2
+      ! ast.xpath(%q{//*[self::if or self::unless]/*[self::aref or self::call]
+        [count(descendant::const[@value = 'Chef' or @value = 'Config']) = 2
           and
             (   count(descendant::ident[@value='solo']) > 0
             or  count(descendant::tstring_content[@value='solo']) > 0
