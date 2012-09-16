@@ -41,6 +41,7 @@ module FoodCritic
       'FC033' => 'Missing template',
       'FC034' => 'Unused template variables',
       'FC037' => 'Invalid notification action',
+      'FC038' => 'Invalid resource action',
       'FCTEST001' => 'Test Rule'
     }
 

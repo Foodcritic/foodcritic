@@ -451,6 +451,22 @@ Given /^a cookbook recipe with a ([^ ]+) resource that subscribes to ([^ ]+) whe
   }
 end
 
+Given /^a cookbook recipe with a ([^ ]+) resource with action (.*)$/ do |resource, action|
+  write_recipe %Q{
+    #{resource} "foo" do
+      action :#{action}
+    end
+  }
+end
+
+Given /^a cookbook recipe with a ([^ ]+) resource with actions (.*)$/ do |resource, actions|
+  write_recipe %Q{
+    #{resource} "foo" do
+      action [#{actions.split(', ').map{|a| ":#{a}"}.join(", ")}]
+    end
+  }
+end
+
 Given 'a cookbook recipe with a case condition unrelated to platform' do
   write_recipe %Q{
     case day_of_week
@@ -514,6 +530,22 @@ Given /^a cookbook recipe with a '([^']+)' condition for flavours (.*)$/ do |typ
   else
     fail "Unrecognised type: #{type}"
   end
+end
+
+Given 'a cookbook recipe with a service resource that does not specify an action' do
+  write_recipe %q{
+    service "foo" do
+      start_command "/sbin/service foo start"
+    end
+  }.strip
+end
+
+Given 'a cookbook recipe with a service resource with an action specified via a variable' do
+  write_recipe %q{
+    service "foo" do
+      action action
+    end
+  }.strip
 end
 
 Given 'a cookbook template that uses all variables passed' do
