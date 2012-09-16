@@ -8,6 +8,11 @@ module FoodCritic
       @dsl_metadata[:dsl_methods].map(&:to_sym)
     end
 
+    def chef_node_methods
+      load_metadata
+      @dsl_metadata[:node_methods].map(&:to_sym)
+    end
+
     # Is the specified action valid for the type of resource?
     def resource_action?(resource_type, action)
       resource_check?(:actions, resource_type, action)

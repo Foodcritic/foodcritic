@@ -42,6 +42,7 @@ module FoodCritic
       'FC034' => 'Unused template variables',
       'FC037' => 'Invalid notification action',
       'FC038' => 'Invalid resource action',
+      'FC039' => 'Node method cannot be accessed with key',
       'FCTEST001' => 'Test Rule'
     }
 

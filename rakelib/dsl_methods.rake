@@ -5,6 +5,7 @@ METADATA_FILE = 'chef_dsl_metadata.json'
 file METADATA_FILE do
   require_chef
   chef_dsl_metadata = {:dsl_methods => chef_dsl_methods,
+                       :node_methods => chef_node_methods,
                        :actions => chef_resource_actions,
                        :attributes => chef_resource_attributes}
   json = Yajl::Encoder.encode(chef_dsl_metadata, :pretty => true)
@@ -22,6 +23,10 @@ def chef_dsl_methods
    Chef::Mixin::RecipeDefinitionDSLCore.included_modules.map do |mixin|
      mixin.public_instance_methods
    end).flatten.sort.uniq
+end
+
+def chef_node_methods
+  Chef::Node.public_instance_methods.flatten.sort.uniq
 end
 
 def chef_resource_actions

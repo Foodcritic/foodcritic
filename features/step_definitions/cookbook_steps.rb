@@ -33,6 +33,12 @@ Given /^a cookbook recipe that declares a ([^ ]+) resource with the ([^ ]+) attr
   }
 end
 
+Given /^a cookbook recipe that refers to (node.*)$/ do |reference|
+  write_recipe %Q{
+    Chef::Log.info #{reference}
+  }
+end
+
 Given /^a cookbook recipe that wraps a platform\-specific resource in a (.*) conditional$/ do |conditional|
   write_recipe %Q{
     if #{conditional}
@@ -1193,6 +1199,7 @@ Then 'I should be able to see the full list of DSL methods from inside the rule'
     :attribute_access,
     :checks_for_chef_solo?,
     :chef_dsl_methods,
+    :chef_node_methods,
     :chef_solo_search_supported?,
     :cookbook_name,
     :declared_dependencies,

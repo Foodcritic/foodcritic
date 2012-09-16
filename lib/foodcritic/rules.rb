@@ -505,3 +505,18 @@ rule "FC038", "Invalid resource action" do
     end
   end
 end
+
+rule "FC039", "Node method cannot be accessed with key" do
+  tags %w{correctness}
+  recipe do |ast|
+    (attribute_access(ast, :type => :string).select do |a|
+      chef_node_methods.include?(a.xpath('@value').to_s.to_sym)
+    end +
+    attribute_access(ast, :type => :symbol).select do |a|
+      chef_node_methods.include?(a.xpath('ident/@value').to_s.to_sym)
+    end).select do |att|
+      ! att.xpath('ancestor::args_add_block[position() = 1]
+          [preceding-sibling::vcall | preceding-sibling::var_ref]').empty?
+    end
+  end
+end
