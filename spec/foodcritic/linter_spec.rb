@@ -35,6 +35,9 @@ describe FoodCritic::Linter do
     it "returns a review" do
       linter.check(['.'], {}).must_respond_to(:warnings)
     end
+    it "does not require an empty hash of options" do
+      linter.check(['.'])
+    end
   end
 
 end

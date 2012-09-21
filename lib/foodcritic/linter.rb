@@ -43,7 +43,7 @@ module FoodCritic
     # * `:fail_tags` - The tags to fail the build on
     # * `:exclude_paths` - Paths to exclude from linting
     #
-    def check(cookbook_paths, options)
+    def check(cookbook_paths, options = {})
 
       cookbook_paths = sanity_check_cookbook_paths(cookbook_paths)
       options = setup_defaults(options)
