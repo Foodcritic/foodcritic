@@ -520,3 +520,23 @@ rule "FC039", "Node method cannot be accessed with key" do
     end
   end
 end
+
+rule "ETSY002", "Execute resource used to run git commands" do
+  tags %w{style recipe etsy}
+  recipe do |ast|
+    pres = find_resources(ast, :type => 'execute').find_all do |cmd|
+      cmd_str = (resource_attribute(cmd, 'command') || resource_name(cmd)).to_s
+      cmd_str.include?('git ')
+    end.map{|cmd| match(cmd)}
+  end
+end
+
+rule "ETSY003", "Execute resource used to run curl or wget commands" do
+  tags %w{style recipe etsy}
+  recipe do |ast|
+    pres = find_resources(ast, :type => 'execute').find_all do |cmd|
+      cmd_str = (resource_attribute(cmd, 'command') || resource_name(cmd)).to_s
+      (cmd_str.include?('curl ') || cmd_str.include?('wget  '))
+    end.map{|cmd| match(cmd)}
+  end
+end
