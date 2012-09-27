@@ -531,12 +531,12 @@ rule "FC040", "Execute resource used to run git commands" do
   end
 end
 
-rule "ETSY003", "Execute resource used to run curl or wget commands" do
+rule "FC041", "Execute resource used to run curl or wget commands" do
   tags %w{style recipe etsy}
   recipe do |ast|
     pres = find_resources(ast, :type => 'execute').find_all do |cmd|
       cmd_str = (resource_attribute(cmd, 'command') || resource_name(cmd)).to_s
-      (cmd_str.include?('curl ') || cmd_str.include?('wget  '))
+      (cmd_str.include?('curl ') || cmd_str.include?('wget '))
     end.map{|cmd| match(cmd)}
   end
 end

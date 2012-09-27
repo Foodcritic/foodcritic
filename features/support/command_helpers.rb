@@ -44,6 +44,7 @@ module FoodCritic
       'FC038' => 'Invalid resource action',
       'FC039' => 'Node method cannot be accessed with key',
       'FC040' => 'Execute resource used to run git commands',
+      'FC041' => 'Execute resource used to run curl or wget commands',
       'FCTEST001' => 'Test Rule'
     }
 
