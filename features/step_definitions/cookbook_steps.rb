@@ -33,6 +33,22 @@ Given /^a cookbook recipe that declares a ([^ ]+) resource with the ([^ ]+) attr
   }
 end
 
+Given /^a cookbook recipe with an execute resource named (.*)$/ do |name|
+  write_recipe %Q{
+    execute "#{name}" do
+      action :run
+    end
+  }
+end
+
+Given /^a cookbook recipe with an execute resource that runs the command (.*)$/ do |command|
+  write_recipe %Q{
+    execute "do_stuff" do
+      command "#{command}"
+    end
+  }
+end
+
 Given /^a cookbook recipe that refers to (node.*)$/ do |reference|
   write_recipe %Q{
     Chef::Log.info #{reference}
