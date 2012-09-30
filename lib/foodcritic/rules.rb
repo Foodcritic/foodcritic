@@ -539,4 +539,12 @@ rule "FC041", "Execute resource used to run curl or wget commands" do
       (cmd_str.include?('curl ') || cmd_str.include?('wget '))
     end
   end
+
+rule "FC042", "Prefer include_recipe to require_recipe" do
+  tags %w{deprecated}
+  recipe do |ast|
+    ast.xpath('//command[ident/@value="require_recipe"]').map{|n| match(n)}
+  end
+end
+
 end
