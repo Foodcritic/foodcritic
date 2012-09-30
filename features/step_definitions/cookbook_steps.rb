@@ -1110,6 +1110,18 @@ Given 'unit tests under a top-level test directory' do
   minitest_spec_attributes
 end
 
+Given /^a recipe that uses require_recipe$/ do
+  write_recipe %Q{
+    require_recipe "foo::default"
+  }
+end
+
+Given /^a recipe that uses include_recipe$/ do
+  write_recipe %Q{
+    include_recipe "foo::default"
+  }
+end
+
 When /^I check the cookbook specifying ([^ ]+) as the Chef version$/ do |version|
   options = ['-c', version, 'cookbooks/example']
   in_current_dir do
