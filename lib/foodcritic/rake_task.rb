@@ -24,8 +24,11 @@ module FoodCritic
         desc "Lint Chef cookbooks"
         task(name) do
           result = FoodCritic::Linter.new.check(files, options)
-          puts result
-          fail if result.failed?
+          if result.warnings.any?
+            puts result
+          end
+
+          fail result.to_s if result.failed?
         end
       end
 
