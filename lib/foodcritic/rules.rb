@@ -556,3 +556,12 @@ rule "FC043", "Prefer new notification syntax" do
     end
   end
 end
+
+rule "FC044", "Avoid bare attribute keys" do
+  tags %w{style}
+  attributes do |ast|
+    declared = ast.xpath('//descendant::var_field/ident/@value').map{|v| v.to_s}
+    ast.xpath('//assign/*[self::vcall or self::var_ref]
+      [count(child::kw) = 0]/ident').select{|v| ! declared.include?(v['value'])}
+  end
+end

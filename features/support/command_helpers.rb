@@ -47,6 +47,7 @@ module FoodCritic
       'FC041' => 'Execute resource used to run curl or wget commands',
       'FC042' => 'Prefer include_recipe to require_recipe', 
       'FC043' => 'Prefer new notification syntax',
+      'FC044' => 'Avoid bare attribute keys',
       'FCTEST001' => 'Test Rule'
     }
 

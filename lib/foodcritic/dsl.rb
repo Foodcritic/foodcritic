@@ -59,6 +59,7 @@ module FoodCritic
     rule_block :cookbook
     rule_block :metadata
     rule_block :resource
+    rule_block :attributes
     rule_block :provider
     rule_block :library
     rule_block :template

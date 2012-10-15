@@ -122,6 +122,7 @@ module FoodCritic
 
     def dsl_method_for_file(file)
       dir_mapping = {
+        'attributes' => :attributes,
         'libraries' => :library,
         'providers' => :provider,
         'resources' => :resource,

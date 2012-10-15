@@ -2,6 +2,19 @@ Given /^a ([a-z_])+ resource declared with the mode (.*)$/ do |resource,mode|
   recipe_resource_with_mode(resource, mode)
 end
 
+Given 'a cookbook attributes file that declares and refers to a local variable' do
+  write_attributes %q{
+    master = search(:nodes, 'foo:master')
+    default[:foo][:master] = master
+  }
+end
+
+Given /^a cookbook attributes file that refers to an attribute with (.*)$/ do |reference|
+  write_attributes %Q{
+    default['myhostname'] = #{reference}
+  }
+end
+
 Given /^a cookbook recipe that declares (too many )?execute resources varying only in the command in branching conditionals$/ do |too_many|
   extra_resource = %q{
     execute "bing" do
@@ -52,6 +65,12 @@ end
 Given /^a cookbook recipe that refers to (node.*)$/ do |reference|
   write_recipe %Q{
     Chef::Log.info #{reference}
+  }
+end
+
+Given 'a cookbook recipe that refers to an attribute with a bare keyword' do
+  write_recipe %q{
+    node['myhostname'] = hostname
   }
 end
 
@@ -1319,6 +1338,10 @@ Then 'I should be able to see the full list of DSL methods from inside the rule'
     :template_paths,
     :valid_query?
   ]
+end
+
+Then 'the bare attribute keys warning 044 should not be displayed against the local variable' do
+  expect_warning 'FC044', {:expect_warning => false, :line => 2, :file_type => :attributes}
 end
 
 Then /^the lint task will be listed( under the different name)?$/ do |diff_name|

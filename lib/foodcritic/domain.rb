@@ -53,8 +53,9 @@ module FoodCritic
 
   # A rule to be matched against.
   class Rule
-    attr_accessor :code, :name, :applies_to, :cookbook, :recipe, :provider,
-      :resource, :metadata, :library, :template
+    attr_accessor :code, :name, :applies_to, :cookbook, :attributes, :recipe,
+      :provider, :resource, :metadata, :library, :template
+
     attr_writer :tags
 
     def initialize(code, name)
