@@ -566,3 +566,17 @@ rule "FC044", "Avoid bare attribute keys" do
       [count(child::kw) = 0]/ident').select{|v| ! declared.include?(v['value'])}
   end
 end
+
+rule "FC045", "Consider setting cookbook name in metadata" do
+  tags %w{annoyances metadata}
+  metadata do |ast, filename|
+    unless ast.xpath('descendant::stmts_add/command/ident/@value="name"')
+      [file_match(filename)]
+    end
+  end
+  cookbook do |filename|
+    if ! File.exists?(File.join(filename, 'metadata.rb'))
+      [file_match(File.join(filename, 'metadata.rb'))]
+    end
+  end
+end

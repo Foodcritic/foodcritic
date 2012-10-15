@@ -1040,6 +1040,12 @@ Given /^a cookbook with metadata that declares a recipe with (.*)$/ do |declarat
   write_recipe ""
 end
 
+Given /^a cookbook with metadata that (specifies|does not specify) the cookbook name$/ do |specifies|
+  write_metadata %Q{
+    #{"name 'example'" if specifies == 'specifies'}
+  }
+end
+
 Given 'a file resource declared without a mode' do
   write_recipe %q{
     file "/tmp/something" do

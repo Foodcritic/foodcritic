@@ -48,6 +48,7 @@ module FoodCritic
       'FC042' => 'Prefer include_recipe to require_recipe', 
       'FC043' => 'Prefer new notification syntax',
       'FC044' => 'Avoid bare attribute keys',
+      'FC045' => 'Consider setting cookbook name in metadata',
       'FCTEST001' => 'Test Rule'
     }
 
