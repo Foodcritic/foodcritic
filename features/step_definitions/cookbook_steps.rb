@@ -847,6 +847,17 @@ Given 'a cookbook with a single recipe that passes node attributes accessed via 
   }.strip
 end
 
+Given 'a cookbook with a single recipe that uses a hash value to access a node attribute' do
+  write_recipe %q{
+    some_hash = {
+      :key => "value"
+    }
+    execute "accesses-hash" do
+      command "echo #{node['foo'][some_hash[:key]]}"
+    end
+  }.strip
+end
+
 Given /a(nother)? cookbook with a single recipe that (reads|updates|ignores)(nested)? node attributes via ([a-z,]*)(?:(?: and calls node\.)?([a-z_?]+)?| with (.*)?)(?: only)?$/ do |more_than_one,op,nested,types,method,expr|
   cookbook_name = more_than_one.nil? ? 'example' : 'another_example'
 

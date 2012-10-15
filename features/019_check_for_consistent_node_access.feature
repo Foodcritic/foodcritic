@@ -78,6 +78,11 @@ Feature: Check for consistency in node access
      When I check the cookbook
      Then the attribute consistency warning 019 should be not shown
 
+  Scenario: User hashes
+    Given a cookbook with a single recipe that uses a hash value to access a node attribute
+     When I check the cookbook
+     Then the attribute consistency warning 019 should be not shown
+
   Scenario: Two cookbooks with differing approaches
     Given a cookbook with a single recipe that reads node attributes via strings only
       And another cookbook with a single recipe that reads node attributes via symbols only

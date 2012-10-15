@@ -441,6 +441,7 @@ module FoodCritic
       else
         type = options[:type] == :string ? 'tstring_content' : options[:type]
         expr = '//*[self::aref_field or self::aref]'
+        expr += '[count(descendant::aref/var_ref) = 0]'
         expr += '[is_att_type(descendant::ident'
         expr += '[not(ancestor::aref/call)]' if options[:ignore_calls]
         expr += "/@value)]/descendant::#{type}"
