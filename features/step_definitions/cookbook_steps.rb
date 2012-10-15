@@ -152,7 +152,7 @@ Given /^a cookbook recipe that declares a resource with a (.*)$/ do |conditional
   }
 end
 
-Given 'a cookbook recipe that declares a resource with no conditions at all' do
+Given /^a cookbook recipe (?:that declares a resource with no conditions at all|with no notifications)$/ do
   write_recipe %q{
     service "apache" do
       action :enable
@@ -565,6 +565,14 @@ Given /^a cookbook recipe with a resource that (notifies|subscribes) a ([^ ]+) t
   write_recipe %Q{
     template "/etc/apache.conf" do
       #{notification}
+    end
+  }
+end
+
+Given 'a cookbook recipe with a resource that uses old notification syntax' do
+  write_recipe %q{
+    template "/etc/www/configures-apache.conf" do
+      notifies :restart, resources(:service => "apache")
     end
   }
 end

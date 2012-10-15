@@ -46,6 +46,7 @@ module FoodCritic
       'FC040' => 'Execute resource used to run git commands',
       'FC041' => 'Execute resource used to run curl or wget commands',
       'FC042' => 'Prefer include_recipe to require_recipe', 
+      'FC043' => 'Prefer new notification syntax',
       'FCTEST001' => 'Test Rule'
     }
 
