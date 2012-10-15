@@ -436,7 +436,8 @@ rule "FC033", "Missing template" do
   tags %w{correctness}
   recipe do |ast,filename|
     find_resources(ast, :type => :template).reject do |resource|
-      resource_attributes(resource)['local']
+      resource_attributes(resource)['local'] ||
+        resource_attributes(resource)['cookbook']
     end.map do |resource|
       file = template_file(resource_attributes(resource,
         :return_expressions => true))

@@ -29,6 +29,11 @@ Feature: Check for missing template
      When I check the cookbook
      Then the missing template warning 033 should not be displayed
 
+  Scenario: Template present in another cookbook
+    Given a cookbook recipe that uses a template from another cookbook
+     When I check the cookbook
+     Then the missing template warning 033 should not be displayed
+
   Scenario: Local template
     Given a cookbook recipe that refers to a local template
      When I check the cookbook

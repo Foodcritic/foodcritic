@@ -491,6 +491,15 @@ Given /^a cookbook recipe that (refers to|infers) a template with an expression$
   }
 end
 
+Given 'a cookbook recipe that uses a template from another cookbook' do
+  write_recipe %q{
+    template "foo" do
+      cookbook "othercookbook"
+      source "source_in_the_other_cookbook.erb"
+    end
+  }
+end
+
 Given /^a cookbook recipe that uses a(?:n)? (missing )?inferred template$/ do |missing|
   write_recipe %Q{
     template "/tmp/config.conf" do
