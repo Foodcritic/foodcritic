@@ -160,6 +160,28 @@ Given 'a cookbook recipe that declares a resource with no conditions at all' do
   }
 end
 
+Given 'a cookbook recipe that declares multiple directories with different file modes' do
+  write_recipe %q{
+    directory "#{node["nagios"]["dir"]}/dist" do
+      owner "nagios"
+      group "nagios"
+      mode 0755
+    end
+
+    directory node["nagios"]["state_dir"] do
+      owner "nagios"
+      group "nagios"
+      mode 0751
+    end
+
+    directory "#{node["nagios"]["state_dir"]}/rw" do
+      owner "nagios"
+      group node["apache"]["user"]
+      mode 2710
+    end
+  }
+end
+
 Given 'a cookbook recipe that declares multiple package resources mixed with other resources' do
   write_recipe %q{
     package "erlang-base" do

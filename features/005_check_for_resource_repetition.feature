@@ -57,3 +57,8 @@ Feature: Check for resource repetition
     | type        | show             |
     | varying     | not be displayed |
     | non-varying | be displayed     |
+
+  Scenario: Directories with different file modes
+    Given a cookbook recipe that declares multiple directories with different file modes
+     When I check the cookbook
+     Then the service resource warning 005 should not be displayed
