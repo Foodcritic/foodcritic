@@ -48,3 +48,12 @@ Feature: Check for resource repetition
     Given a cookbook provider that declares execute resources varying only in the command in the same action
     When I check the cookbook
     Then the service resource warning 005 should be shown
+
+  Scenario Outline: Template resources within a block
+    Given a cookbook recipe that declares multiple <type> template resources within a block
+    When I check the cookbook
+    Then the service resource warning 005 should <show> against the first resource in the block
+  Examples:
+    | type        | show             |
+    | varying     | not be displayed |
+    | non-varying | be displayed     |

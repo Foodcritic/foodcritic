@@ -186,6 +186,29 @@ Given 'a cookbook recipe that declares multiple package resources mixed with oth
   }
 end
 
+Given /^a cookbook recipe that declares multiple (varying|non-varying) template resources within a block$/ do |vary|
+   do_vary = vary == 'varying'
+   write_recipe %Q{
+     node['apps'].each do |app|
+       template "/etc/#\{app\}.conf" do
+         owner "root"
+         group "root"
+         #{'mode "0600"' if do_vary}
+       end
+       template "/etc/init.d/#\{app\}" do
+         owner "root"
+         group "root"
+         #{'mode "0700"' if do_vary}
+       end
+       template "/home/#\{app\}/foo" do
+         owner "root"
+         group "root"
+         #{'mode "0600"' if do_vary}
+       end
+     end
+   }
+end
+
 Given 'a cookbook recipe that declares multiple resources varying only in the package name' do
   write_recipe %q{
     package "erlang-base" do
@@ -1426,6 +1449,10 @@ end
 
 Then /^the service resource warning 005 should( not)? be visible$/ do |dont_show|
   expect_warning('FC005', :line => dont_show ? 2 : 7, :expect_warning => ! dont_show)
+end
+
+Then /^the service resource warning 005 should( not)? be displayed against the first resource in the block$/ do |dont_show|
+  expect_warning('FC005', :line => 2, :expect_warning => ! dont_show)
 end
 
 Then /^the service resource warning 005 should( not)? be shown$/ do |dont_show|

@@ -1330,7 +1330,7 @@ describe FoodCritic::Api do
         atts['not_if'].must_respond_to :xpath
         atts['not_if'].name.must_equal 'brace_block'
       end
-      it "includes top-level blocks only" do
+      it "doesn't include method calls in ruby blocks" do
         atts = str_to_atts(%q{
           ruby_block "example" do
             block do

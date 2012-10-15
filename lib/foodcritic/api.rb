@@ -388,14 +388,13 @@ module FoodCritic
 
     def normal_attributes(resource, options = {})
       atts = {}
-      # The ancestor check here ensures that nested blocks are not returned.
-      # For example a method call within a `ruby_block` would otherwise be
-      # returned as an attribute.
-      #
-      # TODO: This may need to be revisted in light of recent changes to the
-      # application cookbook which is popularising nested blocks.
       resource.xpath('do_block/descendant::*[self::command or
-        self::method_add_arg][count(ancestor::do_block) = 1]').each do |att|
+        self::method_add_arg][count(ancestor::do_block) >= 1]').each do |att|
+
+          next unless %w{block not_if only_if}.all? do |block_att|
+            att.xpath("count(ancestor::method_add_block/method_add_arg/
+              fcall[ident/@value='#{block_att}']) = 0")
+          end
 
           unless att.xpath('string(ident/@value | fcall/ident/@value)').empty?
             atts[att.xpath('string(ident/@value | fcall/ident/@value)')] =
