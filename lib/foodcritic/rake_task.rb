@@ -17,7 +17,8 @@ module FoodCritic
 
       def options
         {:fail_tags => ['correctness'], # differs to default cmd-line behaviour
-         :exclude_paths => ['test/**/*']}.merge(@options)
+         :exclude_paths => ['test/**/*', 'spec/**/*', 'features/**/*']
+        }.merge(@options)
       end
 
       def define
