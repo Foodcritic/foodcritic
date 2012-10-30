@@ -880,10 +880,13 @@ Given /^a cookbook with a single recipe for which the first hash (key|value) is 
   end
 end
 
-Given 'a cookbook with a single recipe that accesses multiple node attributes via symbols' do
+Given 'a cookbook with a single recipe that reads multiple node attributes via symbols,strings' do
   write_recipe %q{
     node[:foo] = 'bar'
-    node[:testing] = 'bar'
+    node[:baz] = 'foo'
+    node[:wham] = 'shazam'
+    node['testing'] = 'bar'
+    node['testing2'] = 'bar2'
   }
 end
 
@@ -978,12 +981,12 @@ Given 'a cookbook with a single recipe which accesses node attributes with symbo
     # Here we access the node attributes via a symbol
     foo = node[:foo]
 
-    directory "/tmp/foo" do
-      owner "root"
-      group "root"
-      action :create
-    end
+    # String access is in the majority
+    node['foo']
+    node['bar']
+    node['baz']
 
+    # Second access via a symbol
     bar = node[:bar]
   }
 end
@@ -1372,6 +1375,21 @@ Then /^no warnings will be displayed against the tests$/ do
   assert_no_test_warnings
 end
 
+Then 'the attribute consistency warning 019 should warn on lines 2 and 10 in that order' do
+  expected_warnings = [2, 10].map do |line|
+    "FC019: Access node attributes in a consistent manner: cookbooks/example/recipes/default.rb:#{line}"
+  end
+  expect_output(expected_warnings.join("\n"))
+end
+
+Then 'the attribute consistency warning 019 should be displayed for the recipe' do
+  expect_warning('FC019', :line => 2)
+end
+
+Then 'the attribute consistency warning 019 should not be displayed for the attributes' do
+  expect_warning('FC019', :file_type => :attributes, :line => 1, :expect_warning => false)
+end
+
 Then /^the warning should (not )?be displayed$/ do |should_not|
   expect_warning 'FCTEST001', {:expect_warning => should_not.nil?}
 end
@@ -1455,10 +1473,10 @@ end
 
 Then /^the line number and line of code that triggered the warning(s)? should be displayed$/ do |multiple|
   if multiple.nil?
-    expect_line_shown 1, "log node[:foo]"
+    expect_line_shown 2, "log node['foo']"
   else
-    expect_line_shown 1, "node[:foo] = 'bar'"
-    expect_line_shown 2, "    node[:testing] = 'bar'"
+    expect_line_shown 4, "    node['testing'] = 'bar'"
+    expect_line_shown 5, "    node['testing2'] = 'bar2'"
   end
 end
 

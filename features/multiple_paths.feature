@@ -5,7 +5,7 @@ Feature: Multiple paths
   I want to lint multiple paths at once
 
   Scenario: Linting multiple individual cookbooks
-    Given a cookbook with a single recipe that reads node attributes via symbols only
-      And another cookbook with a single recipe that reads node attributes via strings only
+    Given a cookbook with a single recipe that reads node attributes via symbols,strings
+      And another cookbook with a single recipe that reads node attributes via strings
      When I check both cookbooks
-     Then the node access warning 001 should be displayed
+     Then the attribute consistency warning 019 should be shown
