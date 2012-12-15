@@ -398,8 +398,8 @@ module FoodCritic
               fcall[ident/@value='#{block_att}']) = 0")
           end
 
-          unless att.xpath('string(ident/@value | fcall/ident/@value)').empty?
-            atts[att.xpath('string(ident/@value | fcall/ident/@value)')] =
+          unless att.xpath('string(ident/@value)').empty?
+            atts[att.xpath('string(ident/@value)')] =
               extract_attribute_value(att, options)
           end
       end
