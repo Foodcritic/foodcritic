@@ -1079,6 +1079,16 @@ Given /^a recipe that declares a ([^ ]+) resource with these attributes: (.*)$/ 
   recipe_with_resource(type, attributes.split(','))
 end
 
+Given 'a recipe that declares a resource with an attribute value set to the result of a method call' do
+  write_recipe %q{
+    cron "run a command at a random minute" do
+      user "root"
+      minute rand(60)
+      command "/usr/bin/whatever"
+    end
+  }
+end
+
 Given 'a recipe that declares a resource with only a name attribute' do
   write_recipe %q{
     package 'foo'
