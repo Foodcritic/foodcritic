@@ -64,7 +64,8 @@ module FoodCritic
 
       # Given `notifies :restart, "service[foo]"` the target is the
       # `"service[foo]"` string portion.
-      target_path = 'args_add_block/args_add/descendant::tstring_content/@value'
+      target_path = 'args_add_block/args_add/descendant::
+        tstring_content[count(ancestor::dyna_symbol) = 0]/@value'
       target = notify.xpath("arg_paren/#{target_path} | #{target_path}").to_s
 
       # Test the target string against the standard syntax for a new-style

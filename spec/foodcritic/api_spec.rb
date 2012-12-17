@@ -655,6 +655,25 @@ describe FoodCritic::Api do
         }]
       )
     end
+    it "understands new-style notifications with :'symbol' literals as action" do
+      api.notifications(parse_ast(%q{
+        template "/etc/nscd.conf" do
+          source "nscd.conf"
+          owner "root"
+          group "root"
+          notifies :'soft-restart', "service[nscd]"
+        end
+      })).must_equal(
+        [{
+          :type => :notifies,
+          :action => :'soft-restart',
+          :resource_type => :service,
+          :resource_name => 'nscd',
+          :timing => :delayed,
+          :style => :new
+        }]
+      )
+    end
     it "understands new-style notifications with added parentheses" do
       api.notifications(parse_ast(%q{
         template "/etc/nscd.conf" do
