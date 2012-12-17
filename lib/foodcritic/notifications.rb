@@ -123,7 +123,8 @@ module FoodCritic
     end
 
     def notification_action(notify)
-      notify.xpath('descendant::symbol[1]/ident/@value').to_s.to_sym
+      notify.xpath('descendant::symbol[1]/ident/@value |
+        descendant::dyna_symbol[1]/xstring_add/tstring_content/@value').first.to_s.to_sym
     end
 
     def notification_nodes(ast, &block)
