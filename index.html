@@ -1128,6 +1128,28 @@ rules:
           remote_file "/tmp/testfile" do
             source "http://www.example.org/"
           end
+  - code: FC042
+    name: Prefer include_recipe to require_recipe
+    tags:
+      - deprecated
+    summary: |
+      This warning is shown when `require_recipe` is used. Because
+      `require_recipe` has been deprecated you should replace any references to
+      to `require_recipe` with `include_recipe`.
+    examples:
+      - title: Use of deprecated require_recipe statement
+        text: |
+          This example matches the FC042 rule because the deprecated
+          `require_recipe` statement is used.
+        code: |
+          # Don't do this
+          require_recipe "apache2::default"
+      - title: Modified version
+        text: |
+          This modified example would not match the FC042 rule because the
+          `require_recipe` statement has been replaced with `include_recipe`.
+        code: |
+          include_recipe "apache2::default"
 
 api_methods: 
   - name: attribute_access
