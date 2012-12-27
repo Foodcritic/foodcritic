@@ -392,10 +392,10 @@ module FoodCritic
       atts = {}
       resource.xpath('do_block/descendant::*[self::command or
         self::method_add_arg][count(ancestor::do_block) >= 1]').each do |att|
-
-          next unless %w{block not_if only_if}.all? do |block_att|
-            att.xpath("count(ancestor::method_add_block/method_add_arg/
-              fcall[ident/@value='#{block_att}']) = 0")
+          next unless %w{block not_if only_if restart_command before_migrate
+            before_symlink before_restart after_restart}.all? do |block_att|
+              att.xpath("count(ancestor::method_add_block/method_add_arg/
+                fcall[ident/@value='#{block_att}']) = 0")
           end
 
           att_name = att.xpath('string(ident/@value |

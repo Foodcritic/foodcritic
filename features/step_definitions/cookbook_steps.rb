@@ -1110,6 +1110,23 @@ Given 'a recipe that declares a resource with recognised attributes and a condit
   }
 end
 
+Given 'a recipe that declares a resource with recognised attributes and a nested block' do
+  write_recipe %q{
+    deploy_revision "foo" do
+      revision "HEAD"
+      repository "git://github.com/git/git.git"
+      deploy_to "/foo"
+      action :deploy
+      before_migrate do
+        execute "bundle install" do
+          cwd release_path
+          action :run
+        end
+      end
+    end
+  }
+end
+
 Given 'a recipe that declares a resource with standard attributes' do
   write_recipe %q{
     file "/tmp/something" do

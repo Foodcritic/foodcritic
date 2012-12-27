@@ -44,6 +44,11 @@ Feature: Check for unrecognised resource attributes
      When I check the cookbook
      Then the unrecognised attribute warning 009 should not be displayed
 
+  Scenario: Resource with nested block
+    Given a recipe that declares a resource with recognised attributes and a nested block
+     When I check the cookbook
+     Then the unrecognised attribute warning 009 should not be displayed
+
   Scenario: Resource with attribute method call
     Given a recipe that declares a resource with an attribute value set to the result of a method call
      When I check the cookbook
