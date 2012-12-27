@@ -26,3 +26,8 @@ Feature: Check for key access to node methods
     | node['tags']             | should not |
     | node[:tags]              | should not |
     | node.tags                | should not |
+
+  Scenario: Expressions that look like node access
+    Given a cookbook recipe that has a confusingly named local variable "default"
+    When I check the cookbook
+    Then the node method cannot be accessed with key warning 039 should not be displayed

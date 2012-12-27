@@ -319,6 +319,12 @@ Given 'a cookbook recipe that declares two or fewer resources varying only in th
   }
 end
 
+Given 'a cookbook recipe that has a confusingly named local variable "default"' do
+  write_recipe %q{
+    default = {'run_list' => 'foo'}; Chef::Log.info default['run_list']
+  }
+end
+
 Given 'a cookbook recipe that has a wrapping condition containing a resource with no condition attribute and a Ruby statement' do
   write_recipe %q{
     if node['foo'] == 'bar'
