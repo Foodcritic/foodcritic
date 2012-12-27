@@ -367,10 +367,10 @@ module FoodCritic
         var_ref/kw[@value="true" or @value="false"]').empty?
         att.xpath('string(args_add_block/args_add/
           var_ref/kw/@value)') == 'true'
-      elsif ! att.xpath('descendant::int').empty?
-        att.xpath('descendant::int')
       elsif ! att.xpath('descendant::assoc_new').empty?
         att.xpath('descendant::assoc_new')
+      elsif ! att.xpath('descendant::int').empty?
+        att.xpath('descendant::int/@value').to_s
       elsif att.xpath('descendant::symbol').empty?
         if options[:return_expressions] and
            (att.xpath('descendant::string_add').size != 1 or

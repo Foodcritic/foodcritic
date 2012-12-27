@@ -1324,6 +1324,16 @@ describe FoodCritic::Api do
       atts['recursive'].wont_be_nil
       atts['recursive'].must_equal false
     end
+    it "decodes numeric attributes correctly" do
+      atts = str_to_atts(%q{
+        directory "/foo/bar" do
+          owner "root"
+          mode 0755
+        end
+      })
+      atts['mode'].wont_be_nil
+      atts['mode'].must_equal "0755"
+    end
     describe "block attributes" do
       it "includes attributes with brace block values in the result" do
         atts = str_to_atts(%q{
