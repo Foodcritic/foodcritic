@@ -1177,6 +1177,30 @@ rules:
           template "/etc/www/configures-apache.conf" do
             notifies :restart, "service[apache]"
           end
+  - code: FC044
+    name: Avoid bare attribute keys
+    tags:
+      - style
+    summary: |
+      This warning is shown when, within a cookbook attributes file, you refer
+      to an attribute as you would a local variable rather than as an attribute
+      of the `node` object. It is valid to do the former, but you should prefer
+      the later more explicit approach to accessing attributes because it is
+      easier for users of your cookbooks to understand.
+    examples:
+      - title: Referring to an attribute within an attributes file
+        text: |
+          This example matches the FC044 rule because it refers to the
+          `hostname` attribute as a bare attribute.
+        code: |
+          default['myhostname'] = hostname
+      - title: Modified version
+        text: |
+          This modified example would not match the FC044 rule because the
+          reference to the `hostname` attribute has been qualified so that
+          the meaning is more apparent.
+        code: |
+          default['myhostname'] = node['hostname']
 
 api_methods: 
   - name: attribute_access
