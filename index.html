@@ -1201,6 +1201,16 @@ rules:
           the meaning is more apparent.
         code: |
           default['myhostname'] = node['hostname']
+  - code: FC045
+    name: Consider setting cookbook name in metadata
+    tags:
+      - annoyances
+      - metadata
+    summary: |
+      This warning is shown when your cookbook does not define a name within
+      the cookbook `metadata.rb` file. It's a good idea to specify a name in
+      your cookbook metadata to avoid breakage if the name of the containing
+      directory changes.
 
 api_methods: 
   - name: attribute_access
