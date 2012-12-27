@@ -1024,6 +1024,31 @@ rules:
           template "/etc/foo.conf" do
             notifies :restart, "service[foo]"
           end
+  - code: FC038
+    name: Invalid resource action
+    tags:
+      - correctness
+    summary: |
+      This warning is shown when a resource action is not valid for the type of
+      resource.
+    examples:
+      - title: Invalid resource action
+        text: |
+          This example matches the FC038 rule because `:none` is
+          not a valid action.
+        code: |
+          # Don't do this
+          service "foo" do
+            action :none
+          end
+      - title: Modified version
+        text: |
+          This modified example would not match the FC038 rule because the
+          action has been corrected.
+        code: |
+          service "foo" do
+            action :nothing
+          end
 
 api_methods: 
   - name: attribute_access
