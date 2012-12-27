@@ -15,6 +15,13 @@ Given /^a cookbook attributes file that refers to an attribute with (.*)$/ do |r
   }
 end
 
+Given 'a cookbook attributes file that sets an attribute to be the result of a library call' do
+  write_attributes %q{
+    ::Chef::Node.send(:include, Opscode::OpenSSL::Password)
+    default[:admin_password] = secure_password
+  }
+end
+
 Given /^a cookbook recipe that declares (too many )?execute resources varying only in the command in branching conditionals$/ do |too_many|
   extra_resource = %q{
     execute "bing" do
@@ -1391,7 +1398,7 @@ Then 'I should be able to see the full list of DSL methods from inside the rule'
   ]
 end
 
-Then 'the bare attribute keys warning 044 should not be displayed against the local variable' do
+Then /^the bare attribute keys warning 044 should not be displayed against the (?:local variable|library call)$/ do
   expect_warning 'FC044', {:expect_warning => false, :line => 2, :file_type => :attributes}
 end
 

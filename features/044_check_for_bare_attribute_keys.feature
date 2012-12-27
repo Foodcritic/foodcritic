@@ -27,3 +27,8 @@ Feature: Check for bare attribute keys
     Given a cookbook attributes file that declares and refers to a local variable
      When I check the cookbook
      Then the bare attribute keys warning 044 should not be displayed against the local variable
+
+  Scenario: Attribute set to library method call
+    Given a cookbook attributes file that sets an attribute to be the result of a library call
+     When I check the cookbook
+     Then the bare attribute keys warning 044 should not be displayed against the library call
