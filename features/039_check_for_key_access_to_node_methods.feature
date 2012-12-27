@@ -23,3 +23,6 @@ Feature: Check for key access to node methods
     | node[:run_state][:foo]   | should     |
     | node['foo']['run_state'] | should not |
     | node[:foo][:run_state]   | should not |
+    | node['tags']             | should not |
+    | node[:tags]              | should not |
+    | node.tags                | should not |

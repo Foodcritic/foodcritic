@@ -502,15 +502,16 @@ end
 rule "FC039", "Node method cannot be accessed with key" do
   tags %w{correctness}
   recipe do |ast|
-    (attribute_access(ast, :type => :string).select do |a|
-      chef_node_methods.include?(a.xpath('@value').to_s.to_sym)
-    end +
-    attribute_access(ast, :type => :symbol).select do |a|
-      chef_node_methods.include?(a.xpath('ident/@value').to_s.to_sym)
-    end).select do |att|
-      ! att.xpath('ancestor::args_add_block[position() = 1]
+    [{:type => :string, :path => '@value'},
+     {:type => :symbol, :path => 'ident/@value'}].map do |access_type|
+      attribute_access(ast, :type => access_type[:type]).select do |att|
+        att_name = att.xpath(access_type[:path]).to_s.to_sym
+        att_name != :tags && chef_node_methods.include?(att_name)
+      end.select do |att|
+        ! att.xpath('ancestor::args_add_block[position() = 1]
           [preceding-sibling::vcall | preceding-sibling::var_ref]').empty?
-    end
+      end
+    end.flatten
   end
 end
 
