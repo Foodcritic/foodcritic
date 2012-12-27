@@ -1049,6 +1049,29 @@ rules:
           service "foo" do
             action :nothing
           end
+  - code: FC039
+    name: Node method cannot be accessed with key
+    tags:
+      - correctness
+    summary: |
+      Chef allows you to use varying syntax to refer to node attributes.
+      This warning is shown when you attempt to reference a method on
+      `Chef::Node` using the same string or symbol syntax reserved for node
+      attributes.
+    examples:
+      - title: Attempt to access node method as a key
+        text: |
+          This example matches the FC039 rule because `run_state` is
+          only accessible as a method and cannot be referenced as an attribute.
+        code: |
+          # Don't do this
+          node['run_state']['nginx_force_recompile'] = false
+      - title: Modified version
+        text: |
+          This modified example would not match the FC039 rule because the
+          `run_state` is referenced as a method.
+        code: |
+          node.run_state['nginx_force_recompile'] = false
 
 api_methods: 
   - name: attribute_access
