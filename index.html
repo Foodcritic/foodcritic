@@ -1101,6 +1101,33 @@ rules:
             reference "master"
             action :sync
           end
+  - code: FC041
+    name: Execute resource used to run curl or wget commands
+    tags:
+      - style
+      - recipe
+      - etsy
+    summary: |
+      This warning is shown if you use an execute resource to run the `curl` or
+      `wget` commands. If you are downloading a file consider using the
+      `remote_file` resource instead.
+    examples:
+      - title: Execute resource used to run wget command
+        text: |
+          This example matches the FC041 rule because an `execute` resource is
+          used where you could instead use a `remote_file` resource.
+        code: |
+          execute "cd /tmp && wget 'http://example.org/'" do
+            action :run
+          end
+      - title: Modified version
+        text: |
+          This modified example would not match the FC041 rule because the
+          `execute` resource has been replaced by a `remote_file` resource.
+        code: |
+          remote_file "/tmp/testfile" do
+            source "http://www.example.org/"
+          end
 
 api_methods: 
   - name: attribute_access
