@@ -1150,6 +1150,33 @@ rules:
           `require_recipe` statement has been replaced with `include_recipe`.
         code: |
           include_recipe "apache2::default"
+  - code: FC043
+    name: Prefer new notification syntax
+    tags:
+      - style
+      - notifications
+      - deprecated
+    summary: |
+      This warning is shown when you use the old-style notification syntax. You
+      should prefer the new-style notification syntax which has the advantage
+      that you can notify resources that are defined later.
+    examples:
+      - title: Old notification syntax
+        text: |
+          This example matches the FC043 rule because it uses the older
+          notification syntax.
+        code: |
+          template "/etc/www/configures-apache.conf" do
+            notifies :restart, resources(:service => "apache")
+          end
+      - title: Modified version
+        text: |
+          This modified example would not match the FC043 rule because the
+          syntax of the notification has been updated to use the new format.
+        code: |
+          template "/etc/www/configures-apache.conf" do
+            notifies :restart, "service[apache]"
+          end
 
 api_methods: 
   - name: attribute_access
