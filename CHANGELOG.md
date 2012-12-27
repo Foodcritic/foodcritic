@@ -1,3 +1,88 @@
+## 1.7.0 (27th December, 2012)
+
+Features
+
+  - [FC038: Invalid resource action](http://acrmp.github.com/foodcritic/#FC038)
+    rule added
+    ([related issue](https://github.com/acrmp/foodcritic/issues/61)).
+    Thanks @jaymzh.
+  - [FC039: Node method cannot be accessed with key](http://acrmp.github.com/foodcritic/#FC039)
+    rule added.
+  - [FC040: Execute resource used to run git commands](http://acrmp.github.com/foodcritic/#FC040)
+    rule stolen from Etsy rules (ETSY003)
+    ([related issue](https://github.com/acrmp/foodcritic/issues/72)).
+    Thanks @jonlives.
+  - [FC041: Execute resource used to run curl or wget commands](http://acrmp.github.com/foodcritic/#FC041)
+    rule stolen from Etsy rules (ETSY002)
+    ([related issue](https://github.com/acrmp/foodcritic/issues/73)).
+    Thanks @jonlives.
+  - [FC042: Prefer include_recipe](http://acrmp.github.com/foodcritic/#FC042)
+    rule added
+    ([related issue](https://github.com/acrmp/foodcritic/pull/77)).
+    Thanks @pwelch.
+  - [FC043: Prefer new notification syntax](http://acrmp.github.com/foodcritic/#FC043)
+    rule added
+    ([related issue](https://github.com/acrmp/foodcritic/issues/80)).
+    Thanks @jtimberman.
+  - [FC044: Avoid bare attribute keys](http://acrmp.github.com/foodcritic/#FC044)
+    rule added
+    ([related issue](https://github.com/acrmp/foodcritic/issues/75)).
+    Thanks @jtimberman.
+  - [FC045: Consider setting cookbook name in metadata](http://acrmp.github.com/foodcritic/#FC045)
+    rule added
+    ([related issue](https://github.com/acrmp/foodcritic/issues/64)).
+    Thanks @miketheman.
+  - Linter `#check` method no longer requires options to be explicitly passed if
+    you are using the defaults
+    ([related issue](https://github.com/acrmp/foodcritic/pull/71)).
+    Thanks @kreynolds.
+
+Bugfixes:
+
+  - Bump version of Nokogiri to
+    [fix installation failure on Ubuntu 12.10](https://github.com/sparklemotion/nokogiri/issues/680)
+    ([related issue](https://github.com/acrmp/foodcritic/issues/83)).
+    Thanks @dracoater.
+  - Support added for quoted symbols as notification actions
+    ([related issue](https://github.com/acrmp/foodcritic/pull/94)).
+    Thanks @ohm.
+  - Add `spec/**/*` and `features/**/*` to default rake task `:exclude_paths`
+    ([related issue](https://github.com/acrmp/foodcritic/pull/84)).
+    Thanks @fnichol.
+  - Remove unnecessary whitespace from rake task output
+    ([related issue](https://github.com/acrmp/foodcritic/pull/78)).
+    Thanks @ketan.
+  - Removed [FC001: Use strings in preference to symbols to access node attributes](http://acrmp.github.com/foodcritic/#FC001)
+    ([related issue](https://github.com/acrmp/foodcritic/issues/86)).
+    Thanks @jtimberman.
+  - [FC003: Check whether you are running with chef server before using server-specific features](http://acrmp.github.com/foodcritic/#FC003)
+    updated to also match `unless`
+    ([related issue](https://github.com/acrmp/foodcritic/issues/58)).
+    Thanks @cap10morgan.
+  - Decode numeric attributes.
+    This could cause [FC005: Avoid repetition of resource declarations](http://acrmp.github.com/foodcritic/#FC005)
+    to warn incorrectly
+    ([related issue](https://github.com/acrmp/foodcritic/issues/79)).
+    Thanks @masterkorp.
+  - Recognise attributes correctly within a block.
+    This could cause [FC005: Avoid repetition of resource declarations](http://acrmp.github.com/foodcritic/#FC005)
+    to warn incorrectly
+    ([related issue](https://github.com/acrmp/foodcritic/issues/76)).
+    Thanks @masterkorp.
+  - [FC009: Resource attribute not recognised](http://acrmp.github.com/foodcritic/#FC009)
+    would warn incorrectly on methods used within a resource block
+    ([related issue](https://github.com/acrmp/foodcritic/issues/85)).
+    Thanks @arangamani.
+  - [FC019: Access node attributes in a consistent manner](http://acrmp.github.com/foodcritic/#FC019)
+    would warn incorrectly when referencing node attributes from a user-created
+    hash.
+    ([related issue](https://github.com/acrmp/foodcritic/issues/54)).
+    Thanks @schubert.
+  - [FC033: Missing Template](http://acrmp.github.com/foodcritic/#FC033)
+    would warn incorrectly when using templates from another cookbook
+    ([related issue](https://github.com/acrmp/foodcritic/issues/74)).
+    Thanks @woohgit.
+
 ## 1.6.1 (31st August, 2012)
 
 Bugfixes:
