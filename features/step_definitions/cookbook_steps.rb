@@ -1524,6 +1524,35 @@ Then /^the no leading cookbook name warning 029 should be (not )?shown$/ do |sho
   expect_warning('FC029', :line => 1, :expect_warning => should_not.nil?, :file => 'metadata.rb')
 end
 
+Then 'the node access warning 001 should be displayed for each match' do
+  expect_warning('FC001', :line => 1)
+  expect_warning('FC001', :line => 2)
+end
+
+Then 'the node access warning 001 should be displayed against the variables' do
+  expect_warning('FC001', :line => 4)
+  expect_warning('FC001', :line => 5)
+end
+
+Then 'the node access warning 001 should be displayed twice for the same line' do
+  expect_warning('FC001', :line => 1, :num_occurrences => 2)
+end
+
+Then 'the node access warning 001 should warn on lines 2 and 10 in that order' do
+  expected_warnings = [2, 10].map do |line|
+    "FC001: Use strings in preference to symbols to access node attributes: cookbooks/example/recipes/default.rb:#{line}"
+  end
+  expect_output(expected_warnings.join("\n"))
+end
+
+Then 'the node access warning 001 should be displayed for the recipe' do
+  expect_warning('FC001')
+end
+
+Then 'the node access warning 001 should not be displayed for the attributes' do
+  expect_warning("FC001", :file_type => :attributes, :line => 1, :expect_warning => false)
+end
+
 Then 'the prefer chef_gem to manual install warning 025 should be shown' do
   expect_warning('FC025', :line => nil)
 end

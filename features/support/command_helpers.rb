@@ -7,6 +7,7 @@ module FoodCritic
 
     # The warning codes and messages displayed to the end user.
     WARNINGS = {
+      'FC001' => 'Use strings in preference to symbols to access node attributes',
       'FC002' => 'Avoid string interpolation where not required',
       'FC003' => 'Check whether you are running with chef server before using server-specific features',
       'FC004' => 'Use a service resource to start and stop services',
