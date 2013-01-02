@@ -525,8 +525,14 @@ rule "FC040", "Execute resource used to run git commands" do
     impossible_git_commands = %w{ show }
     find_resources(ast, :type => 'execute').select do |cmd|
       cmd_str = (resource_attribute(cmd, 'command') || resource_name(cmd)).to_s
-      git_cmd = cmd_str.split(" ")[1]
-      cmd_str.include?('git ') && !impossible_git_commands.include?(git_cmd)
+
+      git_cmd = cmd_str.match(/git ([a-z\-]*)/)
+
+      is_git_cmd  = !git_cmd.nil?
+      has_args    = is_git_cmd && !git_cmd.captures.nil?
+      is_possible = has_args && !impossible_git_commands.include?(git_cmd.captures[0])
+
+      is_git_cmd && is_possible
     end
   end
 end
