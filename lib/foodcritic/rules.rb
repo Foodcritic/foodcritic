@@ -522,9 +522,11 @@ end
 rule "FC040", "Execute resource used to run git commands" do
   tags %w{style recipe etsy}
   recipe do |ast|
+    impossible_git_commands = %w{ show }
     find_resources(ast, :type => 'execute').select do |cmd|
       cmd_str = (resource_attribute(cmd, 'command') || resource_name(cmd)).to_s
-      cmd_str.include?('git ')
+      git_cmd = cmd_str.split(" ")[1]
+      cmd_str.include?('git ') && !impossible_git_commands.include?(git_cmd)
     end
   end
 end

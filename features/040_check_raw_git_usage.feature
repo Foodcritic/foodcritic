@@ -11,6 +11,7 @@ Feature: Check for direct usage of git
   Examples:
     | name      | display    |
     | git pull  | should     |
+    | git show  | should not |
     | which foo | should not |
 
   Scenario Outline: Execute resource
@@ -22,5 +23,6 @@ Feature: Check for direct usage of git
     | git clone https://github.com/git/git.git            | should     |
     | git clone --depth 10 https://github.com/git/git.git | should     |
     | git pull                                            | should     |
+    | git show                                            | should not |
     | gitk                                                | should not |
     | curl http://github.com/                             | should not |
