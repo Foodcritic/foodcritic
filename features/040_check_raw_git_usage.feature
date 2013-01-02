@@ -9,9 +9,15 @@ Feature: Check for direct usage of git
     When I check the cookbook
     Then the execute resource used to run git commands warning 040 <display> be displayed
   Examples:
-    | name      | display    |
-    | git pull  | should     |
-    | which foo | should not |
+    | name                   | display    |
+    | git pull               | should     |
+    | git clone              | should     |
+    | git fetch              | should     |
+    | git checkout           | should     |
+    | git reset --hard       | should     |
+    | git show               | should not |
+    | echo 'bob' && git show | should not |
+    | which foo              | should not |
 
   Scenario Outline: Execute resource
     Given a cookbook recipe with an execute resource that runs the command <command>
@@ -22,5 +28,10 @@ Feature: Check for direct usage of git
     | git clone https://github.com/git/git.git            | should     |
     | git clone --depth 10 https://github.com/git/git.git | should     |
     | git pull                                            | should     |
+    | git fetch origin                                    | should     |
+    | git checkout master                                 | should     |
+    | git reset --hard                                    | should     |
+    | git show                                            | should not |
+    | echo 'bob' && git show                              | should not |
     | gitk                                                | should not |
     | curl http://github.com/                             | should not |
