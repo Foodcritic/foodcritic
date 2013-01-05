@@ -229,7 +229,10 @@ end
 rule "FC019", "Access node attributes in a consistent manner" do
   tags %w{style attributes}
   cookbook do |cookbook_dir|
-    asts = {}; files = Dir["#{cookbook_dir}/*/*.rb"].map do |file|
+    asts = {}; files = Dir["#{cookbook_dir}/*/*.rb"].reject do |file|
+      relative_path = Pathname.new(file).relative_path_from(Pathname.new(cookbook_dir))
+      relative_path.to_s.split(File::SEPARATOR).include?('spec')
+    end.map do |file|
       {:path => file, :ast => read_ast(file)}
     end
     types = [:string, :symbol, :vivified].map do |type|
