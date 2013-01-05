@@ -83,6 +83,11 @@ Feature: Check for consistency in node access
      When I check the cookbook
      Then the attribute consistency warning 019 should be not shown
 
+  Scenario: Interpolated access
+    Given a cookbook with a single recipe that mixes node access types in an interpolated value
+      When I check the cookbook
+     Then the attribute consistency warning 019 should be shown
+
   Scenario: Two cookbooks with differing approaches
     Given a cookbook with a single recipe that reads node attributes via strings only
       And another cookbook with a single recipe that reads node attributes via symbols only

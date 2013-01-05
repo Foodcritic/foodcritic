@@ -893,6 +893,14 @@ Given /^a cookbook with a single recipe for which the first hash (key|value) is 
   end
 end
 
+Given 'a cookbook with a single recipe that mixes node access types in an interpolated value' do
+  write_recipe %q{
+    execute "interpolated-example" do
+      command "#{node['foo'][:bar]}'"
+    end
+  }
+end
+
 Given 'a cookbook with a single recipe that reads multiple node attributes via symbols,strings' do
   write_recipe %q{
     node[:foo] = 'bar'

@@ -443,11 +443,11 @@ module FoodCritic
       else
         type = options[:type] == :string ? 'tstring_content' : options[:type]
         expr = '//*[self::aref_field or self::aref]'
-        expr += '[count(descendant::aref/var_ref) = 0]'
+        expr += '[count(is_att_type(descendant::var_ref/ident/@value)) =
+          count(descendant::var_ref/ident/@value)]'
         expr += '[is_att_type(descendant::ident'
         expr += '[not(ancestor::aref/call)]' if options[:ignore_calls]
         expr += "/@value)]/descendant::#{type}"
-        expr += "[ident/@value != 'node']" if type == :symbol
         ast.xpath(expr, AttFilter.new).sort
       end
     end
