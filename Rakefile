@@ -10,7 +10,12 @@ Bundler.setup
 Bundler::GemHelper.install_tasks
 
 Rake::TestTask.new do |t|
-  t.pattern = 'spec/**/*_spec.rb'
+  t.pattern = 'spec/foodcritic/*_spec.rb'
+end
+
+Rake::TestTask.new do |t|
+  t.name = 'regressions'
+  t.pattern = 'spec/regression/*_spec.rb'
 end
 
 Cucumber::Rake::Task.new(:features) do |t|
