@@ -11,6 +11,10 @@ Feature: Check for direct usage of git
   Examples:
     | name                   | display    |
     | git pull               | should     |
+    | git clone              | should     |
+    | git fetch              | should     |
+    | git checkout           | should     |
+    | git reset --hard       | should     |
     | git show               | should not |
     | echo 'bob' && git show | should not |
     | which foo              | should not |
