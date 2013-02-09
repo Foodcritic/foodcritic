@@ -11,7 +11,7 @@ end
 
 group :development do
   gem 'cane', '~> 1.4.0'
-  gem 'chef', '~> 0.10.8'
+  gem 'chef', '~> 10.20'
   gem 'guard', '~> 1.3.0'
   gem 'guard-cucumber', '~> 1.2.0'
   gem 'fl-rocco', '~> 1.0.0'
