@@ -82,7 +82,7 @@ module FoodCritic
         end
 
         Review.new(cookbook_paths, warnings,
-          should_fail_build?(options[:fail_tags], matched_rule_tags))
+          should_fail_build?(options[:fail_tags], matched_rule_tags), options[:ignore_file])
       end
     end
 

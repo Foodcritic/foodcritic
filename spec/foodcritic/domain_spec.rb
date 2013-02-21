@@ -32,4 +32,10 @@ describe FoodCritic::Review do
       FoodCritic::Review.new('example', [warning], false).warnings.must_equal [warning]
     end
   end
+  describe "#quieter_warnings" do
+    it "returns empty when there are no warnings" do
+      ignore_file = ""
+      FoodCritic::Review.new('example', [], false, ignore_file).quieter_warnings.must_be_empty
+    end
+  end
 end
