@@ -3,7 +3,6 @@ require 'bundler'
 require 'rake/testtask'
 require 'cucumber'
 require 'cucumber/rake/task'
-require 'yard'
 task :default => ['chef_dsl_metadata.json', :install, :test, :features]
 
 Bundler.setup
@@ -28,5 +27,3 @@ Cucumber::Rake::Task.new(:features) do |t|
   end
   t.cucumber_opts += ['features']
 end
-
-YARD::Rake::YardocTask.new
