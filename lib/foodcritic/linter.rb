@@ -9,7 +9,6 @@ module FoodCritic
   class Linter
 
     include FoodCritic::Api
-    include FoodCritic::REPL
 
     # The default version that will be used to determine relevant rules. This
     # can be over-ridden at the command line with the `--chef-version` option.
@@ -47,53 +46,51 @@ module FoodCritic
 
       cookbook_paths = sanity_check_cookbook_paths(cookbook_paths)
       options = setup_defaults(options)
+      @options = options
 
-      # Enable checks to be easily repeated at the REPL
-      with_repl(cookbook_paths, options) do
-        warnings = []; last_dir = nil; matched_rule_tags = Set.new
+      warnings = []; last_dir = nil; matched_rule_tags = Set.new
 
-        load_rules
+      load_rules
 
-        # Loop through each file to be processed and apply the rules
-        files_to_process(cookbook_paths, options[:exclude_paths]).each do |file|
-          ast = read_ast(file)
-          active_rules(options).each do |rule|
-            rule_matches = matches(rule.recipe, ast, file)
+      # Loop through each file to be processed and apply the rules
+      files_to_process(cookbook_paths, options[:exclude_paths]).each do |file|
+        ast = read_ast(file)
+        active_rules(options).each do |rule|
+          rule_matches = matches(rule.recipe, ast, file)
 
-            if dsl_method_for_file(file)
-              rule_matches += matches(rule.send(dsl_method_for_file(file)),
-                ast, file)
-            end
-
-            per_cookbook_rules(last_dir, file) do
-              if File.basename(file) == 'metadata.rb'
-                rule_matches += matches(rule.metadata, ast, file)
-              end
-              rule_matches += matches(rule.cookbook, cookbook_dir(file))
-            end
-
-            # Convert the matches into warnings
-            rule_matches.each do |match|
-              warnings << Warning.new(rule, {:filename => file}.merge(match))
-              matched_rule_tags << rule.tags
-            end
+          if dsl_method_for_file(file)
+            rule_matches += matches(rule.send(dsl_method_for_file(file)),
+              ast, file)
           end
-          last_dir = cookbook_dir(file)
-        end
 
-        Review.new(cookbook_paths, warnings,
-          should_fail_build?(options[:fail_tags], matched_rule_tags))
+          per_cookbook_rules(last_dir, file) do
+            if File.basename(file) == 'metadata.rb'
+              rule_matches += matches(rule.metadata, ast, file)
+            end
+            rule_matches += matches(rule.cookbook, cookbook_dir(file))
+          end
+
+          # Convert the matches into warnings
+          rule_matches.each do |match|
+            warnings << Warning.new(rule, {:filename => file}.merge(match))
+            matched_rule_tags << rule.tags
+          end
+        end
+        last_dir = cookbook_dir(file)
       end
+
+      Review.new(cookbook_paths, warnings,
+        should_fail_build?(options[:fail_tags], matched_rule_tags))
     end
 
     # Load the rules from the (fairly unnecessary) DSL.
     def load_rules
-      load_rules!(@last_options) unless defined? @rules
+      load_rules!(@options) unless defined? @rules
     end
 
     def load_rules!(options)
       @rules = RuleDsl.load([File.join(File.dirname(__FILE__), 'rules.rb')] +
-        options[:include_rules], options[:repl])
+        options[:include_rules])
     end
 
     private

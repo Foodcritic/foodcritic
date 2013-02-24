@@ -12,10 +12,6 @@ module FoodCritic
       @options = {:fail_tags => [], :tags => [], :include_rules => []}
       @parser = OptionParser.new do |opts|
         opts.banner = 'foodcritic [cookbook_paths]'
-        opts.on("-r", "--[no-]repl",
-          "Drop into a REPL for interactive rule editing.") do |r|
-          options[:repl] = r
-        end
         opts.on("-t", "--tags TAGS",
           "Only check against rules with the specified tags.") do |t|
           options[:tags] << t

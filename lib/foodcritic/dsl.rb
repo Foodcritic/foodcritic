@@ -65,17 +65,13 @@ module FoodCritic
     rule_block :template
 
     # Load the ruleset(s).
-    def self.load(paths, with_repl)
+    def self.load(paths)
       dsl = RuleDsl.new
       paths.map do |path|
         File.directory?(path) ? Dir["#{path}/**/*.rb"].sort : path
       end.flatten.each do |path|
         dsl.instance_eval(File.read(path), path)
       end
-
-      # Drop into the REPL for exploratory rule development.
-      dsl.instance_eval { binding.pry } if with_repl
-
       dsl.rules
     end
 

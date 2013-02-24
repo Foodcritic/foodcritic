@@ -128,7 +128,6 @@ module FoodCritic
       expect_output 'foodcritic [cookbook_paths]'
       expect_usage_option('c', 'chef-version VERSION', 'Only check against rules valid for this version of Chef.')
       expect_usage_option('f', 'epic-fail TAGS', 'Fail the build if any of the specified tags are matched.')
-      expect_usage_option('r', '[no-]repl', 'Drop into a REPL for interactive rule editing.')
       expect_usage_option('t', 'tags TAGS', 'Only check against rules with the specified tags.')
       expect_usage_option('C', '[no-]context', 'Show lines matched against rather than the default summary.')
       expect_usage_option('I', 'include PATH', 'Additional rule file path(s) to load.')
@@ -182,7 +181,6 @@ module FoodCritic
     #
     # @param [Array] cmd_args The command line arguments.
     def run_lint(cmd_args)
-      cmd_args.unshift '--repl' if with_repl?
       in_current_dir do
         show_context = cmd_args.include?('-C')
         review, @status = FoodCritic::Linter.check(CommandLine.new(cmd_args))
@@ -195,10 +193,6 @@ module FoodCritic
             "#{review.to_s}\n"
           end
       end
-    end
-
-    def with_repl?
-      (ENV.has_key?('FC_REPL') and ENV['FC_REPL'] == true.to_s)
     end
 
   end

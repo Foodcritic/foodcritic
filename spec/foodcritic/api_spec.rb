@@ -8,6 +8,46 @@ describe FoodCritic::Api do
 
   let(:api) { Object.new.extend(FoodCritic::Api) }
 
+  describe :exposed_api do
+    let(:ignorable_methods) do
+      api.class.ancestors.map{|a| a.public_methods}.flatten.sort.uniq
+    end
+    it "exposes the expected api to rule authors" do
+      (api.public_methods.sort - ignorable_methods).must_equal([
+        :attribute_access,
+        :checks_for_chef_solo?,
+        :chef_dsl_methods,
+        :chef_node_methods,
+        :chef_solo_search_supported?,
+        :cookbook_name,
+        :declared_dependencies,
+        :file_match,
+        :find_resources,
+        :gem_version,
+        :included_recipes,
+        :literal_searches,
+        :match,
+        :notifications,
+        :os_command?,
+        :read_ast,
+        :resource_action?,
+        :resource_attribute,
+        :resource_attribute?,
+        :resource_attributes,
+        :resource_attributes_by_type,
+        :resource_name,
+        :resource_type,
+        :resources_by_type,
+        :ruby_code?,
+        :searches,
+        :standard_cookbook_subdirs,
+        :template_file,
+        :template_paths,
+        :valid_query?
+      ])
+    end
+  end
+
   describe "#attribute_access" do
     let(:ast) { MiniTest::Mock.new }
     it "returns empty if the provided ast does not support XPath" do

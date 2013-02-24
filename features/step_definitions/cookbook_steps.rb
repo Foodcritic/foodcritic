@@ -1230,13 +1230,6 @@ Given 'I have installed the lint tool' do
 
 end
 
-Given 'I have started the lint tool with the REPL enabled' do
-  @repl_match_string = 'Here is a placeholder recipe'
-  write_recipe %Q{
-    log "#{@repl_match_string}"
-  }
-end
-
 Given /^(?:a cookbook that has|the cookbook has) a Gemfile that includes rake and foodcritic$/ do
   buildable_gemfile
 end
@@ -1295,14 +1288,6 @@ end
 
 When 'I check the recipe' do
   run_lint(["cookbooks/example/recipes/default.rb"])
-end
-
-When /^I define a new rule( and reset the list of rules| that includes a binding)?$/ do |qualifier|
-  @rule_code, @rule_name = 'FC000', 'Like caprese and with the basil'
-  repl_define_rule(@rule_code, @rule_name,
-                  :reset_rules => ! /reset/.match(qualifier).nil?,
-                  :with_binding => ! /binding/.match(qualifier).nil?,
-                  :rule_match_string => @repl_match_string)
 end
 
 When 'I list the available build tasks' do
@@ -1365,45 +1350,6 @@ end
 
 Then /^an? '([^']+)' error should be displayed$/ do |expected_error|
   last_error.should include expected_error
-end
-
-Then 'I should be able to see the AST from inside the rule' do
-  repl_ast_available?(@repl_match_string).should be_true
-end
-
-Then 'I should be able to see the full list of DSL methods from inside the rule' do
-  repl_api_methods.should == [
-    :attribute_access,
-    :checks_for_chef_solo?,
-    :chef_dsl_methods,
-    :chef_node_methods,
-    :chef_solo_search_supported?,
-    :cookbook_name,
-    :declared_dependencies,
-    :file_match,
-    :find_resources,
-    :gem_version,
-    :included_recipes,
-    :literal_searches,
-    :match,
-    :notifications,
-    :os_command?,
-    :read_ast,
-    :resource_action?,
-    :resource_attribute,
-    :resource_attribute?,
-    :resource_attributes,
-    :resource_attributes_by_type,
-    :resource_name,
-    :resource_type,
-    :resources_by_type,
-    :ruby_code?,
-    :searches,
-    :standard_cookbook_subdirs,
-    :template_file,
-    :template_paths,
-    :valid_query?
-  ]
 end
 
 Then /^the bare attribute keys warning 044 should not be displayed against the (?:local variable|library call)$/ do
@@ -1544,14 +1490,6 @@ Then /^the resource sets internal attribute warning 027 should be (not )?shown$/
   expect_warning('FC027', :line => nil, :expect_warning => should_not.nil?)
 end
 
-Then 'the review should include the matching rules' do
-  repl_review_includes_match?(@rule_code, @rule_name).should be_true
-end
-
-Then /^the rule should (not )?be visible in the list of rules$/ do |invisible|
-  repl_rule_exists?(@rule_code, @rule_name).should == invisible.nil?
-end
-
 Then /^the service resource warning 005 should( not)? be visible$/ do |dont_show|
   expect_warning('FC005', :line => dont_show ? 2 : 7, :expect_warning => ! dont_show)
 end
@@ -1586,10 +1524,6 @@ end
 
 Then 'the unrecognised attribute warning 009 should be displayed against the correct resource' do
   expect_warning('FC009', :line => 7)
-end
-
-Then 'the usage text should include an option for launching a REPL' do
-  expect_usage_option('r', '[no-]repl', 'Drop into a REPL for interactive rule editing.')
 end
 
 Then 'the usage text should include an option for specifying tags that will fail the build' do
