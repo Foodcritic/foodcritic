@@ -48,6 +48,7 @@ module FoodCritic
       'FC043' => 'Prefer new notification syntax',
       'FC044' => 'Avoid bare attribute keys',
       'FC045' => 'Consider setting cookbook name in metadata',
+      'FC046' => 'Attribute assignment uses assign unless nil',
       'FCTEST001' => 'Test Rule'
     }
 

@@ -22,6 +22,10 @@ Given 'a cookbook attributes file that sets an attribute to be the result of a l
   }
 end
 
+Given /^a cookbook attributes file with assignment (.*)$/ do |assignment|
+  write_attributes assignment
+end
+
 Given /^a cookbook recipe that declares (too many )?execute resources varying only in the command in branching conditionals$/ do |too_many|
   extra_resource = %q{
     execute "bing" do

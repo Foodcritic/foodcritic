@@ -587,3 +587,9 @@ rule "FC045", "Consider setting cookbook name in metadata" do
     end
   end
 end
+
+rule "FC046", "Attribute assignment uses assign unless nil" do
+  attributes do |ast|
+    attribute_access(ast).map{|a| a.xpath('ancestor::opassign/op[@value="||="]')}
+  end
+end
