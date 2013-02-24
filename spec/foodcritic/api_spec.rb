@@ -41,6 +41,7 @@ describe FoodCritic::Api do
         :ruby_code?,
         :searches,
         :standard_cookbook_subdirs,
+	:supported_platforms,
         :template_file,
         :template_paths,
         :valid_query?
@@ -1563,6 +1564,68 @@ describe FoodCritic::Api do
     end
     it "does not include a subdirectory of a subdirectory" do
       api.standard_cookbook_subdirs.wont_include 'default'
+    end
+  end
+
+  describe "#supported_platforms" do
+    def supports(str)
+      api.supported_platforms(parse_ast(str))
+    end
+    it "returns an empty if no platforms are specified as supported" do
+      supports("name 'example'").must_be_empty
+    end
+    describe :ignored_support_declarations do
+      it "should ignore supports without any arguments" do
+        supports('supports').must_be_empty
+      end
+      it "should ignore supports where an embedded string expression is used" do
+        supports('supports "red#{hat}"').must_be_empty
+      end
+    end
+    it "returns the supported platform names if multiple are given" do
+      supports(%q{
+        supports "redhat"
+        supports "scientific"
+      }).must_equal([{:platform => 'redhat', :versions => []},
+	             {:platform => 'scientific', :versions => []}])
+    end
+    it "sorts the platform names in alphabetical order" do
+      supports(%q{
+        supports "scientific"
+        supports "redhat"
+      }).must_equal([{:platform => 'redhat', :versions => []},
+	             {:platform => 'scientific', :versions => []}])
+    end
+    it "handles support declarations that include version constraints" do
+      supports(%q{
+        supports "redhat", '>= 6'
+      }).must_equal([{:platform => 'redhat', :versions => ['>= 6']}])
+    end
+    it "handles support declarations that include obsoleted version constraints" do
+      supports(%q{
+        supports 'redhat', '> 5.0', '< 7.0'
+        supports 'scientific', '> 5.0', '< 6.0'
+      }).must_equal([{:platform => 'redhat', :versions => ['> 5.0', '< 7.0']},
+                     {:platform => 'scientific', :versions => ['> 5.0', '< 6.0']}])
+    end
+    it "normalises platform symbol references to strings" do
+      supports(%q{
+        supports :ubuntu
+      }).must_equal([{:platform => 'ubuntu', :versions => []}])
+    end
+    it "handles support declarations as symbols that include version constraints" do
+      supports(%q{
+        supports :redhat, '>= 6'
+      }).must_equal([{:platform => 'redhat', :versions => ['>= 6']}])
+    end
+    it "understands support declarations that use word lists" do
+      supports(%q{
+        %w{redhat centos fedora}.each do |os|
+	  supports os
+	end
+      }).must_equal([{:platform => 'centos', :versions => []},
+                     {:platform => 'fedora', :versions => []},
+	             {:platform => 'redhat', :versions => []}])
     end
   end
 

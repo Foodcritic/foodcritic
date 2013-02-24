@@ -105,12 +105,7 @@ module FoodCritic
       #     %w{foo bar baz}.each do |cbk|
       #       depends cbk
       #     end
-      var_ref = ast.xpath(%q{//command[ident/@value='depends']/
-        descendant::var_ref/ident})
-      unless var_ref.empty?
-        deps += ast.xpath(%Q{//block_var/params/ident#{var_ref.first['value']}/
-          ancestor::method_add_block/call/descendant::tstring_content})
-      end
+      deps = deps.to_a + word_list_values(ast, "//command[ident/@value='depends']")
       deps.map{|dep| dep['value']}
     end
 
@@ -298,6 +293,20 @@ module FoodCritic
          templates}
     end
 
+    # Platforms declared as supported in cookbook metadata
+    def supported_platforms(ast)
+      platforms = ast.xpath('//command[ident/@value="supports"]/
+        descendant::*[self::string_literal or self::symbol_literal][position() = 1]
+        [self::symbol_literal or count(descendant::string_add) = 1]/
+        descendant::*[self::tstring_content | self::ident]')
+      platforms = platforms.to_a + word_list_values(ast, "//command[ident/@value='supports']")
+      platforms.map do |platform|
+        versions = platform.xpath('ancestor::args_add[position() > 1]/
+	  string_literal/descendant::tstring_content/@value').map{|v| v.to_s}
+        {:platform => platform['value'], :versions => versions}
+      end.sort{|a,b| a[:platform] <=> b[:platform]}
+    end
+
     # Template filename
     def template_file(resource)
       if resource['source']
@@ -461,6 +470,16 @@ module FoodCritic
           (call.xpath("descendant::ident").size > 1 and
             ! node_method?(call.xpath("ident/@value").to_s.to_sym, cookbook_dir))
       end.sort
+    end
+
+    def word_list_values(ast, xpath)
+      var_ref = ast.xpath("#{xpath}/descendant::var_ref/ident")
+      if var_ref.empty?
+        []
+      else
+        ast.xpath(%Q{descendant::block_var/params/ident#{var_ref.first['value']}/
+          ancestor::method_add_block/call/descendant::tstring_content})
+      end
     end
 
   end

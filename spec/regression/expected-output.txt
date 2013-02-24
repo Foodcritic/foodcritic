@@ -270,39 +270,11 @@ FC023: Prefer conditional attributes: ./users/providers/manage.rb:101
 FC023: Prefer conditional attributes: ./wordpress/recipes/default.rb:53
 FC023: Prefer conditional attributes: ./wordpress/recipes/default.rb:112
 FC023: Prefer conditional attributes: ./yum/providers/key.rb:59
-FC024: Consider adding platform equivalents: ./emacs/attributes/default.rb:22
-FC024: Consider adding platform equivalents: ./glance/attributes/default.rb:64
-FC024: Consider adding platform equivalents: ./horizon/recipes/server.rb:144
-FC024: Consider adding platform equivalents: ./imagemagick/recipes/default.rb:21
-FC024: Consider adding platform equivalents: ./jetty/recipes/default.rb:22
-FC024: Consider adding platform equivalents: ./jetty/recipes/default.rb:43
-FC024: Consider adding platform equivalents: ./jpackage/recipes/default.rb:23
-FC024: Consider adding platform equivalents: ./keystone/attributes/default.rb:65
-FC024: Consider adding platform equivalents: ./man/recipes/default.rb:23
-FC024: Consider adding platform equivalents: ./memcached/recipes/default.rb:26
-FC024: Consider adding platform equivalents: ./memcached/recipes/default.rb:40
 FC024: Consider adding platform equivalents: ./munin/attributes/default.rb:34
 FC024: Consider adding platform equivalents: ./mysql/recipes/server.rb:130
 FC024: Consider adding platform equivalents: ./mysql/recipes/server.rb:132
-FC024: Consider adding platform equivalents: ./nova/attributes/default.rb:128
-FC024: Consider adding platform equivalents: ./nova/recipes/libvirt.rb:36
-FC024: Consider adding platform equivalents: ./nova/recipes/libvirt.rb:44
-FC024: Consider adding platform equivalents: ./nova/recipes/libvirt.rb:96
-FC024: Consider adding platform equivalents: ./nova/recipes/nova-common.rb:22
-FC024: Consider adding platform equivalents: ./passenger_apache2/recipes/default.rb:31
 FC024: Consider adding platform equivalents: ./pdns/attributes/default.rb:24
-FC024: Consider adding platform equivalents: ./postgresql/attributes/default.rb:86
-FC024: Consider adding platform equivalents: ./rsync/attributes/rsyncd.rb:3
-FC024: Consider adding platform equivalents: ./snort/attributes/default.rb:23
-FC024: Consider adding platform equivalents: ./snort/recipes/default.rb:60
-FC024: Consider adding platform equivalents: ./stompserver/recipes/default.rb:20
-FC024: Consider adding platform equivalents: ./tomcat/attributes/default.rb:27
-FC024: Consider adding platform equivalents: ./tomcat/recipes/default.rb:40
-FC024: Consider adding platform equivalents: ./tomcat/recipes/default.rb:49
 FC024: Consider adding platform equivalents: ./transmission/recipes/default.rb:42
-FC024: Consider adding platform equivalents: ./zenoss/attributes/default.rb:36
-FC024: Consider adding platform equivalents: ./zenoss/recipes/server.rb:23
-FC024: Consider adding platform equivalents: ./zenoss/recipes/server.rb:109
 FC025: Prefer chef_gem to compile-time gem install: ./transmission/recipes/default.rb:25
 FC025: Prefer chef_gem to compile-time gem install: ./transmission/recipes/default.rb:31
 FC029: No leading cookbook name in recipe metadata: ./apparmor/metadata.rb:8

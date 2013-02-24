@@ -1268,6 +1268,19 @@ Given /^a recipe that uses include_recipe$/ do
   }
 end
 
+Given /^the cookbook metadata declares support for (.*)$/ do |supported_platforms|
+  write_metadata(supported_platforms.split(',').map do |platform|
+    "supports '#{platform}'"
+  end.join("\n"))
+end
+
+Given 'the cookbook metadata declares support with versions specified' do
+  write_metadata %q{
+    supports 'redhat', '>= 6'
+    supports 'scientific', '>= 6'
+  }.strip
+end
+
 When /^I check the cookbook specifying ([^ ]+) as the Chef version$/ do |version|
   options = ['-c', version, 'cookbooks/example']
   in_current_dir do
