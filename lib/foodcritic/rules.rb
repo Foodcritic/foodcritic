@@ -226,10 +226,11 @@ rule "FC018", "LWRP uses deprecated notification syntax" do
   end
 end
 
-rule "FC019", "Access node attributes in a consistent manner" do
+rule "FC019", "Access node attributes consistently with either strings or symbols" do
   tags %w{style attributes}
   cookbook do |cookbook_dir|
-    asts = {}; files = Dir["#{cookbook_dir}/*/*.rb"].reject do |file|
+    asts = {}
+    files = Dir["#{cookbook_dir}/*/*.rb"].reject do |file|
       relative_path = Pathname.new(file).relative_path_from(Pathname.new(cookbook_dir))
       relative_path.to_s.split(File::SEPARATOR).include?('spec')
     end.map do |file|
