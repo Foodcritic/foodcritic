@@ -614,7 +614,7 @@ Given /^a cookbook recipe with a resource that (notifies|subscribes) a ([^ ]+) t
   }
 end
 
-Given 'a cookbook recipe with a resource that uses old notification syntax' do
+Given 'a cookbook recipe with a resource that uses the old notification syntax' do
   write_recipe %q{
     template "/etc/www/configures-apache.conf" do
       notifies :restart, resources(:service => "apache")
