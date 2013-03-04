@@ -565,6 +565,7 @@ end
 
 rule "FC043", "Prefer new notification syntax" do
   tags %w{style notifications deprecated}
+  applies_to {|version| version >= gem_version("0.9.10")}
   recipe do |ast|
     find_resources(ast).select do |resource|
       notifications(resource).any?{|notify| notify[:style] == :old}

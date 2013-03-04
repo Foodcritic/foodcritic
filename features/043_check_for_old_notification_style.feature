@@ -18,3 +18,18 @@ Feature: Check for old notification style
     Given a cookbook recipe with a resource that uses the old notification syntax
      When I check the cookbook
      Then the prefer new notification syntax warning 043 should be displayed
+
+  Scenario Outline: Applicability by Chef version
+    Given a cookbook recipe with a resource that uses the old notification syntax
+     When I check the cookbook specifying <version> as the Chef version
+     Then the prefer new notification syntax warning 043 <displayed> be displayed
+  Examples:
+     | version | displayed  |
+     | 0.7.6   | should not |
+     | 0.8.16  | should not |
+     | 0.9.0   | should not |
+     | 0.9.10  | should     |
+     | 0.9.18  | should     |
+     | 0.10.0  | should     |
+     | 10.24.0 | should     |
+     | 11.4.0  | should     |
