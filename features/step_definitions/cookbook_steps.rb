@@ -1,5 +1,9 @@
-Given /^a ([a-z_])+ resource declared with the mode (.*)$/ do |resource,mode|
-  recipe_resource_with_mode(resource, mode)
+Given /^a ([a-z_])+ resource declared with the mode ([^\s]*)(?: ignored from (.*))?$/ do |resource,mode,ignored_rule|
+  recipe_resource_with_mode(resource, mode, ignored_rule)
+end
+
+Given /^the line is ignored from (.*)$/ do |resource,mode|
+  write_file "cookbooks/#{cookbook_name}/recipes/default.rb", content.strip
 end
 
 Given 'a cookbook attributes file that declares and refers to a local variable' do
