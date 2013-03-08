@@ -70,6 +70,8 @@ module FoodCritic
             rule_matches += matches(rule.cookbook, cookbook_dir(file))
           end
 
+          remove_ignored!(rule_matches, rule, file)
+
           # Convert the matches into warnings
           rule_matches.each do |match|
             warnings << Warning.new(rule, {:filename => file}.merge(match))
@@ -94,6 +96,16 @@ module FoodCritic
     end
 
     private
+
+    def remove_ignored!(matches, rule, file)
+      matches.reject! do |m|
+        (
+          (line = m[:line]) &&
+          File.exist?(file) &&
+          File.readlines(file)[line-1].to_s =~ /# ignore #{rule.code}/
+        )
+      end
+    end
 
     # Some rules are version specific.
     def applies_to_version?(rule, version)

@@ -237,10 +237,11 @@ module FoodCritic
     #
     # @param [String] type The type of resource (file, template)
     # @param [String] mode The file mode as a string
-    def recipe_resource_with_mode(type, mode)
+    # @param [String] code of rule that is ignored
+    def recipe_resource_with_mode(type, mode, ignored_rule=nil)
       source_att = type == 'template' ? 'source "foo.erb"' : ''
       write_recipe %Q{
-        #{type} "/tmp/something" do
+        #{type} "/tmp/something" do#{ " # ignore #{ignored_rule}" if ignored_rule}
           #{source_att}
           owner "root"
           group "root"
