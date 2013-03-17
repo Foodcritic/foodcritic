@@ -1482,7 +1482,7 @@ Then /^the debugger breakpoint warning 030 should be (not )?shown against the (.
   expect_warning('FC030', :line => nil, :expect_warning => should_not.nil?, :file => filename)
 end
 
-Then /^the file mode warning (\d+) should be (valid|invalid)$/ do |code, valid|
+Then /^the warning (\d+) should be (valid|invalid)$/ do |code, valid|
   code = "FC#{code}"
   valid == 'valid' ? expect_no_warning(code) : expect_warning(code)
 end
