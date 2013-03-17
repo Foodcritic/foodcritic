@@ -1,5 +1,9 @@
-Given /^a ([a-z_])+ resource declared with the mode ([^\s]*)(?: ignored from '(.*)')?$/ do |resource,mode,ignored_rule|
-  recipe_resource_with_mode(resource, mode, ignored_rule)
+Given /a file with multiple errors on 1 line(?: ignored from '(.*)')?/ do |ignored_rules|
+  write_file "cookbooks/example/recipes/default.rb", %Q{node['run_state']['nginx_force_recompile'] = "\#{foo}" # ~#{ignored_rules}}
+end
+
+Given /^a ([a-z_])+ resource declared with the mode ([^\s]*)(?: ignored from '(.*)')?$/ do |resource,mode,ignored_rules|
+  recipe_resource_with_mode(resource, mode, ignored_rules)
 end
 
 Given /^the line is ignored from (.*)$/ do |resource,mode|
@@ -1478,8 +1482,9 @@ Then /^the debugger breakpoint warning 030 should be (not )?shown against the (.
   expect_warning('FC030', :line => nil, :expect_warning => should_not.nil?, :file => filename)
 end
 
-Then /^the file mode warning 006 should be (valid|invalid)$/ do |valid|
-  valid == 'valid' ? expect_no_warning('FC006') : expect_warning('FC006')
+Then /^the file mode warning (\d+) should be (valid|invalid)$/ do |code, valid|
+  code = "FC#{code}"
+  valid == 'valid' ? expect_no_warning(code) : expect_warning(code)
 end
 
 Then /^the incorrect platform usage warning 028 should be (not )?shown$/ do |should_not|

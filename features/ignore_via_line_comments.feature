@@ -23,3 +23,21 @@ Feature: Ignoring rules on per line basis
     Given a resource resource declared with the mode 644 ignored from 'FC003, FC009'
     When I check the cookbook
     Then the file mode warning 006 should be invalid
+
+  Scenario: File with multiple errors on 1 line
+    Given a file with multiple errors on 1 line
+    When I check the cookbook
+    Then the file mode warning 002 should be invalid
+    Then the file mode warning 039 should be invalid
+
+  Scenario: Ignoring multiple the errors on 1 line
+    Given a file with multiple errors on 1 line ignored from 'FC002, FC039'
+    When I check the cookbook
+    Then the file mode warning 002 should be valid
+    Then the file mode warning 039 should be valid
+
+  Scenario: Ignoring 1 of multiple errors on 1 line
+    Given a file with multiple errors on 1 line ignored from 'FC002'
+    When I check the cookbook
+    Then the file mode warning 002 should be valid
+    Then the file mode warning 039 should be invalid
