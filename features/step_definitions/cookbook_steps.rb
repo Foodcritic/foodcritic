@@ -1,4 +1,4 @@
-Given /^a ([a-z_])+ resource declared with the mode ([^\s]*)(?: ignored from (.*))?$/ do |resource,mode,ignored_rule|
+Given /^a ([a-z_])+ resource declared with the mode ([^\s]*)(?: ignored from '(.*)')?$/ do |resource,mode,ignored_rule|
   recipe_resource_with_mode(resource, mode, ignored_rule)
 end
 

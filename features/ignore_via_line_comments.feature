@@ -10,6 +10,16 @@ Feature: Ignoring rules on per line basis
     Then the file mode warning 006 should be invalid
 
   Scenario: Ignoring
-    Given a resource resource declared with the mode 644 ignored from FC006
+    Given a resource resource declared with the mode 644 ignored from 'FC006'
     When I check the cookbook
     Then the file mode warning 006 should be valid
+
+  Scenario: Ignoring multiple
+    Given a resource resource declared with the mode 644 ignored from 'FC003, FC006, FC009'
+    When I check the cookbook
+    Then the file mode warning 006 should be valid
+
+  Scenario: Ignoring multiple but not ignoring the current
+    Given a resource resource declared with the mode 644 ignored from 'FC003, FC009'
+    When I check the cookbook
+    Then the file mode warning 006 should be invalid

@@ -102,9 +102,21 @@ module FoodCritic
         (
           (line = m[:line]) &&
           File.exist?(file) &&
-          File.readlines(file)[line-1].to_s =~ /# ignore #{rule.code}/
+          line_is_ignoed_from?(File.readlines(file)[line-1], rule.code)
         )
       end
+    end
+
+    # - # ~FC001
+    # - # ~FC001,FC002
+    # - #   ~FC001, FC002
+    # - # ~FC001, ~FC002
+    def line_is_ignoed_from?(line, code)
+      ignores = line.to_s[/#\s+~(.*)/, 1].to_s.
+        split(",").
+        map(&:strip).
+        map { |item| item.sub(/^~/, '') }
+      ignores.include?(code)
     end
 
     # Some rules are version specific.
