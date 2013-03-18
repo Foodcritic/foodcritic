@@ -61,6 +61,21 @@ Given /^a cookbook recipe that declares a ([^ ]+) resource with the ([^ ]+) attr
   }
 end
 
+Given 'a cookbook recipe with a resource that notifies where the action is an expression' do
+  write_recipe %q{
+    notify_action = node['platform_family'] == "mac_os_x" ? :restart : :reload
+
+    service 'svc' do
+      action :nothing
+    end
+
+    template '/tmp/foo' do
+      source 'foo.erb'
+      notifies notify_action, 'service[svc]'
+    end
+  }
+end
+
 Given /^a cookbook recipe with an execute resource named (.*)$/ do |name|
   write_recipe %Q{
     execute "#{name}" do

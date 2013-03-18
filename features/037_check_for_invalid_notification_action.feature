@@ -27,3 +27,8 @@ Feature: Check for invalid notification actions
     | service  | create  | should     |
     | execute  | run     | should not |
     | execute  | execute | should     |
+
+  Scenario: Notification action is an expression
+    Given a cookbook recipe with a resource that notifies where the action is an expression
+     When I check the cookbook
+     Then the invalid notification action warning 037 should not be displayed

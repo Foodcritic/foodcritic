@@ -488,7 +488,7 @@ rule "FC037", "Invalid notification action" do
           when :notifies then n[:resource_type]
           when :subscribes then resource_type(resource).to_sym
         end
-        ! resource_action?(type, n[:action])
+        n[:action].size > 0 and ! resource_action?(type, n[:action])
       end
     end
   end
