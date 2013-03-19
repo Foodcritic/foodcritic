@@ -241,7 +241,7 @@ module FoodCritic
     def recipe_resource_with_mode(type, mode, ignored_rule=nil)
       source_att = type == 'template' ? 'source "foo.erb"' : ''
       write_recipe %Q{
-        #{type} "/tmp/something" do#{ " # ignore #{ignored_rule}" if ignored_rule}
+        #{type} "/tmp/something" do#{ " # ~#{ignored_rule}" if ignored_rule}
           #{source_att}
           owner "root"
           group "root"
