@@ -40,3 +40,8 @@ Feature: Check for Chef Server
     Given a cookbook with a single recipe that searches but checks first (method) to see if this is server
     When I check the cookbook
     Then the check for server warning 003 should not be displayed given we have checked
+
+  Scenario: Search checking for server (alternation)
+    Given a cookbook with a single recipe that searches but checks first (alternation) to see if this is server
+    When I check the cookbook
+    Then the check for server warning 003 should not be displayed against the condition

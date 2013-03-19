@@ -1044,6 +1044,17 @@ Given /^a cookbook with a single recipe that creates a directory resource with (
                         'a literal and interpolated variable' => :literal_and_interpolated_symbol}[path_type])
 end
 
+Given 'a cookbook with a single recipe that searches but checks first (alternation) to see if this is server' do
+  write_recipe %q{
+    if Chef::Config[:solo] || we_dont_want_to_use_search
+      # set up stuff from attributes
+    else
+      # set up stuff from search
+      nodes = search(:node, "hostname:[* TO *] AND chef_environment:#{node.chef_environment}")
+    end
+  }
+end
+
 Given /^a cookbook with a single recipe that searches but checks first( \(string\))? to see if this is server$/ do |str|
   write_recipe %Q{
     if Chef::Config[#{str ? "'solo'" : ":solo"}]
@@ -1463,6 +1474,10 @@ end
 
 Then /^the build will (succeed|fail) with (?:no )?warnings(.*)$/ do |build_outcome, warnings|
   assert_build_result(build_outcome == 'succeed', warnings.gsub(' ', '').split(','))
+end
+
+Then 'the check for server warning 003 should not be displayed against the condition' do
+  expect_warning("FC003", :line => 5, :expect_warning => false)
 end
 
 Then 'the check for server warning 003 should not be displayed given we have checked' do
