@@ -18,7 +18,7 @@ Rake::TestTask.new do |t|
 end
 
 Cucumber::Rake::Task.new(:features) do |t|
-  t.cucumber_opts = ['-f', 'progress']
+  t.cucumber_opts = ['-f', 'progress', '--strict']
   unless ENV.has_key?('FC_FORK_PROCESS') and ENV['FC_FORK_PROCESS'] == true.to_s
     t.cucumber_opts += ['-t', '~@build']
     t.cucumber_opts += ['-t', '~@context']
