@@ -18,6 +18,22 @@ Given 'a cookbook attributes file that sets an attribute to be the result of a l
   }
 end
 
+Given 'a cookbook attributes file with a brace block that takes arguments' do
+  write_attributes %q{
+    foo = {'foo' => 'bar'}
+    foo.each{|k, v| default['waka'][k] = v}
+  }
+end
+
+Given 'a cookbook attributes file with a do block that takes arguments' do
+  write_attributes %q{
+    foo = {'foo' => 'bar'}
+    foo.each do |k, v|
+      default['waka'][k] = v
+    end
+  }
+end
+
 Given /^a cookbook attributes file with assignment (.*)$/ do |assignment|
   write_attributes assignment
 end
@@ -1417,6 +1433,11 @@ end
 
 Then /^an? '([^']+)' error should be displayed$/ do |expected_error|
   last_error.should include expected_error
+end
+
+Then /^the bare attribute keys warning 044 should not be displayed against the (brace|do) block$/ do |block_type|
+  line = block_type == 'brace' ? 2 : 3
+  expect_warning 'FC044', {:expect_warning => false, :line => line, :file_type => :attributes}
 end
 
 Then /^the bare attribute keys warning 044 should not be displayed against the (?:local variable|library call)$/ do

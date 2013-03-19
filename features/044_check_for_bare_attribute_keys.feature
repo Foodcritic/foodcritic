@@ -28,6 +28,15 @@ Feature: Check for bare attribute keys
      When I check the cookbook
      Then the bare attribute keys warning 044 should not be displayed against the local variable
 
+  Scenario Outline: Block variable
+    Given a cookbook attributes file with a <block_type> block that takes arguments
+     When I check the cookbook
+     Then the bare attribute keys warning 044 should not be displayed against the <block_type> block
+  Examples:
+    | block_type |
+    | do         |
+    | brace      |
+
   Scenario: Attribute set to library method call
     Given a cookbook attributes file that sets an attribute to be the result of a library call
      When I check the cookbook

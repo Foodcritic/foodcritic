@@ -579,7 +579,10 @@ rule "FC044", "Avoid bare attribute keys" do
     declared = ast.xpath('//descendant::var_field/ident/@value').map{|v| v.to_s}
     ast.xpath('//assign/*[self::vcall or self::var_ref]
       [count(child::kw) = 0]/ident').select do |v|
-        (v['value'] != 'secure_password') && ! declared.include?(v['value'])
+        (v['value'] != 'secure_password') &&
+          ! declared.include?(v['value']) &&
+	  ! v.xpath("ancestor::*[self::brace_block or self::do_block]/block_var/
+                     descendant::ident/@value='#{v['value']}'")
     end
   end
 end
