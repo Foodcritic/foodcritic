@@ -1,15 +1,3 @@
-Given /a file with multiple errors on 1 line(?: ignored from '(.*)')?/ do |ignored_rules|
-  write_file "cookbooks/example/recipes/default.rb", %Q{node['run_state']['nginx_force_recompile'] = "\#{foo}" # ~#{ignored_rules}}
-end
-
-Given /^a ([a-z_])+ resource declared with the mode ([^\s]*)(?: ignored from '(.*)')?$/ do |resource,mode,ignored_rules|
-  recipe_resource_with_mode(resource, mode, ignored_rules)
-end
-
-Given /^the line is ignored from (.*)$/ do |resource,mode|
-  write_file "cookbooks/#{cookbook_name}/recipes/default.rb", content.strip
-end
-
 Given 'a cookbook attributes file that declares and refers to a local variable' do
   write_attributes %q{
     master = search(:nodes, 'foo:master')
@@ -1097,12 +1085,20 @@ Given /^a cookbook with metadata that (specifies|does not specify) the cookbook 
   }
 end
 
+Given /^a ([a-z_]+) resource declared with the mode ([^\s]+)(?: with comment (.*)?)?$/ do |resource,mode,comment|
+  recipe_resource_with_mode(resource, mode, comment)
+end
+
 Given 'a file resource declared without a mode' do
   write_recipe %q{
     file "/tmp/something" do
       action :delete
     end
   }
+end
+
+Given /^a file with multiple errors on one line(?: with comment (.*))?$/ do |comment|
+  write_file "cookbooks/example/recipes/default.rb", %Q{node['run_state']['nginx_force_recompile'] = "\#{foo}"#{comment}}
 end
 
 Given /^a Rakefile that defines (no lint task|a lint task with no block|a lint task with an empty block|a lint task with a block setting options to)(.*)?$/ do |task,options|
@@ -1424,8 +1420,9 @@ Then 'the attribute consistency warning 019 should not be displayed for the attr
   expect_warning('FC019', :file_type => :attributes, :line => 1, :expect_warning => false)
 end
 
-Then /^the warning should (not )?be displayed$/ do |should_not|
-  expect_warning 'FCTEST001', {:expect_warning => should_not.nil?}
+Then /^the warning ([0-9]+ )?should (not )?be (?:displayed|shown)$/ do |warning,should_not|
+  code = warning.nil? ? 'FCTEST001' : "FC#{warning.strip}"
+  expect_warning code, {:expect_warning => should_not.nil?}
 end
 
 Then /^the (?:[a-zA-Z \-_]+) warning ([0-9]+) should (not )?be displayed(?: against the (attributes|definition|metadata|provider|resource|README.md|README.rdoc) file)?( below)?$/ do |code, no_display, file, warning_only|

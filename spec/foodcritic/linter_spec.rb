@@ -45,45 +45,4 @@ describe FoodCritic::Linter do
     end
   end
 
-  describe "#line_is_ignored_from?" do
-    it "does not ignore normal line" do
-      linter.send(:line_is_ignored_from?, "X", "X").must_equal false
-    end
-
-    it "does not ignore nil" do
-      linter.send(:line_is_ignored_from?, nil, "X").must_equal false
-    end
-
-    it "does not ignore empty comment" do
-      linter.send(:line_is_ignored_from?, "#", "X").must_equal false
-    end
-
-    it "ignores single" do
-      linter.send(:line_is_ignored_from?, "# ~X", "X").must_equal true
-    end
-
-    it "ignores with spacing single" do
-      linter.send(:line_is_ignored_from?, "#   ~X", "X").must_equal true
-    end
-
-    it "does not ignore invalid" do
-      linter.send(:line_is_ignored_from?, "# X", "X").must_equal false
-    end
-
-    it "does not ignore unfound in multiple" do
-      linter.send(:line_is_ignored_from?, "# ~X,Y", "Z").must_equal false
-    end
-
-    it "ignores multiple" do
-      linter.send(:line_is_ignored_from?, "# ~X,Y", "Y").must_equal true
-    end
-
-    it "ignores multiple with spacing" do
-      linter.send(:line_is_ignored_from?, "# ~X, Y", "Y").must_equal true
-    end
-
-    it "ignores multiple with repeated ~" do
-      linter.send(:line_is_ignored_from?, "# ~X, ~Y", "Y").must_equal true
-    end
-  end
 end

@@ -70,7 +70,7 @@ module FoodCritic
             rule_matches += matches(rule.cookbook, cookbook_dir(file))
           end
 
-          remove_ignored!(rule_matches, rule, file)
+          rule_matches = remove_ignored(rule_matches, rule, file)
 
           # Convert the matches into warnings
           rule_matches.each do |match|
@@ -97,26 +97,20 @@ module FoodCritic
 
     private
 
-    def remove_ignored!(matches, rule, file)
-      matches.reject! do |m|
-        (
-          (line = m[:line]) &&
-          File.exist?(file) &&
-          line_is_ignored_from?(File.readlines(file)[line-1], rule.code)
-        )
+    def remove_ignored(matches, rule, file)
+      matches.reject do |m|
+        (line = m[:line]) && File.exist?(file) &&
+           ignore_line_match?(File.readlines(file)[line-1], rule)
       end
     end
 
-    # - # ~FC001
-    # - # ~FC001,FC002
-    # - #   ~FC001, FC002
-    # - # ~FC001, ~FC002
-    def line_is_ignored_from?(line, code)
-      ignores = line.to_s[/#\s+~(.*)/, 1].to_s.
-        split(",").
-        map(&:strip).
-        map { |item| item.sub(/^~/, '') }
-      ignores.include?(code)
+    def ignore_line_match?(line, rule)
+      ignores = line.to_s[/\s+#\s*(.*)/, 1]
+      if ignores and ignores.include?('~')
+        ! matching_tags?(ignores.split(/[ ,]/), rule.tags)
+      else
+        false
+      end
     end
 
     # Some rules are version specific.

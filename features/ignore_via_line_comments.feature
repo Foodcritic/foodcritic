@@ -2,42 +2,40 @@ Feature: Ignoring rules on per line basis
 
   To ignore specific warnings on some lines
   As a developer
-  I want to add a ignore comment
+  I want to add an ignore comment
 
-  Scenario: Not ignoring
-    Given a resource resource declared with the mode 644
+  Scenario Outline: Ignoring
+    Given a file resource declared with the mode 644 with comment <comment>
     When I check the cookbook
-    Then the warning 006 should be invalid
+    Then the warning 006 should <shown>
+  Examples:
+    | comment                      | shown        |
+    |                              | be shown     |
+    | #                            | be shown     |
+    | # foo bar baz                | be shown     |
+    | # ~FC006                     | not be shown |
+    | # ~FC006 is a false positive | not be shown |
+    | #~FC006                      | not be shown |
+    | #~FC022                      | be shown     |
+    | #       ~FC006               | not be shown |
+    | # ~FC003,~FC006,~FC009       | not be shown |
+    | # ~FC003 ~FC006 ~FC009       | not be shown |
+    | # ~FC003,  ~FC006,  ~FC009   | not be shown |
+    | # ~FC003,~FC009              | be shown     |
+    | # FC006                      | be shown     |
+    | # ~ FC006                    | be shown     |
+    | # fc006                      | be shown     |
+    | # ~006                       | be shown     |
+    | # ~style                     | be shown     |
+    | # ~files                     | not be shown |
 
-  Scenario: Ignoring
-    Given a resource resource declared with the mode 644 ignored from 'FC006'
+  Scenario Outline: Multiple warnings
+    Given a file with multiple errors on one line with comment <comment>
     When I check the cookbook
-    Then the warning 006 should be valid
-
-  Scenario: Ignoring multiple
-    Given a resource resource declared with the mode 644 ignored from 'FC003, FC006, FC009'
-    When I check the cookbook
-    Then the warning 006 should be valid
-
-  Scenario: Ignoring multiple but not ignoring the current
-    Given a resource resource declared with the mode 644 ignored from 'FC003, FC009'
-    When I check the cookbook
-    Then the warning 006 should be invalid
-
-  Scenario: File with multiple errors on 1 line
-    Given a file with multiple errors on 1 line
-    When I check the cookbook
-    Then the warning 002 should be invalid
-    And the warning 039 should be invalid
-
-  Scenario: Ignoring multiple the errors on 1 line
-    Given a file with multiple errors on 1 line ignored from 'FC002, FC039'
-    When I check the cookbook
-    Then the warning 002 should be valid
-    And the warning 039 should be valid
-
-  Scenario: Ignoring 1 of multiple errors on 1 line
-    Given a file with multiple errors on 1 line ignored from 'FC002'
-    When I check the cookbook
-    Then the warning 002 should be valid
-    And the warning 039 should be invalid
+    Then the warnings shown should be <warnings>
+  Examples:
+    | comment         | warnings    |
+    |                 | FC002,FC039 |
+    | # ~FC002,~FC007 | FC002       |
+    | # ~FC002,~FC039 |             |
+    | # ~FC002        | FC039       |
