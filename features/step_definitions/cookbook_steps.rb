@@ -1459,7 +1459,7 @@ end
 
 Then 'the attribute consistency warning 019 should warn on lines 2 and 10 in that order' do
   expected_warnings = [2, 10].map do |line|
-    "FC019: Access node attributes in a consistent manner: cookbooks/example/recipes/default.rb:#{line}"
+    "FC019: Access node attributes consistently with either strings or symbols: cookbooks/example/recipes/default.rb:#{line}"
   end
   expect_output(expected_warnings.join("\n"))
 end

@@ -24,7 +24,7 @@ module FoodCritic
       'FC016' => 'LWRP does not declare a default action',
       'FC017' => 'LWRP does not notify when updated',
       'FC018' => 'LWRP uses deprecated notification syntax',
-      'FC019' => 'Access node attributes in a consistent manner',
+      'FC019' => 'Access node attributes consistently with either strings or symbols',
       'FC021' => 'Resource condition in provider may not behave as expected',
       'FC022' => 'Resource condition within loop may not behave as expected',
       'FC023' => 'Prefer conditional attributes',
