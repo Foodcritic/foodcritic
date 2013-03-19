@@ -450,13 +450,20 @@ module FoodCritic
           standard_attribute_access(ast, options.merge(:type => type))
         end.inject(:+)
       else
-        type = options[:type] == :string ? 'tstring_content' : options[:type]
+        type = if options[:type] == :string
+	         'tstring_content'
+	       else
+                 '*[self::symbol or self::dyna_symbol]'
+	       end
         expr = '//*[self::aref_field or self::aref]'
         expr += '[count(is_att_type(descendant::var_ref/ident/@value)) =
           count(descendant::var_ref/ident/@value)]'
         expr += '[is_att_type(descendant::ident'
         expr += '[not(ancestor::aref/call)]' if options[:ignore_calls]
         expr += "/@value)]/descendant::#{type}"
+	if options[:type] == :string
+          expr += '[count(ancestor::dyna_symbol) = 0]'
+        end
         ast.xpath(expr, AttFilter.new).sort
       end
     end

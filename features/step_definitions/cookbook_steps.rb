@@ -930,6 +930,10 @@ Given 'a cookbook with a single recipe that accesses nested node attributes via 
   write_recipe %q{node[:foo][:foo2] = 'bar'}
 end
 
+Given 'a cookbook with a single recipe that reads node attributes via symbols and quoted_symbols' do
+  write_recipe %q{default[:foo][:'bar-baz']}
+end
+
 Given 'a cookbook with a single recipe that calls a patched node method' do
   write_library 'search', %q{
     class Chef

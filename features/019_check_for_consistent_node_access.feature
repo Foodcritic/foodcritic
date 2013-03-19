@@ -31,6 +31,11 @@ Feature: Check for consistency in node access
       | updates  | vivified,strings |        | shown        |
       | updates  | vivified,symbols |        | shown        |
 
+  Scenario: Quoted symbols
+    Given a cookbook with a single recipe that reads node attributes via symbols and quoted_symbols
+    When I check the cookbook
+    Then the attribute consistency warning 019 should be not shown
+
   Scenario Outline: Ignore node built-in methods
     Given a cookbook with a single recipe that <accesses> node attributes via <read_access_type> and calls node.<method>
     When I check the cookbook
