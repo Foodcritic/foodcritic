@@ -1085,6 +1085,22 @@ Given /^a cookbook with a single recipe that searches but checks first \(method\
   }
 end
 
+Given /^a cookbook with a single recipe that searches but returns first \((oneline|multiline)\) if search is not supported$/ do |format|
+  if format == 'oneline'
+    write_recipe %q{
+      return Chef::Log.warn("This recipe uses search. Chef Solo does not support search.") if Chef::Config[:solo]
+      nodes = search(:node, "hostname:[* TO *] AND chef_environment:#{node.chef_environment}")
+    }
+  else
+    write_recipe %q{
+      if Chef::Config[:solo]
+        return Chef::Log.warn("This recipe uses search. Chef Solo does not support search.")
+      end
+      nodes = search(:node, "hostname:[* TO *] AND chef_environment:#{node.chef_environment}")
+    }
+  end
+end
+
 Given 'a cookbook with a single recipe that searches without checking if this is server' do
   write_recipe %q{nodes = search(:node, "hostname:[* TO *] AND chef_environment:#{node.chef_environment}")}
 end
@@ -1478,6 +1494,11 @@ end
 
 Then 'the check for server warning 003 should not be displayed against the condition' do
   expect_warning("FC003", :line => 5, :expect_warning => false)
+end
+
+Then /^the check for server warning 003 should not be displayed against the search after the (.*) conditional$/ do |format|
+  line = format == 'oneline' ? 2 : 4
+  expect_warning("FC003", :line => line, :expect_warning => false)
 end
 
 Then 'the check for server warning 003 should not be displayed given we have checked' do

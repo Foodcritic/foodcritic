@@ -36,14 +36,16 @@ module FoodCritic
       raise_unless_xpath!(ast)
       # TODO: This expression is too loose, but also will fail to match other
       # types of conditionals.
-      ! ast.xpath(%q{//*[self::if or self::unless]/*[self::aref or
+      (! ast.xpath(%q{//*[self::if or self::unless]/*[self::aref or
         child::aref or self::call]
         [count(descendant::const[@value = 'Chef' or @value = 'Config']) = 2
           and
             (   count(descendant::ident[@value='solo']) > 0
             or  count(descendant::tstring_content[@value='solo']) > 0
             )
-          ]}).empty?
+          ]}).empty?) ||
+      ast.xpath('//if_mod[return][aref/descendant::ident/@value="solo"]/aref/
+        const_path_ref/descendant::const').map{|c|c['value']} == %w{Chef Config}
     end
 
     # Is the [chef-solo-search library](https://github.com/edelight/chef-solo-search)

@@ -93,6 +93,7 @@ describe FoodCritic::Api do
     end
     it "returns false if there is no reference to chef solo" do
       ast.expect :xpath, [], [String]
+      ast.expect :xpath, [], [String]
       refute api.checks_for_chef_solo?(ast)
     end
     it "returns true if there is one reference to chef solo" do
