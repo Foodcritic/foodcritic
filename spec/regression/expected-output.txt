@@ -78,7 +78,6 @@ FC003: Check whether you are running with chef server before using server-specif
 FC003: Check whether you are running with chef server before using server-specific features: ./ossec/recipes/server.rb:31
 FC003: Check whether you are running with chef server before using server-specific features: ./partial_search/libraries/partial_search.rb:65
 FC003: Check whether you are running with chef server before using server-specific features: ./resolver/recipes/from_server_role.rb:21
-FC003: Check whether you are running with chef server before using server-specific features: ./rsyslog/recipes/client.rb:26
 FC003: Check whether you are running with chef server before using server-specific features: ./samba/recipes/server.rb:32
 FC003: Check whether you are running with chef server before using server-specific features: ./sbuild/recipes/default.rb:56
 FC003: Check whether you are running with chef server before using server-specific features: ./ssh_known_hosts/recipes/default.rb:23
@@ -211,7 +210,11 @@ FC019: Access node attributes in a consistent manner: chef-server/libraries/omni
 FC019: Access node attributes in a consistent manner: chef/attributes/default.rb:38
 FC019: Access node attributes in a consistent manner: chef/attributes/default.rb:39
 FC019: Access node attributes in a consistent manner: chef/attributes/default.rb:50
+FC019: Access node attributes in a consistent manner: chef/attributes/server_proxy.rb:26
 FC019: Access node attributes in a consistent manner: database/libraries/provider_database_postgresql.rb:113
+FC019: Access node attributes in a consistent manner: database/recipes/ebs_backup.rb:31
+FC019: Access node attributes in a consistent manner: database/recipes/ebs_volume.rb:22
+FC019: Access node attributes in a consistent manner: database/recipes/ebs_volume.rb:86
 FC019: Access node attributes in a consistent manner: drbd/attributes/default.rb:1
 FC019: Access node attributes in a consistent manner: drbd/attributes/default.rb:2
 FC019: Access node attributes in a consistent manner: drbd/attributes/default.rb:3
@@ -226,18 +229,50 @@ FC019: Access node attributes in a consistent manner: dynect/recipes/a_record.rb
 FC019: Access node attributes in a consistent manner: dynect/recipes/a_record.rb:27
 FC019: Access node attributes in a consistent manner: dynect/recipes/a_record.rb:28
 FC019: Access node attributes in a consistent manner: dynect/recipes/a_record.rb:29
+FC019: Access node attributes in a consistent manner: dynect/recipes/ec2.rb:23
+FC019: Access node attributes in a consistent manner: dynect/recipes/ec2.rb:25
+FC019: Access node attributes in a consistent manner: dynect/recipes/ec2.rb:26
+FC019: Access node attributes in a consistent manner: dynect/recipes/ec2.rb:40
 FC019: Access node attributes in a consistent manner: gecode/recipes/package.rb:29
 FC019: Access node attributes in a consistent manner: gecode/recipes/package.rb:30
 FC019: Access node attributes in a consistent manner: gecode/recipes/package.rb:51
 FC019: Access node attributes in a consistent manner: gecode/recipes/package.rb:56
 FC019: Access node attributes in a consistent manner: munin/attributes/default.rb:27
+FC019: Access node attributes in a consistent manner: munin/recipes/client.rb:36
+FC019: Access node attributes in a consistent manner: munin/recipes/server.rb:20
+FC019: Access node attributes in a consistent manner: munin/recipes/server.rb:24
+FC019: Access node attributes in a consistent manner: munin/recipes/server.rb:25
+FC019: Access node attributes in a consistent manner: munin/recipes/server.rb:28
+FC019: Access node attributes in a consistent manner: munin/recipes/server.rb:29
+FC019: Access node attributes in a consistent manner: munin/recipes/server.rb:46
+FC019: Access node attributes in a consistent manner: munin/recipes/server.rb:49
+FC019: Access node attributes in a consistent manner: munin/recipes/server.rb:51
+FC019: Access node attributes in a consistent manner: munin/recipes/server.rb:54
+FC019: Access node attributes in a consistent manner: munin/recipes/server.rb:57
+FC019: Access node attributes in a consistent manner: munin/recipes/server.rb:64
+FC019: Access node attributes in a consistent manner: munin/recipes/server_apache.rb:10
+FC019: Access node attributes in a consistent manner: munin/recipes/server_apache.rb:13
+FC019: Access node attributes in a consistent manner: munin/recipes/server_apache.rb:15
+FC019: Access node attributes in a consistent manner: munin/recipes/server_apache.rb:18
+FC019: Access node attributes in a consistent manner: munin/recipes/server_apache.rb:21
+FC019: Access node attributes in a consistent manner: munin/recipes/server_apache.rb:25
+FC019: Access node attributes in a consistent manner: munin/recipes/server_nginx.rb:14
+FC019: Access node attributes in a consistent manner: munin/recipes/server_nginx.rb:16
+FC019: Access node attributes in a consistent manner: munin/recipes/server_nginx.rb:19
+FC019: Access node attributes in a consistent manner: munin/recipes/server_nginx.rb:21
+FC019: Access node attributes in a consistent manner: munin/recipes/server_nginx.rb:24
 FC019: Access node attributes in a consistent manner: passenger_apache2/recipes/default.rb:33
 FC019: Access node attributes in a consistent manner: passenger_apache2/recipes/default.rb:41
 FC019: Access node attributes in a consistent manner: pdns/recipes/recursor.rb:36
 FC019: Access node attributes in a consistent manner: perl/definitions/cpan_module.rb:27
+FC019: Access node attributes in a consistent manner: perl/recipes/default.rb:26
 FC019: Access node attributes in a consistent manner: powershell/recipes/default.rb:69
 FC019: Access node attributes in a consistent manner: rabbitmq/attributes/default.rb:44
 FC019: Access node attributes in a consistent manner: radiant/libraries/radiant.rb:4
+FC019: Access node attributes in a consistent manner: radiant/recipes/db_bootstrap.rb:37
+FC019: Access node attributes in a consistent manner: radiant/recipes/db_bootstrap.rb:45
+FC019: Access node attributes in a consistent manner: radiant/recipes/default.rb:60
+FC019: Access node attributes in a consistent manner: radiant/recipes/default.rb:61
 FC019: Access node attributes in a consistent manner: runit/definitions/runit_service.rb:145
 FC019: Access node attributes in a consistent manner: runit/definitions/runit_service.rb:154
 FC019: Access node attributes in a consistent manner: trac/recipes/default.rb:53
@@ -247,6 +282,14 @@ FC019: Access node attributes in a consistent manner: windows/providers/reboot.r
 FC019: Access node attributes in a consistent manner: windows/providers/reboot.rb:23
 FC019: Access node attributes in a consistent manner: windows/providers/reboot.rb:24
 FC019: Access node attributes in a consistent manner: zenoss/attributes/default.rb:33
+FC019: Access node attributes in a consistent manner: zenoss/recipes/server.rb:62
+FC019: Access node attributes in a consistent manner: zenoss/recipes/server.rb:86
+FC019: Access node attributes in a consistent manner: zenoss/recipes/server.rb:95
+FC019: Access node attributes in a consistent manner: zenoss/recipes/server.rb:96
+FC019: Access node attributes in a consistent manner: zenoss/recipes/server.rb:106
+FC019: Access node attributes in a consistent manner: zenoss/recipes/server.rb:163
+FC019: Access node attributes in a consistent manner: zenoss/recipes/server.rb:226
+FC019: Access node attributes in a consistent manner: zenoss/recipes/server.rb:227
 FC023: Prefer conditional attributes: ./application_ruby/providers/rails.rb:100
 FC023: Prefer conditional attributes: ./apt/providers/repository.rb:26
 FC023: Prefer conditional attributes: ./apt/providers/repository.rb:68
