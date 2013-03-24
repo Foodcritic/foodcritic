@@ -23,20 +23,6 @@ describe FoodCritic::CommandLine do
     end
   end
 
-  describe "#valid_path?" do
-    it "returns true if the specified directory exists" do
-      assert FoodCritic::CommandLine.new(["lib"]).valid_path?
-    end
-
-    it "returns false if the specified directory does not exist" do
-      refute FoodCritic::CommandLine.new(["lib2"]).valid_path?
-    end
-
-    it "returns true if the specified file exists" do
-      assert FoodCritic::CommandLine.new(["lib/foodcritic.rb"]).valid_path?
-    end
-  end
-
   describe "#valid_paths?" do
     it "returns false if no paths are specified" do
       refute FoodCritic::CommandLine.new([]).valid_paths?
