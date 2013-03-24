@@ -97,14 +97,6 @@ module FoodCritic
       @args.any? && @args.all? {|path| File.exists?(path) }
     end
 
-    # The cookbook path.
-    #
-    # @deprecated Multiple cookbook paths may be provided.
-    # @return [String] Path to the cookbook(s) being checked.
-    def cookbook_path
-      @args[0]
-    end
-
     # The cookbook paths
     #
     # @return [Array<String>] Path(s) to the cookbook(s) being checked.

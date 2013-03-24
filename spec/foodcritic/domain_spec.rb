@@ -4,17 +4,6 @@ describe FoodCritic::Review do
   it "is instantiable with no warnings" do
     FoodCritic::Review.new('example', [], false)
   end
-  describe "#cookbook_path" do
-    it "returns the cookbook path provided" do
-      FoodCritic::Review.new('example', [], false).cookbook_path.must_equal 'example'
-    end
-    it "returns a scalar cookbook path even if provided as an array" do
-      FoodCritic::Review.new(['example'], [], false).cookbook_path.must_equal 'example'
-    end
-    it "returns the first cookbook path if multiple have been provided" do
-      FoodCritic::Review.new(['example', 'example2'], [], false).cookbook_path.must_equal 'example'
-    end
-  end
   describe "#cookbook_paths" do
     it "returns the cookbook paths provided" do
       FoodCritic::Review.new(['example'], [], false).cookbook_paths.must_equal ['example']

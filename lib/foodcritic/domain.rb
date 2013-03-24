@@ -25,12 +25,6 @@ module FoodCritic
       @is_failed = is_failed
     end
 
-    # Provided for backwards compatibility. Deprecated and will be removed in a
-    # later version.
-    def cookbook_path
-      @cookbook_paths.first
-    end
-
     # If this review has failed or not.
     def failed?
       @is_failed
