@@ -28,7 +28,6 @@ describe FoodCritic::Api do
         :literal_searches,
         :match,
         :notifications,
-        :os_command?,
         :read_ast,
         :resource_action?,
         :resource_attribute,
@@ -1290,27 +1289,6 @@ describe FoodCritic::Api do
             end
           })).first[:style].must_equal :new
       end
-    end
-  end
-
-  describe "#os_command?" do
-    it "identifies grep as an os command" do
-      assert api.os_command?('grep pattern file')
-    end
-    it "identifies which as an os command" do
-      assert api.os_command?('which ls')
-    end
-    it "assumes any pipe is a unix pipe" do
-      assert api.os_command?('ls | grep foo')
-    end
-    it "assumes a single word is an os command" do
-      assert api.os_command?('ls')
-    end
-    it "identifies a single character flag as an os command" do
-      assert api.os_command?('ls -l')
-    end
-    it "identifies a long flag as an os command" do
-      assert api.os_command?('curl --basic')
     end
   end
 

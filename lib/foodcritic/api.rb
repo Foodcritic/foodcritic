@@ -188,16 +188,6 @@ module FoodCritic
        :line => pos['line'].to_i, :column => pos['column'].to_i}
     end
 
-    # Does the provided string look like an Operating System command? This is a
-    # rough heuristic to be taken with a pinch of salt.
-    def os_command?(str)
-      str.start_with?('grep ', 'net ', 'which ') or # common commands
-      str.include?('|') or     # a pipe, could be alternation
-      str.include?('/') or     # file path delimiter
-      str.match(/^[\w]+$/) or  # command name only
-      str.match(/ --?[a-z]/i)  # command-line flag
-    end
-
     # Read the AST for the given Ruby source file
     def read_ast(file)
       source = if file.to_s.end_with? '.erb'
