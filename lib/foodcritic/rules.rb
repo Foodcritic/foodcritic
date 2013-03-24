@@ -207,7 +207,8 @@ rule "FC017", "LWRP does not notify when updated" do
     version >= gem_version("0.7.12")
   end
   provider do |ast, filename|
-    if ast.xpath(%q{//call/*[self::vcall or self::var_ref/ident/
+    if ast.xpath(%q{//*[self::call or self::command_call]/
+                 *[self::vcall or self::var_ref/ident/
                  @value='new_resource']/../
                  ident[@value='updated_by_last_action']}).empty?
       [file_match(filename)]

@@ -172,9 +172,7 @@ FC017: LWRP does not notify when updated: ./iis/providers/config.rb:1
 FC017: LWRP does not notify when updated: ./iis/providers/pool.rb:1
 FC017: LWRP does not notify when updated: ./iis/providers/site.rb:1
 FC017: LWRP does not notify when updated: ./java/providers/ark.rb:1
-FC017: LWRP does not notify when updated: ./lvm/providers/logical_volume.rb:1
 FC017: LWRP does not notify when updated: ./lvm/providers/physical_volume.rb:1
-FC017: LWRP does not notify when updated: ./lvm/providers/volume_group.rb:1
 FC017: LWRP does not notify when updated: ./pacman/providers/aur.rb:1
 FC017: LWRP does not notify when updated: ./php/providers/pear.rb:1
 FC017: LWRP does not notify when updated: ./php/providers/pear_channel.rb:1

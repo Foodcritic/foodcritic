@@ -14,6 +14,11 @@ Feature: Check for no LWRP notifications
     When I check the cookbook
     Then the LWRP does not notify when updated warning 017 should not be displayed against the provider file
 
+  Scenario: LWRP with a notification without parentheses
+    Given a cookbook that contains a LWRP with a single notification without parentheses
+    When I check the cookbook
+    Then the LWRP does not notify when updated warning 017 should not be displayed against the provider file
+
   Scenario: LWRP with multiple notifications
     Given a cookbook that contains a LWRP with multiple notifications
     When I check the cookbook

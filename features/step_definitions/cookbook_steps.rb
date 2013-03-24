@@ -747,6 +747,10 @@ Given /^a cookbook that contains a LWRP (?:with a single notification|that uses 
   cookbook_with_lwrp({:notifies => :does_notify})
 end
 
+Given 'a cookbook that contains a LWRP with a single notification without parentheses' do
+  cookbook_with_lwrp({:notifies => :does_notify_without_parens})
+end
+
 Given /^a cookbook that contains a LWRP that declares a resource called ([^ ]+) with the condition (.*)$/ do |name,condition|
   write_resource("site", %q{
     actions :create
