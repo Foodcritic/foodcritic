@@ -1,3 +1,86 @@
+## 2.0.0 (24th March, 2013)
+
+Features
+
+  - Support added for ignoring individual matches. To ignore a match add a
+    comment to the affected line in your cookbook of the format `# ~FC006`
+    ([related issue](https://github.com/acrmp/foodcritic/issues/119)).
+    Big thanks to @grosser.
+  - Command line help now specifies the tag to use to fail the build on any
+    rule match
+    ([related issue](https://github.com/acrmp/foodcritic/issues/108)).
+    Thanks @grosser.
+  - FC046: Attribute assignment uses assign unless nil
+    rule added
+    ([related issue](https://github.com/acrmp/foodcritic/issues/52)).
+    Thanks @jaymzh.
+
+Bugfixes:
+
+  - [FC003: Check whether you are running with chef server before using server-specific features](http://acrmp.github.com/foodcritic/#FC003)
+    updated to recognise checks that use return
+    ([related issue](https://github.com/acrmp/foodcritic/issues/92)).
+    Thanks @sethvargo, @miketheman.
+  - [FC003: Check whether you are running with chef server before using server-specific features](http://acrmp.github.com/foodcritic/#FC003)
+    updated to recognise checks that test for Chef Solo with alternation
+    ([related issue](https://github.com/acrmp/foodcritic/issues/103)).
+    Thanks @promisedlandt.
+  - [FC017: LWRP does not notify when updated](http://acrmp.github.com/foodcritic/#FC017)
+    modified to no longer warn when a notification is made without parentheses
+    ([related issue](https://github.com/acrmp/foodcritic/issues/121)).
+    Thanks @justinforce.
+  - [FC019: Access node attributes in a consistent manner](http://acrmp.github.com/foodcritic/#FC019)
+    would previously only show warnings for the first matching file.
+  - [FC019: Access node attributes in a consistent manner](http://acrmp.github.com/foodcritic/#FC019)
+    updated to avoid showing a false positive where a search is passed an
+    argument based on a node attribute accessed with a string.
+  - [FC019: Access node attributes in a consistent manner](http://acrmp.github.com/foodcritic/#FC019)
+    updated to exclude specs, removing a source of false positives.
+  - [FC019: Access node attributes in a consistent manner](http://acrmp.github.com/foodcritic/#FC019)
+    fixed regression in var_ref handling.
+  - [FC019: Access node attributes in a consistent manner](http://acrmp.github.com/foodcritic/#FC019)
+    updated to not trigger on quoted symbols
+    ([related issue](https://github.com/acrmp/foodcritic/issues/88)).
+    Thanks @spheromak.
+  - [FC024: Consider adding platform equivalents](http://acrmp.github.com/foodcritic/#FC024)
+    updated to only warn about platform equivalents that are listed in the
+    cookbook metadata
+    ([related issue](https://github.com/acrmp/foodcritic/issues/59)).
+    Thanks @tknerr.
+  - [FC037: Invalid notification action](http://acrmp.github.com/foodcritic/#FC037)
+    would cause foodcritic to halt with an error when a notification action was
+    specified as an expression
+    ([related issue](https://github.com/acrmp/foodcritic/issues/104)).
+    Thanks @jaymzh.
+  - [FC040: Execute resource used to run git commands](http://acrmp.github.com/foodcritic/#FC040)
+    updated to not match if the git command cannot be expressed as a `git`
+    resource.
+    ([related issue](https://github.com/acrmp/foodcritic/pull/98)).
+    Thanks @trobrock for raising this issue and implementing the fix.
+  - [FC043: Prefer new notification syntax](http://acrmp.github.com/foodcritic/#FC043)
+    updated to apply only to Chef versions >= 0.9.10
+    ([related issue](https://github.com/acrmp/foodcritic/issues/114)).
+    Thanks @iainbeeston.
+  - [FC044: Avoid bare attribute keys](http://acrmp.github.com/foodcritic/#FC044)
+    changed to not raise false positives against block variables
+    ([related issue](https://github.com/acrmp/foodcritic/issues/105)).
+    Thanks @jaymzh.
+
+Other:
+
+  - The `--repl` command line flag has been removed. This feature little used
+    and was problematic for users attempting to use newer versions of pry or
+    guard
+    ([related issue](https://github.com/acrmp/foodcritic/issues/50)).
+    Thanks @jperry, @miketheman, @jtimberman.
+  - The `os_command?` api method has been removed.
+  - The deprecated `cookbook_path` and `valid_path?` methods have been removed.
+    This may cause breakage if you are using foodcritic programatically from
+    Ruby. Please update your code to use the `cookbook_paths` and `valid_paths?`
+    methods instead.
+  - Added regression test for expected output against opscode-cookbooks. Run
+    `bundle exec rake regressions` to perform this test.
+
 ## 1.7.0 (27th December, 2012)
 
 Features
