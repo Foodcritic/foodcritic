@@ -84,6 +84,10 @@ describe FoodCritic::Api do
       ast.verify
       call.verify
     end
+    it "doesn't flag searching for a node by name as symbol access" do
+      ast = parse_ast(%q{baz = search(:node, "name:#{node['foo']['bar']}")[0]})
+      api.attribute_access(ast, :type => :symbol).must_be_empty
+    end
   end
 
   describe "#checks_for_chef_solo?" do

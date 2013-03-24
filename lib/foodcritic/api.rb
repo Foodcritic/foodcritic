@@ -457,7 +457,7 @@ module FoodCritic
 	       else
                  '*[self::symbol or self::dyna_symbol]'
 	       end
-        expr = '//*[self::aref_field or self::aref]'
+        expr = '//*[self::aref_field or self::aref][count(method_add_arg) = 0]'
         expr += '[count(is_att_type(descendant::var_ref/ident/@value)) =
           count(descendant::var_ref/ident/@value)]'
         expr += '[is_att_type(descendant::ident'
