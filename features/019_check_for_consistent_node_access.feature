@@ -36,6 +36,13 @@ Feature: Check for consistency in node access
     When I check the cookbook
     Then the attribute consistency warning 019 should be not shown
 
+  Scenario: Multiple file matches
+    Given a cookbook with five recipes
+      And three of the recipes read node attributes via strings
+      And two of the recipes read node attributes via symbols
+     When I check the cookbook
+     Then the attribute consistency warning 019 should be shown for both of the recipes that use symbols
+
   Scenario Outline: Ignore node built-in methods
     Given a cookbook with a single recipe that <accesses> node attributes via <read_access_type> and calls node.<method>
     When I check the cookbook

@@ -1121,6 +1121,10 @@ Given 'a cookbook with a single recipe that searches without checking if this is
   write_recipe %q{nodes = search(:node, "hostname:[* TO *] AND chef_environment:#{node.chef_environment}")}
 end
 
+Given 'a cookbook with five recipes' do
+
+end
+
 Given /^a cookbook with metadata that declares a recipe with (.*)$/ do |declaration|
   write_metadata declaration
   write_recipe ""
@@ -1347,6 +1351,18 @@ Given 'the cookbook metadata declares support with versions specified' do
   }.strip
 end
 
+Given 'three of the recipes read node attributes via strings' do
+  (1..3).map{|i| "string_#{i}"}.each do |recipe|
+    write_file "cookbooks/example/recipes/#{recipe}.rb", "Chef::Log.warn node['foo']"
+  end
+end
+
+Given 'two of the recipes read node attributes via symbols' do
+  (1..2).map{|i| "symbol_#{i}"}.each do |recipe|
+    write_file "cookbooks/example/recipes/#{recipe}.rb", "Chef::Log.warn node[:foo]"
+  end
+end
+
 When /^I check the cookbook specifying ([^ ]+) as the Chef version$/ do |version|
   options = ['-c', version, 'cookbooks/example']
   in_current_dir do
@@ -1433,6 +1449,11 @@ end
 
 Then /^an? '([^']+)' error should be displayed$/ do |expected_error|
   last_error.should include expected_error
+end
+
+Then 'the attribute consistency warning 019 should be shown for both of the recipes that use symbols' do
+  expect_warning 'FC019', :file => 'recipes/symbol_1.rb'
+  expect_warning 'FC019', :file => 'recipes/symbol_2.rb'
 end
 
 Then /^the bare attribute keys warning 044 should not be displayed against the (brace|do) block$/ do |block_type|

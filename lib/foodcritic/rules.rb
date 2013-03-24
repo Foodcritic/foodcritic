@@ -239,16 +239,16 @@ rule "FC019", "Access node attributes in a consistent manner" do
       {:access_type => type, :count => files.map do |file|
         attribute_access(file[:ast], :type => type, :ignore_calls => true,
                           :cookbook_dir => cookbook_dir).tap do |ast|
-          if (! ast.empty?) and (! asts.has_key?(type))
-            asts[type] = {:ast => ast, :path => file[:path]}
+          unless ast.empty?
+            (asts[type] ||= []) << {:ast => ast, :path => file[:path]}
           end
         end.size
       end.inject(:+)}
     end.reject{|type| type[:count] == 0}
     if asts.size > 1
       least_used = asts[types.min{|a,b| a[:count] <=> b[:count]}[:access_type]]
-      least_used[:ast].map do |ast|
-        match(ast).merge(:filename => least_used[:path])
+      least_used.map do |file|
+        file[:ast].map{|ast| match(ast).merge(:filename => file[:path])}.flatten
       end
     end
   end
