@@ -128,7 +128,8 @@ module FoodCritic
     def usage_displayed(is_exit_zero)
       expect_output 'foodcritic [cookbook_paths]'
       expect_usage_option('c', 'chef-version VERSION', 'Only check against rules valid for this version of Chef.')
-      expect_usage_option('f', 'epic-fail TAGS', 'Fail the build if any of the specified tags are matched.')
+      expect_usage_option('f', 'epic-fail TAGS',
+        "Fail the build if any of the specified tags are matched ('any' -> fail on any match).")
       expect_usage_option('t', 'tags TAGS', 'Only check against rules with the specified tags.')
       expect_usage_option('C', '[no-]context', 'Show lines matched against rather than the default summary.')
       expect_usage_option('I', 'include PATH', 'Additional rule file path(s) to load.')

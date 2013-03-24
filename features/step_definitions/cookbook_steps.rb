@@ -1626,7 +1626,8 @@ Then 'the unrecognised attribute warning 009 should be displayed against the cor
 end
 
 Then 'the usage text should include an option for specifying tags that will fail the build' do
-  expect_usage_option('f', 'epic-fail TAGS', 'Fail the build if any of the specified tags are matched.')
+  expect_usage_option('f', 'epic-fail TAGS',
+    "Fail the build if any of the specified tags are matched ('any' -> fail on any match).")
 end
 
 Then /^the warnings shown should be (.*)$/ do |warnings|
