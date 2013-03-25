@@ -29,6 +29,16 @@ Feature: Ignoring rules on per line basis
     | # ~style                     | be shown     |
     | # ~files                     | not be shown |
 
+  Scenario Outline: Ignoring cookbook level rules
+    Given a cookbook with a single recipe that triggers FC019 with comment <comment>
+      And metadata
+    When I check the cookbook
+    Then the attribute consistency warning 019 should <shown>
+    Examples:
+      | comment | shown        |
+      |         | be shown     |
+      | #~FC019 | be not shown |
+
   Scenario Outline: Multiple warnings
     Given a file with multiple errors on one line with comment <comment>
     When I check the cookbook

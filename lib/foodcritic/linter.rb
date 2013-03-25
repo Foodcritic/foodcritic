@@ -99,8 +99,9 @@ module FoodCritic
 
     def remove_ignored(matches, rule, file)
       matches.reject do |m|
-        (line = m[:line]) && File.exist?(file) &&
-           ignore_line_match?(File.readlines(file)[line-1], rule)
+        matched_file = m[:filename] || file
+        (line = m[:line]) && File.exist?(matched_file) &&
+           ignore_line_match?(File.readlines(matched_file)[line-1], rule)
       end
     end
 

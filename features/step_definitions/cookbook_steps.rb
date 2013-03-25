@@ -954,6 +954,15 @@ Given 'a cookbook with a single recipe that reads node attributes via symbols an
   write_recipe %q{default[:foo][:'bar-baz']}
 end
 
+Given /^a cookbook with a single recipe that triggers FC019 with comment (.*)$/ do |comment|
+  write_recipe %Q{
+    file node[:bar] do
+      content node['foo'] #{comment}
+      action:create
+    end
+  }.strip
+end
+
 Given 'a cookbook with a single recipe that calls a patched node method' do
   write_library 'search', %q{
     class Chef
@@ -1306,6 +1315,12 @@ end
 
 Given 'I have installed the lint tool' do
 
+end
+
+Given 'metadata' do
+  write_metadata %q{
+    name 'example'
+  }.strip
 end
 
 Given /^(?:a cookbook that has|the cookbook has) a Gemfile that includes rake and foodcritic$/ do
