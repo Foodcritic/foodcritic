@@ -69,6 +69,24 @@ Given /^a cookbook recipe that declares a ([^ ]+) resource with the ([^ ]+) attr
   }
 end
 
+Given 'a cookbook recipe with a deploy resource that contains a template resource' do
+  write_recipe %q{
+    deploy '/foo/bar' do
+      before_restart do
+        template "/tmp/config.conf" do
+          source "foo.conf.erb"
+          variables({
+            :config_var => 'foo'
+          })
+	end
+      end
+    end
+  }
+  write_file "cookbooks/example/templates/default/foo.conf.erb", %q{
+    <%= @config_var %>
+  }
+end
+
 Given 'a cookbook recipe with a resource that notifies where the action is an expression' do
   write_recipe %q{
     notify_action = node['platform_family'] == "mac_os_x" ? :restart : :reload
@@ -1611,6 +1629,10 @@ Then /^the line number and line of code that triggered the warning(s)? should be
     expect_line_shown 4, "    node['testing'] = 'bar'"
     expect_line_shown 5, "    node['testing2'] = 'bar2'"
   end
+end
+
+Then 'the missing template warning 033 should not be displayed against the template' do
+  expect_warning('FC033', :line => 3, :expect_warning => false)
 end
 
 Then /^the no leading cookbook name warning 029 should be (not )?shown$/ do |should_not|

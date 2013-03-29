@@ -333,6 +333,10 @@ module FoodCritic
       atts
     end
 
+    def block_depth(resource)
+      resource.path.split('/').group_by{|e|e}['method_add_block'].size
+    end
+
     # Recurse the nested arrays provided by Ripper to create a tree we can more
     # easily apply expressions to.
     def build_xml(node, doc = nil, xml_node=nil)
@@ -393,12 +397,8 @@ module FoodCritic
       atts = {}
       resource.xpath('do_block/descendant::*[self::command or
         self::method_add_arg][count(ancestor::do_block) >= 1]').each do |att|
-          next unless %w{block not_if only_if restart_command before_migrate
-            before_symlink before_restart after_restart}.all? do |block_att|
-              att.xpath("count(ancestor::method_add_block/method_add_arg/
-                fcall[ident/@value='#{block_att}']) = 0")
-          end
-
+          blocks = att.xpath('ancestor::method_add_block/method_add_arg/fcall')
+          next if blocks.any?{|a| block_depth(a) > block_depth(resource)}
           att_name = att.xpath('string(ident/@value |
             fcall/ident[@value="variables"]/@value)')
           unless att_name.empty?

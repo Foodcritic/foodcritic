@@ -63,3 +63,8 @@ Feature: Check for missing template
     Given a cookbook recipe that defines a template where both the name and source are complex expressions
      When I check the cookbook
      Then the missing template warning 033 should not be displayed
+
+  Scenario: Template within deploy resource
+    Given a cookbook recipe with a deploy resource that contains a template resource
+     When I check the cookbook
+     Then the missing template warning 033 should not be displayed against the template
