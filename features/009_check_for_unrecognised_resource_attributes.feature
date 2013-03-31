@@ -53,3 +53,24 @@ Feature: Check for unrecognised resource attributes
     Given a recipe that declares a resource with an attribute value set to the result of a method call
      When I check the cookbook
      Then the unrecognised attribute warning 009 should not be displayed
+
+  Scenario Outline: Install package with yum specifying architecture
+    Given a recipe that installs a package with yum specifying the architecture
+     When I check the cookbook specifying <version> as the Chef version
+     Then the unrecognised attribute warning 009 should be <shown>
+  Examples:
+    | version | shown |
+    | 0.8.14  | true  |
+    | 0.9.6   | true  |
+    | 0.9.8   | false |
+
+  Scenario Outline: Retry a resource on failure
+    Given a recipe that installs a gem with 5 retries
+     When I check the cookbook specifying <version> as the Chef version
+     Then the unrecognised attribute warning 009 should be <shown>
+  Examples:
+    | version | shown |
+    | 0.8.16  | true  |
+    | 0.9.0   | true  |
+    | 0.10.2  | true  |
+    | 0.10.4  | false |

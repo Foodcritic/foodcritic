@@ -23,8 +23,13 @@ module FoodCritic
 
   class RuleDsl
     attr_reader :rules
+    attr_reader :chef_version
 
     include Api
+
+    def initialize(chef_version=Linter::DEFAULT_CHEF_VERSION)
+      @chef_version = chef_version
+    end
 
     # Define a new rule, the outer block of a rule definition.
     def rule(code, name, &block)
@@ -65,8 +70,8 @@ module FoodCritic
     rule_block :template
 
     # Load the ruleset(s).
-    def self.load(paths)
-      dsl = RuleDsl.new
+    def self.load(paths, chef_version=Linter::DEFAULT_CHEF_VERSION)
+      dsl = RuleDsl.new(chef_version)
       paths.map do |path|
         File.directory?(path) ? Dir["#{path}/**/*.rb"].sort : path
       end.flatten.each do |path|

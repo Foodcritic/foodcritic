@@ -3,7 +3,8 @@ require 'bundler'
 require 'rake/testtask'
 require 'cucumber'
 require 'cucumber/rake/task'
-task :default => ['chef_dsl_metadata.json', :install, :test, :features]
+
+task :default => [:install, :test, :features]
 
 Bundler.setup
 Bundler::GemHelper.install_tasks

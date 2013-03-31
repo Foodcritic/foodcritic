@@ -1363,6 +1363,32 @@ Given 'unit tests under a top-level test directory' do
   minitest_spec_attributes
 end
 
+Given 'a recipe that installs a gem with 5 retries' do
+  write_recipe %q{
+    gem_package "foo" do
+      retries 5
+      action :install
+    end
+  }
+end
+
+Given 'a recipe that installs a package with yum specifying the architecture' do
+  write_recipe %q{
+    yum_package "foo" do
+      arch "x86_64"
+      action :install
+    end
+  }
+end
+
+Given 'a recipe that reconfigures a package' do
+  write_recipe %q{
+    apt_package "foo" do
+      action :reconfig
+    end
+  }
+end
+
 Given /^a recipe that uses require_recipe$/ do
   write_recipe %Q{
     require_recipe "foo::default"

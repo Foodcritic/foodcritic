@@ -12,7 +12,8 @@ module FoodCritic
 
     # The default version that will be used to determine relevant rules. This
     # can be over-ridden at the command line with the `--chef-version` option.
-    DEFAULT_CHEF_VERSION = "0.10.10"
+    DEFAULT_CHEF_VERSION = "11.4.0"
+    attr_reader :chef_version
 
     # Perform a lint check. This method is intended for use by the command-line
     # wrapper. If you are programatically using foodcritic you should use
@@ -47,6 +48,7 @@ module FoodCritic
       cookbook_paths = sanity_check_cookbook_paths(cookbook_paths)
       options = setup_defaults(options)
       @options = options
+      @chef_version = options[:chef_version] || DEFAULT_CHEF_VERSION
 
       warnings = []; last_dir = nil; matched_rule_tags = Set.new
 
@@ -92,7 +94,7 @@ module FoodCritic
 
     def load_rules!(options)
       @rules = RuleDsl.load([File.join(File.dirname(__FILE__), 'rules.rb')] +
-        options[:include_rules])
+        options[:include_rules], chef_version)
     end
 
     private
@@ -123,7 +125,7 @@ module FoodCritic
     def active_rules(options)
       @rules.select do |rule|
         matching_tags?(options[:tags], rule.tags) and
-        applies_to_version?(rule, options[:chef_version] || DEFAULT_CHEF_VERSION)
+        applies_to_version?(rule, chef_version)
       end
     end
 

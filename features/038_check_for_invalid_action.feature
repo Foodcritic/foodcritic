@@ -37,3 +37,15 @@ Feature: Check for invalid resource actions
     | service  | enable, start        | should not |
     | service  | enble, start         | should     |
     | foo      | energize, revitalize | should not |
+
+  Scenario Outline: Reconfigure a package
+    Given a recipe that reconfigures a package
+     When I check the cookbook specifying <version> as the Chef version
+     Then the invalid resource action warning 038 <display> be displayed
+  Examples:
+    | version      | display    |
+    | 0.9.2        | should     |
+    | 0.10.0       | should     |
+    | 0.10.6.beta3 | should not |
+    | 0.10.6       | should not |
+    | 11.4.0       | should not |
