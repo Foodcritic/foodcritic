@@ -1,3 +1,17 @@
+## 2.0.1 (31st March, 2013)
+
+Bugfixes:
+
+  - Matches that should be ignored were not if the rule implementation used the
+    `cookbook` block
+    ([related issue](https://github.com/acrmp/foodcritic/issues/119)).
+  - [FC033: Missing Template](http://acrmp.github.com/foodcritic/#FC033)
+    would warn incorrectly when the template resource was nested within another
+    resource
+    ([related issue](https://github.com/acrmp/foodcritic/issues/96)).
+    Thanks @justinforce.
+  - The `#resource_attributes` API method now copes with nested resources.
+
 ## 2.0.0 (24th March, 2013)
 
 Features
