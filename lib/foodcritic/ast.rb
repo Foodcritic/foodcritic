@@ -8,7 +8,7 @@ module FoodCritic
     end
 
     def ast_node_has_children?(node)
-      node.respond_to?(:first)
+      node.respond_to?(:first) and ! node.respond_to?(:match)
     end
 
     # If the provided node is the line / column information.
