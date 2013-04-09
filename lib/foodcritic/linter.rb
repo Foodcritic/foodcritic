@@ -190,7 +190,7 @@ module FoodCritic
 
     # We use the Gherkin (Cucumber) syntax to specify tags.
     def matching_tags?(tag_expr, tags)
-      Gherkin::TagExpression.new(tag_expr).eval(tags.map do |t|
+      Gherkin::TagExpression.new(tag_expr).evaluate(tags.map do |t|
         Gherkin::Formatter::Model::Tag.new(t, 1)
       end)
     end
