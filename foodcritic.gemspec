@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.homepage = 'http://acrmp.github.com/foodcritic'
   s.license = 'MIT'
   s.executables << 'foodcritic'
-  s.add_dependency('gherkin', '~> 2.11.1')
+  s.add_dependency('gherkin', '~> 2.11.7')
   s.add_dependency('nokogiri', '~> 1.5.4')
   s.add_dependency('rak', '~> 1.4')
   s.add_dependency('treetop', '~> 1.4.10')
