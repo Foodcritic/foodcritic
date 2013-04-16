@@ -1,3 +1,27 @@
+## 2.1.0 (17th April, 2013)
+
+Features:
+
+  - DSL metadata will now reflect the version of Chef selected with
+    `--chef-version`. For example this means that
+    [FC009: Resource attribute not recognised](http://acrmp.github.com/foodcritic/#FC009)
+    will warn about attributes not present in the specified version of Chef.
+
+Bugfixes:
+
+  - [FC045: Consider setting cookbook name in metadata](http://acrmp.github.com/foodcritic/#FC045)
+    would warn incorrectly and other rules would fail to work when activesupport
+    had been loaded
+    ([related issue](https://github.com/acrmp/foodcritic/issues/118)). This
+    affected Berkshelf users. Thanks @scalp42 and @c-nolic.
+  - Upgrade the version of Gherkin dependency to avoid deprecation warnings
+    ([related issue](https://github.com/acrmp/foodcritic/pull/122)).
+    Thanks @tmatilai.
+
+Other:
+
+  - Known to run on MRI 2.0.0 - added to Travis CI matrix.
+
 ## 2.0.1 (31st March, 2013)
 
 Bugfixes:
