@@ -316,10 +316,11 @@ module FoodCritic
 
     # Create a recipe with a ruby_block resource.
     #
-    # @param [Boolean] is_short Is this a short block?
-    def recipe_with_ruby_block(is_short)
-      if is_short
-        write_recipe %q{
+    # @param [Symbol] length A :short or :long block, or :both
+    def recipe_with_ruby_block(length)
+      recipe = ''
+      if length == :short || length == :both
+        recipe << %q{
           ruby_block "reload_client_config" do
             block do
               Chef::Config.from_file("/etc/chef/client.rb")
@@ -327,8 +328,9 @@ module FoodCritic
             action :create
           end
         }
-      else
-        write_recipe %q{
+      end
+      if length == :long || length == :both
+        recipe << %q{
           ruby_block "too_long" do
             block do
               begin
@@ -356,6 +358,7 @@ module FoodCritic
           end
         }
       end
+      write_recipe(recipe)
     end
 
     # Create a recipe that performs a search of the specified type.

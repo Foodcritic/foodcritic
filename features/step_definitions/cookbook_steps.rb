@@ -747,7 +747,7 @@ Given /^a cookbook that passes variables (.*) to a template$/ do |vars|
 end
 
 Given /^a cookbook that contains a (short|long) ruby block$/ do |length|
-  recipe_with_ruby_block(length == 'short')
+  recipe_with_ruby_block(length.to_sym)
 end
 
 Given 'a cookbook that contains a definition' do
@@ -1201,6 +1201,10 @@ Given 'a Rakefile that defines a lint task specifying a different name' do
   rakefile(:block, :name => 'lint')
 end
 
+Given 'a recipe that contains both long and short ruby blocks' do
+  recipe_with_ruby_block(:both)
+end
+
 Given /^a recipe that declares a ([^ ]+) resource with these attributes: (.*)$/ do |type,attributes|
   recipe_with_resource(type, attributes.split(','))
 end
@@ -1526,6 +1530,11 @@ end
 
 Then /^the bare attribute keys warning 044 should not be displayed against the (?:local variable|library call)$/ do
   expect_warning 'FC044', {:expect_warning => false, :line => 2, :file_type => :attributes}
+end
+
+Then 'the long ruby block warning 014 should be displayed against the long block only' do
+  expect_warning 'FC014', {:expect_warning => false, :line => 1}
+  expect_warning 'FC014', {:expect_warning => true, :line => 8}
 end
 
 Then /^the lint task will be listed( under the different name)?$/ do |diff_name|
