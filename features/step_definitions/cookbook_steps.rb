@@ -1534,7 +1534,7 @@ end
 
 Then 'the long ruby block warning 014 should be displayed against the long block only' do
   expect_warning 'FC014', {:expect_warning => false, :line => 1}
-  expect_warning 'FC014', {:expect_warning => true, :line => 8}
+  expect_warning 'FC014', {:expect_warning => true, :line => 11}
 end
 
 Then /^the lint task will be listed( under the different name)?$/ do |diff_name|

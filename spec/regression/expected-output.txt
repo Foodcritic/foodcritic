@@ -103,8 +103,9 @@ FC007: Ensure recipe dependencies are reflected in cookbook metadata: ./tmux/rec
 FC009: Resource attribute not recognised: ./chef-server/recipes/default.rb:46
 FC009: Resource attribute not recognised: ./perl/recipes/default.rb:43
 FC013: Use file_cache_path rather than hard-coding tmp paths: ./zenoss/providers/zenpack.rb:30
-FC014: Consider extracting long ruby_block to library: ./chef-server/recipes/default.rb:80
-FC014: Consider extracting long ruby_block to library: ./cloudkick/recipes/default.rb:86
+FC014: Consider extracting long ruby_block to library: ./java/recipes/openjdk.rb:51
+FC014: Consider extracting long ruby_block to library: ./lvm/providers/logical_volume.rb:18
+FC014: Consider extracting long ruby_block to library: ./pxe_dust/recipes/bootstrap_template.rb:77
 FC015: Consider converting definition to a LWRP: apache2/definitions/apache_conf.rb:1
 FC015: Consider converting definition to a LWRP: apache2/definitions/apache_module.rb:1
 FC015: Consider converting definition to a LWRP: apache2/definitions/apache_site.rb:1

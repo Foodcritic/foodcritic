@@ -321,9 +321,12 @@ module FoodCritic
       recipe = ''
       if length == :short || length == :both
         recipe << %q{
-          ruby_block "reload_client_config" do
-            block do
-              Chef::Config.from_file("/etc/chef/client.rb")
+          ruby_block "subexpressions" do
+	    block do
+	      rc = Chef::Util::FileEdit.new("/foo/bar.conf")
+              rc.search_file_replace_line(/^search/, "search #{node["foo"]["bar"]} compute-1.internal")
+              rc.search_file_replace_line(/^domain/, "domain #{node["foo"]["bar"]}")
+              rc.write_file
             end
             action :create
           end
