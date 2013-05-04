@@ -314,7 +314,7 @@ module FoodCritic
 
     # Templates in the current cookbook
     def template_paths(recipe_path)
-      Dir[Pathname.new(recipe_path).dirname.dirname + 'templates' + '**/*.erb']
+      Dir[Pathname.new(recipe_path).dirname.dirname + 'templates' + '**/*']
     end
 
     private

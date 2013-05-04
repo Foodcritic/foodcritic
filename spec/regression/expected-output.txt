@@ -320,7 +320,6 @@ FC024: Consider adding platform equivalents: ./transmission/recipes/default.rb:4
 FC025: Prefer chef_gem to compile-time gem install: ./transmission/recipes/default.rb:25
 FC025: Prefer chef_gem to compile-time gem install: ./transmission/recipes/default.rb:31
 FC029: No leading cookbook name in recipe metadata: ./apparmor/metadata.rb:8
-FC033: Missing template: ./nova/recipes/nova-scheduler-patch.rb:24
 FC033: Missing template: ./pdns/recipes/server.rb:43
 FC034: Unused template variables: ./activemq/templates/default/wrapper.conf.erb:1
 FC034: Unused template variables: ./application_java/templates/default/context.xml.erb:1

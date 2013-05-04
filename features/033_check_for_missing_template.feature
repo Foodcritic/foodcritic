@@ -19,7 +19,12 @@ Feature: Check for missing template
      When I check the cookbook
      Then the missing template warning 033 should not be displayed
 
-  Scenario: Present template
+  Scenario: Present template (not .erb)
+    Given a cookbook recipe that refers to a template without an erb extension
+     When I check the cookbook
+     Then the missing template warning 033 should not be displayed
+
+  Scenario: Present template (subdirectory)
     Given a cookbook recipe that refers to a template in a subdirectory
      When I check the cookbook
      Then the missing template warning 033 should not be displayed

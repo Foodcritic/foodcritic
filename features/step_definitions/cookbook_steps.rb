@@ -483,6 +483,15 @@ Given /^a cookbook recipe that refers to a (missing |local )?template( in a subd
   end
 end
 
+Given 'a cookbook recipe that refers to a template without an erb extension' do
+  write_recipe %q{
+    template '/etc/resolv.conf' do
+      source 'resolv.conf'
+    end
+  }
+  write_file 'cookbooks/example/templates/default/resolv.conf', ''
+end
+
 Given 'a cookbook recipe that defines a template where name is a complex expression' do
   write_recipe %q{
     template ::File.join(new_resource.foo.bar, "str", new_resource.baz) do
