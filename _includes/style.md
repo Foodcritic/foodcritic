@@ -47,15 +47,8 @@ but here's a quick getting-started guide.
 
    Since most Ruby project stick their code in a `lib` directory, the default
    "file set" is set to apply that default list of style rulers to all files
-   ending in .rb under that directory--change `'lib/**/*.rb'` to point to your
-   cookbook files.  Some users find it more intuitive to express the same thing
-   like:
-
-       Tailor.config do |config|
-         config.recursive_file_set '*.rb' do |style|
-           # ...
-         end
-       end
+   ending in .rb under that directory--change `'lib/**/*.rb'` to `'**/*.rb'`
+   instead to capture all cookbook files.
 
 1. Take a look at the list of files tailor will measure when you run it:
 
