@@ -469,9 +469,9 @@ rule "FC034", "Unused template variables" do
     Array(resource_attributes_by_type(ast)['template']).select do
       |t| t['variables'] and t['variables'].respond_to?(:xpath)
     end.map do |resource|
-      template_paths = Dir[Pathname.new(filename).dirname.dirname +
-        'templates' + '**/*.erb']
-      template_path = template_paths.find{|p| File.basename(p) == resource['source']}
+      template_path = template_paths(filename).find do |p|
+        File.basename(p) == resource['source']
+      end
       next unless template_path
       passed_vars = resource['variables'].xpath('symbol/ident/@value').map{|tv| tv.to_s}
       template_vars = read_ast(template_path).xpath('//var_ref/ivar/' +

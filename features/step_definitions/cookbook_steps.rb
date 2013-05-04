@@ -744,10 +744,10 @@ Given /^a cookbook that passes no variables to a template$/ do
   }
 end
 
-Given /^a cookbook that passes variables (.*) to a template$/ do |vars|
+Given /^a cookbook that passes variables (.*) to a template with extension (.*)$/ do |vars, ext|
   write_recipe %Q{
     template "/tmp/config.conf" do
-      source "config.conf.erb"
+      source "config#{ext}"
       variables(
         :#{vars.split(',').map{|v| "#{v} => node[:#{v}]"}.join(",\n:")}
       )
@@ -1366,8 +1366,13 @@ Given 'the gems have been vendored' do
   vendor_gems
 end
 
-Given /^the template contains the expression (.*)$/ do |expr|
-  write_file 'cookbooks/example/templates/default/config.conf.erb', %Q{
+Given /^the template (.+)?contains the expression (.*)$/ do |ext,expr|
+  file = if ext
+    "templates/default/config#{ext.strip}"
+  else
+    'templates/default/config.conf.erb'
+  end
+  write_file "cookbooks/example/#{file}", %Q{
     <%= #{expr} %>
   }
 end
@@ -1718,9 +1723,14 @@ Then 'the undeclared dependency warning 007 should be displayed only for the und
   expect_warning("FC007", :file => 'recipes/default.rb', :line => 6, :expect_warning => true)
 end
 
-Then /^the unused template variables warning 034 should (not )?be displayed against the template$/ do |not_shown|
-  expect_warning('FC034', :file => 'templates/default/config.conf.erb',
-                 :line => 1, :expect_warning => ! not_shown)
+Then /^the unused template variables warning 034 should (not )?be displayed against the template(.*)?$/ do |not_shown, ext|
+  file = if ext
+    "templates/default/config#{ext.strip}"
+  else
+    'templates/default/config.conf.erb'
+  end
+  expect_warning('FC034', :file => file, :line => 1,
+		 :expect_warning => ! not_shown)
 end
 
 Then /^the unrecognised attribute warning 009 should be (true|false)$/ do |shown|

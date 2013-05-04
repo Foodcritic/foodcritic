@@ -190,7 +190,7 @@ module FoodCritic
 
     # Read the AST for the given Ruby source file
     def read_ast(file)
-      source = if file.to_s.end_with? '.erb'
+      source = if file.to_s.split(File::SEPARATOR).include?('templates')
         Template::ExpressionExtractor.new.extract(
           File.read(file)).map{|e| e[:code]}.join(';')
       else
@@ -314,7 +314,8 @@ module FoodCritic
 
     # Templates in the current cookbook
     def template_paths(recipe_path)
-      Dir[Pathname.new(recipe_path).dirname.dirname + 'templates' + '**/*']
+      Dir[Pathname.new(recipe_path).dirname.dirname + 'templates' +
+        '**/*'].select{|path| File.file?(path)}
     end
 
     private
