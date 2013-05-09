@@ -1,5 +1,5 @@
 GEM
-  remote: http://rubygems.org/
+  remote: https://rubygems.org/
   specs:
     appraisal (0.5.1)
       bundler
@@ -67,3 +67,4 @@ DEPENDENCIES
   appraisal (~> 0.5.1)
   chef (= 0.10.2)
   rake (~> 0.9.2.2)
+  yajl-ruby (~> 1.1.0)
