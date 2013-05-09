@@ -91,7 +91,6 @@
     "private_methods",
     "protected_methods",
     "psych_to_yaml",
-    "psych_y",
     "public_method",
     "public_methods",
     "public_send",
@@ -136,8 +135,7 @@
     "untrusted?",
     "validate",
     "value_for_platform",
-    "with_indexer_metadata",
-    "y"
+    "with_indexer_metadata"
   ],
   "node_methods": [
     "!",
@@ -228,7 +226,6 @@
     "private_methods",
     "protected_methods",
     "psych_to_yaml",
-    "psych_y",
     "public_method",
     "public_methods",
     "public_send",
@@ -271,8 +268,7 @@
     "untrust",
     "untrusted?",
     "validate",
-    "with_indexer_metadata",
-    "y"
+    "with_indexer_metadata"
   ],
   "actions": {
     "apt_package": [
@@ -624,7 +620,6 @@
       "provider",
       "provider=",
       "psych_to_yaml",
-      "psych_y",
       "public_method",
       "public_methods",
       "public_send",
@@ -667,8 +662,7 @@
       "updated=",
       "validate",
       "value_for_platform",
-      "version",
-      "y"
+      "version"
     ],
     "bash": [
       "!",
@@ -760,7 +754,6 @@
       "provider",
       "provider=",
       "psych_to_yaml",
-      "psych_y",
       "public_method",
       "public_methods",
       "public_send",
@@ -804,8 +797,7 @@
       "updated=",
       "user",
       "validate",
-      "value_for_platform",
-      "y"
+      "value_for_platform"
     ],
     "breakpoint": [
       "!",
@@ -889,7 +881,6 @@
       "provider",
       "provider=",
       "psych_to_yaml",
-      "psych_y",
       "public_method",
       "public_methods",
       "public_send",
@@ -929,8 +920,7 @@
       "updated",
       "updated=",
       "validate",
-      "value_for_platform",
-      "y"
+      "value_for_platform"
     ],
     "cron": [
       "!",
@@ -1022,7 +1012,6 @@
       "provider",
       "provider=",
       "psych_to_yaml",
-      "psych_y",
       "public_method",
       "public_methods",
       "public_send",
@@ -1065,8 +1054,7 @@
       "user",
       "validate",
       "value_for_platform",
-      "weekday",
-      "y"
+      "weekday"
     ],
     "csh": [
       "!",
@@ -1158,7 +1146,6 @@
       "provider",
       "provider=",
       "psych_to_yaml",
-      "psych_y",
       "public_method",
       "public_methods",
       "public_send",
@@ -1202,8 +1189,7 @@
       "updated=",
       "user",
       "validate",
-      "value_for_platform",
-      "y"
+      "value_for_platform"
     ],
     "deploy": [
       "!",
@@ -1304,7 +1290,6 @@
       "provider",
       "provider=",
       "psych_to_yaml",
-      "psych_y",
       "public_method",
       "public_methods",
       "public_send",
@@ -1365,8 +1350,7 @@
       "updated=",
       "user",
       "validate",
-      "value_for_platform",
-      "y"
+      "value_for_platform"
     ],
     "deploy_branch": [
       "!",
@@ -1467,7 +1451,6 @@
       "provider",
       "provider=",
       "psych_to_yaml",
-      "psych_y",
       "public_method",
       "public_methods",
       "public_send",
@@ -1528,8 +1511,7 @@
       "updated=",
       "user",
       "validate",
-      "value_for_platform",
-      "y"
+      "value_for_platform"
     ],
     "deploy_revision": [
       "!",
@@ -1630,7 +1612,6 @@
       "provider",
       "provider=",
       "psych_to_yaml",
-      "psych_y",
       "public_method",
       "public_methods",
       "public_send",
@@ -1691,8 +1672,7 @@
       "updated=",
       "user",
       "validate",
-      "value_for_platform",
-      "y"
+      "value_for_platform"
     ],
     "directory": [
       "!",
@@ -1740,6 +1720,7 @@
       "hash",
       "ignore_failure",
       "in?",
+      "inherits",
       "initialize_clone",
       "initialize_dup",
       "inspect",
@@ -1780,7 +1761,6 @@
       "provider",
       "provider=",
       "psych_to_yaml",
-      "psych_y",
       "public_method",
       "public_methods",
       "public_send",
@@ -1792,6 +1772,7 @@
       "resources",
       "respond_to?",
       "respond_to_missing?",
+      "rights",
       "run_action",
       "search",
       "send",
@@ -1821,8 +1802,7 @@
       "updated",
       "updated=",
       "validate",
-      "value_for_platform",
-      "y"
+      "value_for_platform"
     ],
     "dpkg_package": [
       "!",
@@ -1908,7 +1888,6 @@
       "provider",
       "provider=",
       "psych_to_yaml",
-      "psych_y",
       "public_method",
       "public_methods",
       "public_send",
@@ -1951,8 +1930,7 @@
       "updated=",
       "validate",
       "value_for_platform",
-      "version",
-      "y"
+      "version"
     ],
     "easy_install_package": [
       "!",
@@ -2039,7 +2017,6 @@
       "provider",
       "provider=",
       "psych_to_yaml",
-      "psych_y",
       "public_method",
       "public_methods",
       "public_send",
@@ -2082,8 +2059,7 @@
       "updated=",
       "validate",
       "value_for_platform",
-      "version",
-      "y"
+      "version"
     ],
     "erl_call": [
       "!",
@@ -2172,7 +2148,6 @@
       "provider",
       "provider=",
       "psych_to_yaml",
-      "psych_y",
       "public_method",
       "public_methods",
       "public_send",
@@ -2212,8 +2187,7 @@
       "updated",
       "updated=",
       "validate",
-      "value_for_platform",
-      "y"
+      "value_for_platform"
     ],
     "execute": [
       "!",
@@ -2303,7 +2277,6 @@
       "provider",
       "provider=",
       "psych_to_yaml",
-      "psych_y",
       "public_method",
       "public_methods",
       "public_send",
@@ -2347,8 +2320,7 @@
       "updated=",
       "user",
       "validate",
-      "value_for_platform",
-      "y"
+      "value_for_platform"
     ],
     "file": [
       "!",
@@ -2439,7 +2411,6 @@
       "provider",
       "provider=",
       "psych_to_yaml",
-      "psych_y",
       "public_method",
       "public_methods",
       "public_send",
@@ -2479,8 +2450,7 @@
       "updated",
       "updated=",
       "validate",
-      "value_for_platform",
-      "y"
+      "value_for_platform"
     ],
     "freebsd_package": [
       "!",
@@ -2566,7 +2536,6 @@
       "provider",
       "provider=",
       "psych_to_yaml",
-      "psych_y",
       "public_method",
       "public_methods",
       "public_send",
@@ -2609,8 +2578,7 @@
       "updated=",
       "validate",
       "value_for_platform",
-      "version",
-      "y"
+      "version"
     ],
     "gem_package": [
       "!",
@@ -2697,7 +2665,6 @@
       "provider",
       "provider=",
       "psych_to_yaml",
-      "psych_y",
       "public_method",
       "public_methods",
       "public_send",
@@ -2740,8 +2707,7 @@
       "updated=",
       "validate",
       "value_for_platform",
-      "version",
-      "y"
+      "version"
     ],
     "git": [
       "!",
@@ -2830,7 +2796,6 @@
       "provider",
       "provider=",
       "psych_to_yaml",
-      "psych_y",
       "public_method",
       "public_methods",
       "public_send",
@@ -2880,8 +2845,7 @@
       "updated=",
       "user",
       "validate",
-      "value_for_platform",
-      "y"
+      "value_for_platform"
     ],
     "group": [
       "!",
@@ -2969,7 +2933,6 @@
       "provider",
       "provider=",
       "psych_to_yaml",
-      "psych_y",
       "public_method",
       "public_methods",
       "public_send",
@@ -3010,8 +2973,7 @@
       "updated=",
       "users",
       "validate",
-      "value_for_platform",
-      "y"
+      "value_for_platform"
     ],
     "http_request": [
       "!",
@@ -3096,7 +3058,6 @@
       "provider",
       "provider=",
       "psych_to_yaml",
-      "psych_y",
       "public_method",
       "public_methods",
       "public_send",
@@ -3137,8 +3098,7 @@
       "updated=",
       "url",
       "validate",
-      "value_for_platform",
-      "y"
+      "value_for_platform"
     ],
     "ifconfig": [
       "!",
@@ -3232,7 +3192,6 @@
       "provider",
       "provider=",
       "psych_to_yaml",
-      "psych_y",
       "public_method",
       "public_methods",
       "public_send",
@@ -3273,8 +3232,7 @@
       "updated",
       "updated=",
       "validate",
-      "value_for_platform",
-      "y"
+      "value_for_platform"
     ],
     "link": [
       "!",
@@ -3361,7 +3319,6 @@
       "provider",
       "provider=",
       "psych_to_yaml",
-      "psych_y",
       "public_method",
       "public_methods",
       "public_send",
@@ -3403,8 +3360,7 @@
       "updated",
       "updated=",
       "validate",
-      "value_for_platform",
-      "y"
+      "value_for_platform"
     ],
     "log": [
       "!",
@@ -3489,7 +3445,6 @@
       "provider",
       "provider=",
       "psych_to_yaml",
-      "psych_y",
       "public_method",
       "public_methods",
       "public_send",
@@ -3529,8 +3484,7 @@
       "updated",
       "updated=",
       "validate",
-      "value_for_platform",
-      "y"
+      "value_for_platform"
     ],
     "macports_package": [
       "!",
@@ -3616,7 +3570,6 @@
       "provider",
       "provider=",
       "psych_to_yaml",
-      "psych_y",
       "public_method",
       "public_methods",
       "public_send",
@@ -3659,8 +3612,7 @@
       "updated=",
       "validate",
       "value_for_platform",
-      "version",
-      "y"
+      "version"
     ],
     "mdadm": [
       "!",
@@ -3748,7 +3700,6 @@
       "provider",
       "provider=",
       "psych_to_yaml",
-      "psych_y",
       "public_method",
       "public_methods",
       "public_send",
@@ -3789,8 +3740,7 @@
       "updated",
       "updated=",
       "validate",
-      "value_for_platform",
-      "y"
+      "value_for_platform"
     ],
     "mount": [
       "!",
@@ -3883,7 +3833,6 @@
       "provider",
       "provider=",
       "psych_to_yaml",
-      "psych_y",
       "public_method",
       "public_methods",
       "public_send",
@@ -3923,8 +3872,7 @@
       "updated",
       "updated=",
       "validate",
-      "value_for_platform",
-      "y"
+      "value_for_platform"
     ],
     "package": [
       "!",
@@ -4010,7 +3958,6 @@
       "provider",
       "provider=",
       "psych_to_yaml",
-      "psych_y",
       "public_method",
       "public_methods",
       "public_send",
@@ -4053,8 +4000,7 @@
       "updated=",
       "validate",
       "value_for_platform",
-      "version",
-      "y"
+      "version"
     ],
     "pacman_package": [
       "!",
@@ -4140,7 +4086,6 @@
       "provider",
       "provider=",
       "psych_to_yaml",
-      "psych_y",
       "public_method",
       "public_methods",
       "public_send",
@@ -4183,8 +4128,7 @@
       "updated=",
       "validate",
       "value_for_platform",
-      "version",
-      "y"
+      "version"
     ],
     "perl": [
       "!",
@@ -4276,7 +4220,6 @@
       "provider",
       "provider=",
       "psych_to_yaml",
-      "psych_y",
       "public_method",
       "public_methods",
       "public_send",
@@ -4320,8 +4263,7 @@
       "updated=",
       "user",
       "validate",
-      "value_for_platform",
-      "y"
+      "value_for_platform"
     ],
     "portage_package": [
       "!",
@@ -4407,7 +4349,6 @@
       "provider",
       "provider=",
       "psych_to_yaml",
-      "psych_y",
       "public_method",
       "public_methods",
       "public_send",
@@ -4450,8 +4391,7 @@
       "updated=",
       "validate",
       "value_for_platform",
-      "version",
-      "y"
+      "version"
     ],
     "python": [
       "!",
@@ -4543,7 +4483,6 @@
       "provider",
       "provider=",
       "psych_to_yaml",
-      "psych_y",
       "public_method",
       "public_methods",
       "public_send",
@@ -4587,8 +4526,7 @@
       "updated=",
       "user",
       "validate",
-      "value_for_platform",
-      "y"
+      "value_for_platform"
     ],
     "remote_directory": [
       "!",
@@ -4641,6 +4579,7 @@
       "hash",
       "ignore_failure",
       "in?",
+      "inherits",
       "initialize_clone",
       "initialize_dup",
       "inspect",
@@ -4681,7 +4620,6 @@
       "provider",
       "provider=",
       "psych_to_yaml",
-      "psych_y",
       "public_method",
       "public_methods",
       "public_send",
@@ -4694,6 +4632,7 @@
       "resources",
       "respond_to?",
       "respond_to_missing?",
+      "rights",
       "run_action",
       "search",
       "send",
@@ -4724,8 +4663,7 @@
       "updated",
       "updated=",
       "validate",
-      "value_for_platform",
-      "y"
+      "value_for_platform"
     ],
     "remote_file": [
       "!",
@@ -4777,6 +4715,7 @@
       "hash",
       "ignore_failure",
       "in?",
+      "inherits",
       "initialize_clone",
       "initialize_dup",
       "inspect",
@@ -4817,7 +4756,6 @@
       "provider",
       "provider=",
       "psych_to_yaml",
-      "psych_y",
       "public_method",
       "public_methods",
       "public_send",
@@ -4828,6 +4766,7 @@
       "resources",
       "respond_to?",
       "respond_to_missing?",
+      "rights",
       "run_action",
       "search",
       "send",
@@ -4858,8 +4797,7 @@
       "updated",
       "updated=",
       "validate",
-      "value_for_platform",
-      "y"
+      "value_for_platform"
     ],
     "route": [
       "!",
@@ -4952,7 +4890,6 @@
       "provider",
       "provider=",
       "psych_to_yaml",
-      "psych_y",
       "public_method",
       "public_methods",
       "public_send",
@@ -4994,8 +4931,7 @@
       "updated",
       "updated=",
       "validate",
-      "value_for_platform",
-      "y"
+      "value_for_platform"
     ],
     "ruby": [
       "!",
@@ -5087,7 +5023,6 @@
       "provider",
       "provider=",
       "psych_to_yaml",
-      "psych_y",
       "public_method",
       "public_methods",
       "public_send",
@@ -5131,8 +5066,7 @@
       "updated=",
       "user",
       "validate",
-      "value_for_platform",
-      "y"
+      "value_for_platform"
     ],
     "ruby_block": [
       "!",
@@ -5217,7 +5151,6 @@
       "provider",
       "provider=",
       "psych_to_yaml",
-      "psych_y",
       "public_method",
       "public_methods",
       "public_send",
@@ -5257,8 +5190,7 @@
       "updated",
       "updated=",
       "validate",
-      "value_for_platform",
-      "y"
+      "value_for_platform"
     ],
     "scm": [
       "!",
@@ -5346,7 +5278,6 @@
       "provider",
       "provider=",
       "psych_to_yaml",
-      "psych_y",
       "public_method",
       "public_methods",
       "public_send",
@@ -5395,8 +5326,7 @@
       "updated=",
       "user",
       "validate",
-      "value_for_platform",
-      "y"
+      "value_for_platform"
     ],
     "script": [
       "!",
@@ -5488,7 +5418,6 @@
       "provider",
       "provider=",
       "psych_to_yaml",
-      "psych_y",
       "public_method",
       "public_methods",
       "public_send",
@@ -5532,8 +5461,7 @@
       "updated=",
       "user",
       "validate",
-      "value_for_platform",
-      "y"
+      "value_for_platform"
     ],
     "service": [
       "!",
@@ -5619,7 +5547,6 @@
       "provider",
       "provider=",
       "psych_to_yaml",
-      "psych_y",
       "public_method",
       "public_methods",
       "public_send",
@@ -5667,8 +5594,7 @@
       "updated",
       "updated=",
       "validate",
-      "value_for_platform",
-      "y"
+      "value_for_platform"
     ],
     "subversion": [
       "!",
@@ -5756,7 +5682,6 @@
       "provider",
       "provider=",
       "psych_to_yaml",
-      "psych_y",
       "public_method",
       "public_methods",
       "public_send",
@@ -5805,8 +5730,7 @@
       "updated=",
       "user",
       "validate",
-      "value_for_platform",
-      "y"
+      "value_for_platform"
     ],
     "template": [
       "!",
@@ -5858,6 +5782,7 @@
       "hash",
       "ignore_failure",
       "in?",
+      "inherits",
       "initialize_clone",
       "initialize_dup",
       "inspect",
@@ -5899,7 +5824,6 @@
       "provider",
       "provider=",
       "psych_to_yaml",
-      "psych_y",
       "public_method",
       "public_methods",
       "public_send",
@@ -5910,6 +5834,7 @@
       "resources",
       "respond_to?",
       "respond_to_missing?",
+      "rights",
       "run_action",
       "search",
       "send",
@@ -5941,8 +5866,7 @@
       "updated=",
       "validate",
       "value_for_platform",
-      "variables",
-      "y"
+      "variables"
     ],
     "timestamped_deploy": [
       "!",
@@ -6043,7 +5967,6 @@
       "provider",
       "provider=",
       "psych_to_yaml",
-      "psych_y",
       "public_method",
       "public_methods",
       "public_send",
@@ -6104,8 +6027,7 @@
       "updated=",
       "user",
       "validate",
-      "value_for_platform",
-      "y"
+      "value_for_platform"
     ],
     "user": [
       "!",
@@ -6194,7 +6116,6 @@
       "provider",
       "provider=",
       "psych_to_yaml",
-      "psych_y",
       "public_method",
       "public_methods",
       "public_send",
@@ -6237,8 +6158,7 @@
       "updated=",
       "username",
       "validate",
-      "value_for_platform",
-      "y"
+      "value_for_platform"
     ],
     "yum_package": [
       "!",
@@ -6324,7 +6244,6 @@
       "provider",
       "provider=",
       "psych_to_yaml",
-      "psych_y",
       "public_method",
       "public_methods",
       "public_send",
@@ -6367,8 +6286,7 @@
       "updated=",
       "validate",
       "value_for_platform",
-      "version",
-      "y"
+      "version"
     ]
   }
 }

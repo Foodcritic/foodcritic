@@ -41,8 +41,18 @@ end
 
 def chef_resource_attributes
   chef_resources do |resource_klazz,resource|
-    [convert_to_snake_case(resource_klazz.to_s),
-       resource.public_instance_methods(true).sort]
+
+    winresources = [ "CookbookFile", "RemoteDirectory", "Directory", "RemoteFile", "Template" ]
+
+    myresources = resource.public_instance_methods(true)
+
+    if winresources.include?(resource_klazz.to_s)
+	myresources.push("rights".to_sym)
+	myresources.push("inherits".to_sym)
+    end	
+
+    [convert_to_snake_case(resource_klazz.to_s), myresources.sort]
+
   end
 end
 
