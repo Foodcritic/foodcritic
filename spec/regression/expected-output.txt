@@ -101,7 +101,6 @@ FC007: Ensure recipe dependencies are reflected in cookbook metadata: ./postgres
 FC007: Ensure recipe dependencies are reflected in cookbook metadata: ./postgresql/recipes/ruby.rb:30
 FC007: Ensure recipe dependencies are reflected in cookbook metadata: ./tmux/recipes/package.rb:2
 FC009: Resource attribute not recognised: ./chef-server/recipes/default.rb:46
-FC009: Resource attribute not recognised: ./perl/recipes/default.rb:43
 FC013: Use file_cache_path rather than hard-coding tmp paths: ./zenoss/providers/zenpack.rb:30
 FC014: Consider extracting long ruby_block to library: ./java/recipes/openjdk.rb:51
 FC014: Consider extracting long ruby_block to library: ./lvm/providers/logical_volume.rb:18

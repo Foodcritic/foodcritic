@@ -11,6 +11,7 @@ Feature: Check for unrecognised resource attributes
   Examples:
     | type    | attributes                  | shown |
     | file    | punter,group,mode,action    | true  |
+    | file    | owner,group,rights,action   | false |
     | file    | owner,group,mode,action     | false |
     | file    | action,retries              | false |
     | group   | gid                         | false |
