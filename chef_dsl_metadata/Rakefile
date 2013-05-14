@@ -42,14 +42,21 @@ end
 def chef_resource_attributes
   chef_resources do |resource_klazz,resource|
 
-    winresources = [ "CookbookFile", "RemoteDirectory", "Directory", "RemoteFile", "Template" ]
-
     myresources = resource.public_instance_methods(true)
 
-    if winresources.include?(resource_klazz.to_s)
+    winres1 = [ "CookbookFile", "RemoteDirectory", "Directory", "RemoteFile", "Template" ]
+    winres2 = [ "File", "Link" ]
+
+    if winres1.include?(resource_klazz.to_s)
 	myresources.push("rights".to_sym)
 	myresources.push("inherits".to_sym)
     end	
+
+    if winres2.include?(resource_klazz.to_s)
+	myresources.push("deny_rights".to_sym)
+	myresources.push("files_rights".to_sym)
+    end	
+
 
     [convert_to_snake_case(resource_klazz.to_s), myresources.sort]
 
