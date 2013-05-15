@@ -6,7 +6,4 @@ gem "appraisal", "~> 0.5.1"
 gem "rake", "~> 0.9.2.2"
 gem "yajl-ruby", "~> 1.1.0"
 gem "chef", "10.14.0"
-gem "ffi"
-gem "ruby-wmi"
-gem "win32-service"
 

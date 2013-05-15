@@ -63,7 +63,6 @@
     "extend",
     "filename_to_qualified_string",
     "find_file",
-    "fork",
     "freeze",
     "from_file",
     "frozen?",
@@ -109,6 +108,7 @@
     "private_methods",
     "protected_methods",
     "psych_to_yaml",
+    "psych_y",
     "public_method",
     "public_methods",
     "public_send",
@@ -153,7 +153,8 @@
     "update_from!",
     "validate",
     "value_for_platform",
-    "with_indexer_metadata"
+    "with_indexer_metadata",
+    "y"
   ],
   "node_methods": [
     "!",
@@ -217,7 +218,6 @@
     "extend",
     "filename_to_qualified_string",
     "find_file",
-    "fork",
     "freeze",
     "from_file",
     "frozen?",
@@ -262,6 +262,7 @@
     "private_methods",
     "protected_methods",
     "psych_to_yaml",
+    "psych_y",
     "public_method",
     "public_methods",
     "public_send",
@@ -304,7 +305,8 @@
     "untrusted?",
     "update_from!",
     "validate",
-    "with_indexer_metadata"
+    "with_indexer_metadata",
+    "y"
   ],
   "actions": {
     "apt_package": [
@@ -633,7 +635,6 @@
       "equal?",
       "extend",
       "filename_to_qualified_string",
-      "fork",
       "freeze",
       "frozen?",
       "gem",
@@ -679,6 +680,7 @@
       "provider",
       "provider=",
       "psych_to_yaml",
+      "psych_y",
       "public_method",
       "public_methods",
       "public_send",
@@ -727,7 +729,8 @@
       "updated_by_last_action?",
       "validate",
       "value_for_platform",
-      "version"
+      "version",
+      "y"
     ],
     "bash": [
       "!",
@@ -771,7 +774,6 @@
       "extend",
       "filename_to_qualified_string",
       "flags",
-      "fork",
       "freeze",
       "frozen?",
       "gem",
@@ -818,6 +820,7 @@
       "provider",
       "provider=",
       "psych_to_yaml",
+      "psych_y",
       "public_method",
       "public_methods",
       "public_send",
@@ -867,7 +870,8 @@
       "updated_by_last_action?",
       "user",
       "validate",
-      "value_for_platform"
+      "value_for_platform",
+      "y"
     ],
     "breakpoint": [
       "!",
@@ -905,7 +909,6 @@
       "equal?",
       "extend",
       "filename_to_qualified_string",
-      "fork",
       "freeze",
       "frozen?",
       "gem",
@@ -949,6 +952,7 @@
       "provider",
       "provider=",
       "psych_to_yaml",
+      "psych_y",
       "public_method",
       "public_methods",
       "public_send",
@@ -994,7 +998,8 @@
       "updated_by_last_action",
       "updated_by_last_action?",
       "validate",
-      "value_for_platform"
+      "value_for_platform",
+      "y"
     ],
     "cookbook_file": [
       "!",
@@ -1036,7 +1041,6 @@
       "equal?",
       "extend",
       "filename_to_qualified_string",
-      "fork",
       "freeze",
       "frozen?",
       "gem",
@@ -1084,6 +1088,7 @@
       "provider",
       "provider=",
       "psych_to_yaml",
+      "psych_y",
       "public_method",
       "public_methods",
       "public_send",
@@ -1130,7 +1135,8 @@
       "updated_by_last_action",
       "updated_by_last_action?",
       "validate",
-      "value_for_platform"
+      "value_for_platform",
+      "y"
     ],
     "cron": [
       "!",
@@ -1170,7 +1176,6 @@
       "equal?",
       "extend",
       "filename_to_qualified_string",
-      "fork",
       "freeze",
       "frozen?",
       "gem",
@@ -1220,6 +1225,7 @@
       "provider",
       "provider=",
       "psych_to_yaml",
+      "psych_y",
       "public_method",
       "public_methods",
       "public_send",
@@ -1268,7 +1274,8 @@
       "user",
       "validate",
       "value_for_platform",
-      "weekday"
+      "weekday",
+      "y"
     ],
     "csh": [
       "!",
@@ -1312,7 +1319,6 @@
       "extend",
       "filename_to_qualified_string",
       "flags",
-      "fork",
       "freeze",
       "frozen?",
       "gem",
@@ -1359,6 +1365,7 @@
       "provider",
       "provider=",
       "psych_to_yaml",
+      "psych_y",
       "public_method",
       "public_methods",
       "public_send",
@@ -1408,7 +1415,8 @@
       "updated_by_last_action?",
       "user",
       "validate",
-      "value_for_platform"
+      "value_for_platform",
+      "y"
     ],
     "deploy": [
       "!",
@@ -1459,7 +1467,6 @@
       "equal?",
       "extend",
       "filename_to_qualified_string",
-      "fork",
       "freeze",
       "frozen?",
       "gem",
@@ -1507,6 +1514,7 @@
       "provider",
       "provider=",
       "psych_to_yaml",
+      "psych_y",
       "public_method",
       "public_methods",
       "public_send",
@@ -1573,7 +1581,8 @@
       "updated_by_last_action?",
       "user",
       "validate",
-      "value_for_platform"
+      "value_for_platform",
+      "y"
     ],
     "deploy_branch": [
       "!",
@@ -1624,7 +1633,6 @@
       "equal?",
       "extend",
       "filename_to_qualified_string",
-      "fork",
       "freeze",
       "frozen?",
       "gem",
@@ -1672,6 +1680,7 @@
       "provider",
       "provider=",
       "psych_to_yaml",
+      "psych_y",
       "public_method",
       "public_methods",
       "public_send",
@@ -1738,7 +1747,8 @@
       "updated_by_last_action?",
       "user",
       "validate",
-      "value_for_platform"
+      "value_for_platform",
+      "y"
     ],
     "deploy_revision": [
       "!",
@@ -1789,7 +1799,6 @@
       "equal?",
       "extend",
       "filename_to_qualified_string",
-      "fork",
       "freeze",
       "frozen?",
       "gem",
@@ -1837,6 +1846,7 @@
       "provider",
       "provider=",
       "psych_to_yaml",
+      "psych_y",
       "public_method",
       "public_methods",
       "public_send",
@@ -1903,7 +1913,8 @@
       "updated_by_last_action?",
       "user",
       "validate",
-      "value_for_platform"
+      "value_for_platform",
+      "y"
     ],
     "directory": [
       "!",
@@ -1941,7 +1952,6 @@
       "equal?",
       "extend",
       "filename_to_qualified_string",
-      "fork",
       "freeze",
       "frozen?",
       "gem",
@@ -1989,6 +1999,7 @@
       "provider",
       "provider=",
       "psych_to_yaml",
+      "psych_y",
       "public_method",
       "public_methods",
       "public_send",
@@ -2035,7 +2046,8 @@
       "updated_by_last_action",
       "updated_by_last_action?",
       "validate",
-      "value_for_platform"
+      "value_for_platform",
+      "y"
     ],
     "dpkg_package": [
       "!",
@@ -2073,7 +2085,6 @@
       "equal?",
       "extend",
       "filename_to_qualified_string",
-      "fork",
       "freeze",
       "frozen?",
       "gem",
@@ -2119,6 +2130,7 @@
       "provider",
       "provider=",
       "psych_to_yaml",
+      "psych_y",
       "public_method",
       "public_methods",
       "public_send",
@@ -2167,7 +2179,8 @@
       "updated_by_last_action?",
       "validate",
       "value_for_platform",
-      "version"
+      "version",
+      "y"
     ],
     "easy_install_package": [
       "!",
@@ -2206,7 +2219,6 @@
       "equal?",
       "extend",
       "filename_to_qualified_string",
-      "fork",
       "freeze",
       "frozen?",
       "gem",
@@ -2253,6 +2265,7 @@
       "provider",
       "provider=",
       "psych_to_yaml",
+      "psych_y",
       "public_method",
       "public_methods",
       "public_send",
@@ -2302,7 +2315,8 @@
       "updated_by_last_action?",
       "validate",
       "value_for_platform",
-      "version"
+      "version",
+      "y"
     ],
     "env": [
       "!",
@@ -2341,7 +2355,6 @@
       "equal?",
       "extend",
       "filename_to_qualified_string",
-      "fork",
       "freeze",
       "frozen?",
       "gem",
@@ -2386,6 +2399,7 @@
       "provider",
       "provider=",
       "psych_to_yaml",
+      "psych_y",
       "public_method",
       "public_methods",
       "public_send",
@@ -2432,7 +2446,8 @@
       "updated_by_last_action?",
       "validate",
       "value",
-      "value_for_platform"
+      "value_for_platform",
+      "y"
     ],
     "erl_call": [
       "!",
@@ -2473,7 +2488,6 @@
       "equal?",
       "extend",
       "filename_to_qualified_string",
-      "fork",
       "freeze",
       "frozen?",
       "gem",
@@ -2519,6 +2533,7 @@
       "provider",
       "provider=",
       "psych_to_yaml",
+      "psych_y",
       "public_method",
       "public_methods",
       "public_send",
@@ -2564,7 +2579,8 @@
       "updated_by_last_action",
       "updated_by_last_action?",
       "validate",
-      "value_for_platform"
+      "value_for_platform",
+      "y"
     ],
     "execute": [
       "!",
@@ -2606,7 +2622,6 @@
       "equal?",
       "extend",
       "filename_to_qualified_string",
-      "fork",
       "freeze",
       "frozen?",
       "gem",
@@ -2652,6 +2667,7 @@
       "provider",
       "provider=",
       "psych_to_yaml",
+      "psych_y",
       "public_method",
       "public_methods",
       "public_send",
@@ -2701,7 +2717,8 @@
       "updated_by_last_action?",
       "user",
       "validate",
-      "value_for_platform"
+      "value_for_platform",
+      "y"
     ],
     "file": [
       "!",
@@ -2742,7 +2759,6 @@
       "equal?",
       "extend",
       "filename_to_qualified_string",
-      "fork",
       "freeze",
       "frozen?",
       "gem",
@@ -2790,6 +2806,7 @@
       "provider",
       "provider=",
       "psych_to_yaml",
+      "psych_y",
       "public_method",
       "public_methods",
       "public_send",
@@ -2835,7 +2852,8 @@
       "updated_by_last_action",
       "updated_by_last_action?",
       "validate",
-      "value_for_platform"
+      "value_for_platform",
+      "y"
     ],
     "freebsd_package": [
       "!",
@@ -2873,7 +2891,6 @@
       "equal?",
       "extend",
       "filename_to_qualified_string",
-      "fork",
       "freeze",
       "frozen?",
       "gem",
@@ -2919,6 +2936,7 @@
       "provider",
       "provider=",
       "psych_to_yaml",
+      "psych_y",
       "public_method",
       "public_methods",
       "public_send",
@@ -2967,7 +2985,8 @@
       "updated_by_last_action?",
       "validate",
       "value_for_platform",
-      "version"
+      "version",
+      "y"
     ],
     "gem_package": [
       "!",
@@ -3005,7 +3024,6 @@
       "equal?",
       "extend",
       "filename_to_qualified_string",
-      "fork",
       "freeze",
       "frozen?",
       "gem",
@@ -3052,6 +3070,7 @@
       "provider",
       "provider=",
       "psych_to_yaml",
+      "psych_y",
       "public_method",
       "public_methods",
       "public_send",
@@ -3100,7 +3119,8 @@
       "updated_by_last_action?",
       "validate",
       "value_for_platform",
-      "version"
+      "version",
+      "y"
     ],
     "git": [
       "!",
@@ -3142,7 +3162,6 @@
       "equal?",
       "extend",
       "filename_to_qualified_string",
-      "fork",
       "freeze",
       "frozen?",
       "gem",
@@ -3187,6 +3206,7 @@
       "provider",
       "provider=",
       "psych_to_yaml",
+      "psych_y",
       "public_method",
       "public_methods",
       "public_send",
@@ -3243,7 +3263,8 @@
       "updated_by_last_action?",
       "user",
       "validate",
-      "value_for_platform"
+      "value_for_platform",
+      "y"
     ],
     "group": [
       "!",
@@ -3282,7 +3303,6 @@
       "equal?",
       "extend",
       "filename_to_qualified_string",
-      "fork",
       "freeze",
       "frozen?",
       "gem",
@@ -3329,6 +3349,7 @@
       "provider",
       "provider=",
       "psych_to_yaml",
+      "psych_y",
       "public_method",
       "public_methods",
       "public_send",
@@ -3375,7 +3396,8 @@
       "updated_by_last_action?",
       "users",
       "validate",
-      "value_for_platform"
+      "value_for_platform",
+      "y"
     ],
     "http_request": [
       "!",
@@ -3413,7 +3435,6 @@
       "equal?",
       "extend",
       "filename_to_qualified_string",
-      "fork",
       "freeze",
       "frozen?",
       "gem",
@@ -3459,6 +3480,7 @@
       "provider",
       "provider=",
       "psych_to_yaml",
+      "psych_y",
       "public_method",
       "public_methods",
       "public_send",
@@ -3505,7 +3527,8 @@
       "updated_by_last_action?",
       "url",
       "validate",
-      "value_for_platform"
+      "value_for_platform",
+      "y"
     ],
     "ifconfig": [
       "!",
@@ -3546,7 +3569,6 @@
       "equal?",
       "extend",
       "filename_to_qualified_string",
-      "fork",
       "freeze",
       "frozen?",
       "gem",
@@ -3597,6 +3619,7 @@
       "provider",
       "provider=",
       "psych_to_yaml",
+      "psych_y",
       "public_method",
       "public_methods",
       "public_send",
@@ -3643,7 +3666,8 @@
       "updated_by_last_action",
       "updated_by_last_action?",
       "validate",
-      "value_for_platform"
+      "value_for_platform",
+      "y"
     ],
     "link": [
       "!",
@@ -3681,7 +3705,6 @@
       "equal?",
       "extend",
       "filename_to_qualified_string",
-      "fork",
       "freeze",
       "frozen?",
       "gem",
@@ -3728,6 +3751,7 @@
       "provider",
       "provider=",
       "psych_to_yaml",
+      "psych_y",
       "public_method",
       "public_methods",
       "public_send",
@@ -3775,7 +3799,8 @@
       "updated_by_last_action",
       "updated_by_last_action?",
       "validate",
-      "value_for_platform"
+      "value_for_platform",
+      "y"
     ],
     "log": [
       "!",
@@ -3813,7 +3838,6 @@
       "equal?",
       "extend",
       "filename_to_qualified_string",
-      "fork",
       "freeze",
       "frozen?",
       "gem",
@@ -3858,6 +3882,7 @@
       "provider",
       "provider=",
       "psych_to_yaml",
+      "psych_y",
       "public_method",
       "public_methods",
       "public_send",
@@ -3903,7 +3928,8 @@
       "updated_by_last_action",
       "updated_by_last_action?",
       "validate",
-      "value_for_platform"
+      "value_for_platform",
+      "y"
     ],
     "macports_package": [
       "!",
@@ -3941,7 +3967,6 @@
       "equal?",
       "extend",
       "filename_to_qualified_string",
-      "fork",
       "freeze",
       "frozen?",
       "gem",
@@ -3987,6 +4012,7 @@
       "provider",
       "provider=",
       "psych_to_yaml",
+      "psych_y",
       "public_method",
       "public_methods",
       "public_send",
@@ -4035,7 +4061,8 @@
       "updated_by_last_action?",
       "validate",
       "value_for_platform",
-      "version"
+      "version",
+      "y"
     ],
     "mdadm": [
       "!",
@@ -4076,7 +4103,6 @@
       "exists",
       "extend",
       "filename_to_qualified_string",
-      "fork",
       "freeze",
       "frozen?",
       "gem",
@@ -4121,6 +4147,7 @@
       "provider",
       "provider=",
       "psych_to_yaml",
+      "psych_y",
       "public_method",
       "public_methods",
       "public_send",
@@ -4167,7 +4194,8 @@
       "updated_by_last_action",
       "updated_by_last_action?",
       "validate",
-      "value_for_platform"
+      "value_for_platform",
+      "y"
     ],
     "mount": [
       "!",
@@ -4209,7 +4237,6 @@
       "equal?",
       "extend",
       "filename_to_qualified_string",
-      "fork",
       "freeze",
       "frozen?",
       "fstype",
@@ -4258,6 +4285,7 @@
       "provider",
       "provider=",
       "psych_to_yaml",
+      "psych_y",
       "public_method",
       "public_methods",
       "public_send",
@@ -4303,7 +4331,8 @@
       "updated_by_last_action",
       "updated_by_last_action?",
       "validate",
-      "value_for_platform"
+      "value_for_platform",
+      "y"
     ],
     "ohai": [
       "!",
@@ -4341,7 +4370,6 @@
       "equal?",
       "extend",
       "filename_to_qualified_string",
-      "fork",
       "freeze",
       "frozen?",
       "gem",
@@ -4386,6 +4414,7 @@
       "provider",
       "provider=",
       "psych_to_yaml",
+      "psych_y",
       "public_method",
       "public_methods",
       "public_send",
@@ -4431,7 +4460,8 @@
       "updated_by_last_action",
       "updated_by_last_action?",
       "validate",
-      "value_for_platform"
+      "value_for_platform",
+      "y"
     ],
     "package": [
       "!",
@@ -4469,7 +4499,6 @@
       "equal?",
       "extend",
       "filename_to_qualified_string",
-      "fork",
       "freeze",
       "frozen?",
       "gem",
@@ -4515,6 +4544,7 @@
       "provider",
       "provider=",
       "psych_to_yaml",
+      "psych_y",
       "public_method",
       "public_methods",
       "public_send",
@@ -4563,7 +4593,8 @@
       "updated_by_last_action?",
       "validate",
       "value_for_platform",
-      "version"
+      "version",
+      "y"
     ],
     "pacman_package": [
       "!",
@@ -4601,7 +4632,6 @@
       "equal?",
       "extend",
       "filename_to_qualified_string",
-      "fork",
       "freeze",
       "frozen?",
       "gem",
@@ -4647,6 +4677,7 @@
       "provider",
       "provider=",
       "psych_to_yaml",
+      "psych_y",
       "public_method",
       "public_methods",
       "public_send",
@@ -4695,7 +4726,8 @@
       "updated_by_last_action?",
       "validate",
       "value_for_platform",
-      "version"
+      "version",
+      "y"
     ],
     "perl": [
       "!",
@@ -4739,7 +4771,6 @@
       "extend",
       "filename_to_qualified_string",
       "flags",
-      "fork",
       "freeze",
       "frozen?",
       "gem",
@@ -4786,6 +4817,7 @@
       "provider",
       "provider=",
       "psych_to_yaml",
+      "psych_y",
       "public_method",
       "public_methods",
       "public_send",
@@ -4835,7 +4867,8 @@
       "updated_by_last_action?",
       "user",
       "validate",
-      "value_for_platform"
+      "value_for_platform",
+      "y"
     ],
     "portage_package": [
       "!",
@@ -4873,7 +4906,6 @@
       "equal?",
       "extend",
       "filename_to_qualified_string",
-      "fork",
       "freeze",
       "frozen?",
       "gem",
@@ -4919,6 +4951,7 @@
       "provider",
       "provider=",
       "psych_to_yaml",
+      "psych_y",
       "public_method",
       "public_methods",
       "public_send",
@@ -4967,7 +5000,8 @@
       "updated_by_last_action?",
       "validate",
       "value_for_platform",
-      "version"
+      "version",
+      "y"
     ],
     "python": [
       "!",
@@ -5011,7 +5045,6 @@
       "extend",
       "filename_to_qualified_string",
       "flags",
-      "fork",
       "freeze",
       "frozen?",
       "gem",
@@ -5058,6 +5091,7 @@
       "provider",
       "provider=",
       "psych_to_yaml",
+      "psych_y",
       "public_method",
       "public_methods",
       "public_send",
@@ -5107,7 +5141,8 @@
       "updated_by_last_action?",
       "user",
       "validate",
-      "value_for_platform"
+      "value_for_platform",
+      "y"
     ],
     "remote_directory": [
       "!",
@@ -5150,7 +5185,6 @@
       "files_group",
       "files_mode",
       "files_owner",
-      "fork",
       "freeze",
       "frozen?",
       "gem",
@@ -5199,6 +5233,7 @@
       "provider",
       "provider=",
       "psych_to_yaml",
+      "psych_y",
       "public_method",
       "public_methods",
       "public_send",
@@ -5247,7 +5282,8 @@
       "updated_by_last_action",
       "updated_by_last_action?",
       "validate",
-      "value_for_platform"
+      "value_for_platform",
+      "y"
     ],
     "remote_file": [
       "!",
@@ -5289,7 +5325,6 @@
       "equal?",
       "extend",
       "filename_to_qualified_string",
-      "fork",
       "freeze",
       "frozen?",
       "gem",
@@ -5337,6 +5372,7 @@
       "provider",
       "provider=",
       "psych_to_yaml",
+      "psych_y",
       "public_method",
       "public_methods",
       "public_send",
@@ -5383,7 +5419,8 @@
       "updated_by_last_action",
       "updated_by_last_action?",
       "validate",
-      "value_for_platform"
+      "value_for_platform",
+      "y"
     ],
     "route": [
       "!",
@@ -5424,7 +5461,6 @@
       "equal?",
       "extend",
       "filename_to_qualified_string",
-      "fork",
       "freeze",
       "frozen?",
       "gateway",
@@ -5474,6 +5510,7 @@
       "provider",
       "provider=",
       "psych_to_yaml",
+      "psych_y",
       "public_method",
       "public_methods",
       "public_send",
@@ -5521,7 +5558,8 @@
       "updated_by_last_action",
       "updated_by_last_action?",
       "validate",
-      "value_for_platform"
+      "value_for_platform",
+      "y"
     ],
     "rpm_package": [
       "!",
@@ -5559,7 +5597,6 @@
       "equal?",
       "extend",
       "filename_to_qualified_string",
-      "fork",
       "freeze",
       "frozen?",
       "gem",
@@ -5605,6 +5642,7 @@
       "provider",
       "provider=",
       "psych_to_yaml",
+      "psych_y",
       "public_method",
       "public_methods",
       "public_send",
@@ -5653,7 +5691,8 @@
       "updated_by_last_action?",
       "validate",
       "value_for_platform",
-      "version"
+      "version",
+      "y"
     ],
     "ruby": [
       "!",
@@ -5697,7 +5736,6 @@
       "extend",
       "filename_to_qualified_string",
       "flags",
-      "fork",
       "freeze",
       "frozen?",
       "gem",
@@ -5744,6 +5782,7 @@
       "provider",
       "provider=",
       "psych_to_yaml",
+      "psych_y",
       "public_method",
       "public_methods",
       "public_send",
@@ -5793,7 +5832,8 @@
       "updated_by_last_action?",
       "user",
       "validate",
-      "value_for_platform"
+      "value_for_platform",
+      "y"
     ],
     "ruby_block": [
       "!",
@@ -5832,7 +5872,6 @@
       "equal?",
       "extend",
       "filename_to_qualified_string",
-      "fork",
       "freeze",
       "frozen?",
       "gem",
@@ -5876,6 +5915,7 @@
       "provider",
       "provider=",
       "psych_to_yaml",
+      "psych_y",
       "public_method",
       "public_methods",
       "public_send",
@@ -5921,7 +5961,8 @@
       "updated_by_last_action",
       "updated_by_last_action?",
       "validate",
-      "value_for_platform"
+      "value_for_platform",
+      "y"
     ],
     "scm": [
       "!",
@@ -5962,7 +6003,6 @@
       "equal?",
       "extend",
       "filename_to_qualified_string",
-      "fork",
       "freeze",
       "frozen?",
       "gem",
@@ -6007,6 +6047,7 @@
       "provider",
       "provider=",
       "psych_to_yaml",
+      "psych_y",
       "public_method",
       "public_methods",
       "public_send",
@@ -6061,7 +6102,8 @@
       "updated_by_last_action?",
       "user",
       "validate",
-      "value_for_platform"
+      "value_for_platform",
+      "y"
     ],
     "script": [
       "!",
@@ -6105,7 +6147,6 @@
       "extend",
       "filename_to_qualified_string",
       "flags",
-      "fork",
       "freeze",
       "frozen?",
       "gem",
@@ -6152,6 +6193,7 @@
       "provider",
       "provider=",
       "psych_to_yaml",
+      "psych_y",
       "public_method",
       "public_methods",
       "public_send",
@@ -6201,7 +6243,8 @@
       "updated_by_last_action?",
       "user",
       "validate",
-      "value_for_platform"
+      "value_for_platform",
+      "y"
     ],
     "service": [
       "!",
@@ -6240,7 +6283,6 @@
       "equal?",
       "extend",
       "filename_to_qualified_string",
-      "fork",
       "freeze",
       "frozen?",
       "gem",
@@ -6286,6 +6328,7 @@
       "provider",
       "provider=",
       "psych_to_yaml",
+      "psych_y",
       "public_method",
       "public_methods",
       "public_send",
@@ -6339,7 +6382,8 @@
       "updated_by_last_action",
       "updated_by_last_action?",
       "validate",
-      "value_for_platform"
+      "value_for_platform",
+      "y"
     ],
     "subversion": [
       "!",
@@ -6380,7 +6424,6 @@
       "equal?",
       "extend",
       "filename_to_qualified_string",
-      "fork",
       "freeze",
       "frozen?",
       "gem",
@@ -6425,6 +6468,7 @@
       "provider",
       "provider=",
       "psych_to_yaml",
+      "psych_y",
       "public_method",
       "public_methods",
       "public_send",
@@ -6479,7 +6523,8 @@
       "updated_by_last_action?",
       "user",
       "validate",
-      "value_for_platform"
+      "value_for_platform",
+      "y"
     ],
     "template": [
       "!",
@@ -6521,7 +6566,6 @@
       "equal?",
       "extend",
       "filename_to_qualified_string",
-      "fork",
       "freeze",
       "frozen?",
       "gem",
@@ -6570,6 +6614,7 @@
       "provider",
       "provider=",
       "psych_to_yaml",
+      "psych_y",
       "public_method",
       "public_methods",
       "public_send",
@@ -6617,7 +6662,8 @@
       "updated_by_last_action?",
       "validate",
       "value_for_platform",
-      "variables"
+      "variables",
+      "y"
     ],
     "timestamped_deploy": [
       "!",
@@ -6668,7 +6714,6 @@
       "equal?",
       "extend",
       "filename_to_qualified_string",
-      "fork",
       "freeze",
       "frozen?",
       "gem",
@@ -6716,6 +6761,7 @@
       "provider",
       "provider=",
       "psych_to_yaml",
+      "psych_y",
       "public_method",
       "public_methods",
       "public_send",
@@ -6782,7 +6828,8 @@
       "updated_by_last_action?",
       "user",
       "validate",
-      "value_for_platform"
+      "value_for_platform",
+      "y"
     ],
     "user": [
       "!",
@@ -6821,7 +6868,6 @@
       "equal?",
       "extend",
       "filename_to_qualified_string",
-      "fork",
       "freeze",
       "frozen?",
       "gem",
@@ -6871,6 +6917,7 @@
       "provider",
       "provider=",
       "psych_to_yaml",
+      "psych_y",
       "public_method",
       "public_methods",
       "public_send",
@@ -6920,7 +6967,8 @@
       "updated_by_last_action?",
       "username",
       "validate",
-      "value_for_platform"
+      "value_for_platform",
+      "y"
     ],
     "yum_package": [
       "!",
@@ -6959,7 +7007,6 @@
       "equal?",
       "extend",
       "filename_to_qualified_string",
-      "fork",
       "freeze",
       "frozen?",
       "gem",
@@ -7005,6 +7052,7 @@
       "provider",
       "provider=",
       "psych_to_yaml",
+      "psych_y",
       "public_method",
       "public_methods",
       "public_send",
@@ -7053,7 +7101,8 @@
       "updated_by_last_action?",
       "validate",
       "value_for_platform",
-      "version"
+      "version",
+      "y"
     ]
   }
 }

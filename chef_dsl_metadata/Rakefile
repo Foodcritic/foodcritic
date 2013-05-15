@@ -41,12 +41,25 @@ end
 
 def chef_resource_attributes
   chef_resources do |resource_klazz,resource|
-    [convert_to_snake_case(resource_klazz.to_s),
-       resource.public_instance_methods(true).sort]
+    resource_name = convert_to_snake_case(resource_klazz.to_s)
+    attributes = resource.public_instance_methods(true)
+
+    if (!windows?) and has_windows_rights?(::Chef::VERSION) and
+      resource.ancestors.include?(Chef::Mixin::Securable)
+        attributes = add_windows_securable_attributes(resource_name, attributes)
+    end
+
+    [resource_name, attributes.sort]
   end
 end
 
 private
+
+def add_windows_securable_attributes(resource_name, attributes)
+  atts = [:rights, :deny_rights, :inherits] + attributes
+  atts << :files_rights if resource_name == 'remote_directory'
+  atts
+end
 
 def chef_dsl_module
   if Chef.const_defined?('DSL')
