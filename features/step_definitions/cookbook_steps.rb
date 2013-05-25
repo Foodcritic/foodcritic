@@ -1210,6 +1210,14 @@ Given 'a Rakefile that defines a lint task specifying a different name' do
   rakefile(:block, :name => 'lint')
 end
 
+Given 'a recipe that contains a ruby block without a block attribute' do
+  write_recipe %q{
+    ruby_block "missing block" do
+      puts "Missing a block attribute"
+    end
+  }
+end
+
 Given 'a recipe that contains both long and short ruby blocks' do
   recipe_with_ruby_block(:both)
 end

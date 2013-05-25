@@ -23,3 +23,8 @@ Feature: Check for overly long ruby blocks
     Given a recipe that contains both long and short ruby blocks
      When I check the cookbook
      Then the long ruby block warning 014 should be displayed against the long block only
+
+  Scenario: Missing block attribute
+    Given a recipe that contains a ruby block without a block attribute
+     When I check the cookbook
+     Then no error should have occurred
