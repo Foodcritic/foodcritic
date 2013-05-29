@@ -57,7 +57,8 @@ module FoodCritic
       # Loop through each file to be processed and apply the rules
       files_to_process(cookbook_paths, options[:exclude_paths]).each do |file|
         ast = read_ast(file)
-        active_rules(options).each do |rule|
+        relevant_tags = options[:tags].any? ? options[:tags] : cookbook_tags(file)
+        active_rules(relevant_tags).each do |rule|
           rule_matches = matches(rule.recipe, ast, file)
 
           if dsl_method_for_file(file)
@@ -122,9 +123,17 @@ module FoodCritic
       rule.applies_to.yield(Gem::Version.create(version))
     end
 
-    def active_rules(options)
+    def cookbook_tags(file)
+      fc_file = "#{cookbook_dir(file)}/.foodcritic"
+      tag_text = File.read fc_file
+      tag_text.split(/\s/)
+    rescue Errno::ENOENT, Errno::EACCES
+      []
+    end
+
+    def active_rules(tags)
       @rules.select do |rule|
-        matching_tags?(options[:tags], rule.tags) and
+        matching_tags?(tags, rule.tags) and
         applies_to_version?(rule, chef_version)
       end
     end
