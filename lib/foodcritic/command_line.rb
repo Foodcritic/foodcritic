@@ -32,6 +32,10 @@ module FoodCritic
           "Additional rule file path(s) to load.") do |i|
           options[:include_rules] << i
         end
+        opts.on("-G", "--search-gems",
+          "Search rubygems for rule files with the path foodcritic/rules/**/*.rb") do |g|
+          options[:search_gems] = true
+        end
         opts.on("-S", "--search-grammar PATH",
           "Specify grammar to use when validating search syntax.") do |s|
           options[:search_grammar] = s
