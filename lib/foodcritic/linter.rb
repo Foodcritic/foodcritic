@@ -96,11 +96,17 @@ module FoodCritic
     def load_rules!(options)
       rule_files = [File.join(File.dirname(__FILE__), 'rules.rb')]
       rule_files << options[:include_rules]
-      rule_files << Gem.find_files('foodcritic/rules/**/*.rb') if options[:search_gems]
+      rule_files << rule_files_in_gems if options[:search_gems]
       @rules = RuleDsl.load(rule_files.flatten.compact, chef_version)
     end
 
     private
+
+    def rule_files_in_gems
+      Gem::Specification.latest_specs(true).map do |spec| 
+        spec.matches_for_glob('foodcritic/rules/**/*.rb') 
+      end.flatten
+    end
 
     def remove_ignored(matches, rule, file)
       matches.reject do |m|
