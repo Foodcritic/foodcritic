@@ -38,6 +38,7 @@ FC002: Avoid string interpolation where not required: ./radiant/recipes/default.
 FC002: Avoid string interpolation where not required: ./radiant/templates/default/radiant.conf.erb:1
 FC002: Avoid string interpolation where not required: ./rsyslog/recipes/default.rb:24
 FC002: Avoid string interpolation where not required: ./rsyslog/recipes/default.rb:63
+FC002: Avoid string interpolation where not required: ./sbuild/definitions/sbuild_lv.rb:30
 FC002: Avoid string interpolation where not required: ./windows/libraries/registry_helper.rb:99
 FC002: Avoid string interpolation where not required: ./windows/libraries/registry_helper.rb:173
 FC002: Avoid string interpolation where not required: ./windows/libraries/windows_privileged.rb:42
@@ -288,6 +289,7 @@ FC019: Access node attributes in a consistent manner: zenoss/recipes/server.rb:1
 FC019: Access node attributes in a consistent manner: zenoss/recipes/server.rb:163
 FC019: Access node attributes in a consistent manner: zenoss/recipes/server.rb:226
 FC019: Access node attributes in a consistent manner: zenoss/recipes/server.rb:227
+FC023: Prefer conditional attributes: ./apache2/definitions/apache_module.rb:30
 FC023: Prefer conditional attributes: ./application_ruby/providers/rails.rb:100
 FC023: Prefer conditional attributes: ./apt/providers/repository.rb:26
 FC023: Prefer conditional attributes: ./apt/providers/repository.rb:68
@@ -299,11 +301,14 @@ FC023: Prefer conditional attributes: ./gnu_parallel/recipes/homebrew.rb:22
 FC023: Prefer conditional attributes: ./homebrew/providers/tap.rb:14
 FC023: Prefer conditional attributes: ./homebrew/providers/tap.rb:22
 FC023: Prefer conditional attributes: ./lvm/providers/volume_group.rb:12
+FC023: Prefer conditional attributes: ./munin/definitions/munin_plugin.rb:29
 FC023: Prefer conditional attributes: ./nagios/recipes/nginx.rb:17
 FC023: Prefer conditional attributes: ./nagios/recipes/server_source.rb:125
 FC023: Prefer conditional attributes: ./passenger_apache2/recipes/mod_rails.rb:27
 FC023: Prefer conditional attributes: ./rabbitmq/providers/plugin.rb:29
 FC023: Prefer conditional attributes: ./rabbitmq/providers/plugin.rb:38
+FC023: Prefer conditional attributes: ./runit/definitions/runit_service.rb:107
+FC023: Prefer conditional attributes: ./runit/definitions/runit_service.rb:158
 FC023: Prefer conditional attributes: ./runit/recipes/default.rb:37
 FC023: Prefer conditional attributes: ./samba/recipes/server.rb:24
 FC023: Prefer conditional attributes: ./users/providers/manage.rb:70
@@ -326,9 +331,18 @@ FC034: Unused template variables: ./application_python/templates/default/celeryc
 FC034: Unused template variables: ./horizon/templates/default/local_settings.py.erb:1
 FC034: Unused template variables: ./nginx/templates/default/nginx.init.erb:1
 FC034: Unused template variables: ./nova/templates/default/libvirtd.conf.erb:1
+FC034: Unused template variables: ./sbuild/templates/default/mk_chroot.sh.erb:1
 FC037: Invalid notification action: ./wordpress/recipes/default.rb:125
 FC041: Execute resource used to run curl or wget commands: ./hadoop/recipes/default.rb:33
 FC042: Prefer include_recipe to require_recipe: ./postfix/recipes/aliases.rb:17
+FC043: Prefer new notification syntax: ./apache2/definitions/apache_module.rb:20
+FC043: Prefer new notification syntax: ./apache2/definitions/apache_module.rb:38
+FC043: Prefer new notification syntax: ./apache2/definitions/apache_module.rb:47
+FC043: Prefer new notification syntax: ./apache2/definitions/apache_site.rb:20
+FC043: Prefer new notification syntax: ./apache2/definitions/apache_site.rb:24
+FC043: Prefer new notification syntax: ./apache2/definitions/apache_site.rb:34
+FC043: Prefer new notification syntax: ./apache2/definitions/web_app.rb:20
+FC043: Prefer new notification syntax: ./apache2/definitions/web_app.rb:29
 FC043: Prefer new notification syntax: ./apache2/recipes/mod_fcgid.rb:24
 FC043: Prefer new notification syntax: ./application_java/providers/tomcat.rb:46
 FC043: Prefer new notification syntax: ./application_nginx/providers/nginx_load_balancer.rb:39
@@ -351,8 +365,12 @@ FC043: Prefer new notification syntax: ./glance/recipes/registry.rb:76
 FC043: Prefer new notification syntax: ./glance/recipes/registry.rb:84
 FC043: Prefer new notification syntax: ./glance/recipes/registry.rb:143
 FC043: Prefer new notification syntax: ./glance/recipes/registry.rb:161
+FC043: Prefer new notification syntax: ./god/definitions/god_monitor.rb:20
+FC043: Prefer new notification syntax: ./god/definitions/god_monitor.rb:23
 FC043: Prefer new notification syntax: ./horizon/recipes/server.rb:159
 FC043: Prefer new notification syntax: ./horizon/recipes/server.rb:165
+FC043: Prefer new notification syntax: ./iptables/definitions/iptables_rule.rb:20
+FC043: Prefer new notification syntax: ./iptables/definitions/iptables_rule.rb:23
 FC043: Prefer new notification syntax: ./jetty/recipes/cargo.rb:41
 FC043: Prefer new notification syntax: ./jetty/recipes/cargo.rb:56
 FC043: Prefer new notification syntax: ./jetty/recipes/cargo.rb:65
@@ -368,6 +386,8 @@ FC043: Prefer new notification syntax: ./maradns/recipes/default.rb:46
 FC043: Prefer new notification syntax: ./memcached/recipes/default.rb:41
 FC043: Prefer new notification syntax: ./memcached/recipes/default.rb:56
 FC043: Prefer new notification syntax: ./memcached/recipes/default.rb:74
+FC043: Prefer new notification syntax: ./munin/definitions/munin_plugin.rb:21
+FC043: Prefer new notification syntax: ./munin/definitions/munin_plugin.rb:39
 FC043: Prefer new notification syntax: ./munin/recipes/client.rb:29
 FC043: Prefer new notification syntax: ./munin/recipes/server_apache.rb:21
 FC043: Prefer new notification syntax: ./nagios/providers/nrpecheck.rb:31
@@ -399,6 +419,8 @@ FC043: Prefer new notification syntax: ./openldap/recipes/server.rb:71
 FC043: Prefer new notification syntax: ./openldap/recipes/server.rb:78
 FC043: Prefer new notification syntax: ./openldap/recipes/server.rb:97
 FC043: Prefer new notification syntax: ./rabbitmq/recipes/mgmt_console.rb:25
+FC043: Prefer new notification syntax: ./runit/definitions/runit_service.rb:20
+FC043: Prefer new notification syntax: ./runit/definitions/runit_service.rb:172
 FC043: Prefer new notification syntax: ./runit/recipes/default.rb:44
 FC043: Prefer new notification syntax: ./runit/recipes/default.rb:65
 FC043: Prefer new notification syntax: ./samba/recipes/server.rb:55
