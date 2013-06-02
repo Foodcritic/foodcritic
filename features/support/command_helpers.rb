@@ -94,7 +94,7 @@ module FoodCritic
       if options.has_key?(:file_type)
         options[:file] = {:attributes => 'attributes/default.rb', :definition => 'definitions/apache_site.rb',
                           :metadata => 'metadata.rb', :provider => 'providers/site.rb',
-                          :resource => 'resources/site.rb'}[options[:file_type]]
+                          :resource => 'resources/site.rb', :libraries => 'libraries/lib.rb'}[options[:file_type]]
       end
       options = {:line => 1, :expect_warning => true, :file => 'recipes/default.rb'}.merge!(options)
       if options[:warning_only]
