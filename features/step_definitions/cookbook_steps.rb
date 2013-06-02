@@ -1584,7 +1584,7 @@ Then /^the warning ([0-9]+ )?should (not )?be (?:displayed|shown)$/ do |warning,
   expect_warning code, {:expect_warning => should_not.nil?}
 end
 
-Then /^the (?:[a-zA-Z \-_]+) warning ([0-9]+) should (not )?be displayed(?: against the (attributes|definition|metadata|provider|resource|README.md|README.rdoc) file)?( below)?$/ do |code, no_display, file, warning_only|
+Then /^the (?:[a-zA-Z \-_]+) warning ([0-9]+) should (not )?be displayed(?: against the (attributes|libraries|definition|metadata|provider|resource|README.md|README.rdoc) file)?( below)?$/ do |code, no_display, file, warning_only|
   options = {}
   options[:expect_warning] = no_display != 'not '
   unless file.nil?
@@ -1762,4 +1762,17 @@ end
 
 Then /^the check should abort with an error$/ do
   assert_error_occurred
+end
+
+Given(/^a cookbook with an? (.*) file with an interpolated name$/) do |file_type|
+  content = %q{
+    a = "#{node.hostname}"
+  }
+  write_recipe content if file_type == "recipe"
+  write_attributes content if file_type == "attribute"
+  write_metadata content if file_type == "metadata"
+  write_provider "site", content if file_type == "provider"
+  write_resource "site", content if file_type == "resource"
+  write_definition "apache_site", content if file_type == "definition"
+  write_library "lib", content if file_type == "library"
 end
