@@ -160,7 +160,7 @@ module FoodCritic
       dirs.each do |dir|
         exclusions = Dir.glob(exclude_paths.map{|p| File.join(dir, p)})
         if File.directory? dir
-          cookbook_glob = '{metadata.rb,{attributes,libraries,providers,recipes,resources}/*.rb,templates/*/*.erb}'
+          cookbook_glob = '{metadata.rb,{attributes,definitions,libraries,providers,recipes,resources}/*.rb,templates/*/*.erb}'
           files += (Dir.glob(File.join(dir, cookbook_glob)) +
             Dir.glob(File.join(dir, "*/#{cookbook_glob}")) - exclusions)
         else
