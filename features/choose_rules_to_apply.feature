@@ -45,5 +45,5 @@ Feature: Choose rules to apply
     | FC002,FC003,FC004 | @FC002         |                |                   |
     | FC002,FC003,FC004 | style          |                | FC002,FC004       |
     | FC002,FC003,FC004 | FC002 FC003    |                |                   |
-    | FC002,FC003,FC004 | style,services |                | FC004             |
+    | FC002,FC003,FC004 | style,services |                | FC002,FC004       |
 
