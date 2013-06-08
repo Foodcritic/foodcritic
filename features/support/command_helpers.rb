@@ -298,7 +298,6 @@ module FoodCritic
     #
     # @param [Array] cmd_args The command line arguments.
     def run_lint(cmd_args)
-      set_env 'RAK_TEST', true.to_s
       run_simple(unescape("foodcritic #{cmd_args.join(' ')}"), false)
     end
   end

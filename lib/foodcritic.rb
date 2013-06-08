@@ -1,7 +1,6 @@
 require 'pathname'
 require 'gherkin'
 require 'treetop'
-require 'rak'
 require 'ripper'
 require 'yajl'
 require 'erubis'
