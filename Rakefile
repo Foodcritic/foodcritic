@@ -4,7 +4,7 @@ require 'rake/testtask'
 require 'cucumber'
 require 'cucumber/rake/task'
 
-task :default => [:install, :test, :features]
+task :default => [:man, :install, :test, :features]
 
 Bundler.setup
 Bundler::GemHelper.install_tasks
@@ -25,4 +25,9 @@ Cucumber::Rake::Task.new(:features) do |t|
     t.cucumber_opts += ['-t', '~@context']
   end
   t.cucumber_opts += ['features']
+end
+
+desc 'Build the manpage'
+task :man do
+  sh 'ronn -w --roff man/*.ronn'
 end
