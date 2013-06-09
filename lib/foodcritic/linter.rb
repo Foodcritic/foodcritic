@@ -125,13 +125,13 @@ module FoodCritic
 
     def cookbook_tags(file)
       tags = []
-      begin
-        fc_file = "#{cookbook_dir(file)}/.foodcritic"
-        if File.exist? fc_file
+      fc_file = "#{cookbook_dir(file)}/.foodcritic"
+      if File.exist? fc_file
+        begin
           tag_text = File.read fc_file
-          tag_text.split(/\s/)
+          tags = tag_text.split(/\s/)
+        rescue Errno::EACCES
         end
-      rescue Errno::EACCES
       end
       tags
     end
