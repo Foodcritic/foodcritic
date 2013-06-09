@@ -1466,6 +1466,11 @@ When /^I check the cookbook( tree)?(?: specifying tags(.*))?(, specifying that c
   run_lint(options + ["cookbooks/#{whole_tree.nil? ? 'example' : ''}"])
 end
 
+Given /^the cookbook directory has a \.foodcritic file specifying tags (.*)$/ do |tags|
+  write_file "cookbooks/example/.foodcritic", tags
+  run_lint(["cookbooks/example"])
+end
+
 When 'I check both cookbooks' do
   run_lint(["cookbooks/another_example", "cookbooks/example"])
 end
