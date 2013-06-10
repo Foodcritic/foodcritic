@@ -17,6 +17,6 @@ Gem::Specification.new do |s|
   s.add_dependency('erubis')
   s.files = Dir['chef_dsl_metadata/*.json'] + Dir['lib/**/*.rb']
   s.files += Dir['spec/**/*'] + Dir['features/**/*']
-  s.files += Dir['*.md'] + Dir['LICENSE']
+  s.files += Dir['*.md'] + Dir['LICENSE'] + Dir['man/*']
   s.required_ruby_version = '>= 1.9.2'
 end

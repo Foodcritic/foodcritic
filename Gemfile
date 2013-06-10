@@ -12,4 +12,6 @@ end
 group :development do
   gem 'chef', '~> 10.24.0'
   gem "rake", '~> 0.9.2.2'
+  gem 'rdiscount', '~> 1.6.8'
+  gem 'ronn', '~> 0.7.0'
 end
