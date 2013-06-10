@@ -4,6 +4,8 @@
 chef_dsl_metadata.json
 coverage
 doc
+man/*.1.html
+man/*.1
 pkg
 *.swp
 tmp
