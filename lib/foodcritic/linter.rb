@@ -1,7 +1,6 @@
 require 'optparse'
 require 'ripper'
 require 'rubygems'
-require 'gherkin/tag_expression'
 require 'set'
 
 module FoodCritic
@@ -78,15 +77,14 @@ module FoodCritic
 
           # Convert the matches into warnings
           rule_matches.each do |match|
-            warnings << Warning.new(rule, {:filename => file}.merge(match))
+            warnings << Warning.new(rule, {:filename => file}.merge(match), options)
             matched_rule_tags << rule.tags
           end
         end
         last_dir = cookbook_dir(file)
       end
 
-      Review.new(cookbook_paths, warnings,
-        should_fail_build?(options[:fail_tags], matched_rule_tags))
+      Review.new(cookbook_paths, warnings)
     end
 
     # Load the rules from the (fairly unnecessary) DSL.
@@ -120,7 +118,7 @@ module FoodCritic
     def ignore_line_match?(line, rule)
       ignores = line.to_s[/\s+#\s*(.*)/, 1]
       if ignores and ignores.include?('~')
-        ! matching_tags?(ignores.split(/[ ,]/), rule.tags)
+        ! rule.matches_tags?(ignores.split(/[ ,]/))
       else
         false
       end
@@ -147,7 +145,7 @@ module FoodCritic
 
     def active_rules(tags)
       @rules.select do |rule|
-        matching_tags?(tags, rule.tags) and
+        rule.matches_tags?(tags) and
         applies_to_version?(rule, chef_version)
       end
     end
@@ -211,13 +209,6 @@ module FoodCritic
       end.flatten
     end
 
-    # We use the Gherkin (Cucumber) syntax to specify tags.
-    def matching_tags?(tag_expr, tags)
-      Gherkin::TagExpression.new(tag_expr).evaluate(tags.map do |t|
-        Gherkin::Formatter::Model::Tag.new(t, 1)
-      end)
-    end
-
     def per_cookbook_rules(last_dir, file)
       yield if last_dir != cookbook_dir(file)
     end
@@ -234,11 +225,6 @@ module FoodCritic
     def setup_defaults(options)
       {:tags => [], :fail_tags => [],
                  :include_rules => [], :exclude_paths => []}.merge(options)
-    end
-
-    def should_fail_build?(fail_tags, matched_tags)
-      return false if fail_tags.empty?
-      matched_tags.any?{|tags| matching_tags?(fail_tags, tags)}
     end
 
   end
