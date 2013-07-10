@@ -1,3 +1,66 @@
+## 2.2.0 (10th July, 2013)
+
+Features:
+
+  - Additional rules may now be shipped as gems. Files matching the path
+    `foodcritic/rules/**/*.rb` will be loaded if the `--search-gems` option is
+    specified
+    ([related issue](https://github.com/acrmp/foodcritic/issues/143)). Thanks
+    to @rteabeault for implementing this feature.
+  - You can now control the rules applied to individual cookbooks by including
+    a `.foodcritic` file at the root of your cookbook with the tags you want
+    checked
+    ([related issue](https://github.com/acrmp/foodcritic/issues/141)). Thanks
+    to @sabat for implementing this feature.
+  - The [project license](https://github.com/acrmp/foodcritic/blob/master/LICENSE)
+    is now included in the built gem
+    ([related issue](https://github.com/acrmp/foodcritic/issues/145)).
+    Thanks @stefanor.
+  - Foodcritic no longer uses the `rak` gem to generate output with context
+    ([related issue](https://github.com/acrmp/foodcritic/issues/146)).
+    Thanks to @stefanor for re-implementing context output to remove this
+    dependency.
+  - A man page is now included with foodcritic in
+    [ronn-format](http://rtomayko.github.io/ronn/).
+    Thanks @stefanor.
+
+Bugfixes:
+
+  - Definitions are now included in the files that are linted
+    ([related issue](https://github.com/acrmp/foodcritic/issues/142)). Thanks
+    @bpaquet.
+  - [FC009: Resource attribute not recognised](http://acrmp.github.com/foodcritic/#FC009)
+    would warn against Windows-specific resource attributes
+    ([related issue](https://github.com/acrmp/foodcritic/issues/135)). Thanks
+    @stormtrooperguy.
+  - [FC011: Missing README in markdown format](http://acrmp.github.com/foodcritic/#FC011)
+    was not shown when outputting with context enabled
+    ([related issue](https://github.com/acrmp/foodcritic/issues/146)). Thanks
+    @stefanor.
+  - [FC014: Consider extracting long ruby_block to library](http://acrmp.github.com/foodcritic/#FC014)
+    previously used the number of AST nodes to determine block length. This
+    was a poor proxy for length and this rule has been updated to warn if the
+    number of lines > 15
+    ([related issue](https://github.com/acrmp/foodcritic/issues/130)). Thanks
+    @adamjk-dev.
+  - [FC014: Consider extracting long ruby_block to library](http://acrmp.github.com/foodcritic/#FC014)
+    would warn against other blocks incorrectly
+    ([related issue](https://github.com/acrmp/foodcritic/issues/130)). Thanks
+    @adamjk-dev.
+  - [FC014: Consider extracting long ruby_block to library](http://acrmp.github.com/foodcritic/#FC014)
+    would raise an error if the ruby_block did not contain a nested `block`
+    attribute
+    ([related issue](https://github.com/acrmp/foodcritic/issues/139)). Thanks
+    @stevendanna.
+  - [FC033: Missing template](http://acrmp.github.com/foodcritic/#FC033)
+    would warn when the template file did not have an erb extension
+    ([related issue](https://github.com/acrmp/foodcritic/issues/131)). Thanks
+    @nvwls.
+  - [FC034: Unused template variables](http://acrmp.github.com/foodcritic/#FC034)
+    would warn when the template file did not have an erb extension
+    ([related issue](https://github.com/acrmp/foodcritic/issues/131)). Thanks
+    @nvwls.
+
 ## 2.1.0 (17th April, 2013)
 
 Features:
