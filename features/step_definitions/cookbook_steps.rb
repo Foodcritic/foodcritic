@@ -34,8 +34,12 @@ Given 'a cookbook attributes file with a do block that takes arguments' do
   }
 end
 
-Given /^a cookbook attributes file with assignment (.*)$/ do |assignment|
-  write_attributes assignment
+Given /^a cookbook (attributes|recipe) file with assignment (.*)$/ do |type, assignment|
+  if type == 'attributes'
+    write_attributes assignment
+  else
+    write_recipe assignment
+  end
 end
 
 Given /^a cookbook recipe that declares (too many )?execute resources varying only in the command in branching conditionals$/ do |too_many|

@@ -441,3 +441,7 @@ FC043: Prefer new notification syntax: ./zenoss/recipes/server.rb:155
 FC043: Prefer new notification syntax: ./zenoss/recipes/server.rb:164
 FC044: Avoid bare attribute keys: ./resolver/attributes/default.rb:20
 FC045: Consider setting cookbook name in metadata: ./maven/metadata.rb:1
+FC047: Attribute assignment does not specify precedence: ./jetty/recipes/cargo.rb:35
+FC047: Attribute assignment does not specify precedence: ./munin/recipes/server_apache.rb:1
+FC047: Attribute assignment does not specify precedence: ./python/recipes/package.rb:28
+FC047: Attribute assignment does not specify precedence: ./users/providers/manage.rb:55

@@ -433,7 +433,22 @@ module FoodCritic
     class AttFilter
       def is_att_type(value)
         return [] unless value.respond_to?(:select)
-        value.select{|n| %w{node default override set normal}.include?(n.to_s)}
+        value.select do |n|
+          %w{
+            automatic_attrs
+            default
+            default_unless
+            force_default
+            force_override
+            node
+            normal
+            normal_unless
+            override
+            override_unless
+            set
+            set_unless
+          }.include?(n.to_s)
+        end
       end
     end
 
