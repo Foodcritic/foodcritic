@@ -87,6 +87,51 @@ describe FoodCritic::Api do
       ast = parse_ast(%q{baz = search(:node, "name:#{node['foo']['bar']}")[0]})
       api.attribute_access(ast, :type => :symbol).must_be_empty
     end
+    describe :ignoring_attributes do
+      it "doesn't ignore run_state by default for backwards compatibility" do
+        ast = parse_ast("node.run_state['bar'] = 'baz'")
+        api.attribute_access(ast).wont_be_empty
+      end
+      it "allows run_state to be ignored" do
+        ast = parse_ast("node.run_state['bar'] = 'baz'")
+        api.attribute_access(ast, :ignore => ['run_state']).must_be_empty
+      end
+      it "allows run_state to be ignored (symbols access)" do
+        ast = parse_ast("node.run_state[:bar] = 'baz'")
+        api.attribute_access(ast, :ignore => ['run_state']).must_be_empty
+      end
+      it "allows any attribute to be ignored" do
+        ast = parse_ast("node['bar'] = 'baz'")
+        api.attribute_access(ast, :ignore => ['bar']).must_be_empty
+      end
+      it "allows any attribute to be ignored (symbols access)" do
+        ast = parse_ast("node[:bar] = 'baz'")
+        api.attribute_access(ast, :ignore => ['bar']).must_be_empty
+      end
+      it "allows any attribute to be ignored (dot access)" do
+        ast = parse_ast("node.bar = 'baz'")
+        api.attribute_access(ast, :ignore => ['bar']).must_be_empty
+      end
+      it "includes the children of attributes" do
+        ast = parse_ast("node['foo']['bar'] = 'baz'")
+        api.attribute_access(ast).map{|a| a['value']}.must_equal(%w{foo bar})
+      end
+      it "does not include children of removed attributes" do
+        ast = parse_ast("node['foo']['bar'] = 'baz'")
+        api.attribute_access(ast, :ignore => ['foo']).must_be_empty
+      end
+      it "coerces ignore values to enumerate them" do
+        ast = parse_ast("node.run_state['bar'] = 'baz'")
+        api.attribute_access(ast, :ignore => 'run_state').must_be_empty
+      end
+      it "can ignore multiple attributes" do
+        ast = parse_ast(%q{
+          node['bar'] = 'baz'
+          node.foo = 'baz'
+        })
+        api.attribute_access(ast, :ignore => %w{foo bar}).must_be_empty
+      end
+    end
   end
 
   describe "#checks_for_chef_solo?" do

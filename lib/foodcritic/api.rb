@@ -22,10 +22,10 @@ module FoodCritic
 
       case options[:type]
         when :any then
-          vivified_attribute_access(ast, options[:cookbook_dir]) +
-          standard_attribute_access(ast, options)
+          vivified_attribute_access(ast, options) +
+            standard_attribute_access(ast, options)
         when :vivified then
-          vivified_attribute_access(ast, options[:cookbook_dir])
+          vivified_attribute_access(ast, options)
         else
           standard_attribute_access(ast, options)
       end
@@ -390,6 +390,12 @@ module FoodCritic
       end
     end
 
+    def ignore_attributes_xpath(ignores)
+      Array(ignores).map do |ignore|
+        "[count(descendant::*[@value='#{ignore}']) = 0]"
+      end.join
+    end
+
     def node_method?(meth, cookbook_dir)
       chef_dsl_methods.include?(meth) || patched_node_method?(meth, cookbook_dir)
     end
@@ -468,7 +474,9 @@ module FoodCritic
           count(descendant::var_ref/ident/@value)]'
         expr += '[is_att_type(descendant::ident'
         expr += '[not(ancestor::aref/call)]' if options[:ignore_calls]
-        expr += "/@value)]/descendant::#{type}"
+        expr += '/@value)]'
+        expr += ignore_attributes_xpath(options[:ignore])
+        expr += "/descendant::#{type}"
         if options[:type] == :string
           expr += '[count(ancestor::dyna_symbol) = 0]'
         end
@@ -476,14 +484,16 @@ module FoodCritic
       end
     end
 
-    def vivified_attribute_access(ast, cookbook_dir)
-      calls = ast.xpath(%q{//*[self::call or self::field]
+    def vivified_attribute_access(ast, options={})
+      calls = ast.xpath(%Q{//*[self::call or self::field]
         [is_att_type(vcall/ident/@value) or is_att_type(var_ref/ident/@value)]
+        #{ignore_attributes_xpath(options[:ignore])}
         [@value='.'][count(following-sibling::arg_paren) = 0]}, AttFilter.new)
       calls.select do |call|
         call.xpath("aref/args_add_block").size == 0 and
           (call.xpath("descendant::ident").size > 1 and
-            ! node_method?(call.xpath("ident/@value").to_s.to_sym, cookbook_dir))
+            ! node_method?(call.xpath("ident/@value").to_s.to_sym,
+                options[:cookbook_dir]))
       end.sort
     end
 
