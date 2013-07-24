@@ -53,6 +53,7 @@ Feature: Check for consistency in node access
       | reads    | strings          | platform? | not shown    |
       | reads    | symbols          | run_list  | not shown    |
       | reads    | symbols          | run_state | not shown    |
+      | reads    | strings          | run_state | not shown    |
       | reads    | strings          | set       | not shown    |
       | reads    | strings,symbols  | set       | shown        |
 

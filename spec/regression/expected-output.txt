@@ -277,9 +277,6 @@ FC019: Access node attributes in a consistent manner: runit/definitions/runit_se
 FC019: Access node attributes in a consistent manner: trac/recipes/default.rb:53
 FC019: Access node attributes in a consistent manner: ufw/attributes/default.rb:1
 FC019: Access node attributes in a consistent manner: ufw/attributes/default.rb:2
-FC019: Access node attributes in a consistent manner: windows/providers/reboot.rb:22
-FC019: Access node attributes in a consistent manner: windows/providers/reboot.rb:23
-FC019: Access node attributes in a consistent manner: windows/providers/reboot.rb:24
 FC019: Access node attributes in a consistent manner: zenoss/attributes/default.rb:33
 FC019: Access node attributes in a consistent manner: zenoss/recipes/server.rb:62
 FC019: Access node attributes in a consistent manner: zenoss/recipes/server.rb:86
