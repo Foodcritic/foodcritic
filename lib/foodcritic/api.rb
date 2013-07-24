@@ -459,17 +459,17 @@ module FoodCritic
         end.inject(:+)
       else
         type = if options[:type] == :string
-	         'tstring_content'
-	       else
-                 '*[self::symbol or self::dyna_symbol]'
-	       end
+          'tstring_content'
+        else
+          '*[self::symbol or self::dyna_symbol]'
+        end
         expr = '//*[self::aref_field or self::aref][count(method_add_arg) = 0]'
         expr += '[count(is_att_type(descendant::var_ref/ident/@value)) =
           count(descendant::var_ref/ident/@value)]'
         expr += '[is_att_type(descendant::ident'
         expr += '[not(ancestor::aref/call)]' if options[:ignore_calls]
         expr += "/@value)]/descendant::#{type}"
-	if options[:type] == :string
+        if options[:type] == :string
           expr += '[count(ancestor::dyna_symbol) = 0]'
         end
         ast.xpath(expr, AttFilter.new).sort
