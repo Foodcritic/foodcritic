@@ -1,16 +1,24 @@
+require 'gherkin/tag_expression'
+
 module FoodCritic
 
   # A warning of a possible issue
   class Warning
-    attr_reader :rule, :match
+    attr_reader :rule, :match, :is_failed
 
     # Create a new warning.
     #
     #     Warning.new(rule, :filename => 'foo/recipes.default.rb',
     #       :line => 5, :column=> 40)
     #
-    def initialize(rule, match={})
+    def initialize(rule, match={}, options={})
       @rule, @match = rule, match
+      @is_failed = options[:fail_tags].empty? ? false : rule.matches_tags?(options[:fail_tags])
+    end
+
+    # If this warning has failed or not.
+    def failed?
+      @is_failed
     end
   end
 
@@ -19,15 +27,19 @@ module FoodCritic
 
     attr_reader :cookbook_paths, :warnings
 
-    def initialize(cookbook_paths, warnings, is_failed)
+    def initialize(cookbook_paths, warnings)
       @cookbook_paths = Array(cookbook_paths)
       @warnings = warnings
-      @is_failed = is_failed
     end
 
-    # If this review has failed or not.
+    # If any of the warnings in this review have failed or not.
     def failed?
-      @is_failed
+      warnings.any? { |w| w.failed? }
+    end
+
+    # Returns an array of warnings that are marked as failed.
+    def failures
+      warnings.select { |w| w.failed? }
     end
 
     # Returns a string representation of this review. This representation is
@@ -62,6 +74,13 @@ module FoodCritic
     # `any` and the rule code.
     def tags
       ['any'] + @tags
+    end
+
+    # Checks the rule's tags to see if they match a Gherkin (Cucumber) expression
+    def matches_tags?(tag_expr)
+      Gherkin::TagExpression.new(tag_expr).evaluate(tags.map do |t|
+        Gherkin::Formatter::Model::Tag.new(t, 1)
+      end)
     end
 
     # Returns a string representation of this rule.
