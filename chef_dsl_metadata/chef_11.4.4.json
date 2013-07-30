@@ -442,6 +442,7 @@
       "nothing"
     ],
     "log": [
+      "write",
       "nothing"
     ],
     "macports_package": [
