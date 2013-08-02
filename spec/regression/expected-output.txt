@@ -329,7 +329,6 @@ FC034: Unused template variables: ./horizon/templates/default/local_settings.py.
 FC034: Unused template variables: ./nginx/templates/default/nginx.init.erb:1
 FC034: Unused template variables: ./nova/templates/default/libvirtd.conf.erb:1
 FC034: Unused template variables: ./sbuild/templates/default/mk_chroot.sh.erb:1
-FC037: Invalid notification action: ./wordpress/recipes/default.rb:125
 FC041: Execute resource used to run curl or wget commands: ./hadoop/recipes/default.rb:33
 FC042: Prefer include_recipe to require_recipe: ./postfix/recipes/aliases.rb:17
 FC043: Prefer new notification syntax: ./apache2/definitions/apache_module.rb:20

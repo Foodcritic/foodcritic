@@ -446,7 +446,8 @@
       "nothing"
     ],
     "log": [
-      "nothing"
+      "nothing",
+      "write"
     ],
     "macports_package": [
       "install",
@@ -504,9 +505,7 @@
     ],
     "remote_directory": [
       "create",
-      "create",
       "create_if_missing",
-      "delete",
       "delete",
       "nothing"
     ],

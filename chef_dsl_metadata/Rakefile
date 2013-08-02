@@ -32,10 +32,11 @@ end
 def chef_resource_actions
   chef_resources do |resource_klazz,resource|
     instance = resource.new('dsl')
+    actions = Array(instance.action).map{|a| a.to_sym}
     if instance.respond_to?(:allowed_actions)
-      [convert_to_snake_case(resource_klazz.to_s),
-        instance.allowed_actions.sort]
+      actions += instance.allowed_actions
     end
+    [convert_to_snake_case(resource_klazz.to_s), actions.sort.uniq]
   end
 end
 
