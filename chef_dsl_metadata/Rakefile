@@ -31,6 +31,7 @@ end
 
 def chef_resource_actions
   chef_resources do |resource_klazz,resource|
+    next if resource.to_s == 'Chef::Resource::WindowsScript'
     instance = resource.new('dsl')
     actions = Array(instance.action).map{|a| a.to_sym}
     if instance.respond_to?(:allowed_actions)
