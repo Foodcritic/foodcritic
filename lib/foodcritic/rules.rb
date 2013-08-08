@@ -213,7 +213,9 @@ rule "FC017", "LWRP does not notify when updated" do
       ident/@value='new_resource']/../ident[@value='updated_by_last_action']
     }).empty?
     converge_by = ! ast.xpath('//fcall/ident[@value="converge_by"]').empty?
-    unless updated_by_last_action or converge_by
+    use_inline_resources = ! ast.xpath('//*[self::vcall or self::var_ref]/ident
+      [@value="use_inline_resources"]').empty?
+    unless updated_by_last_action or converge_by or use_inline_resources
       [file_match(filename)]
     end
   end

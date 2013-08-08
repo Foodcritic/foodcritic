@@ -32,3 +32,8 @@ Feature: Check for no LWRP notifications
     | block_type |
     | brace      |
     | do         |
+
+  Scenario: LWRP using use_inline_resources
+    Given a cookbook that contains a LWRP that uses use_inline_resources
+     When I check the cookbook
+     Then the LWRP does not notify when updated warning 017 should not be displayed against the provider file

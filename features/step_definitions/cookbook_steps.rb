@@ -847,6 +847,10 @@ Given /^a cookbook that contains a LWRP that uses the deprecated notification sy
   cookbook_with_lwrp({:notifies => qualifier.include?('class variable') ? :class_variable : :deprecated_syntax})
 end
 
+Given 'a cookbook that contains a LWRP that uses use_inline_resources' do
+  cookbook_with_lwrp({:use_inline_resources => true})
+end
+
 Given 'a cookbook that contains a LWRP with multiple notifications' do
   write_resource("site", %q{
     actions :create, :delete
