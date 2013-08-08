@@ -624,3 +624,10 @@ rule "FC047", "Attribute assignment does not specify precedence" do
     end
   end
 end
+
+rule "FC048", "Prefer Mixlib::ShellOut" do
+  tags %w{style processes}
+  recipe do |ast|
+    ast.xpath('//xstring_literal')
+  end
+end

@@ -441,3 +441,8 @@ FC047: Attribute assignment does not specify precedence: ./jetty/recipes/cargo.r
 FC047: Attribute assignment does not specify precedence: ./munin/recipes/server_apache.rb:1
 FC047: Attribute assignment does not specify precedence: ./python/recipes/package.rb:28
 FC047: Attribute assignment does not specify precedence: ./users/providers/manage.rb:55
+FC048: Prefer Mixlib::ShellOut: ./chef-client/recipes/cron.rb:38
+FC048: Prefer Mixlib::ShellOut: ./chef-client/recipes/service.rb:52
+FC048: Prefer Mixlib::ShellOut: ./chef-client/recipes/task.rb:42
+FC048: Prefer Mixlib::ShellOut: ./nginx/recipes/passenger.rb:20
+FC048: Prefer Mixlib::ShellOut: ./windows/providers/task.rb:106

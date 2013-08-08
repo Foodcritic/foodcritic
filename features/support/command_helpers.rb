@@ -50,6 +50,7 @@ module FoodCritic
       'FC045' => 'Consider setting cookbook name in metadata',
       'FC046' => 'Attribute assignment uses assign unless nil',
       'FC047' => 'Attribute assignment does not specify precedence',
+      'FC048' => 'Prefer Mixlib::ShellOut',
       'FCTEST001' => 'Test Rule'
     }
 

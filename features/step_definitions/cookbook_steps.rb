@@ -73,6 +73,18 @@ Given /^a cookbook recipe that declares a ([^ ]+) resource with the ([^ ]+) attr
   }
 end
 
+Given /^a cookbook recipe that executes '([^']+)' with an execute resource$/ do |command|
+  write_recipe %Q{
+    execute "#{command}" do
+      action :run
+    end
+  }
+end
+
+Given /^a cookbook recipe that spawns a sub-process with (.*)$/ do |command|
+  write_recipe command
+end
+
 Given 'a cookbook recipe with a deploy resource that contains a template resource' do
   write_recipe %q{
     deploy '/foo/bar' do
