@@ -23,3 +23,12 @@ Feature: Check for no LWRP notifications
     Given a cookbook that contains a LWRP with multiple notifications
     When I check the cookbook
     Then the LWRP does not notify when updated warning 017 should not be displayed against the provider file
+
+  Scenario Outline: LWRP using converge_by
+    Given a cookbook that contains a LWRP that uses converge_by - <block_type> block
+    When I check the cookbook
+    Then the LWRP does not notify when updated warning 017 should not be displayed against the provider file
+  Examples:
+    | block_type |
+    | brace      |
+    | do         |

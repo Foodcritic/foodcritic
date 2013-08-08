@@ -821,6 +821,28 @@ Given /^a cookbook that contains a LWRP that (?:does not trigger notifications|d
   })
 end
 
+Given /^a cookbook that contains a LWRP that uses converge_by - (brace|do) block$/ do |block_type|
+  write_resource("site", %q{
+    actions :create
+    attribute :name, :kind_of => String, :name_attribute => true
+  })
+  if block_type == 'brace'
+    write_provider("site", %q{
+      action :create do
+        converge_by("Creating site #{new_resource.name}"){ Site.new(new_resource.name).create }
+      end
+    })
+  else
+    write_provider("site", %q{
+      action :create do
+        converge_by("Creating site #{new_resource.name}") do
+          Site.new(new_resource.name).create
+        end
+      end
+    })
+  end
+end
+
 Given /^a cookbook that contains a LWRP that uses the deprecated notification syntax(.*)$/ do |qualifier|
   cookbook_with_lwrp({:notifies => qualifier.include?('class variable') ? :class_variable : :deprecated_syntax})
 end

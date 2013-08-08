@@ -159,11 +159,6 @@ FC017: LWRP does not notify when updated: ./application_ruby/providers/memcached
 FC017: LWRP does not notify when updated: ./application_ruby/providers/passenger_apache2.rb:1
 FC017: LWRP does not notify when updated: ./application_ruby/providers/rails.rb:1
 FC017: LWRP does not notify when updated: ./application_ruby/providers/unicorn.rb:1
-FC017: LWRP does not notify when updated: ./aws/providers/ebs_volume.rb:1
-FC017: LWRP does not notify when updated: ./aws/providers/elastic_ip.rb:1
-FC017: LWRP does not notify when updated: ./aws/providers/elastic_lb.rb:1
-FC017: LWRP does not notify when updated: ./aws/providers/resource_tag.rb:1
-FC017: LWRP does not notify when updated: ./chef_handler/providers/default.rb:1
 FC017: LWRP does not notify when updated: ./dmg/providers/package.rb:1
 FC017: LWRP does not notify when updated: ./heartbeat/providers/default.rb:1
 FC017: LWRP does not notify when updated: ./heartbeat/providers/null.rb:1
@@ -172,13 +167,9 @@ FC017: LWRP does not notify when updated: ./iis/providers/app.rb:1
 FC017: LWRP does not notify when updated: ./iis/providers/config.rb:1
 FC017: LWRP does not notify when updated: ./iis/providers/pool.rb:1
 FC017: LWRP does not notify when updated: ./iis/providers/site.rb:1
-FC017: LWRP does not notify when updated: ./java/providers/ark.rb:1
 FC017: LWRP does not notify when updated: ./lvm/providers/physical_volume.rb:1
 FC017: LWRP does not notify when updated: ./pacman/providers/aur.rb:1
-FC017: LWRP does not notify when updated: ./php/providers/pear.rb:1
-FC017: LWRP does not notify when updated: ./php/providers/pear_channel.rb:1
 FC017: LWRP does not notify when updated: ./powershell/providers/default.rb:1
-FC017: LWRP does not notify when updated: ./python/providers/pip.rb:1
 FC017: LWRP does not notify when updated: ./supervisor/providers/fcgi.rb:1
 FC017: LWRP does not notify when updated: ./supervisor/providers/group.rb:1
 FC017: LWRP does not notify when updated: ./supervisor/providers/service.rb:1
