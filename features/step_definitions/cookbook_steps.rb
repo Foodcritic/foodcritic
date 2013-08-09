@@ -821,7 +821,7 @@ Given /^a cookbook that contains a LWRP that (?:does not trigger notifications|d
   })
 end
 
-Given /^a cookbook that contains a LWRP that uses converge_by - (brace|do) block$/ do |block_type|
+Given /^a cookbook that contains a LWRP that uses converge_by - (brace|do) block (with|without) parentheses$/ do |block_type, with_parens|
   write_resource("site", %q{
     actions :create
     attribute :name, :kind_of => String, :name_attribute => true
@@ -833,13 +833,23 @@ Given /^a cookbook that contains a LWRP that uses converge_by - (brace|do) block
       end
     })
   else
-    write_provider("site", %q{
-      action :create do
-        converge_by("Creating site #{new_resource.name}") do
-          Site.new(new_resource.name).create
+    if with_parens == 'with'
+      write_provider("site", %q{
+        action :create do
+          converge_by("Creating site #{new_resource.name}") do
+            Site.new(new_resource.name).create
+          end
         end
-      end
-    })
+      })
+    else
+      write_provider("site", %q{
+        action :create do
+          converge_by "Creating site #{new_resource.name}" do
+            Site.new(new_resource.name).create
+          end
+        end
+      })
+    end
   end
 end
 
@@ -1234,6 +1244,13 @@ Given /^a file with multiple errors on one line(?: with comment (.*))?$/ do |com
   write_file "cookbooks/example/recipes/default.rb", %Q{node['run_state']['nginx_force_recompile'] = "\#{foo}"#{comment}}
 end
 
+Given(/^a LWRP with an action :create that notifies with (converge_by|updated_by_last_action) and another :delete that does not notify$/) do |notify_type|
+  cookbook_with_lwrp_actions([
+    {:name => :create, :notify_type => notify_type.to_sym},
+    {:name => :delete, :notify_type => :none}
+  ])
+end
+
 Given /^a Rakefile that defines (no lint task|a lint task with no block|a lint task with an empty block|a lint task with a block setting options to)(.*)?$/ do |task,options|
   rakefile(
     case task
@@ -1599,6 +1616,11 @@ end
 
 Then /^the bare attribute keys warning 044 should not be displayed against the (?:local variable|library call)$/ do
   expect_warning 'FC044', {:expect_warning => false, :line => 2, :file_type => :attributes}
+end
+
+Then /^the LWRP does not notify when updated warning 017 should( not)? be shown against the :([^ ]+) action$/ do |not_shown, action|
+  line = action == 'create' ? 1 : 8
+  expect_warning('FC017', :file_type => :provider, :expect_warning => ! not_shown, :line => line)
 end
 
 Then 'the long ruby block warning 014 should be displayed against the long block only' do

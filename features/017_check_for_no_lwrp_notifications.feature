@@ -25,15 +25,26 @@ Feature: Check for no LWRP notifications
     Then the LWRP does not notify when updated warning 017 should not be displayed against the provider file
 
   Scenario Outline: LWRP using converge_by
-    Given a cookbook that contains a LWRP that uses converge_by - <block_type> block
+    Given a cookbook that contains a LWRP that uses converge_by - <block_type> block <with_parens> parentheses
     When I check the cookbook
     Then the LWRP does not notify when updated warning 017 should not be displayed against the provider file
   Examples:
-    | block_type |
-    | brace      |
-    | do         |
+    | block_type | with_parens |
+    | brace      | with        |
+    | do         | with        |
+    | do         | without     |
 
   Scenario: LWRP using use_inline_resources
     Given a cookbook that contains a LWRP that uses use_inline_resources
      When I check the cookbook
      Then the LWRP does not notify when updated warning 017 should not be displayed against the provider file
+
+  Scenario Outline: Warnings raised for actions individually
+    Given a LWRP with an action :create that notifies with <notify_type> and another :delete that does not notify
+    When I check the cookbook
+    Then the LWRP does not notify when updated warning 017 should not be shown against the :create action
+     And the LWRP does not notify when updated warning 017 should be shown against the :delete action
+  Examples:
+    | notify_type            |
+    | converge_by            |
+    | updated_by_last_action |

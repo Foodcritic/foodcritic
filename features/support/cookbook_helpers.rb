@@ -111,6 +111,14 @@ module FoodCritic
       })
     end
 
+    def cookbook_with_lwrp_actions(actions)
+      write_resource("site", %Q{
+        actions #{actions.map{|a| a[:name].inspect}.join(', ')}
+        attribute :name, :kind_of => String, :name_attribute => true
+      })
+      write_provider("site", actions.map{|a| provider_action(a)}.join("\n"))
+    end
+
     # Create an cookbook with the maintainer specified in the metadata
     #
     # @param [String] name The maintainer name
@@ -146,6 +154,30 @@ module FoodCritic
         describe 'Example::Attributes::Default' do
         end
       }
+    end
+
+    def provider_action(action)
+      case action[:notify_type]
+      when :none then %Q{
+        action #{action[:name].inspect} do
+          log "Would take action here"
+        end
+      }
+      when :updated_by_last_action then %Q{
+        action #{action[:name].inspect} do
+          log "Would take action here"
+          # Explicitly update
+          new_resource.updated_by_last_action(true)
+        end
+      }
+      when :converge_by then %Q{
+        action #{action[:name].inspect} do
+          converge_by "#{action[:name]} site" do
+            log "Would take action here"
+          end
+        end
+      }
+      end
     end
 
     # Create a Rakefile that uses the linter rake task
