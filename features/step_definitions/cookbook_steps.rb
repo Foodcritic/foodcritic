@@ -42,6 +42,14 @@ Given /^a cookbook (attributes|recipe) file with assignment (.*)$/ do |type, ass
   end
 end
 
+Given "a cookbook recipe that contains a group resource that uses the 'system' attribute" do
+  write_recipe %q{
+    group "senge" do
+      system true
+    end
+  }
+end
+
 Given /^a cookbook recipe that declares (too many )?execute resources varying only in the command in branching conditionals$/ do |too_many|
   extra_resource = %q{
     execute "bing" do
@@ -1621,6 +1629,10 @@ end
 Then /^the LWRP does not notify when updated warning 017 should( not)? be shown against the :([^ ]+) action$/ do |not_shown, action|
   line = action == 'create' ? 1 : 8
   expect_warning('FC017', :file_type => :provider, :expect_warning => ! not_shown, :line => line)
+end
+
+Then 'the prefer mixlib shellout warning 048 should not be displayed against the group resource' do
+  expect_warning 'FC048', {:expect_warning => false, :line => 2}
 end
 
 Then 'the long ruby block warning 014 should be displayed against the long block only' do

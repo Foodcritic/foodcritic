@@ -646,6 +646,8 @@ end
 rule "FC048", "Prefer Mixlib::ShellOut" do
   tags %w{style processes}
   recipe do |ast|
-    ast.xpath('//xstring_literal')
+    ast.xpath('//xstring_literal | //*[self::command or self::fcall]/
+      ident[@value="system"][count(following-sibling::args_add_block/
+      descendant::kw[@value="true" or @value="false"]) = 0]')
   end
 end
