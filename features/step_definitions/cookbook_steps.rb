@@ -453,8 +453,9 @@ Given /^a cookbook recipe that includes a recipe name from an( embedded)? expres
   }
 end
 
-Given /^a cookbook recipe that includes a(n un| )?declared recipe dependency( unscoped)?$/ do |undeclared,unscoped|
-  recipe_with_dependency(:is_declared => undeclared.strip.empty?, :is_scoped => unscoped.nil?)
+Given /^a cookbook recipe that includes a(n un| )?declared recipe dependency(?: {0,1})(unscoped)?( with parentheses)?$/ do |undeclared,unscoped, parens|
+  recipe_with_dependency(:is_declared => undeclared.strip.empty?,
+                         :is_scoped => unscoped.nil?, :parentheses => parens)
 end
 
 Given 'a cookbook recipe that includes both declared and undeclared recipe dependencies' do

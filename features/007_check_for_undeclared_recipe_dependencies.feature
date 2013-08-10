@@ -4,15 +4,16 @@ Feature: Check for undeclared recipe dependencies
   As a developer
   I want to identify included recipes that are not expressed in cookbook metadata
 
-  Scenario: Cookbook includes undeclared recipe dependency
-    Given a cookbook recipe that includes an undeclared recipe dependency
+  Scenario Outline: Cookbook includes undeclared recipe dependency
+    Given a cookbook recipe that includes an undeclared recipe dependency <qualifiers>
     When I check the cookbook
     Then the undeclared dependency warning 007 should be displayed
-
-  Scenario: Cookbook includes undeclared recipe dependency unscoped
-    Given a cookbook recipe that includes an undeclared recipe dependency unscoped
-    When I check the cookbook
-    Then the undeclared dependency warning 007 should be displayed
+  Examples:
+    | qualifiers                |
+    |                           |
+    | with parentheses          |
+    | unscoped                  |
+    | unscoped with parentheses |
 
   Scenario: Cookbook includes recipe via expression
     Given a cookbook recipe that includes a recipe name from an expression

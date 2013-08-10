@@ -164,8 +164,13 @@ module FoodCritic
         filter << '[count(descendant::string_embexpr) = 0]'
       end
 
-      included = ast.xpath(%Q{//command[ident/@value = 'include_recipe']#{filter.join}
-        [descendant::args_add/string_literal]/descendant::tstring_content})
+      string_desc = '[descendant::args_add/string_literal]/descendant::tstring_content'
+      included = ast.xpath([
+        "//command[ident/@value = 'include_recipe']",
+        "//fcall[ident/@value = 'include_recipe']/following-sibling::arg_paren",
+      ].map do |recipe_include|
+        recipe_include + filter.join + string_desc
+      end.join(' | '))
 
       # Hash keyed by recipe name with matched nodes.
       included.inject(Hash.new([])){|h, i| h[i['value']] += [i]; h}

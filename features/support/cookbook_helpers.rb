@@ -308,11 +308,16 @@ module FoodCritic
     # @param [Hash] dep The options to use for dependency
     # @option dep [Boolean] :is_declared True if this dependency has been declared in the cookbook metadata
     # @option dep [Boolean] :is_scoped True if the include_recipe references a specific recipe or the cookbook
+    # @option dep [Boolean] :parentheses True if the include_recipe is called with parentheses
     def recipe_with_dependency(dep)
-      dep = {:is_scoped => true, :is_declared => true}.merge!(dep)
-      write_recipe %Q{
-        include_recipe 'foo#{dep[:is_scoped] ? '::default' : ''}'
-      }
+      dep = {:is_scoped => true, :is_declared => true,
+             :parentheses => false}.merge!(dep)
+      recipe = "foo#{dep[:is_scoped] ? '::default' : ''}"
+      write_recipe(if dep[:parentheses]
+        "include_recipe('#{recipe}')"
+      else
+        "include_recipe '#{recipe}'"
+      end)
       write_metadata %Q{
         version "1.9.0"
         depends "#{dep[:is_declared] ? 'foo' : 'dogs'}"
