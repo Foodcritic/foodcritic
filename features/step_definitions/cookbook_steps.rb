@@ -1394,6 +1394,10 @@ Given /^a rule that (declares|does not declare) a version constraint(?: of ([^ ]
   end
 end
 
+Given 'access to the man page documentation' do
+
+end
+
 Given /^another cookbook that has (an older )?chef-solo-search installed$/ do |older|
   if older.nil?
     write_library 'search', %q{
@@ -1551,6 +1555,10 @@ When 'I check the recipe' do
   run_lint(["cookbooks/example/recipes/default.rb"])
 end
 
+When 'I compare the man page options against the usage options' do
+
+end
+
 When 'I list the available build tasks' do
   list_available_build_tasks
 end
@@ -1607,6 +1615,10 @@ end
 
 Then 'a warning for the custom rule should be displayed' do
   expect_output('BAR001: Use symbols in preference to strings to access node attributes: cookbooks/example/recipes/default.rb:1')
+end
+
+Then 'all options should be documented in the man page' do
+  man_page_options.should == usage_options_for_diff
 end
 
 Then /^an? '([^']+)' error should be displayed$/ do |expected_error|

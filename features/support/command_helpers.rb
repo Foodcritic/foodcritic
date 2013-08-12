@@ -124,24 +124,66 @@ module FoodCritic
       expect_output(Regexp.new(expected_switch))
     end
 
+    def man_page_options
+      man_path = Pathname.new(__FILE__) + '../../../man/foodcritic.1.ronn'
+      option_lines = File.read(man_path).split('## ').find do |s|
+        s.start_with?('OPTIONS')
+      end.split("\n").select{|o| o.start_with?(' *')}
+      option_lines.map do |o|
+        o.sub('`[`no-`]`', '').split('`').select{|f| f.include?('-')}
+      end.map do |option|
+        {:short => option.first.sub(/^-/, ''),
+         :long => option.last.sub(/^--/, '')}
+      end.sort_by{|o| o[:short]}
+    end
+
     # Assert that the usage message is displayed.
     #
     # @param [Boolean] is_exit_zero The exit code to check for.
     def usage_displayed(is_exit_zero)
       expect_output 'foodcritic [cookbook_paths]'
-      expect_usage_option('c', 'chef-version VERSION', 'Only check against rules valid for this version of Chef.')
-      expect_usage_option('f', 'epic-fail TAGS',
-        "Fail the build if any of the specified tags are matched ('any' -> fail on any match).")
-      expect_usage_option('t', 'tags TAGS', 'Only check against rules with the specified tags.')
-      expect_usage_option('C', '[no-]context', 'Show lines matched against rather than the default summary.')
-      expect_usage_option('I', 'include PATH', 'Additional rule file path(s) to load.')
-      expect_usage_option('S', 'search-grammar PATH', 'Specify grammar to use when validating search syntax.')
-      expect_usage_option('V', 'version', 'Display the foodcritic version.')
+
+      usage_options.each do |option|
+        expect_usage_option(option[:short], option[:long], option[:description])
+      end
+
       if is_exit_zero
         assert_no_error_occurred
       else
         assert_error_occurred
       end
+    end
+
+    def usage_options
+      [
+        {:short => 'c', :long => 'chef-version VERSION',
+         :description => 'Only check against rules valid for this version of Chef.'},
+
+        {:short => 'f', :long => 'epic-fail TAGS',
+         :description => "Fail the build if any of the specified tags are matched ('any' -> fail on any match)."},
+
+        {:short => 't', :long => 'tags TAGS',
+         :description => 'Only check against rules with the specified tags.'},
+
+        {:short => 'C', :long => '[no-]context',
+         :description => 'Show lines matched against rather than the default summary.'},
+
+        {:short => 'I', :long => 'include PATH',
+         :description => 'Additional rule file path(s) to load.'},
+
+        {:short => 'S', :long => 'search-grammar PATH',
+         :description => 'Specify grammar to use when validating search syntax.'},
+
+        {:short => 'V', :long => 'version',
+         :description => 'Display the foodcritic version.'}
+      ]
+    end
+
+    def usage_options_for_diff
+      usage_options.map do |o|
+        {:short => o[:short],
+         :long => o[:long].split(' ').first.sub(/^\[no-\]/, '')}
+      end.sort_by{|o| o[:short]}
     end
 
   end
