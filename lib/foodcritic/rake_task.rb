@@ -9,7 +9,7 @@ module FoodCritic
 
       def initialize(name = :foodcritic)
         @name = name
-        @files = Dir.pwd
+        @files = [Dir.pwd]
         @options = {}
         yield self if block_given?
         define
@@ -17,6 +17,7 @@ module FoodCritic
 
       def options
         {:fail_tags => ['correctness'], # differs to default cmd-line behaviour
+         :cookbook_paths => @files,
          :exclude_paths => ['test/**/*', 'spec/**/*', 'features/**/*']
         }.merge(@options)
       end
@@ -24,7 +25,7 @@ module FoodCritic
       def define
         desc "Lint Chef cookbooks"
         task(name) do
-          result = FoodCritic::Linter.new.check(files, options)
+          result = FoodCritic::Linter.new.check(options)
           if result.warnings.any?
             puts result
           end

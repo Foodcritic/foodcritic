@@ -28,11 +28,17 @@ poor style.
  * `-c`, `--chef-version` <VERSION>:
    Only check against rules valid for this version of Chef.
 
+ * `-B`, `--cookbook-path`:
+   Cookbook path(s) to check.
+
  * `-C`, `--`[`no-`]`context`:
    Show lines matched against rather than the default summary.
 
  * `-I`, `--include` <PATH>:
    Additional rule file path(s) to load.
+
+ * `-R`, `--role-path`:
+   Role path(s) to check.
 
  * `-S`, `--search-grammar` <PATH>:
    Specify grammar to use when validating search syntax.

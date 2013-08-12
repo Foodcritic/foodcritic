@@ -49,3 +49,12 @@ Feature: Ignoring rules on per line basis
     | # ~FC002,~FC007 | FC002       |
     | # ~FC002,~FC039 |             |
     | # ~FC002        | FC039       |
+
+  Scenario Outline: Ignoring role rules
+    Given a ruby role that triggers FC049 with comment <comment>
+     When I check the role directory
+     Then the role name does not match file name warning 049 should <shown>
+  Examples:
+    | comment | shown        |
+    |         | be shown     |
+    | #~FC049 | not be shown |

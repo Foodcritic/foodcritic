@@ -24,8 +24,7 @@ module FoodCritic
       if ! cmd_line.valid_grammar?
         [cmd_line.help, 4]
       elsif cmd_line.valid_paths?
-        review = FoodCritic::Linter.new.check(cmd_line.cookbook_paths,
-          cmd_line.options)
+        review = FoodCritic::Linter.new.check(cmd_line.options)
         [review, review.failed? ? 3 : 0]
       else
         [cmd_line.help, 2]
@@ -37,54 +36,86 @@ module FoodCritic
     #
     # The `options` are a hash where the valid keys are:
     #
+    # * `:cookbook_paths` - Cookbook paths to lint
+    # * `:role_paths` - Role paths to lint
     # * `:include_rules` - Paths to additional rules to apply
     # * `:search_gems - If true then search for custom rules in installed gems.
     # * `:tags` - The tags to filter rules based on
     # * `:fail_tags` - The tags to fail the build on
     # * `:exclude_paths` - Paths to exclude from linting
     #
-    def check(cookbook_paths, options = {})
+    def check(options = {})
 
-      cookbook_paths = sanity_check_cookbook_paths(cookbook_paths)
       options = setup_defaults(options)
       @options = options
       @chef_version = options[:chef_version] || DEFAULT_CHEF_VERSION
 
       warnings = []; last_dir = nil; matched_rule_tags = Set.new
-
       load_rules
+      paths = specified_paths!(options)
 
       # Loop through each file to be processed and apply the rules
-      files_to_process(cookbook_paths, options[:exclude_paths]).each do |file|
-        ast = read_ast(file)
-        relevant_tags = options[:tags].any? ? options[:tags] : cookbook_tags(file)
+      files_to_process(paths).each do |p|
+
+        relevant_tags = if options[:tags].any?
+          options[:tags]
+        else
+          cookbook_tags(p[:filename])
+        end
+
         active_rules(relevant_tags).each do |rule|
-          rule_matches = matches(rule.recipe, ast, file)
 
-          if dsl_method_for_file(file)
-            rule_matches += matches(rule.send(dsl_method_for_file(file)),
-              ast, file)
+          state = {
+            :path_type => p[:path_type],
+            :file => p[:filename],
+            :ast => read_ast(p[:filename]),
+            :rule => rule,
+            :last_dir => last_dir
+          }
+
+          matches = if p[:path_type] == :cookbook
+            cookbook_matches(state)
+          else
+            other_matches(state)
           end
 
-          per_cookbook_rules(last_dir, file) do
-            if File.basename(file) == 'metadata.rb'
-              rule_matches += matches(rule.metadata, ast, file)
-            end
-            rule_matches += matches(rule.cookbook, cookbook_dir(file))
-          end
-
-          rule_matches = remove_ignored(rule_matches, rule, file)
+          matches = remove_ignored(matches, state[:rule], state[:file])
 
           # Convert the matches into warnings
-          rule_matches.each do |match|
-            warnings << Warning.new(rule, {:filename => file}.merge(match), options)
-            matched_rule_tags << rule.tags
+          matches.each do |match|
+            warnings << Warning.new(state[:rule],
+              {:filename => state[:file]}.merge(match), options)
+            matched_rule_tags << state[:rule].tags
           end
         end
-        last_dir = cookbook_dir(file)
+        last_dir = cookbook_dir(p[:filename])
       end
 
-      Review.new(cookbook_paths, warnings)
+      Review.new(paths, warnings)
+    end
+
+    def cookbook_matches(state)
+      cbk_matches = matches(state[:rule].recipe, state[:ast], state[:file])
+
+      if dsl_method_for_file(state[:file])
+        cbk_matches += matches(state[:rule].send(
+          dsl_method_for_file(state[:file])), state[:ast], state[:file])
+      end
+
+      per_cookbook_rules(state[:last_dir], state[:file]) do
+        if File.basename(state[:file]) == 'metadata.rb'
+          cbk_matches += matches(
+            state[:rule].metadata, state[:ast], state[:file])
+        end
+        cbk_matches += matches(
+          state[:rule].cookbook, cookbook_dir(state[:file]))
+      end
+
+      cbk_matches
+    end
+
+    def other_matches(state)
+      matches(state[:rule].send(state[:path_type]), state[:ast], state[:file])
     end
 
     # Load the rules from the (fairly unnecessary) DSL.
@@ -176,19 +207,29 @@ module FoodCritic
 
     # Return the files within a cookbook tree that we are interested in trying
     # to match rules against.
-    def files_to_process(dirs, exclude_paths = [])
-      files = []
-      dirs.each do |dir|
-        exclusions = Dir.glob(exclude_paths.map{|p| File.join(dir, p)})
-        if File.directory? dir
-          cookbook_glob = '{metadata.rb,{attributes,definitions,libraries,providers,recipes,resources}/*.rb,templates/*/*.erb}'
-          files += (Dir.glob(File.join(dir, cookbook_glob)) +
-            Dir.glob(File.join(dir, "*/#{cookbook_glob}")) - exclusions)
-        else
-          files << dir unless exclusions.include?(dir)
+    def files_to_process(paths)
+      paths.reject{|type, _| type == :exclude}.map do |path_type, dirs|
+        dirs.map do |dir|
+          exclusions = []
+          unless paths[:exclude].empty?
+            exclusions = Dir.glob(paths[:exclude].map{|p| File.join(dir, p)})
+          end
+
+          if File.directory?(dir)
+            glob = if path_type == :cookbook
+              '{metadata.rb,{attributes,definitions,libraries,providers,recipes,resources}/*.rb,templates/*/*.erb}'
+            else
+              '*.rb'
+            end
+            (Dir.glob(File.join(dir, glob)) +
+             Dir.glob(File.join(dir, "*/#{glob}")) - exclusions)
+          else
+            dir unless exclusions.include?(dir)
+          end
+        end.compact.flatten.map do |filename|
+          {:filename => filename, :path_type => path_type}
         end
-      end
-      files
+      end.flatten
     end
 
     # Invoke the DSL method with the provided parameters.
@@ -213,18 +254,23 @@ module FoodCritic
       yield if last_dir != cookbook_dir(file)
     end
 
-    def sanity_check_cookbook_paths(cookbook_paths)
-      raise ArgumentError, "Cookbook paths are required" if cookbook_paths.nil?
-      cookbook_paths = Array(cookbook_paths)
-      if cookbook_paths.empty?
-        raise ArgumentError, "Cookbook paths cannot be empty"
+    def specified_paths!(options)
+      paths = Hash[options.map do |key, value|
+        [key, Array(value)] if key.to_s.end_with?('paths')
+      end.compact]
+
+      unless paths.find{|k, v| k != :exclude_paths and ! v.empty?}
+        raise ArgumentError, "A cookbook path or role path must be specified"
       end
-      cookbook_paths
+
+      Hash[paths.map do |key, value|
+        [key.to_s.sub(/_paths$/, '').to_sym, value]
+      end]
     end
 
     def setup_defaults(options)
-      {:tags => [], :fail_tags => [],
-                 :include_rules => [], :exclude_paths => []}.merge(options)
+      {:tags => [], :fail_tags => [], :include_rules => [], :exclude_paths => [],
+       :cookbook_paths => [], :role_paths => []}.merge(options)
     end
 
   end

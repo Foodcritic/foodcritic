@@ -69,6 +69,8 @@ module FoodCritic
     rule_block :library
     rule_block :template
 
+    rule_block :role
+
     # Load the ruleset(s).
     def self.load(paths, chef_version=Linter::DEFAULT_CHEF_VERSION)
       dsl = RuleDsl.new(chef_version)

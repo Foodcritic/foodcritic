@@ -51,6 +51,8 @@ module FoodCritic
       'FC046' => 'Attribute assignment uses assign unless nil',
       'FC047' => 'Attribute assignment does not specify precedence',
       'FC048' => 'Prefer Mixlib::ShellOut',
+      'FC049' => 'Role name does not match containing file name',
+      'FC050' => 'Name includes invalid characters',
       'FCTEST001' => 'Test Rule'
     }
 
@@ -99,10 +101,13 @@ module FoodCritic
                           :resource => 'resources/site.rb', :libraries => 'libraries/lib.rb'}[options[:file_type]]
       end
       options = {:line => 1, :expect_warning => true, :file => 'recipes/default.rb'}.merge!(options)
+      unless options[:file].include?('roles')
+        options[:file] = "cookbooks/example/#{options[:file]}"
+      end
       if options[:warning_only]
         warning = "#{code}: #{WARNINGS[code]}"
       else
-        warning = "#{code}: #{WARNINGS[code]}: cookbooks/example/#{options[:file]}:#{options[:line]}#{"\n" if ! options[:line].nil?}"
+        warning = "#{code}: #{WARNINGS[code]}: #{options[:file]}:#{options[:line]}#{"\n" if ! options[:line].nil?}"
       end
       options[:expect_warning] ? expect_output(warning) : expect_no_output(warning)
     end
@@ -165,17 +170,24 @@ module FoodCritic
         {:short => 't', :long => 'tags TAGS',
          :description => 'Only check against rules with the specified tags.'},
 
+        {:short => 'B', :long => 'cookbook-path PATH',
+         :description => 'Cookbook path(s) to check.'},
+
         {:short => 'C', :long => '[no-]context',
          :description => 'Show lines matched against rather than the default summary.'},
 
         {:short => 'I', :long => 'include PATH',
          :description => 'Additional rule file path(s) to load.'},
 
+        {:short => 'R', :long => 'role-path PATH',
+         :description => 'Role path(s) to check.'},
+
         {:short => 'S', :long => 'search-grammar PATH',
          :description => 'Specify grammar to use when validating search syntax.'},
 
         {:short => 'V', :long => 'version',
          :description => 'Display the foodcritic version.'}
+
       ]
     end
 

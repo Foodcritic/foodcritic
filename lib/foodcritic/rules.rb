@@ -651,3 +651,23 @@ rule "FC048", "Prefer Mixlib::ShellOut" do
       descendant::kw[@value="true" or @value="false"]) = 0]')
   end
 end
+
+rule "FC049", "Role name does not match containing file name" do
+  tags %w{style roles}
+  role do |ast, filename|
+    role_name_specified = field_value(ast, :name)
+    role_name_file = Pathname.new(filename).basename.sub_ext('').to_s
+    if role_name_specified and role_name_specified != role_name_file
+      field(ast, :name)
+    end
+  end
+end
+
+rule "FC050", "Name includes invalid characters" do
+  tags %w{correctness roles}
+  role do |ast|
+    unless field_value(ast, :name) =~ /^[a-zA-Z0-9_\-]+$/
+      field(ast, :name)
+    end
+  end
+end

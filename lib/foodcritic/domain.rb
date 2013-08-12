@@ -60,7 +60,7 @@ module FoodCritic
   # A rule to be matched against.
   class Rule
     attr_accessor :code, :name, :applies_to, :cookbook, :attributes, :recipe,
-      :provider, :resource, :metadata, :library, :template
+      :provider, :resource, :metadata, :library, :template, :role
 
     attr_writer :tags
 

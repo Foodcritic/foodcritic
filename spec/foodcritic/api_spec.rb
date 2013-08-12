@@ -21,6 +21,8 @@ describe FoodCritic::Api do
         :chef_solo_search_supported?,
         :cookbook_name,
         :declared_dependencies,
+        :field,
+        :field_value,
         :file_match,
         :find_resources,
         :gem_version,
@@ -226,6 +228,86 @@ describe FoodCritic::Api do
             </command>
       })
       api.declared_dependencies(ast).must_equal ['mysql']
+    end
+  end
+
+  describe "#field" do
+    describe :simple_ast do
+      let(:ast){ parse_ast('name "webserver"') }
+      it "raises if the field name is nil" do
+        lambda{api.field(ast, nil)}.must_raise ArgumentError
+      end
+      it "raises if the field name is empty" do
+        lambda{api.field(ast, '')}.must_raise ArgumentError
+      end
+      it "returns empty if the field is not present" do
+        api.field(ast, :common_name).must_be_empty
+      end
+      it "accepts a string for the field name" do
+        api.field(ast, 'name').wont_be_empty
+      end
+      it "accepts a symbol for the field name" do
+        api.field(ast, :name).wont_be_empty
+      end
+    end
+    it "returns fields when the value is an embedded string expression" do
+      ast = parse_ast(%q{
+        name "#{foo}_#{bar}"
+      }.strip)
+      api.field(ast, :name).size.must_equal 1
+    end
+    it "returns fields when the value is a method call" do
+      ast = parse_ast(%q{
+        name generate_name
+      }.strip)
+      api.field(ast, :name).size.must_equal 1
+    end
+    it "returns both fields if the field is specified twice" do
+      ast = parse_ast(%q{
+        name "webserver"
+        name "database"
+      }.strip)
+      api.field(ast, :name).size.must_equal 2
+    end
+  end
+
+  describe "#field_value" do
+    describe :simple_ast do
+      let(:ast){ parse_ast('name "webserver"') }
+      it "raises if the field name is nil" do
+        lambda{api.field_value(ast, nil)}.must_raise ArgumentError
+      end
+      it "raises if the field name is empty" do
+        lambda{api.field_value(ast, '')}.must_raise ArgumentError
+      end
+      it "is falsy if the field is not present" do
+        refute api.field_value(ast, :common_name)
+      end
+      it "accepts a string for the field name" do
+        api.field_value(ast, 'name').must_equal 'webserver'
+      end
+      it "accepts a symbol for the field name" do
+        api.field_value(ast, :name).must_equal 'webserver'
+      end
+    end
+    it "is falsy when the value is an embedded string expression" do
+      ast = parse_ast(%q{
+        name "#{foo}_#{bar}"
+      }.strip)
+      refute api.field_value(ast, :name)
+    end
+    it "is falsy when the value is a method call" do
+      ast = parse_ast(%q{
+        name generate_name('foo')
+      }.strip)
+      refute api.field_value(ast, :name)
+    end
+    it "returns the last value if the field is specified twice" do
+      ast = parse_ast(%q{
+        name "webserver"
+        name "database"
+      }.strip)
+      api.field_value(ast, :name).must_equal 'database'
     end
   end
 

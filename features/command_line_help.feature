@@ -14,6 +14,11 @@ Feature: Command line help
      When I run it on the command line specifying a cookbook that does not exist
      Then the simple usage text should be displayed along with a non-zero exit code
 
+  Scenario: Non-existent role directory
+    Given I have installed the lint tool
+     When I run it on the command line specifying a role directory that does not exist
+     Then the simple usage text should be displayed along with a non-zero exit code
+
   Scenario: Command help
     Given I have installed the lint tool
      When I run it on the command line with the help option

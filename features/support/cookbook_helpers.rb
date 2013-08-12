@@ -13,7 +13,7 @@ module FoodCritic
     # Create a Gemfile for a cookbook
     def buildable_gemfile
       write_file 'cookbooks/example/Gemfile', %q{
-        source :rubygems
+        source 'https://rubygems.org/'
         gem 'rake'
         gem 'foodcritic', :path => '../../../..'
       }
@@ -415,6 +415,34 @@ module FoodCritic
           puts matching_node.to_s
         end
       }
+    end
+
+    # Create a role file
+    #
+    # @param [Hash] options The options to use for the role
+    # @option options [String] :role_name The name of the role declared in the role file
+    # @option options [String] :file_name The containing file relative to the roles directory
+    # @option options [Symbol] :format Either :ruby or :json. Default is :ruby
+    def role(options={})
+      options = {:format => :ruby, :dir => 'roles'}.merge(options)
+      content = if options[:format] == :json
+        %Q{
+          {
+            "chef_type": "role",
+            "json_class": "Chef::Role",
+            #{Array(options[:role_name]).map{|r| "name: #{r},"}.join("\n")}
+            "run_list": [
+              "recipe[apache2]",
+            ]
+          }
+        }
+      else
+        %Q{
+          #{Array(options[:role_name]).map{|r| "name #{r}"}.join("\n")}
+          run_list "recipe[apache2]"
+        }
+      end
+      write_file "#{options[:dir]}/#{options[:file_name]}", content.strip
     end
 
     # Create a rule with the specified Chef version constraints

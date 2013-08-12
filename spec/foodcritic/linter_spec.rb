@@ -7,10 +7,6 @@ describe FoodCritic::Linter do
     it "is instantiable" do
       linter.wont_be_nil
     end
-
-    it "raises if a cookbook path is not provided" do
-      lambda {linter.check(nil, {})}.must_raise(ArgumentError)
-    end
   end
 
   describe "chef version" do
@@ -20,29 +16,51 @@ describe FoodCritic::Linter do
   end
 
   describe "#check" do
-    it "requires a cookbook_path to be provided" do
-      lambda{ linter.check(nil, {}) }.must_raise ArgumentError
+
+    it "requires a cookbook_path or a role_path to be specified" do
+      lambda{ linter.check({}) }.must_raise ArgumentError
     end
 
-    it "requires an array of cookbook paths not to be empty" do
-      lambda{ linter.check([], {}) }.must_raise ArgumentError
+    it "requires a cookbook_path by itself not to be nil" do
+      lambda{ linter.check(:cookbook_paths => nil) }.must_raise ArgumentError
     end
 
-    it "accepts a scalar with a single cookbook path for backwards compatibility" do
-      linter.check('.', {})
+    it "requires a role_path by itself not to be nil" do
+      lambda{ linter.check(:role_paths => nil) }.must_raise ArgumentError
+    end
+
+    it "requires a cookbook_path by itself not to be empty" do
+      lambda{ linter.check(:cookbook_paths => []) }.must_raise ArgumentError
+    end
+
+    it "requires a role_path by itself not to be empty" do
+      lambda{ linter.check(:role_paths => []) }.must_raise ArgumentError
+    end
+
+    it "accepts a scalar with a single cookbook path" do
+      linter.check(:cookbook_paths => '.')
     end
 
     it "accepts an array of cookbook paths" do
-      linter.check(['.'], {})
+      linter.check(:cookbook_paths => ['.'])
     end
 
-    it "returns a review" do
-      linter.check(['.'], {}).must_respond_to(:warnings)
+    it "accepts a scalar with a single role path" do
+      linter.check(:role_paths => '.')
     end
 
-    it "does not require an empty hash of options" do
-      linter.check(['.'])
+    it "accepts an array of role paths" do
+      linter.check(:role_paths => ['.'])
     end
+
+    it "returns a review when a cookbook path is provided" do
+      linter.check(:cookbook_paths => ['.']).must_respond_to(:warnings)
+    end
+
+    it "returns a review when a role path is provided" do
+      linter.check(:cookbook_paths => ['.']).must_respond_to(:warnings)
+    end
+
   end
 
   describe "#load_files!" do

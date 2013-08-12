@@ -23,6 +23,19 @@ describe FoodCritic::CommandLine do
     end
   end
 
+  describe "#role_paths" do
+    it "returns an empty if no role paths are specified" do
+      FoodCritic::CommandLine.new([]).role_paths.must_be_empty
+    end
+    it "returns the provided role path" do
+      FoodCritic::CommandLine.new(['-R', 'roles']).role_paths.must_equal(%w{roles})
+    end
+    it "returns the provided role paths when there are multiple" do
+      FoodCritic::CommandLine.new(['-R', 'roles1',
+        '-R', 'roles2']).role_paths.must_equal(%w{roles1 roles2})
+    end
+  end
+
   describe "#valid_paths?" do
     it "returns false if no paths are specified" do
       refute FoodCritic::CommandLine.new([]).valid_paths?

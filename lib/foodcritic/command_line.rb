@@ -9,40 +9,54 @@ module FoodCritic
     def initialize(args)
       @args = args
       @original_args = args.dup
-      @options = {:fail_tags => [], :tags => [], :include_rules => []}
+      @options = {
+        :fail_tags => [],
+        :tags => [],
+        :include_rules => [],
+        :cookbook_paths => [],
+        :role_paths => []
+      }
       @parser = OptionParser.new do |opts|
         opts.banner = 'foodcritic [cookbook_paths]'
         opts.on("-t", "--tags TAGS",
           "Only check against rules with the specified tags.") do |t|
-          options[:tags] << t
+          @options[:tags] << t
         end
         opts.on("-f", "--epic-fail TAGS",
           "Fail the build if any of the specified tags are matched ('any' -> fail on any match).") do |t|
-          options[:fail_tags] << t
+          @options[:fail_tags] << t
         end
         opts.on("-c", "--chef-version VERSION",
           "Only check against rules valid for this version of Chef.") do |c|
-          options[:chef_version] = c
+          @options[:chef_version] = c
+        end
+        opts.on("-B", "--cookbook-path PATH",
+          "Cookbook path(s) to check.") do |b|
+          @options[:cookbook_paths] << b
         end
         opts.on("-C", "--[no-]context",
           "Show lines matched against rather than the default summary.") do |c|
-          options[:context] = c
+          @options[:context] = c
         end
         opts.on("-I", "--include PATH",
           "Additional rule file path(s) to load.") do |i|
-          options[:include_rules] << i
+          @options[:include_rules] << i
         end
         opts.on("-G", "--search-gems",
           "Search rubygems for rule files with the path foodcritic/rules/**/*.rb") do |g|
-          options[:search_gems] = true
+          @options[:search_gems] = true
+        end
+        opts.on("-R", "--role-path PATH",
+          "Role path(s) to check.") do |r|
+          @options[:role_paths] << r
         end
         opts.on("-S", "--search-grammar PATH",
           "Specify grammar to use when validating search syntax.") do |s|
-          options[:search_grammar] = s
+          @options[:search_grammar] = s
         end
         opts.on("-V", "--version",
           "Display the foodcritic version.") do |v|
-          options[:version] = true
+          @options[:version] = true
         end
       end
       # -v is not implemented but OptionParser gives the Foodcritic's version
@@ -86,18 +100,12 @@ module FoodCritic
       "foodcritic #{FoodCritic::VERSION}"
     end
 
-    # If the cookbook paths provided are valid
+    # If the paths provided are valid
     #
     # @return [Boolean] True if the paths exist.
     def valid_paths?
-      @args.any? && @args.all? {|path| File.exists?(path) }
-    end
-
-    # The cookbook paths
-    #
-    # @return [Array<String>] Path(s) to the cookbook(s) being checked.
-    def cookbook_paths
-      @args
+      paths = options[:cookbook_paths] + options[:role_paths]
+      paths.any? && paths.all?{|path| File.exists?(path) }
     end
 
     # Is the search grammar specified valid?
@@ -112,6 +120,20 @@ module FoodCritic
       search.parser?
     end
 
+    # The cookbook paths to check
+    #
+    # @return [Array<String>] Path(s) to the cookbook(s) being checked.
+    def cookbook_paths
+      @args + Array(@options[:cookbook_paths])
+    end
+
+    # The role paths to check
+    #
+    # @return [Array<String>] Path(s) to the role directories being checked.
+    def role_paths
+      Array(@options[:role_paths])
+    end
+
     # If matches should be shown with context rather than the default summary
     # display.
     #
@@ -124,6 +146,16 @@ module FoodCritic
     #
     # @return [Hash] The parsed command-line options.
     def options
+      original_options.merge({
+        :cookbook_paths => cookbook_paths,
+        :role_paths => role_paths
+      })
+    end
+
+    # The original command-line options
+    #
+    # @return [Hash] The original command-line options.
+    def original_options
       @options
     end
 

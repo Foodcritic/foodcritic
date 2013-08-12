@@ -1237,6 +1237,18 @@ Given /^a cookbook with metadata that (specifies|does not specify) the cookbook 
   }
 end
 
+Given /^a directory that contains a role file ([^ ]+) in (json|ruby) that defines role name (.*)$/ do |file_name, format, role_name|
+  role(:role_name => %Q{"#{role_name}"}, :file_name => file_name, :format => format.to_sym)
+end
+
+Given 'a directory that contains a ruby role that declares the role name more than once' do
+  role(:role_name => ['"webserver"', '"apache"'], :file_name => 'webserver.rb')
+end
+
+Given 'a directory that contains a ruby role with an expression as its name' do
+  role(:role_name => '"#{foo}#{bar}"', :file_name => 'webserver.rb')
+end
+
 Given /^a ([a-z_]+) resource declared with the mode ([^\s]+)(?: with comment (.*)?)?$/ do |resource,mode,comment|
   recipe_resource_with_mode(resource, mode, comment)
 end
@@ -1258,6 +1270,9 @@ Given(/^a LWRP with an action :create that notifies with (converge_by|updated_by
     {:name => :create, :notify_type => notify_type.to_sym},
     {:name => :delete, :notify_type => :none}
   ])
+end
+Given 'a roles directory' do
+
 end
 
 Given /^a Rakefile that defines (no lint task|a lint task with no block|a lint task with an empty block|a lint task with a block setting options to)(.*)?$/ do |task,options|
@@ -1446,6 +1461,10 @@ Given 'the gems have been vendored' do
   vendor_gems
 end
 
+Given 'the last role name declared does not match the containing filename' do
+
+end
+
 Given /^the template (.+)?contains the expression (.*)$/ do |ext,expr|
   file = if ext
     "templates/default/config#{ext.strip}"
@@ -1499,6 +1518,26 @@ Given /^a recipe that uses include_recipe$/ do
   }
 end
 
+Given /^a ruby role file that defines a role with name (.*)$/ do |role_name|
+  role(:role_name => [%Q{"#{role_name}"}], :file_name => 'webserver.rb')
+end
+
+Given /^a ruby role that triggers FC049 with comment (.*)$/ do |comment|
+  write_file 'roles/webserver.rb', %Q{
+    name "apache" #{comment}
+    run_list "recipe[apache2]"
+  }.strip
+end
+
+Given 'each role directory has a role with a name that does not match the containing file name' do
+  role(:dir => 'roles1', :role_name => '"apache"', :file_name => 'webserver.rb')
+  role(:dir => 'roles2', :role_name => '"postgresql"', :file_name => 'database.rb')
+end
+
+Given /^it contains a role file ([a-z]+\.rb) that defines the role name (.*)$/ do |file_name, role_name|
+  role(:role_name => role_name, :file_name => file_name)
+end
+
 Given /^the cookbook metadata declares support for (.*)$/ do |supported_platforms|
   write_metadata(supported_platforms.split(',').map do |platform|
     "supports '#{platform}'"
@@ -1524,6 +1563,10 @@ Given 'two of the recipes read node attributes via symbols' do
   end
 end
 
+Given 'two roles directories' do
+
+end
+
 When /^I check the cookbook specifying ([^ ]+) as the Chef version$/ do |version|
   options = ['-c', version, 'cookbooks/example']
   in_current_dir do
@@ -1543,12 +1586,31 @@ Given /^the cookbook directory has a \.foodcritic file specifying tags (.*)$/ do
   run_lint(["cookbooks/example"])
 end
 
-When 'I check both cookbooks' do
+When 'I check both cookbooks specified as arguments' do
   run_lint(["cookbooks/another_example", "cookbooks/example"])
+end
+
+When /^I check both cookbooks with the command-line (.*)$/ do |command_line|
+  cmds = command_line.split(' ').map do |c|
+    if c.end_with?('example')
+      "cookbooks/#{c}"
+    else
+      c
+    end
+  end
+  run_lint(cmds)
+end
+
+When 'I check both the cookbooks and role together' do
+  run_lint(['-B', 'cookbooks/another_example', '-B', 'cookbooks/example', '-R', 'roles'])
 end
 
 When 'I check the cookbook without specifying a Chef version' do
   run_lint(['-I', 'rules/test.rb', 'cookbooks/example'])
+end
+
+When 'I check both roles directories' do
+  run_lint ['-R', 'roles1', '-R', 'roles2']
 end
 
 When 'I check the recipe' do
@@ -1557,6 +1619,23 @@ end
 
 When 'I compare the man page options against the usage options' do
 
+end
+
+When 'I check the role directory' do
+  run_lint ['-R', 'roles']
+end
+
+When /^I check the role directory as a (default|cookbook|role) path$/ do |path_type|
+  options = case path_type
+    when 'default' then ['roles']
+    when 'cookbook' then ['-B', 'roles']
+    when 'role' then ['-R', 'roles']
+  end
+  run_lint(options)
+end
+
+When 'I check the webserver role only' do
+  run_lint ['-R', 'roles/webserver.rb']
 end
 
 When 'I list the available build tasks' do
@@ -1592,6 +1671,10 @@ end
 
 When 'I run it on the command line specifying a cookbook that does not exist' do
   run_lint(['no-such-cookbook'])
+end
+
+When 'I run it on the command line specifying a role directory that does not exist' do
+  run_lint(['-R', 'no-such-role-dir'])
 end
 
 When 'I run it on the command line with no arguments' do
@@ -1644,8 +1727,28 @@ Then /^the LWRP does not notify when updated warning 017 should( not)? be shown 
   expect_warning('FC017', :file_type => :provider, :expect_warning => ! not_shown, :line => line)
 end
 
+Then /^the invalid role name warning 050 should( not)? be shown$/ do |not_shown|
+  expect_warning 'FC050', {:expect_warning => ! not_shown,
+                           :file => 'roles/webserver.rb'}
+end
+
 Then 'the prefer mixlib shellout warning 048 should not be displayed against the group resource' do
   expect_warning 'FC048', {:expect_warning => false, :line => 2}
+end
+
+Then /^the role name does not match file name warning 049 should( not)? be shown( against the second name)?$/ do |not_shown, second|
+  expect_warning 'FC049', {:expect_warning => ! not_shown,
+                           :file => 'roles/webserver.rb', :line => second ? 2 : 1}
+end
+
+Then 'the role name does not match file name warning 049 should be shown against the files in both directories' do
+  expect_warning 'FC049', {:file => "roles1/webserver.rb", :line => 1}
+  expect_warning 'FC049', {:file => "roles2/database.rb", :line => 1}
+end
+
+Then /^the role name does not match file name warning 049 should( not)? be shown against the (webserver|database) role$/ do |not_shown, role|
+  expect_warning 'FC049', {:expect_warning => ! not_shown,
+                           :file => "roles/#{role}.rb", :line => 1}
 end
 
 Then 'the long ruby block warning 014 should be displayed against the long block only' do
