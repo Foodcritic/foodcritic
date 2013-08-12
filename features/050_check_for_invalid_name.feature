@@ -17,3 +17,17 @@ Feature: Check for invalid names
     | Webserver    | should not   |
     | web server   | should       |
     | webserver%   | should       |
+
+  Scenario Outline: Environment name validity
+    Given a ruby environment file that defines an environment with name <environment_name>
+     When I check the environment directory
+     Then the invalid environment name warning 050 <show_warning> be shown
+  Examples:
+    | environment_name     | show_warning |
+    | production           | should not   |
+    | pre_production       | should not   |
+    | production-eu        | should not   |
+    | production2          | should not   |
+    | Production           | should not   |
+    | EU West              | should       |
+    | production (eu-west) | should       |

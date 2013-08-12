@@ -24,10 +24,12 @@ Feature: Multiple paths
      When I check both roles directories
      Then the role name does not match file name warning 049 should be shown against the files in both directories
 
-  Scenario: Linting a cookbook and a role together
+  Scenario: Linting a cookbook, role and environment together
     Given a cookbook with a single recipe that reads node attributes via symbols,strings
       And another cookbook with a single recipe that reads node attributes via strings
       And a directory that contains a role file webserver.rb in ruby that defines role name apache
-     When I check both the cookbooks and role together
+      And a directory that contains an environment file production.rb in ruby that defines environment name production (us-east)
+     When I check the cookbooks, role and environment together
      Then the attribute consistency warning 019 should be shown
       And the role name does not match file name warning 049 should be shown
+      And the invalid environment name warning 050 should be shown

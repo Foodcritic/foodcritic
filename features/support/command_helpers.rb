@@ -101,8 +101,9 @@ module FoodCritic
                           :resource => 'resources/site.rb', :libraries => 'libraries/lib.rb'}[options[:file_type]]
       end
       options = {:line => 1, :expect_warning => true, :file => 'recipes/default.rb'}.merge!(options)
-      unless options[:file].include?('roles')
-        options[:file] = "cookbooks/example/#{options[:file]}"
+      unless options[:file].include?('roles') ||
+        options[:file].include?('environments')
+          options[:file] = "cookbooks/example/#{options[:file]}"
       end
       if options[:warning_only]
         warning = "#{code}: #{WARNINGS[code]}"
@@ -175,6 +176,9 @@ module FoodCritic
 
         {:short => 'C', :long => '[no-]context',
          :description => 'Show lines matched against rather than the default summary.'},
+
+        {:short => 'E', :long => 'environment-path PATH',
+         :description => 'Environment path(s) to check.'},
 
         {:short => 'I', :long => 'include PATH',
          :description => 'Additional rule file path(s) to load.'},

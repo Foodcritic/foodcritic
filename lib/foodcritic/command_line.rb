@@ -14,7 +14,8 @@ module FoodCritic
         :tags => [],
         :include_rules => [],
         :cookbook_paths => [],
-        :role_paths => []
+        :role_paths => [],
+        :environment_paths => []
       }
       @parser = OptionParser.new do |opts|
         opts.banner = 'foodcritic [cookbook_paths]'
@@ -37,6 +38,10 @@ module FoodCritic
         opts.on("-C", "--[no-]context",
           "Show lines matched against rather than the default summary.") do |c|
           @options[:context] = c
+        end
+        opts.on("-E", "--environment-path PATH",
+          "Environment path(s) to check.") do |e|
+          @options[:environment_paths] << e
         end
         opts.on("-I", "--include PATH",
           "Additional rule file path(s) to load.") do |i|
@@ -104,7 +109,8 @@ module FoodCritic
     #
     # @return [Boolean] True if the paths exist.
     def valid_paths?
-      paths = options[:cookbook_paths] + options[:role_paths]
+      paths = options[:cookbook_paths] + options[:role_paths] +
+        options[:environment_paths]
       paths.any? && paths.all?{|path| File.exists?(path) }
     end
 
@@ -134,6 +140,13 @@ module FoodCritic
       Array(@options[:role_paths])
     end
 
+    # The environment paths to check
+    #
+    # @return [Array<String>] Path(s) to the environment directories being checked.
+    def environment_paths
+      Array(@options[:environment_paths])
+    end
+
     # If matches should be shown with context rather than the default summary
     # display.
     #
@@ -148,7 +161,8 @@ module FoodCritic
     def options
       original_options.merge({
         :cookbook_paths => cookbook_paths,
-        :role_paths => role_paths
+        :role_paths => role_paths,
+        :environment_paths => environment_paths,
       })
     end
 

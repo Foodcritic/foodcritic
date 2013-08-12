@@ -18,3 +18,11 @@ Feature: Individual file
      When I check the webserver role only
      Then the role name does not match file name warning 049 should be shown against the webserver role
       And the role name does not match file name warning 049 should not be shown against the database role
+
+  Scenario: Linting an individual environment
+    Given an environments directory
+      And it contains an environment file production_eu.rb that defines the environment name "production (eu-west-1)"
+      And it contains an environment file production_us.rb that defines the environment name "production (us-east-1)"
+     When I check the eu environment file only
+     Then the invalid environment name warning 050 should be shown against the eu environment
+      And the invalid environment name warning 050 should not be shown against the us environment

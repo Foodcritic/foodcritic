@@ -147,6 +147,20 @@ module FoodCritic
       }
     end
 
+    # Create an environment file
+    #
+    # @param [Hash] options The options to use for the environment
+    # @option options [String] :dir The relative directory to write to
+    # @option options [String] :environment_name The name of the environment declared in the file
+    # @option options [String] :file_name The containing file relative to the environments directory
+    def environment(options={})
+      options = {:dir => 'environments'}.merge(options)
+      write_file "#{options[:dir]}/#{options[:file_name]}", %Q{
+        #{Array(options[:environment_name]).map{|r| "name #{r}"}.join("\n")}
+        cookbook "apache2"
+      }.strip
+    end
+
     # Create a placeholder minitest spec that would be linted due to its path
     # unless an exclusion is specified.
     def minitest_spec_attributes

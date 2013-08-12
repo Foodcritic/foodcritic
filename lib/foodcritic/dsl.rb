@@ -69,6 +69,7 @@ module FoodCritic
     rule_block :library
     rule_block :template
 
+    rule_block :environment
     rule_block :role
 
     # Load the ruleset(s).

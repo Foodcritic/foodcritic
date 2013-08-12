@@ -1249,6 +1249,10 @@ Given 'a directory that contains a ruby role with an expression as its name' do
   role(:role_name => '"#{foo}#{bar}"', :file_name => 'webserver.rb')
 end
 
+Given /^a directory that contains an environment file (.*) in ruby that defines environment name (.*)$/ do |file_name, env_name|
+  environment(:environment_name => %Q{"#{env_name}"}, :file_name => 'production.rb')
+end
+
 Given /^a ([a-z_]+) resource declared with the mode ([^\s]+)(?: with comment (.*)?)?$/ do |resource,mode,comment|
   recipe_resource_with_mode(resource, mode, comment)
 end
@@ -1271,7 +1275,8 @@ Given(/^a LWRP with an action :create that notifies with (converge_by|updated_by
     {:name => :delete, :notify_type => :none}
   ])
 end
-Given 'a roles directory' do
+
+Given /^(?:a roles|an environments) directory$/ do
 
 end
 
@@ -1518,6 +1523,17 @@ Given /^a recipe that uses include_recipe$/ do
   }
 end
 
+Given /^a ruby environment file that defines an environment with name (.*)$/ do |env_name|
+  environment(:environment_name => %Q{"#{env_name}"}, :file_name => 'production.rb')
+end
+
+Given /^a ruby environment that triggers FC050 with comment (.*)$/ do |comment|
+  write_file 'environments/production.rb', %Q{
+    name "Production (eu-west-1)" #{comment}
+    run_list "recipe[apache2]"
+  }.strip
+end
+
 Given /^a ruby role file that defines a role with name (.*)$/ do |role_name|
   role(:role_name => [%Q{"#{role_name}"}], :file_name => 'webserver.rb')
 end
@@ -1532,6 +1548,10 @@ end
 Given 'each role directory has a role with a name that does not match the containing file name' do
   role(:dir => 'roles1', :role_name => '"apache"', :file_name => 'webserver.rb')
   role(:dir => 'roles2', :role_name => '"postgresql"', :file_name => 'database.rb')
+end
+
+Given /^it contains an environment file (.*\.rb) that defines the environment name (.*)$/ do |file_name, env_name|
+  environment(:environment_name => env_name, :file_name => file_name)
 end
 
 Given /^it contains a role file ([a-z]+\.rb) that defines the role name (.*)$/ do |file_name, role_name|
@@ -1601,16 +1621,28 @@ When /^I check both cookbooks with the command-line (.*)$/ do |command_line|
   run_lint(cmds)
 end
 
-When 'I check both the cookbooks and role together' do
-  run_lint(['-B', 'cookbooks/another_example', '-B', 'cookbooks/example', '-R', 'roles'])
+When 'I check the cookbooks, role and environment together' do
+  run_lint([
+    '-B', 'cookbooks/another_example', '-B', 'cookbooks/example',
+    '-E', 'environments',
+    '-R', 'roles'
+  ])
 end
 
 When 'I check the cookbook without specifying a Chef version' do
   run_lint(['-I', 'rules/test.rb', 'cookbooks/example'])
 end
 
+When 'I check the environment directory' do
+  run_lint ['-E', 'environments']
+end
+
 When 'I check both roles directories' do
   run_lint ['-R', 'roles1', '-R', 'roles2']
+end
+
+When 'I check the eu environment file only' do
+  run_lint ['-E', 'environments/production_eu.rb']
 end
 
 When 'I check the recipe' do
@@ -1673,8 +1705,12 @@ When 'I run it on the command line specifying a cookbook that does not exist' do
   run_lint(['no-such-cookbook'])
 end
 
-When 'I run it on the command line specifying a role directory that does not exist' do
-  run_lint(['-R', 'no-such-role-dir'])
+When /^I run it on the command line specifying a( role|n environment) directory that does not exist$/ do |type|
+  if type.include?('role')
+    run_lint(['-R', 'no-such-role-dir'])
+  else
+    run_lint(['-E', 'no-such-environment-dir'])
+  end
 end
 
 When 'I run it on the command line with no arguments' do
@@ -1727,9 +1763,14 @@ Then /^the LWRP does not notify when updated warning 017 should( not)? be shown 
   expect_warning('FC017', :file_type => :provider, :expect_warning => ! not_shown, :line => line)
 end
 
-Then /^the invalid role name warning 050 should( not)? be shown$/ do |not_shown|
+Then /^the invalid (role|environment) name warning 050 should( not)? be shown$/ do |type, not_shown|
+  file = type == 'role' ? 'roles/webserver.rb' : 'environments/production.rb'
+  expect_warning 'FC050', {:expect_warning => ! not_shown, :file => file}
+end
+
+Then /^the invalid environment name warning 050 should( not)? be shown against the (eu|us) environment$/ do |not_shown, env|
   expect_warning 'FC050', {:expect_warning => ! not_shown,
-                           :file => 'roles/webserver.rb'}
+    :file => "environments/production_#{env}.rb", :line => 1}
 end
 
 Then 'the prefer mixlib shellout warning 048 should not be displayed against the group resource' do

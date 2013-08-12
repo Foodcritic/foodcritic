@@ -58,3 +58,12 @@ Feature: Ignoring rules on per line basis
     | comment | shown        |
     |         | be shown     |
     | #~FC049 | not be shown |
+
+  Scenario Outline: Ignoring environment rules
+    Given a ruby environment that triggers FC050 with comment <comment>
+     When I check the environment directory
+     Then the invalid environment name warning 050 should <shown>
+  Examples:
+    | comment | shown        |
+    |         | be shown     |
+    | #~FC050 | not be shown |

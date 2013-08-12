@@ -17,48 +17,27 @@ describe FoodCritic::Linter do
 
   describe "#check" do
 
-    it "requires a cookbook_path or a role_path to be specified" do
+    it "requires a cookbook_path, role_path or environment_path to be specified" do
       lambda{ linter.check({}) }.must_raise ArgumentError
     end
 
-    it "requires a cookbook_path by itself not to be nil" do
-      lambda{ linter.check(:cookbook_paths => nil) }.must_raise ArgumentError
-    end
-
-    it "requires a role_path by itself not to be nil" do
-      lambda{ linter.check(:role_paths => nil) }.must_raise ArgumentError
-    end
-
-    it "requires a cookbook_path by itself not to be empty" do
-      lambda{ linter.check(:cookbook_paths => []) }.must_raise ArgumentError
-    end
-
-    it "requires a role_path by itself not to be empty" do
-      lambda{ linter.check(:role_paths => []) }.must_raise ArgumentError
-    end
-
-    it "accepts a scalar with a single cookbook path" do
-      linter.check(:cookbook_paths => '.')
-    end
-
-    it "accepts an array of cookbook paths" do
-      linter.check(:cookbook_paths => ['.'])
-    end
-
-    it "accepts a scalar with a single role path" do
-      linter.check(:role_paths => '.')
-    end
-
-    it "accepts an array of role paths" do
-      linter.check(:role_paths => ['.'])
-    end
-
-    it "returns a review when a cookbook path is provided" do
-      linter.check(:cookbook_paths => ['.']).must_respond_to(:warnings)
-    end
-
-    it "returns a review when a role path is provided" do
-      linter.check(:cookbook_paths => ['.']).must_respond_to(:warnings)
+    [:cookbook, :role, :environment].each do |path_type|
+      key = "#{path_type}_paths".to_sym
+      it "requires a #{path_type}_path by itself not to be nil" do
+        lambda{ linter.check(key => nil) }.must_raise ArgumentError
+      end
+      it "requires a #{path_type}_path by itself not to be empty" do
+        lambda{ linter.check(key => []) }.must_raise ArgumentError
+      end
+      it "accepts a scalar with a single #{path_type} path" do
+        linter.check(key => '.')
+      end
+      it "accepts an array of #{path_type} paths" do
+        linter.check(key => ['.'])
+      end
+      it "returns a review when a #{path_type} path is provided" do
+        linter.check(key => ['.']).must_respond_to(:warnings)
+      end
     end
 
   end
