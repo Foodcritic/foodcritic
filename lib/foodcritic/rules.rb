@@ -494,6 +494,13 @@ rule "FC034", "Unused template variables" do
       passed_vars = resource['variables'].xpath('symbol/ident/@value').map{|tv| tv.to_s}
       template_vars = read_ast(template_path).xpath('//var_ref/ivar/' +
         '@value').map{|v| v.to_s.sub(/^@/, '')}
+      read_ast(template_path).xpath('//command/args_add_block//tstring_content/@value').map do |included_partial|
+        new_template_path = template_paths(filename).find do |path|
+          File.basename(path) == included_partial.to_s
+        end
+        template_vars.concat(read_ast(new_template_path).xpath('//var_ref/ivar/' +
+          '@value').map{|v| v.to_s.sub(/^@/, '')})
+      end
       file_match(template_path) unless (passed_vars - template_vars).empty?
     end.compact
   end
