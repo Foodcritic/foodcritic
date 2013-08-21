@@ -1481,6 +1481,20 @@ Given /^the template (.+)?contains the expression (.*)$/ do |ext,expr|
   }
 end
 
+Given /^the template (.+)?contains partial includes with the expression (.*)$/ do |ext,expr|
+  file = if ext
+    "templates/default/config#{ext.strip}"
+  else
+    'templates/default/config.conf.erb'
+  end
+  write_file "cookbooks/example/#{file}", %Q{
+    <%= render 'included_template.erb' %>
+  }
+  write_file "cookbooks/example/templates/default/included_template.erb", %Q{
+    <%= #{expr} %>
+    }  
+end
+
 Given 'unit tests under a top-level test directory' do
   minitest_spec_attributes
 end

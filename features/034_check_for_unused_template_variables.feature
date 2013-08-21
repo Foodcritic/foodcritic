@@ -35,3 +35,20 @@ Feature: Check for unused template variables
       | config_var,another_var | @another_var                | .conf.erb | should     |
       | config_var             | @config_var                 | .conf     | should not |
       | config_var,another_var | @another_var                | .conf     | should     |
+
+  Scenario Outline: Valiables passed with includes
+    Given a cookbook that passes variables <variables> to a template with extension <extension>
+      And the template <extension> contains partial includes with the expression <expression>
+     When I check the cookbook
+     Then the unused template variables warning 034 <displayed> be displayed against the template <extension>
+    Examples:
+      | variables              | expression                  | extension | displayed  |
+      | config_var             | node[:configs][:config_var] | .conf.erb | should     |
+      | config_var             | @config_var                 | .conf.erb | should not |
+      | config_var             | @config_var['foo']          | .conf.erb | should not |
+      | config_var             | node[:configs][:config_var] | .conf.erb | should     |
+      | config_var,another_var | node[:configs][:config_var] | .conf.erb | should     |
+      | config_var,another_var | @config_var                 | .conf.erb | should     |
+      | config_var,another_var | @another_var                | .conf.erb | should     |
+      | config_var             | @config_var                 | .conf     | should not |
+      | config_var,another_var | @another_var                | .conf     | should     |
