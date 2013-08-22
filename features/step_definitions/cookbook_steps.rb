@@ -1481,6 +1481,39 @@ Given /^the template (.+)?contains the expression (.*)$/ do |ext,expr|
   }
 end
 
+Given /^the template (.+)?contains partial includes of type (.*) with the expression (.*)$/ do |ext,type,expr|
+  file = if ext
+    "templates/default/config#{ext.strip}"
+  else
+    'templates/default/config.conf.erb'
+  end
+  if type == 'nested' and expr.split(',').length > 1
+    expr.split(',').each_with_index do |template_var,i|
+      template_name = "included_template#{i}.erb"
+      if i.even? 
+        include_string = "<%= render '#{template_name}' %>"
+      else 
+        include_string = "<%= render('#{template_name}') %>"
+      end
+      write_file "cookbooks/example/templates/default/#{template_name}", %Q{
+        <%= #{template_var} %>
+      }
+    end
+  else
+    if type == 'command'
+      include_string = "<%= render 'included_template.erb' %>"
+    else
+      include_string = "<%= render('included_template.erb') %>"
+    end
+    write_file "cookbooks/example/#{file}", %Q{
+      #{include_string}
+    }
+    write_file "cookbooks/example/templates/default/included_template.erb", %Q{
+      <%= #{expr} %>
+    }
+  end  
+end
+
 Given 'unit tests under a top-level test directory' do
   minitest_spec_attributes
 end
