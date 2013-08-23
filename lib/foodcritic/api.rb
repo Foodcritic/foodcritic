@@ -110,7 +110,7 @@ module FoodCritic
       #       depends cbk
       #     end
       deps = deps.to_a + word_list_values(ast, "//command[ident/@value='depends']")
-      deps.map{|dep| dep['value'].strip }
+      deps.uniq.map{|dep| dep['value'].strip }
     end
 
     # The key / value pair in an environment or role ruby file
