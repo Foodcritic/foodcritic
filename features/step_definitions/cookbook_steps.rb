@@ -1483,29 +1483,30 @@ end
 
 Given /^the template (.+)?contains partial includes of type (.*) with the expression (.*)$/ do |ext,type,expr|
   file = if ext
-    "templates/default/config#{ext.strip}"
+    "config#{ext.strip}"
   else
-    'templates/default/config.conf.erb'
+    'config.conf.erb'
   end
   if type == 'nested' and expr.split(',').length > 1
-    expr.split(',').each_with_index do |template_var,i|
-      template_name = "included_template#{i}.erb"
-      if i.even?
-        include_string = "<%= render '#{template_name}' %>"
+    expressions = expr.split(',')
+    includes = (1..expressions.length).map{|i| "included_template_#{i}.erb"}
+    (Array(file) + includes).zip(includes).map do |parent, child|
+      content = if child
+        "<%= render '#{child}' %>"
       else
-        include_string = "<%= render('#{template_name}') %>"
+        expressions.map{|e| "<%= #{e} %>"}.join("\n")
       end
-      write_file "cookbooks/example/templates/default/#{template_name}", %Q{
-        <%= #{template_var} %>
-      }
+      [parent, content]
+    end.each do |template_name, content|
+      write_file "cookbooks/example/templates/default/#{template_name}", content
     end
   else
-    if type == 'command'
+    if type == 'no parentheses'
       include_string = "<%= render 'included_template.erb' %>"
     else
       include_string = "<%= render('included_template.erb') %>"
     end
-    write_file "cookbooks/example/#{file}", %Q{
+    write_file "cookbooks/example/templates/default/#{file}", %Q{
       #{include_string}
     }
     write_file "cookbooks/example/templates/default/included_template.erb", %Q{

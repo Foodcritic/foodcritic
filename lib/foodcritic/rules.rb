@@ -484,27 +484,24 @@ end
 rule "FC034", "Unused template variables" do
   tags %w{correctness}
   recipe do |ast,filename|
-    Array(resource_attributes_by_type(ast)['template']).select do
-      |t| t['variables'] and t['variables'].respond_to?(:xpath)
+    Array(resource_attributes_by_type(ast)['template']).select do |t|
+      t['variables'] and t['variables'].respond_to?(:xpath)
     end.map do |resource|
-      template_path = template_paths(filename).find do |p|
-        File.basename(p) == resource['source']
+      all_templates = template_paths(filename)
+      template_path = all_templates.find do |path|
+        File.basename(path) == resource['source']
       end
       next unless template_path
-      passed_vars = resource['variables'].xpath('symbol/ident/@value').map{|tv| tv.to_s}
-      template_vars = read_ast(template_path).xpath('//var_ref/ivar/' +
-        '@value').map{|v| v.to_s.sub(/^@/, '')}
-      founded_inc = []
-      founded_inc = read_ast(template_path).xpath('//*[self::command or child::fcall][descendant::ident/@value="render"]//args_add_block//tstring_content/@value').map{|p| p.to_s}
-      founded_inc.each do |included_partial|
-        new_template_path = template_paths(filename).find do |path|
-            File.basename(path) == included_partial.to_s
-        end
-        unless new_template_path.nil?
-        template_vars.concat(read_ast(new_template_path).xpath('//var_ref/ivar/' +
-          '@value').map{|v| v.to_s.sub(/^@/, '')})
-        end
-      end
+      passed_vars = resource['variables'].xpath(
+        'symbol/ident/@value').map{|tv| tv.to_s}
+
+      template_vars = templates_included(
+        all_templates, template_path).map do |template|
+          read_ast(template).xpath('//var_ref/ivar/@value').map do |v|
+            v.to_s.sub(/^@/, '')
+          end
+      end.flatten
+
       file_match(template_path) unless (passed_vars - template_vars).empty?
     end.compact
   end

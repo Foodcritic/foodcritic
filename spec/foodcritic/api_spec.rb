@@ -42,9 +42,10 @@ describe FoodCritic::Api do
         :ruby_code?,
         :searches,
         :standard_cookbook_subdirs,
-	:supported_platforms,
+        :supported_platforms,
         :template_file,
         :template_paths,
+        :templates_included,
         :valid_query?
       ])
     end
@@ -1736,6 +1737,87 @@ describe FoodCritic::Api do
       }).must_equal([{:platform => 'centos', :versions => []},
                      {:platform => 'fedora', :versions => []},
 	             {:platform => 'redhat', :versions => []}])
+    end
+  end
+
+  describe "#templates_included" do
+
+    def all_templates
+      [
+        'templates/default/main.erb',
+        'templates/default/included_1.erb',
+        'templates/default/included_2.erb'
+      ]
+    end
+
+    def template_ast(content)
+      parse_ast(FoodCritic::Template::ExpressionExtractor.new.extract(
+        content).map{|e| e[:code]}.join(';'))
+    end
+
+    it "returns the path of the containing template when there are no partials" do
+      ast = parse_ast('<%= foo.erb %>')
+      api.stub :read_ast, ast do
+        api.templates_included(['foo.erb'], 'foo.erb').must_equal ['foo.erb']
+      end
+    end
+
+    it "returns the path of the containing template and any partials" do
+      api.instance_variable_set(:@asts, {
+        :main =>  template_ast('<%= render "included_1.erb" %>
+                                <%= render "included_2.erb" %>'),
+        :ok => template_ast('<%= @foo %>')
+      })
+      def api.read_ast(path)
+        case path
+          when /main/ then @asts[:main]
+          else @asts[:ok]
+        end
+      end
+      api.templates_included(all_templates,
+        'templates/default/main.erb').must_equal(
+          ['templates/default/main.erb',
+           'templates/default/included_1.erb',
+           'templates/default/included_2.erb']
+      )
+    end
+
+    it "doesn't mistake render options for partial template names" do
+      api.instance_variable_set(:@asts, {
+        :main =>  template_ast('<%= render "included_1.erb",
+                               :variables => {:foo => "included_2.erb"} %>'),
+        :ok => template_ast('<%= @foo %>')
+      })
+      def api.read_ast(path)
+        case path
+          when /main/ then @asts[:main]
+          else @asts[:ok]
+        end
+      end
+      api.templates_included(all_templates,
+        'templates/default/main.erb').must_equal(
+          ['templates/default/main.erb', 'templates/default/included_1.erb']
+      )
+    end
+
+    it "raises if included partials have cycles" do
+      api.instance_variable_set(:@asts, {
+        :main =>  template_ast('<%= render "included_1.erb" %>
+                                <%= render "included_2.erb" %>'),
+        :loop => template_ast('<%= render "main.erb" %>'),
+        :ok => template_ast('<%= foo %>')
+      })
+      def api.read_ast(path)
+        case path
+          when /main/ then @asts[:main]
+          when /included_2/ then @asts[:loop]
+          else @asts[:ok]
+        end
+      end
+      err = lambda do
+        api.templates_included(all_templates, 'templates/default/main.erb')
+      end.must_raise(FoodCritic::Api::RecursedTooFarError)
+      err.message.must_equal 'templates/default/main.erb'
     end
   end
 

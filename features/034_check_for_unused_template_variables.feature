@@ -42,24 +42,24 @@ Feature: Check for unused template variables
      When I check the cookbook
      Then the unused template variables warning 034 <displayed> be displayed against the template <extension>
     Examples:
-      | variables              | expression                  | type    | extension | displayed  |
-      | config_var             | node[:configs][:config_var] | command | .conf.erb | should     |
-      | config_var             | @config_var                 | command | .conf.erb | should not |
-      | config_var             | @config_var['foo']          | command | .conf.erb | should not |
-      | config_var             | node[:configs][:config_var] | command | .conf.erb | should     |
-      | config_var,another_var | node[:configs][:config_var] | command | .conf.erb | should     |
-      | config_var,another_var | @config_var                 | command | .conf.erb | should     |
-      | config_var,another_var | @another_var                | command | .conf.erb | should     |
-      | config_var             | @config_var                 | command | .conf     | should not |
-      | config_var,another_var | @another_var                | command | .conf     | should     |
-      | config_var             | node[:configs][:config_var] | fcall   | .conf.erb | should     |
-      | config_var             | @config_var                 | fcall   | .conf.erb | should not |
-      | config_var             | @config_var['foo']          | fcall   | .conf.erb | should not |
-      | config_var             | node[:configs][:config_var] | fcall   | .conf.erb | should     |
-      | config_var,another_var | node[:configs][:config_var] | fcall   | .conf.erb | should     |
-      | config_var,another_var | @config_var                 | fcall   | .conf.erb | should     |
-      | config_var,another_var | @another_var                | fcall   | .conf.erb | should     |
-      | config_var             | @config_var                 | fcall   | .conf     | should not |
-      | config_var,another_var | @another_var                | fcall   | .conf     | should     |
-      | config_var,another_var | @config_var,@another_var    | nested  | .conf     | should not |
-      | config_var,another_var | @config_var                 | nested  | .conf     | should     |
+      | variables              | expression                  | type           | extension | displayed  |
+      | config_var             | node[:configs][:config_var] | no parentheses | .conf.erb | should     |
+      | config_var             | @config_var                 | no parentheses | .conf.erb | should not |
+      | config_var             | @config_var['foo']          | no parentheses | .conf.erb | should not |
+      | config_var             | node[:configs][:config_var] | no parentheses | .conf.erb | should     |
+      | config_var,another_var | node[:configs][:config_var] | no parentheses | .conf.erb | should     |
+      | config_var,another_var | @config_var                 | no parentheses | .conf.erb | should     |
+      | config_var,another_var | @another_var                | no parentheses | .conf.erb | should     |
+      | config_var             | @config_var                 | no parentheses | .conf     | should not |
+      | config_var,another_var | @another_var                | no parentheses | .conf     | should     |
+      | config_var             | node[:configs][:config_var] | parentheses    | .conf.erb | should     |
+      | config_var             | @config_var                 | parentheses    | .conf.erb | should not |
+      | config_var             | @config_var['foo']          | parentheses    | .conf.erb | should not |
+      | config_var             | node[:configs][:config_var] | parentheses    | .conf.erb | should     |
+      | config_var,another_var | node[:configs][:config_var] | parentheses    | .conf.erb | should     |
+      | config_var,another_var | @config_var                 | parentheses    | .conf.erb | should     |
+      | config_var,another_var | @another_var                | parentheses    | .conf.erb | should     |
+      | config_var             | @config_var                 | parentheses    | .conf     | should not |
+      | config_var,another_var | @another_var                | parentheses    | .conf     | should     |
+      | config_var,another_var | @config_var,@another_var    | nested         | .conf     | should not |
+      | config_var,another_var | @config_var                 | nested         | .conf     | should     |
