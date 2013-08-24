@@ -337,8 +337,8 @@ module FoodCritic
     def templates_included(all_templates, template_path, depth=1)
       raise RecursedTooFarError.new(template_path) if depth > 10
       partials = read_ast(template_path).xpath('//*[self::command or
-        child::fcall][descendant::ident/@value="render"]//args_add_block//
-        tstring_content[1]/@value').map{|p| p.to_s}
+        child::fcall][descendant::ident/@value="render"]//args_add/
+        string_literal//tstring_content/@value').map{|p| p.to_s}
       Array(template_path) + partials.map do |included_partial|
         partial_path = Array(all_templates).find do |path|
           File.basename(path) == included_partial.to_s
