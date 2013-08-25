@@ -489,7 +489,7 @@ rule "FC034", "Unused template variables" do
     end.map do |resource|
       all_templates = template_paths(filename)
       template_path = all_templates.find do |path|
-        File.basename(path) == resource['source']
+        File.basename(path) == template_file(resource)
       end
       next unless template_path
       passed_vars = resource['variables'].xpath(

@@ -64,6 +64,16 @@ Feature: Check for unused template variables
       | config_var,another_var | @config_var,@another_var    | nested         | .conf     | should not |
       | config_var,another_var | @config_var                 | nested         | .conf     | should     |
 
+  Scenario Outline: Template path is inferred
+    Given a cookbook that passes variables <variables> to an inferred template
+      And the inferred template contains the expression <expression>
+     When I check the cookbook
+     Then the unused template variables warning 034 <displayed> be displayed against the inferred template
+    Examples:
+      | variables              | expression                  | displayed  |
+      | config_var             | node[:configs][:config_var] | should     |
+      | config_var             | @config_var                 | should not |
+
   Scenario: Template includes contain cycle
     Given a template that includes a partial that includes the original template again
      When I check the cookbook

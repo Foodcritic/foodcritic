@@ -780,6 +780,16 @@ Given /^a cookbook that passes variables (.*) to a template with extension (.*)$
   }
 end
 
+Given /^a cookbook that passes variables (.*) to an inferred template$/ do |vars|
+  write_recipe %Q{
+    template "/tmp/config.conf" do
+      variables(
+        :#{vars.split(',').map{|v| "#{v} => node[:#{v}]"}.join(",\n:")}
+      )
+    end
+  }
+end
+
 Given /^a cookbook that contains a (short|long) ruby block$/ do |length|
   recipe_with_ruby_block(length.to_sym)
 end
@@ -1483,6 +1493,12 @@ Given 'the last role name declared does not match the containing filename' do
 
 end
 
+Given /^the inferred template contains the expression (.*)$/ do |expr|
+  write_file "cookbooks/example/templates/default/config.conf.erb", %Q{
+    <%= #{expr} %>
+  }
+end
+
 Given /^the template (.+)?contains the expression (.*)$/ do |ext,expr|
   file = if ext
     "templates/default/config#{ext.strip}"
@@ -2016,11 +2032,11 @@ Then 'the undeclared dependency warning 007 should be displayed only for the und
   expect_warning("FC007", :file => 'recipes/default.rb', :line => 6, :expect_warning => true)
 end
 
-Then /^the unused template variables warning 034 should (not )?be displayed against the template(.*)?$/ do |not_shown, ext|
-  file = if ext
-    "templates/default/config#{ext.strip}"
-  else
+Then /^the unused template variables warning 034 should (not )?be displayed against the (?:inferred )?template(.*)?$/ do |not_shown, ext|
+  file = if ext.empty?
     'templates/default/config.conf.erb'
+  else
+    "templates/default/config#{ext.strip}"
   end
   expect_warning('FC034', :file => file, :line => 1,
 		 :expect_warning => ! not_shown)
