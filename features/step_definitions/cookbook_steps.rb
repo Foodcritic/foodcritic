@@ -1414,6 +1414,19 @@ Given /^a rule that (declares|does not declare) a version constraint(?: of ([^ ]
   end
 end
 
+Given 'a template that includes a partial that includes the original template again' do
+  write_recipe %q{
+    template "/tmp/a" do
+      source "a.erb"
+      variables({
+        :config_var => "foo"
+      })
+    end
+  }
+  write_file 'cookbooks/example/templates/default/a.erb', '<%= render "b.erb" %>'
+  write_file 'cookbooks/example/templates/default/b.erb', '<%= render "a.erb" %>'
+end
+
 Given 'access to the man page documentation' do
 
 end

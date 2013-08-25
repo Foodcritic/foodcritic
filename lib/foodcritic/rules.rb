@@ -495,14 +495,18 @@ rule "FC034", "Unused template variables" do
       passed_vars = resource['variables'].xpath(
         'symbol/ident/@value').map{|tv| tv.to_s}
 
-      template_vars = templates_included(
-        all_templates, template_path).map do |template|
-          read_ast(template).xpath('//var_ref/ivar/@value').map do |v|
-            v.to_s.sub(/^@/, '')
-          end
-      end.flatten
+      begin
+        template_vars = templates_included(
+          all_templates, template_path).map do |template|
+            read_ast(template).xpath('//var_ref/ivar/@value').map do |v|
+              v.to_s.sub(/^@/, '')
+            end
+        end.flatten
 
-      file_match(template_path) unless (passed_vars - template_vars).empty?
+        file_match(template_path) unless (passed_vars - template_vars).empty?
+      rescue RecursedTooFarError
+        []
+      end
     end.compact
   end
 end
