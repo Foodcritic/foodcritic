@@ -1424,7 +1424,7 @@ Given /^a rule that (declares|does not declare) a version constraint(?: of ([^ ]
   end
 end
 
-Given 'a template that includes a partial that includes the original template again' do
+Given /^a template that includes a partial( that includes the original template again)?$/ do |loops|
   write_recipe %q{
     template "/tmp/a" do
       source "a.erb"
@@ -1434,7 +1434,12 @@ Given 'a template that includes a partial that includes the original template ag
     end
   }
   write_file 'cookbooks/example/templates/default/a.erb', '<%= render "b.erb" %>'
-  write_file 'cookbooks/example/templates/default/b.erb', '<%= render "a.erb" %>'
+  content = if loops
+    '<%= render "a.erb" %>'
+  else
+    '<%= @config_var %>'
+  end
+  write_file 'cookbooks/example/templates/default/b.erb', content
 end
 
 Given 'access to the man page documentation' do
@@ -2024,6 +2029,13 @@ end
 
 Then /^the simple usage text should be displayed along with a (non-)?zero exit code$/ do |non_zero|
   usage_displayed(non_zero.nil?)
+end
+
+Then /^the template partials loop indefinitely warning 051 should (not )?be displayed against the templates$/ do |not_shown|
+  expect_warning('FC051', :file => 'templates/default/a.erb', :line => 1,
+                 :expect_warning => ! not_shown)
+  expect_warning('FC051', :file => 'templates/default/b.erb', :line => 1,
+                 :expect_warning => ! not_shown)
 end
 
 Then 'the undeclared dependency warning 007 should be displayed only for the undeclared dependencies' do

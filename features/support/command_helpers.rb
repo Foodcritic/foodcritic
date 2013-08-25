@@ -44,7 +44,7 @@ module FoodCritic
       'FC039' => 'Node method cannot be accessed with key',
       'FC040' => 'Execute resource used to run git commands',
       'FC041' => 'Execute resource used to run curl or wget commands',
-      'FC042' => 'Prefer include_recipe to require_recipe', 
+      'FC042' => 'Prefer include_recipe to require_recipe',
       'FC043' => 'Prefer new notification syntax',
       'FC044' => 'Avoid bare attribute keys',
       'FC045' => 'Consider setting cookbook name in metadata',
@@ -53,6 +53,7 @@ module FoodCritic
       'FC048' => 'Prefer Mixlib::ShellOut',
       'FC049' => 'Role name does not match containing file name',
       'FC050' => 'Name includes invalid characters',
+      'FC051' => 'Template partials loop indefinitely',
       'FCTEST001' => 'Test Rule'
     }
 
