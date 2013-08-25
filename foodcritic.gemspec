@@ -12,6 +12,7 @@ Gem::Specification.new do |s|
   s.executables << 'foodcritic'
   s.add_dependency('gherkin', '~> 2.11.7')
   s.add_dependency('nokogiri', '~> 1.5.4')
+  s.add_dependency('rake', '~> 10.1.0')
   s.add_dependency('treetop', '~> 1.4.10')
   s.add_dependency('yajl-ruby', '~> 1.1.0')
   s.add_dependency('erubis')
