@@ -213,8 +213,7 @@ module FoodCritic
     # Read the AST for the given Ruby source file
     def read_ast(file)
       source = if file.to_s.split(File::SEPARATOR).include?('templates')
-        Template::ExpressionExtractor.new.extract(
-          File.read(file)).map{|e| e[:code]}.join(';')
+        template_expressions_only(file)
       else
         File.read(file)
       end
@@ -517,6 +516,16 @@ module FoodCritic
         end
         ast.xpath(expr, AttFilter.new).sort
       end
+    end
+
+    def template_expressions_only(file)
+      exprs = Template::ExpressionExtractor.new.extract(File.read(file))
+      lines = Array.new(exprs.map{|e| e[:line]}.max || 0, '')
+      exprs.each do |e|
+        lines[e[:line] -1] += ';' unless lines[e[:line] -1].empty?
+        lines[e[:line] -1] += e[:code]
+      end
+      lines.join("\n")
     end
 
     def vivified_attribute_access(ast, options={})

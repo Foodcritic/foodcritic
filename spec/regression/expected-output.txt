@@ -1,5 +1,5 @@
 FC002: Avoid string interpolation where not required: ./ant/resources/library.rb:29
-FC002: Avoid string interpolation where not required: ./application_php/templates/default/php.conf.erb:1
+FC002: Avoid string interpolation where not required: ./application_php/templates/default/php.conf.erb:3
 FC002: Avoid string interpolation where not required: ./application_python/providers/gunicorn.rb:80
 FC002: Avoid string interpolation where not required: ./ark/libraries/provider_ark.rb:247
 FC002: Avoid string interpolation where not required: ./ark/libraries/provider_ark.rb:249
@@ -21,8 +21,8 @@ FC002: Avoid string interpolation where not required: ./pacman/providers/aur.rb:
 FC002: Avoid string interpolation where not required: ./pacman/providers/aur.rb:31
 FC002: Avoid string interpolation where not required: ./pacman/providers/aur.rb:72
 FC002: Avoid string interpolation where not required: ./pacman/providers/aur.rb:90
-FC002: Avoid string interpolation where not required: ./passenger_apache2/templates/default/passenger_web_app.conf.erb:1
-FC002: Avoid string interpolation where not required: ./passenger_apache2/templates/default/web_app.conf.erb:1
+FC002: Avoid string interpolation where not required: ./passenger_apache2/templates/default/passenger_web_app.conf.erb:3
+FC002: Avoid string interpolation where not required: ./passenger_apache2/templates/default/web_app.conf.erb:3
 FC002: Avoid string interpolation where not required: ./perl/recipes/default.rb:37
 FC002: Avoid string interpolation where not required: ./perl/recipes/default.rb:43
 FC002: Avoid string interpolation where not required: ./pxe_dust/recipes/bootstrap_template.rb:89
@@ -35,7 +35,7 @@ FC002: Avoid string interpolation where not required: ./python/providers/virtual
 FC002: Avoid string interpolation where not required: ./python/providers/virtualenv.rb:64
 FC002: Avoid string interpolation where not required: ./radiant/recipes/default.rb:57
 FC002: Avoid string interpolation where not required: ./radiant/recipes/default.rb:61
-FC002: Avoid string interpolation where not required: ./radiant/templates/default/radiant.conf.erb:1
+FC002: Avoid string interpolation where not required: ./radiant/templates/default/radiant.conf.erb:3
 FC002: Avoid string interpolation where not required: ./rsyslog/recipes/default.rb:24
 FC002: Avoid string interpolation where not required: ./rsyslog/recipes/default.rb:63
 FC002: Avoid string interpolation where not required: ./sbuild/definitions/sbuild_lv.rb:30
@@ -45,7 +45,7 @@ FC002: Avoid string interpolation where not required: ./windows/libraries/window
 FC002: Avoid string interpolation where not required: ./windows/libraries/windows_privileged.rb:56
 FC002: Avoid string interpolation where not required: ./wordpress/recipes/default.rb:66
 FC002: Avoid string interpolation where not required: ./wordpress/recipes/default.rb:148
-FC002: Avoid string interpolation where not required: ./wordpress/templates/default/wordpress.conf.erb:1
+FC002: Avoid string interpolation where not required: ./wordpress/templates/default/wordpress.conf.erb:3
 FC002: Avoid string interpolation where not required: ./zenoss/providers/zendmd.rb:4
 FC002: Avoid string interpolation where not required: ./zenoss/recipes/server.rb:164
 FC003: Check whether you are running with chef server before using server-specific features: ./application/libraries/default.rb:97
