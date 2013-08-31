@@ -30,40 +30,23 @@ Feature: Check for undeclared recipe dependencies
     | #{cookbook_name}::other        |
     | #{cbk}_other::other            |
 
-  Scenario: Cookbook includes declared recipe dependency
-    Given a cookbook recipe that includes a declared recipe dependency
+  Scenario Outline: Declared dependencies
+    Given a cookbook recipe that includes <dependency_type>
     When I check the cookbook
     Then the undeclared dependency warning 007 should not be displayed
-
-  Scenario: Cookbook includes declared recipe dependency unscoped
-    Given a cookbook recipe that includes a declared recipe dependency unscoped
-    When I check the cookbook
-    Then the undeclared dependency warning 007 should not be displayed
-
-  Scenario: Cookbook includes several declared recipe dependencies
-    Given a cookbook recipe that includes several declared recipe dependencies - brace
-    When I check the cookbook
-    Then the undeclared dependency warning 007 should not be displayed
-
-  Scenario: Cookbook includes several declared recipe dependencies
-    Given a cookbook recipe that includes several declared recipe dependencies - block
-    When I check the cookbook
-    Then the undeclared dependency warning 007 should not be displayed
+  Examples:
+    | dependency_type                                         |
+    | a declared recipe dependency                            |
+    | a declared recipe dependency unscoped                   |
+    | several declared recipe dependencies - block            |
+    | several declared recipe dependencies - brace            |
+    | a local recipe                                          |
+    | a local recipe where the directory is differently named |
 
   Scenario: Cookbook includes mix of declared and undeclared recipe dependencies
     Given a cookbook recipe that includes both declared and undeclared recipe dependencies
     When I check the cookbook
     Then the undeclared dependency warning 007 should be displayed only for the undeclared dependencies
-
-  Scenario: Cookbook includes local recipe
-    Given a cookbook recipe that includes a local recipe
-    When I check the cookbook
-    Then the undeclared dependency warning 007 should not be displayed
-
-  Scenario: Cookbook includes local recipe - name in metadata
-    Given a cookbook recipe that includes a local recipe where the directory is differently named
-    When I check the cookbook
-    Then the undeclared dependency warning 007 should not be displayed
 
   Scenario: Cookbook has no metadata file
     Given a cookbook that does not have defined metadata
