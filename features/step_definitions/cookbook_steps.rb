@@ -490,6 +490,17 @@ Given /a cookbook recipe that (install|upgrade)s (a gem|multiple gems)(.*)$/ do 
   end
 end
 
+Given 'a cookbook recipe that refers to a hidden template' do
+  write_recipe %q{
+    template '/etc/.s3cfg' do
+      source '.s3cfg.erb'
+    end
+  }
+  write_file "cookbooks/example/templates/default/.s3cfg.erb", %q{
+    config=true
+  }
+end
+
 Given /^a cookbook recipe that refers to a (missing |local )?template( in a subdirectory)?$/ do |missing_or_local, sub_dir|
   sub_dir = sub_dir ? 'sub_dir/' : ''
   write_recipe %Q{

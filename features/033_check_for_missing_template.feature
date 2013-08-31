@@ -14,6 +14,7 @@ Feature: Check for missing template
     | defines a template where name and source are both simple expressions      | should not be displayed |
     | defines a template where name is a complex expression                     | should not be displayed |
     | infers a template with an expression                                      | should not be displayed |
+    | refers to a hidden template                                               | should not be displayed |
     | refers to a local template                                                | should not be displayed |
     | refers to a missing template                                              | should be displayed     |
     | refers to a template in a subdirectory                                    | should not be displayed |
