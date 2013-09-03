@@ -19,13 +19,13 @@ module FoodCritic
       }
       @parser = OptionParser.new do |opts|
         opts.banner = 'foodcritic [cookbook_paths]'
-        opts.on("-t", "--tags TAGS",
+        opts.on("-t", "--tags TAGS", Array,
           "Only check against rules with the specified tags.") do |t|
-          @options[:tags] << t
+          @options[:tags] += t
         end
-        opts.on("-f", "--epic-fail TAGS",
+        opts.on("-f", "--epic-fail TAGS", Array,
           "Fail the build if any of the specified tags are matched ('any' -> fail on any match).") do |t|
-          @options[:fail_tags] << t
+          @options[:fail_tags] += t
         end
         opts.on("-c", "--chef-version VERSION",
           "Only check against rules valid for this version of Chef.") do |c|
@@ -75,6 +75,7 @@ module FoodCritic
           e.recover args
         end
       end
+      puts @options
     end
 
     # Show the command help to the end user?
