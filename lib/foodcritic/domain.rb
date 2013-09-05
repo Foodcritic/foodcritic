@@ -55,12 +55,26 @@ module FoodCritic
         x.first == y.first ? x[1] <=> y[1] : x.first <=> y.first
       end.map{|w|"#{w.first}:#{w[1]}"}.uniq.join("\n")
     end
+
+    def warnings_by_file_and_line
+      warn_hash = {}
+      warnings.each do |warning|
+        filename = Pathname.new(warning.match[:filename]).cleanpath.to_s
+        line_num = warning.match[:line].to_i
+        warn_hash[filename] = {} unless warn_hash.key?(filename)
+        unless warn_hash[filename].key?(line_num)
+          warn_hash[filename][line_num] = Set.new
+        end
+        warn_hash[filename][line_num] << warning.rule
+      end
+      warn_hash
+    end
   end
 
   # A rule to be matched against.
   class Rule
     attr_accessor :code, :name, :applies_to, :cookbook, :attributes, :recipe,
-      :provider, :resource, :metadata, :library, :template, :role, :environment
+      :provider, :resource, :metadata, :library, :template, :role, :environment, :source
 
     attr_writer :tags
 

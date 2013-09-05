@@ -127,7 +127,11 @@ module FoodCritic
     # @param [String] long_switch The long descriptive version of the switch
     # @param [String] description The description of the switch
     def expect_usage_option(short_switch, long_switch, description)
-      expected_switch = "-#{Regexp.escape(short_switch)}, --#{Regexp.escape(long_switch)}[ ]+#{Regexp.escape(description)}"
+      if short_switch then
+        expected_switch = "-#{Regexp.escape(short_switch)}, --#{Regexp.escape(long_switch)}[ ]+#{Regexp.escape(description)}"
+      else
+        expected_switch = "--#{Regexp.escape(long_switch)}[ ]+#{Regexp.escape(description)}"
+      end
       expect_output(Regexp.new(expected_switch))
     end
 
@@ -246,7 +250,9 @@ module FoodCritic
     def run_lint(cmd_args)
       in_current_dir do
         show_context = cmd_args.include?('-C')
-        review, @status = FoodCritic::Linter.check(CommandLine.new(cmd_args))
+        cmd = CommandLine.new(cmd_args)
+        review, @status = FoodCritic::Linter.check(cmd)
+        suppress_output {Report.new(cmd.options).report(review)} if review.is_a? FoodCritic::Review
         @review =
           if review.nil? || (review.respond_to?(:warnings) && review.warnings.empty?)
             ''
@@ -256,6 +262,16 @@ module FoodCritic
             "#{review.to_s}\n"
           end
       end
+    end
+
+    # Run a block of code, suppressing output to stdout
+    #
+    # @param &block the block of code to execute
+    def suppress_output(&block)
+      old_stdout = $stdout
+      $stdout = File.open(File::NULL, 'w')
+      block.call
+      $stdout = old_stdout
     end
 
   end
@@ -363,6 +379,15 @@ module FoodCritic
     end
   end
 
+end
+
+class DummyReporter
+  attr_writer :destination
+  def output(review)
+    require 'fileutils'
+    FileUtils.mkdir_p(File.dirname(@destination))
+    File.open(@destination, 'w') { |file| file.write 'Hello world' }
+  end
 end
 
 World(FoodCritic::CommandHelpers)

@@ -23,6 +23,18 @@ module FoodCritic
           "Only check against rules with the specified tags.") do |t|
           @options[:tags] << t
         end
+        opts.on("--reporter REPORTER",
+          "Use the specified reporter to output") do |f|
+          @options[:reporter] = f
+        end
+        opts.on("--report-dest DESTINATION",
+          "Output to destination (using reporter)") do |f|
+          @options[:report_dest] = f
+        end
+        opts.on("--require REQUIRED",
+          "Require the specified path when loading reporters") do |f|
+          @options[:require] = f
+        end
         opts.on("-f", "--epic-fail TAGS",
           "Fail the build if any of the specified tags are matched ('any' -> fail on any match).") do |t|
           @options[:fail_tags] << t
