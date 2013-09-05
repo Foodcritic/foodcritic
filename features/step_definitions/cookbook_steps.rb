@@ -2096,6 +2096,26 @@ Then /^the check should abort with an error$/ do
   assert_error_occurred
 end
 
+Then 'the usage text should include an option for specifying external reporters' do
+  expect_usage_option(nil, 'require REQUIRED', 'Require the specified path when loading reporters')
+end
+
+Then 'the usage text should include an option for specifying report destination' do
+  expect_usage_option(nil, 'report-dest DESTINATION', 'Output to destination (using reporter)')
+end
+
+Then 'the usage text should include an option for specifying the reporter' do
+  expect_usage_option(nil, 'reporter REPORTER', 'Use the specified reporter to output')
+end
+
+When /^I run it on the command line with the external reporter output option$/ do
+  run_lint(['--reporter', 'DummyReporter', '--report-dest', 'tmp/my-report.xml', Dir.pwd])
+end
+
+Then /^the external reporter is used$/ do
+  File.exists?('tmp/aruba/tmp/my-report.xml').should == true
+end
+
 Given(/^a cookbook with an? (.*) file with an interpolated name$/) do |file_type|
   content = %q{
     a = "#{node.hostname}"

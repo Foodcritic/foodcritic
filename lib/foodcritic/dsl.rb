@@ -35,6 +35,7 @@ module FoodCritic
     def rule(code, name, &block)
       @rules = [] if @rules.nil?
       @rules << Rule.new(code, name)
+      rules.last.source = block
       yield self
     end
 
