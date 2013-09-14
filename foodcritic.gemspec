@@ -7,7 +7,7 @@ Gem::Specification.new do |s|
   s.description = 'Lint tool for Opscode Chef cookbooks.'
   s.summary = "foodcritic-#{s.version}"
   s.authors = ['Andrew Crump']
-  s.homepage = 'http://acrmp.github.com/foodcritic'
+  s.homepage = 'http://foodcritic.io'
   s.license = 'MIT'
   s.executables << 'foodcritic'
   s.add_dependency('gherkin', '~> 2.11.7')
