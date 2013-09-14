@@ -1,3 +1,86 @@
+## 3.0.0 (14th September, 2013)
+
+Features:
+
+  - [FC047: Attribute assignment does not specify precedence](http://foodcritic.io/#FC047)
+    rule added
+    ([related issue](https://github.com/acrmp/foodcritic/issues/81)). Thanks
+    @jtimberman, @miketheman.
+  - [FC048: Prefer Mixlib::ShellOut](http://foodcritic.io/#FC048)
+    rule added
+    ([related issue](https://github.com/acrmp/foodcritic/issues/111)). Thanks
+    @jaymzh.
+  - [FC049: Role name does not match containing file name](http://foodcritic.io/#FC049)
+    rule added
+    ([related issue](https://github.com/acrmp/foodcritic/issues/19)). Thanks
+    @jaymzh.
+  - [FC050: Name includes invalid characters](http://foodcritic.io/#FC050)
+    rule added.
+  - [FC051: Template partials loop indefinitely](http://foodcritic.io/#FC051)
+    rule added.
+  - Added support for checking Chef environment and role files
+    ([related issue](https://github.com/acrmp/foodcritic/issues/19)). Thanks
+    @jaymzh.
+  - Added metadata for Chef 11.6.0.
+  - API methods `#field`, `#field_value` and `#templates_included` added.
+  - The API now exposes access to whether individual warnings should be viewed
+    as failures
+    ([related issue](https://github.com/acrmp/foodcritic/issues/150)). Thanks
+    @jamesdburgess.
+
+Bugfixes:
+
+  - [FC007: Ensure recipe dependencies are reflected in cookbook metadata](http://foodcritic.io/#FC007)
+    would warn if specifying dependencies in a multi-line word list with leading whitespace
+    ([related issue](https://github.com/acrmp/foodcritic/issues/160)). Thanks to
+    @philk for identifying and fixing this issue.
+  - [FC007: Ensure recipe dependencies are reflected in cookbook metadata](http://foodcritic.io/#FC007)
+    would not warn if `include_recipe` used parentheses
+    ([related issue](https://github.com/acrmp/foodcritic/issues/155)). Thanks
+    @jamesdburgess.
+  - [FC017: LWRP does not notify when updated](http://foodcritic.io/#FC017)
+    would warn even if `converge_by` or `use_inline_resources` was used
+    ([related issue](https://github.com/acrmp/foodcritic/issues/90)). Thanks
+    @stevendanna, @nevir.
+  - [FC017: LWRP does not notify when updated](http://foodcritic.io/#FC017)
+    would not warn if any action within the provider notified. Updated to report
+    against actions individually
+    ([related issue](https://github.com/acrmp/foodcritic/issues/90)).
+  - [FC019: Access node attributes in a consistent manner](http://foodcritic.io/#FC019)
+    would warn incorrectly against `node.run_state`
+    ([related issue](https://github.com/acrmp/foodcritic/issues/66)). Thanks
+    @jtimberman.
+  - [FC033: Missing template](http://foodcritic.io/#FC033)
+    would warn if the template filename began with a dot
+    ([related issue](https://github.com/acrmp/foodcritic/issues/165)). Thanks
+    @eherot.
+  - [FC034: Unused template variables](http://foodcritic.io/#FC034)
+    would warn incorrectly if variables were used by partials
+    ([related issue](https://github.com/acrmp/foodcritic/issues/140)). Thanks to
+    @v-a for implementing initial support for partials.
+  - [FC034: Unused template variables](http://foodcritic.io/#FC034)
+    would not be shown against inferred templates.
+  - [FC038: Invalid resource action](http://foodcritic.io/#FC038)
+    would warn incorrectly for log resources that specified a `write` action
+    ([related issue](https://github.com/acrmp/foodcritic/issues/154)). Thanks
+    @sethvargo.
+  - The foodcritic gem was missing a dependency on rake which broke
+    thor-foodcritic
+    ([related issue](https://github.com/acrmp/foodcritic/issues/157)). Thanks
+    @douglaswth.
+  - Template warnings should now be shown against the correct line number.
+    Previously warnings were always shown against line 1
+    ([related issue](https://github.com/acrmp/foodcritic/issues/102)). Thanks
+    @juliandunn.
+  - The `#declared_dependencies` API method could return duplicates for old
+    versions of LibXML.
+    ([related issue](https://github.com/acrmp/foodcritic/issues/163)). Thanks
+    @danleyden.
+
+Other:
+
+  - This release introduces breaking changes to programmatic use of foodcritic.
+
 ## 2.2.0 (10th July, 2013)
 
 Features:
