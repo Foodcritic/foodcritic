@@ -1,3 +1,10 @@
+## 3.0.1 (25th September, 2013)
+
+Other:
+
+  - Rake version constraint removed to make packaging easier for users who
+    deploy foodcritic alongside Omnibus Chef.
+
 ## 3.0.0 (14th September, 2013)
 
 Features:
