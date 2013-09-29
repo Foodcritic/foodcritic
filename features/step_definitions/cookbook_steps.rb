@@ -1624,6 +1624,13 @@ Given /^a ruby role that triggers FC049 with comment (.*)$/ do |comment|
   }.strip
 end
 
+Given /^a template directory that contains a binary file (.*) that is not valid UTF-8$/ do |filename|
+  template_dir = 'cookbooks/example/templates/default'
+  write_recipe ''
+  write_file "#{template_dir}/innocent_template.erb", '<%= hello %>'
+  File.open("#{current_dir}/#{template_dir}/#{filename}", 'wb'){|f| f.putc(0x93)}
+end
+
 Given 'each role directory has a role with a name that does not match the containing file name' do
   role(:dir => 'roles1', :role_name => '"apache"', :file_name => 'webserver.rb')
   role(:dir => 'roles2', :role_name => '"postgresql"', :file_name => 'database.rb')

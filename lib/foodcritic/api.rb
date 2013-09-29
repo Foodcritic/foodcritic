@@ -349,7 +349,11 @@ module FoodCritic
     # Templates in the current cookbook
     def template_paths(recipe_path)
       Dir.glob(Pathname.new(recipe_path).dirname.dirname + 'templates' +
-        '**/*', File::FNM_DOTMATCH).select{|path| File.file?(path)}
+        '**/*', File::FNM_DOTMATCH).select do |path|
+        File.file?(path)
+      end.reject do |path|
+        File.basename(path) == '.DS_Store' || File.extname(path) == '.swp'
+      end
     end
 
     private
