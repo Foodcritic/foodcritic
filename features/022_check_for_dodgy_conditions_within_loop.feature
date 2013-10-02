@@ -24,5 +24,10 @@ Feature: Check for dodgy resource conditions within a loop
     | "feed_pet_#{pet_name}" | not_if { ::File.exists?("/tmp/#{pet_name}")}      | should not   |
     | "feed_pet"             | not_if { ::File.exists?("/tmp/#{unrelated_var}")} | should not   |
     | "feed_pet"             | only_if "[ -f \"/tmp/#{pet_name}\" ]"             | should       |
-    | "feed_pet_#{pet_name}" | not_if "[ -f \"/tmp/#{pet_name}\" ]"              | should not   |
+    | "feed_pet_#{pet_name}" | not_if " -f \"/tmp/#{pet_name}\" ]"               | should not   |
     | pet_name               | not_if "[ -f \"/tmp/#{pet_name}\" ]"              | should not   |
+
+  Scenario: Resource within a multi-arg block
+    Given a resource declared with a guard within a loop with multiple block arguments
+    When I check the cookbook
+    Then the dodgy resource condition warning 022 should not be shown

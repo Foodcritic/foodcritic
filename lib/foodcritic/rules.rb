@@ -296,6 +296,8 @@ rule "FC022", "Resource condition within loop may not behave as expected" do
     ast.xpath("//call[ident/@value='each']/../do_block").map do |loop|
       block_vars = loop.xpath("block_var/params/child::*").map do |n|
         n.name.sub(/^ident/, '')
+      end + loop.xpath("block_var/params/child::*/descendant::ident").map do |v|
+        v['value']
       end
       find_resources(loop).map do |resource|
         # if any of the parameters to the block are used in a condition then we

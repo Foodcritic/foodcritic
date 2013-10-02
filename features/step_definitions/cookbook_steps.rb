@@ -1423,6 +1423,20 @@ Given 'a recipe that declares multiple resources of the same type of which one h
   }
 end
 
+Given 'a resource declared with a guard within a loop with multiple block arguments' do
+  write_recipe %q{
+    {
+    'foo' => 'bar',
+    'baz' => 'bing',
+    }.each do |foo, bar|
+      package bar do
+        not_if { node['foo'] == foo }
+        action :install
+      end
+    end
+  }
+end
+
 Given /^a rule that (declares|does not declare) a version constraint(?: of ([^ ]+)? to ([^ ]+)?)?$/ do |constraint, from, to|
   if from || to
     rule_with_version_constraint(from, to)
@@ -1992,6 +2006,10 @@ Then /^the debugger breakpoint warning 030 should be (not )?shown against the (.
     when 'template' then 'templates/default/foo.erb'
   end
   expect_warning('FC030', :line => nil, :expect_warning => should_not.nil?, :file => filename)
+end
+
+Then 'the dodgy resource condition warning 022 should not be shown' do
+  expect_warning('FC022', {:line => nil, :expect_warning => false})
 end
 
 Then /^the warning (\d+) should be (valid|invalid)$/ do |code, valid|
