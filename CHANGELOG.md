@@ -1,3 +1,19 @@
+## 3.0.2 (5th October, 2013)
+
+Bugfixes:
+
+  - [FC051: Template partials loop indefinitely](http://foodcritic.io/#FC051)
+    can cause foodcritic to exit with an error on encountering a file that
+    cannot be read as UTF-8. We now explicitly exclude `.DS_Store` and `*.swp`
+    as a workaround
+    ([related issue](https://github.com/acrmp/foodcritic/issues/172)). Thanks
+    @tmatilai, @claco.
+  - [FC022: Resource condition within loop may not behave as expected](http://foodcritic.io/#FC022)
+    would warn incorrectly against loops where the block accepts more than one
+    argument
+    ([related issue](https://github.com/acrmp/foodcritic/issues/69)). Thanks
+    @Ips1975, @jaymzh.
+
 ## 3.0.1 (25th September, 2013)
 
 Other:
