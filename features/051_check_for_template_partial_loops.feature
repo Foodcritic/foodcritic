@@ -20,6 +20,12 @@ Feature: Check for template partial includes cycle
      Then the template partials loop indefinitely warning 051 should be displayed against the templates
       And no error should have occurred
 
+  Scenario: Relative partial
+    Given a template that includes a partial with a relative subdirectory path
+     When I check the cookbook
+     Then the template partials loop indefinitely warning 051 should not be displayed against the templates
+      And no error should have occurred
+
   Scenario Outline: Template directory contains binary files
     Given a template directory that contains a binary file <file> that is not valid UTF-8
      When I check the cookbook

@@ -340,7 +340,7 @@ module FoodCritic
         string_literal//tstring_content/@value').map{|p| p.to_s}
       Array(template_path) + partials.map do |included_partial|
         partial_path = Array(all_templates).find do |path|
-          File.basename(path) == included_partial.to_s
+          (Pathname.new(template_path).dirname + included_partial).to_s == path
         end
         Array(partial_path) + templates_included(all_templates, partial_path, depth + 1)
       end.flatten.uniq

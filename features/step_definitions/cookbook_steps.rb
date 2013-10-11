@@ -1467,6 +1467,19 @@ Given /^a template that includes a partial( that includes the original template 
   write_file 'cookbooks/example/templates/default/b.erb', content
 end
 
+Given 'a template that includes a partial with a relative subdirectory path' do
+  write_recipe %q{
+    template "/tmp/a" do
+      source "a.erb"
+      variables({
+        :config_var => "foo"
+      })
+    end
+  }
+  write_file 'cookbooks/example/templates/default/a.erb', '<%= render "partials/b.erb" %>'
+  write_file 'cookbooks/example/templates/default/partials/b.erb', 'Partial content'
+end
+
 Given 'access to the man page documentation' do
 
 end
