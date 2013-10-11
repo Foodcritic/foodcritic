@@ -1467,7 +1467,7 @@ Given /^a template that includes a partial( that includes the original template 
   write_file 'cookbooks/example/templates/default/b.erb', content
 end
 
-Given 'a template that includes a partial with a relative subdirectory path' do
+Given /^a template that includes a (missing )?partial with a relative subdirectory path$/ do |missing|
   write_recipe %q{
     template "/tmp/a" do
       source "a.erb"
@@ -1477,7 +1477,9 @@ Given 'a template that includes a partial with a relative subdirectory path' do
     end
   }
   write_file 'cookbooks/example/templates/default/a.erb', '<%= render "partials/b.erb" %>'
-  write_file 'cookbooks/example/templates/default/partials/b.erb', 'Partial content'
+  unless missing
+    write_file 'cookbooks/example/templates/default/partials/b.erb', 'Partial content'
+  end
 end
 
 Given 'access to the man page documentation' do

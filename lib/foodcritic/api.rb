@@ -342,8 +342,11 @@ module FoodCritic
         partial_path = Array(all_templates).find do |path|
           (Pathname.new(template_path).dirname + included_partial).to_s == path
         end
-        Array(partial_path) + templates_included(all_templates, partial_path, depth + 1)
-      end.flatten.uniq
+        if partial_path
+          Array(partial_path) +
+            templates_included(all_templates, partial_path, depth + 1)
+        end
+      end.flatten.uniq.compact
     end
 
     # Templates in the current cookbook
