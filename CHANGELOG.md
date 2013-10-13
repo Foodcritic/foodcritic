@@ -1,3 +1,13 @@
+## 3.0.3 (13th October, 2013)
+
+Bugfixes:
+
+  - [FC051: Template partials loop indefinitely](http://foodcritic.io/#FC051)
+    would cause an error for partials included from a subdirectory or where the
+    partial did not exist
+    ([related issue](https://github.com/acrmp/foodcritic/issues/176)). Thanks
+    @claco, @michaelglass.
+
 ## 3.0.2 (5th October, 2013)
 
 Bugfixes:
