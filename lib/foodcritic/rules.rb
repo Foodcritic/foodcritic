@@ -573,7 +573,7 @@ rule "FC040", "Execute resource used to run git commands" do
       cmd_str = (resource_attribute(cmd, 'command') || resource_name(cmd)).to_s
 
       git_cmd = cmd_str.match(/git ([a-z]+)/)
-      break false if git_cmd.nil?
+      next if git_cmd.nil?
 
       !git_cmd.captures.nil? && possible_git_commands.include?(git_cmd.captures[0])
     end
