@@ -395,7 +395,6 @@ FC034: Unused template variables: ./activemq/templates/default/wrapper.conf.erb:
 FC034: Unused template variables: ./application_java/templates/default/context.xml.erb:1
 FC034: Unused template variables: ./application_python/templates/default/celeryconfig.py.erb:1
 FC034: Unused template variables: ./horizon/templates/default/local_settings.py.erb:1
-FC034: Unused template variables: ./nginx/templates/default/nginx.init.erb:1
 FC034: Unused template variables: ./nova/templates/default/libvirtd.conf.erb:1
 FC034: Unused template variables: ./sbuild/templates/default/mk_chroot.sh.erb:1
 FC041: Execute resource used to run curl or wget commands: ./hadoop/recipes/default.rb:33
