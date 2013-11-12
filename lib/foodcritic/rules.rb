@@ -293,13 +293,13 @@ rule "FC022", "Resource condition within loop may not behave as expected" do
   tags %w{correctness}
   applies_to {|version| version >= gem_version("0.10.6")}
   recipe do |ast|
-    ast.xpath("//call[ident/@value='each']/../do_block").map do |loop|
-      block_vars = loop.xpath("block_var/params/child::*").map do |n|
+    ast.xpath("//call[ident/@value='each']/../do_block").map do |lp|
+      block_vars = lp.xpath("block_var/params/child::*").map do |n|
         n.name.sub(/^ident/, '')
-      end + loop.xpath("block_var/params/child::*/descendant::ident").map do |v|
+      end + lp.xpath("block_var/params/child::*/descendant::ident").map do |v|
         v['value']
       end
-      find_resources(loop).map do |resource|
+      find_resources(lp).map do |resource|
         # if any of the parameters to the block are used in a condition then we
         # have a match
         unless (block_vars &
