@@ -35,3 +35,8 @@ Feature: Check for direct usage of git
     | echo 'bob' && git show                              | should not |
     | gitk                                                | should not |
     | curl http://github.com/                             | should not |
+
+  Scenario: Multiple execute resources
+    Given a cookbook recipe with multiple execute resources where the last uses git
+     When I check the cookbook
+     Then the execute resource used to run git commands warning 040 should be displayed against the last resource

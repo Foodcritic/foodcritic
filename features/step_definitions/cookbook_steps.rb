@@ -758,6 +758,20 @@ Given 'a cookbook recipe with a service resource with an action specified via a 
   }.strip
 end
 
+Given 'a cookbook recipe with multiple execute resources where the last uses git' do
+  write_recipe %q{
+    execute "one" do
+      command "ls -al"
+    end
+    execute "two" do
+      command "df -H"
+    end
+    execute "three" do
+      command "git clone https://example.org/bar.git"
+    end
+  }.strip
+end
+
 Given 'a cookbook template that uses all variables passed' do
   write_recipe %q{
     template "/tmp/config.conf" do
@@ -1890,6 +1904,10 @@ end
 
 Then /^the bare attribute keys warning 044 should not be displayed against the (?:local variable|library call)$/ do
   expect_warning 'FC044', {:expect_warning => false, :line => 2, :file_type => :attributes}
+end
+
+Then 'the execute resource used to run git commands warning 040 should be displayed against the last resource' do
+  expect_warning 'FC040', {:line => 7}
 end
 
 Then /^the LWRP does not notify when updated warning 017 should( not)? be shown against the :([^ ]+) action$/ do |not_shown, action|
