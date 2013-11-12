@@ -1437,6 +1437,25 @@ Given 'a resource declared with a guard within a loop with multiple block argume
   }
 end
 
+Given 'a resource that declares a guard containing a block' do
+  write_recipe %q{
+    template '/etc/foo' do
+      not_if do
+        s = false
+        node['mylist'].each do |realm|
+          s = node['mylist'][realm].empty?
+          break if s
+        end
+        s
+      end
+      owner 'root'
+      group 'root'
+      mode '0644'
+      source 'foo.erb'
+    end
+  }
+end
+
 Given /^a rule that (declares|does not declare) a version constraint(?: of ([^ ]+)? to ([^ ]+)?)?$/ do |constraint, from, to|
   if from || to
     rule_with_version_constraint(from, to)

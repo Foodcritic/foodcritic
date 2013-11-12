@@ -31,3 +31,8 @@ Feature: Check for dodgy resource conditions within a loop
     Given a resource declared with a guard within a loop with multiple block arguments
     When I check the cookbook
     Then the dodgy resource condition warning 022 should not be shown
+
+  Scenario: Resource guard contains a block
+    Given a resource that declares a guard containing a block
+     When I check the cookbook
+     Then the dodgy resource condition warning 022 should not be shown

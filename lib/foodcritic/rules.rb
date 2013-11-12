@@ -293,7 +293,9 @@ rule "FC022", "Resource condition within loop may not behave as expected" do
   tags %w{correctness}
   applies_to {|version| version >= gem_version("0.10.6")}
   recipe do |ast|
-    ast.xpath("//call[ident/@value='each']/../do_block").map do |lp|
+    ast.xpath("//call[ident/@value='each']/../do_block[count(ancestor::
+              method_add_block/method_add_arg/fcall/ident[@value='only_if' or
+              @value = 'not_if']) = 0]").map do |lp|
       block_vars = lp.xpath("block_var/params/child::*").map do |n|
         n.name.sub(/^ident/, '')
       end + lp.xpath("block_var/params/child::*/descendant::ident").map do |v|
