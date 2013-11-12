@@ -31,6 +31,7 @@ Feature: Check for direct usage of git
     | git fetch origin                                    | should     |
     | git checkout master                                 | should     |
     | git reset --hard                                    | should     |
+    | git status && git pull                              | should     |
     | git show                                            | should not |
     | echo 'bob' && git show                              | should not |
     | gitk                                                | should not |

@@ -576,10 +576,8 @@ rule "FC040", "Execute resource used to run git commands" do
     find_resources(ast, :type => 'execute').select do |cmd|
       cmd_str = (resource_attribute(cmd, 'command') || resource_name(cmd)).to_s
 
-      git_cmd = cmd_str.match(/git ([a-z]+)/)
-      next if git_cmd.nil?
-
-      !git_cmd.captures.nil? && possible_git_commands.include?(git_cmd.captures[0])
+      actual_git_commands = cmd_str.scan(/git ([a-z]+)/).map{|c| c.first}
+      (possible_git_commands & actual_git_commands).any?
     end
   end
 end
