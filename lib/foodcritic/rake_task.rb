@@ -23,7 +23,7 @@ module FoodCritic
       end
 
       def define
-        desc "Lint Chef cookbooks"
+        desc "Lint Chef cookbooks" unless ::Rake.application.last_comment
         task(name) do
           result = FoodCritic::Linter.new.check(options)
           if result.warnings.any?
