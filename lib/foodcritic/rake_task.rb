@@ -26,11 +26,8 @@ module FoodCritic
         desc "Lint Chef cookbooks" unless ::Rake.application.last_comment
         task(name) do
           result = FoodCritic::Linter.new.check(options)
-          if result.warnings.any?
-            puts result
-          end
-
-          fail result.to_s if result.failed?
+          puts result if result.warnings.any?
+          abort if result.failed?
         end
       end
 
