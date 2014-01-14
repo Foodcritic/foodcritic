@@ -212,12 +212,10 @@ module FoodCritic
 
     # Read the AST for the given Ruby source file
     def read_ast(file)
-      source = if file.to_s.split(File::SEPARATOR).include?('templates')
-        template_expressions_only(file)
-      else
-        File.read(file)
+      @ast_cache ||= Hash.new do |h,k|
+        h[k] = uncached_read_ast(k)
       end
-      build_xml(Ripper::SexpBuilder.new(source).parse)
+      @ast_cache[file]
     end
 
     # Retrieve a single-valued attribute from the specified resource.
@@ -474,6 +472,15 @@ module FoodCritic
       unless ast.respond_to?(:xpath)
         raise ArgumentError, "AST must support #xpath"
       end
+    end
+
+    def uncached_read_ast(file)
+      source = if file.to_s.split(File::SEPARATOR).include?('templates')
+        template_expressions_only(file)
+      else
+        File.read(file)
+      end
+      build_xml(Ripper::SexpBuilder.new(source).parse)
     end
 
     # XPath custom function
