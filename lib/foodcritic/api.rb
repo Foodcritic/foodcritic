@@ -1,4 +1,5 @@
 require 'nokogiri'
+require 'rufus-lru'
 
 module FoodCritic
 
@@ -212,10 +213,12 @@ module FoodCritic
 
     # Read the AST for the given Ruby source file
     def read_ast(file)
-      @ast_cache ||= Hash.new do |h,k|
-        h[k] = uncached_read_ast(k)
+      @ast_cache ||= Rufus::Lru::Hash.new(5)
+      if @ast_cache.include?(file)
+        @ast_cache[file]
+      else
+        @ast_cache[file] = uncached_read_ast(file)
       end
-      @ast_cache[file]
     end
 
     # Retrieve a single-valued attribute from the specified resource.
