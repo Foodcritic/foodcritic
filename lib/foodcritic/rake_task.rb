@@ -18,7 +18,8 @@ module FoodCritic
       def options
         {:fail_tags => ['correctness'], # differs to default cmd-line behaviour
          :cookbook_paths => @files,
-         :exclude_paths => ['test/**/*', 'spec/**/*', 'features/**/*']
+         :exclude_paths => ['test/**/*', 'spec/**/*', 'features/**/*'],
+         :context => false,
         }.merge(@options)
       end
 
@@ -26,9 +27,9 @@ module FoodCritic
         desc "Lint Chef cookbooks"
         task(name) do
           result = FoodCritic::Linter.new.check(options)
-          if result.warnings.any?
-            puts result
-          end
+          printer = options[:context] ? ContextOutput.new : SummaryOutput.new
+
+          printer.output(result) if result.warnings.any?
 
           fail result.to_s if result.failed?
         end
