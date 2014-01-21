@@ -50,6 +50,8 @@ poor style.
  * `-V`, `--version`:
    Display the foodcritic version.
 
+ * `-X`, `--exclude` <PATH>:
+   Exclude path(s) from being linted.
 
 ## RETURN VALUES
 

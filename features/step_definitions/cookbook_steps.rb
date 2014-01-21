@@ -1769,6 +1769,10 @@ When /^I check both cookbooks with the command-line (.*)$/ do |command_line|
   run_lint(cmds)
 end
 
+When 'I check both roles directories' do
+  run_lint ['-R', 'roles1', '-R', 'roles2']
+end
+
 When 'I check the cookbooks, role and environment together' do
   run_lint([
     '-B', 'cookbooks/another_example', '-B', 'cookbooks/example',
@@ -1785,12 +1789,13 @@ When 'I check the environment directory' do
   run_lint ['-E', 'environments']
 end
 
-When 'I check both roles directories' do
-  run_lint ['-R', 'roles1', '-R', 'roles2']
-end
-
 When 'I check the eu environment file only' do
   run_lint ['-E', 'environments/production_eu.rb']
+end
+
+When /^I check the cookbook( without)? excluding the ([^ ]+) directory$/ do |no_exclude, dir|
+  options = no_exclude.nil? ? ['-X', dir] : []
+  run_lint(options + ['cookbooks/example'])
 end
 
 When 'I check the recipe' do
@@ -1958,8 +1963,12 @@ Then 'no error should have occurred' do
   assert_no_error_occurred
 end
 
-Then /^no warnings will be displayed against the tests$/ do
-  assert_no_test_warnings
+Then /^(no )?warnings will be displayed against the tests$/ do |no_display|
+  if no_display.nil?
+    assert_test_warnings
+  else
+    assert_no_test_warnings
+  end
 end
 
 Then 'the attribute consistency warning 019 should warn on lines 2 and 10 in that order' do

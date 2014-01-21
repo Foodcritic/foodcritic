@@ -131,6 +131,12 @@ module FoodCritic
       expect_output(Regexp.new(expected_switch))
     end
 
+    def has_test_warnings?(output)
+      output.split("\n").grep(/FC[0-9]+:/).map do |warn|
+        File.basename(File.dirname(warn.split(':').take(3).last.strip))
+      end.include?('test')
+    end
+
     def man_page_options
       man_path = Pathname.new(__FILE__) + '../../../man/foodcritic.1.ronn'
       option_lines = File.read(man_path).split('## ').find do |s|
@@ -191,7 +197,10 @@ module FoodCritic
          :description => 'Specify grammar to use when validating search syntax.'},
 
         {:short => 'V', :long => 'version',
-         :description => 'Display the foodcritic version.'}
+         :description => 'Display the foodcritic version.'},
+
+        {:short => 'X', :long => 'exclude PATH',
+         :description => 'Exclude path(s) from being linted.'}
 
       ]
     end
@@ -240,6 +249,18 @@ module FoodCritic
       @status.should == 0
     end
 
+    # Assert that warnings have not been raised against the test code which
+    # should have been excluded from linting.
+    def assert_no_test_warnings
+      has_test_warnings?(@review).should be_false
+    end
+
+    # Assert that warnings have been raised against the test code which
+    # shouldn't have been excluded from linting.
+    def assert_test_warnings
+      has_test_warnings?(@review).should be_true
+    end
+
     # Run a lint check with the provided command line arguments.
     #
     # @param [Array] cmd_args The command line arguments.
@@ -278,9 +299,13 @@ module FoodCritic
     # Assert that warnings have not been raised against the test code which
     # should have been excluded from linting.
     def assert_no_test_warnings
-      all_output.split("\n").grep(/FC[0-9]+:/).map do |warn|
-        File.basename(File.dirname(warn.split(':').take(3).last.strip))
-      end.should_not include 'test'
+      has_test_warnings?(all_output).should be_false
+    end
+
+    # Assert that warnings have been raised against the test code which
+    # shouldn't have been excluded from linting.
+    def assert_test_warnings
+      has_test_warnings?(all_output).should be_true
     end
 
     # The available tasks for this build

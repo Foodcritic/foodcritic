@@ -133,8 +133,8 @@ module FoodCritic
     private
 
     def rule_files_in_gems
-      Gem::Specification.latest_specs(true).map do |spec| 
-        spec.matches_for_glob('foodcritic/rules/**/*.rb') 
+      Gem::Specification.latest_specs(true).map do |spec|
+        spec.matches_for_glob('foodcritic/rules/**/*.rb')
       end.flatten
     end
 
@@ -211,8 +211,9 @@ module FoodCritic
       paths.reject{|type, _| type == :exclude}.map do |path_type, dirs|
         dirs.map do |dir|
           exclusions = []
+
           unless paths[:exclude].empty?
-            exclusions = Dir.glob(paths[:exclude].map{|p| File.join(dir, p)})
+            exclusions = Dir.glob(paths[:exclude].map{|p| File.join(dir, p, '**/**')})
           end
 
           if File.directory?(dir)
@@ -221,6 +222,7 @@ module FoodCritic
             else
               '*.rb'
             end
+
             (Dir.glob(File.join(dir, glob)) +
              Dir.glob(File.join(dir, "*/#{glob}")) - exclusions)
           else

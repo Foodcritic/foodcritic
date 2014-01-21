@@ -15,7 +15,8 @@ module FoodCritic
         :include_rules => [],
         :cookbook_paths => [],
         :role_paths => [],
-        :environment_paths => []
+        :environment_paths => [],
+        :exclude_paths => []
       }
       @parser = OptionParser.new do |opts|
         opts.banner = 'foodcritic [cookbook_paths]'
@@ -62,6 +63,10 @@ module FoodCritic
         opts.on("-V", "--version",
           "Display the foodcritic version.") do |v|
           @options[:version] = true
+        end
+        opts.on("-X", "--exclude PATH",
+          "Exclude path(s) from being linted.") do |e|
+          options[:exclude_paths] << e
         end
       end
       # -v is not implemented but OptionParser gives the Foodcritic's version
