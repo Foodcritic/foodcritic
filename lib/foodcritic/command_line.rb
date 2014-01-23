@@ -16,7 +16,8 @@ module FoodCritic
         :cookbook_paths => [],
         :role_paths => [],
         :environment_paths => [],
-        :exclude_paths => []
+        :exclude_paths => [],
+        :exclude_tags => []
       }
       @parser = OptionParser.new do |opts|
         opts.banner = 'foodcritic [cookbook_paths]'
@@ -67,6 +68,10 @@ module FoodCritic
         opts.on("-X", "--exclude PATH",
           "Exclude path(s) from being linted.") do |e|
           options[:exclude_paths] << e
+        end
+        opts.on("-x", "--exclude-tags TAGS",
+          "Exclude tag(s) from being matched.") do |x|
+          @options[:exclude_tags] << x
         end
       end
       # -v is not implemented but OptionParser gives the Foodcritic's version

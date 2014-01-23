@@ -43,6 +43,7 @@ module FoodCritic
     # * `:tags` - The tags to filter rules based on
     # * `:fail_tags` - The tags to fail the build on
     # * `:exclude_paths` - Paths to exclude from linting
+    # * `:exclude_tags` - Tags to exclude from matching
     #
     def check(options = {})
 
@@ -63,7 +64,7 @@ module FoodCritic
           cookbook_tags(p[:filename])
         end
 
-        active_rules(relevant_tags).each do |rule|
+        active_rules(relevant_tags, options[:exclude_tags]).each do |rule|
 
           state = {
             :path_type => p[:path_type],
@@ -174,10 +175,13 @@ module FoodCritic
       tags
     end
 
-    def active_rules(tags)
+    def active_rules(tags, excluded_tags)
       @rules.select do |rule|
         rule.matches_tags?(tags) and
         applies_to_version?(rule, chef_version)
+      end
+      @rules.reject do |rule|
+        rule.matches_tags?(excluded_tags)
       end
     end
 
