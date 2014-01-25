@@ -21,7 +21,7 @@ module FoodCritic
       @parser = OptionParser.new do |opts|
         opts.banner = 'foodcritic [cookbook_paths]'
         opts.on("-t", "--tags TAGS",
-          "Only check against rules with the specified tags.") do |t|
+          "Check against (or exclude ~) rules with the specified tags.") do |t|
           @options[:tags] << t
         end
         opts.on("-f", "--epic-fail TAGS",

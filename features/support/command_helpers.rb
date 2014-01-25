@@ -176,7 +176,7 @@ module FoodCritic
          :description => "Fail the build based on tags. Use 'any' to fail on all warnings."},
 
         {:short => 't', :long => 'tags TAGS',
-         :description => 'Only check against rules with the specified tags.'},
+         :description => 'Check against (or exclude ~) rules with the specified tags.'},
 
         {:short => 'B', :long => 'cookbook-path PATH',
          :description => 'Cookbook path(s) to check.'},
