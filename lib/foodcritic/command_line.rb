@@ -25,7 +25,7 @@ module FoodCritic
           @options[:tags] << t
         end
         opts.on("-f", "--epic-fail TAGS",
-          "Fail the build if any of the specified tags are matched ('any' -> fail on any match).") do |t|
+          "Fail the build based on tags. Use 'any' to fail on all warnings.") do |t|
           @options[:fail_tags] << t
         end
         opts.on("-c", "--chef-version VERSION",

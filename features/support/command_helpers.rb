@@ -173,7 +173,7 @@ module FoodCritic
          :description => 'Only check against rules valid for this version of Chef.'},
 
         {:short => 'f', :long => 'epic-fail TAGS',
-         :description => "Fail the build if any of the specified tags are matched ('any' -> fail on any match)."},
+         :description => "Fail the build based on tags. Use 'any' to fail on all warnings."},
 
         {:short => 't', :long => 'tags TAGS',
          :description => 'Only check against rules with the specified tags.'},
