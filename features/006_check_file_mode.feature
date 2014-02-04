@@ -25,6 +25,7 @@ Feature: Check file mode
       | file          |   644  | invalid             |
       | file          |   044  | invalid             |
       | file          | "0644" |   valid             |
+      | file          | ary[1] |   valid             |
       | template      |  00400 |   valid             |
       | template      |   400  | invalid             |
       | template      |  "400" |   valid             |
