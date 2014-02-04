@@ -1217,6 +1217,12 @@ Given /^a cookbook with a single recipe that searches but checks first( \(string
   }
 end
 
+Given 'a cookbook with a single recipe that searches but checks first (ternary) to see if this is server' do
+  write_recipe %Q{
+    required_node = Chef::Config[:solo] ? node : search(:node, query).first
+  }
+end
+
 Given /^a cookbook with a single recipe that searches but checks with a negative first to see if this is server$/ do
   write_recipe %q{
     unless Chef::Config['solo']
