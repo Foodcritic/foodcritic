@@ -78,7 +78,7 @@ rule "FC006",
   recipe do |ast|
     ast.xpath(%q{//ident[@value='mode']/parent::command/
       descendant::int[string-length(@value) < 5 and not(starts-with(@value, "0")
-      and string-length(@value) = 4)]/ancestor::method_add_block})
+      and string-length(@value) = 4)][count(ancestor::aref) = 0]/ancestor::method_add_block})
   end
 end
 
