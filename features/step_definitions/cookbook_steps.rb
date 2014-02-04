@@ -1217,6 +1217,12 @@ Given /^a cookbook with a single recipe that searches but checks first( \(string
   }
 end
 
+Given 'a cookbook with a single recipe that searches but checks first (ternary) to see if this is server' do
+  write_recipe %Q{
+    required_node = Chef::Config[:solo] ? node : search(:node, query).first
+  }
+end
+
 Given /^a cookbook with a single recipe that searches but checks with a negative first to see if this is server$/ do
   write_recipe %q{
     unless Chef::Config['solo']
@@ -2028,7 +2034,7 @@ Then /^the build will (succeed|fail) with (?:no )?warnings(.*)$/ do |build_outco
 end
 
 Then 'the check for server warning 003 should not be displayed against the condition' do
-  expect_warning("FC003", :line => 5, :expect_warning => false)
+  expect_warning("FC003", :line => nil, :expect_warning => false)
 end
 
 Then /^the check for server warning 003 should not be displayed against the search after the (.*) conditional$/ do |format|
