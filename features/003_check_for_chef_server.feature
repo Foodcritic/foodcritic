@@ -46,6 +46,11 @@ Feature: Check for Chef Server
     When I check the cookbook
     Then the check for server warning 003 should not be displayed against the condition
 
+  Scenario: Search checking for server (ternary)
+    Given a cookbook with a single recipe that searches but checks first (ternary) to see if this is server
+    When I check the cookbook
+    Then the check for server warning 003 should not be displayed against the condition
+
   Scenario Outline: Search checking for server (return)
     Given a cookbook with a single recipe that searches but returns first (<format>) if search is not supported
     When I check the cookbook

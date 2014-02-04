@@ -38,7 +38,7 @@ module FoodCritic
       raise_unless_xpath!(ast)
       # TODO: This expression is too loose, but also will fail to match other
       # types of conditionals.
-      (! ast.xpath(%q{//*[self::if or self::unless]/*[self::aref or
+      (! ast.xpath(%q{//*[self::if or self::ifop or self::unless]/*[self::aref or
         child::aref or self::call]
         [count(descendant::const[@value = 'Chef' or @value = 'Config']) = 2
           and
