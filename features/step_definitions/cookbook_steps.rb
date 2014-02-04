@@ -2028,7 +2028,7 @@ Then /^the build will (succeed|fail) with (?:no )?warnings(.*)$/ do |build_outco
 end
 
 Then 'the check for server warning 003 should not be displayed against the condition' do
-  expect_warning("FC003", :line => 5, :expect_warning => false)
+  expect_warning("FC003", :line => nil, :expect_warning => false)
 end
 
 Then /^the check for server warning 003 should not be displayed against the search after the (.*) conditional$/ do |format|
