@@ -1,4 +1,5 @@
 require 'nokogiri'
+require 'rufus-lru'
 
 module FoodCritic
 
@@ -212,12 +213,12 @@ module FoodCritic
 
     # Read the AST for the given Ruby source file
     def read_ast(file)
-      source = if file.to_s.split(File::SEPARATOR).include?('templates')
-        template_expressions_only(file)
+      @ast_cache ||= Rufus::Lru::Hash.new(5)
+      if @ast_cache.include?(file)
+        @ast_cache[file]
       else
-        File.read(file)
+        @ast_cache[file] = uncached_read_ast(file)
       end
-      build_xml(Ripper::SexpBuilder.new(source).parse)
     end
 
     # Retrieve a single-valued attribute from the specified resource.
@@ -474,6 +475,15 @@ module FoodCritic
       unless ast.respond_to?(:xpath)
         raise ArgumentError, "AST must support #xpath"
       end
+    end
+
+    def uncached_read_ast(file)
+      source = if file.to_s.split(File::SEPARATOR).include?('templates')
+        template_expressions_only(file)
+      else
+        File.read(file)
+      end
+      build_xml(Ripper::SexpBuilder.new(source).parse)
     end
 
     # XPath custom function
