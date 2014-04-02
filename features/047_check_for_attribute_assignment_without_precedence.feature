@@ -21,8 +21,10 @@ Feature: Check for attribute assignment without specified precedence
     | node.normal['foo'] = 'bar'          | should not   |
     | node.default['foo'] = 'bar'         | should not   |
     | node.force_default['foo'] = 'bar'   | should not   |
+    | node.default!['foo'] = 'bar'        | should not   |
     | node.set['foo'] = 'bar'             | should not   |
     | node.override['foo'] = 'bar'        | should not   |
+    | node.override!['foo'] = 'bar'       | should not   |
     | node.force_override['foo'] = 'bar'  | should not   |
     | node.automatic_attrs['foo'] = 'bar' | should not   |
     | node['foos'] << 'bar'               | should       |
