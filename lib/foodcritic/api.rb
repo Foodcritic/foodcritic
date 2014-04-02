@@ -463,6 +463,7 @@ module FoodCritic
           %w{
             automatic_attrs
             default
+            default!
             default_unless
             force_default
             force_override
@@ -470,6 +471,7 @@ module FoodCritic
             normal
             normal_unless
             override
+            override!
             override_unless
             set
             set_unless
