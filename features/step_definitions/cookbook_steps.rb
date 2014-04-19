@@ -1059,13 +1059,10 @@ Given 'a cookbook with a single recipe that mixes node access types in an interp
   }
 end
 
-Given 'a cookbook with a single recipe that reads multiple node attributes via symbols,strings' do
+Given 'a cookbook with a single recipe that accesses multiple node attributes via symbols' do
   write_recipe %q{
     node[:foo] = 'bar'
-    node[:baz] = 'foo'
-    node[:wham] = 'shazam'
-    node['testing'] = 'bar'
-    node['testing2'] = 'bar2'
+    node[:testing] = 'bar'
   }
 end
 
@@ -1173,12 +1170,12 @@ Given 'a cookbook with a single recipe which accesses node attributes with symbo
     # Here we access the node attributes via a symbol
     foo = node[:foo]
 
-    # String access is in the majority
-    node['foo']
-    node['bar']
-    node['baz']
+    directory "/tmp/foo" do
+      owner "root"
+      group "root"
+      action :create
+    end
 
-    # Second access via a symbol
     bar = node[:bar]
   }
 end
@@ -2090,10 +2087,10 @@ end
 
 Then /^the line number and line of code that triggered the warning(s)? should be displayed$/ do |multiple|
   if multiple.nil?
-    expect_line_shown 2, "log node['foo']"
+    expect_line_shown 1, "log node[:foo]"
   else
-    expect_line_shown 4, "    node['testing'] = 'bar'"
-    expect_line_shown 5, "    node['testing2'] = 'bar2'"
+    expect_line_shown 1, "node[:foo] = 'bar'"
+    expect_line_shown 2, "    node[:testing] = 'bar'"
   end
 end
 
@@ -2103,6 +2100,35 @@ end
 
 Then /^the no leading cookbook name warning 029 should be (not )?shown$/ do |should_not|
   expect_warning('FC029', :line => 1, :expect_warning => should_not.nil?, :file => 'metadata.rb')
+end
+
+Then 'the node access warning 001 should be displayed for each match' do
+  expect_warning('FC001', :line => 1)
+  expect_warning('FC001', :line => 2)
+end
+
+Then 'the node access warning 001 should be displayed against the variables' do
+  expect_warning('FC001', :line => 4)
+  expect_warning('FC001', :line => 5)
+end
+
+Then 'the node access warning 001 should be displayed twice for the same line' do
+  expect_warning('FC001', :line => 1, :num_occurrences => 2)
+end
+
+Then 'the node access warning 001 should warn on lines 2 and 10 in that order' do
+  expected_warnings = [2, 10].map do |line|
+    "FC001: Use strings in preference to symbols to access node attributes: cookbooks/example/recipes/default.rb:#{line}"
+  end
+  expect_output(expected_warnings.join("\n"))
+end
+
+Then 'the node access warning 001 should be displayed for the recipe' do
+  expect_warning('FC001')
+end
+
+Then 'the node access warning 001 should not be displayed for the attributes' do
+  expect_warning("FC001", :file_type => :attributes, :line => 1, :expect_warning => false)
 end
 
 Then 'the prefer chef_gem to manual install warning 025 should be shown' do
