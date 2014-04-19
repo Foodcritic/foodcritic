@@ -13,6 +13,7 @@ module FoodCritic
         :fail_tags => [],
         :tags => [],
         :include_rules => [],
+        :exclude_paths => [],
         :cookbook_paths => [],
         :role_paths => [],
         :environment_paths => [],
@@ -43,6 +44,10 @@ module FoodCritic
         opts.on("-E", "--environment-path PATH",
           "Environment path(s) to check.") do |e|
           @options[:environment_paths] << e
+        end
+        opts.on("-X", "--exclude PATH",
+          "Exclude path(s) from being checked.") do |e|
+          @options[:exclude_paths] << e
         end
         opts.on("-I", "--include PATH",
           "Additional rule file path(s) to load.") do |i|
