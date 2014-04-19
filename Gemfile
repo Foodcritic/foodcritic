@@ -1,16 +1,15 @@
-source "https://rubygems.org"
+source 'https://rubygems.org'
 
 gem 'foodcritic', :path => '.'
 
 group :test do
-  gem 'aruba', '~> 0.4.11'
-  gem 'cucumber', '~> 1.2.1'
-  gem 'minitest', '~> 3.3.0'
-  gem 'simplecov', '~> 0.6.4'
+  gem 'aruba', '~> 0.5'
+  gem 'cucumber', '~> 1.3'
+  gem 'minitest', '~> 5.3'
+  gem 'simplecov', '~> 0.8'
 end
 
 group :development do
-  gem 'chef', '~> 10.24.0'
-  gem 'rdiscount', '~> 1.6.8'
-  gem 'ronn', '~> 0.7.0'
+  gem 'chef', '~> 10.32'
+  gem 'ronn', '~> 0.7'
 end
