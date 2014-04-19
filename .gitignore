@@ -12,3 +12,5 @@ tmp
 Gemfile.lock
 .DS_Store
 .rvmrc
+/.bundle/
+/tags
