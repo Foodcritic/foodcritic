@@ -67,6 +67,16 @@ I want to be able to invoke the lint tool from my build
     | style              | {:fail_tags => ['correctness,style']}        | fail          | FC002       |
     | style,correctness  | {:fail_tags => [], :tags => ['correctness']} | succeed       | FC006       |
 
+  @context
+  Scenario: Specify that contexts should be shown
+    Given a cookbook with a single recipe that reads node attributes via symbols,strings
+      And the cookbook has a Gemfile that includes rake and foodcritic
+      And a Rakefile that defines a lint task with a block setting options to {:context => true}
+      When I run the build
+      Then the recipe filename should be displayed
+      And the attribute consistency warning 019 should be displayed below
+      And the line number and line of code that triggered the warning should be displayed
+
   Scenario Outline: Specify paths to lint
     Given a cookbook that has <problems> problems
       And the cookbook has a Gemfile that includes rake and foodcritic
