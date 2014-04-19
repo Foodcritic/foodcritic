@@ -1476,6 +1476,21 @@ Given 'a resource that declares a guard containing a block' do
   }
 end
 
+
+Given 'a resource declared within a definition' do
+  write_recipe %q{
+    define :toto, {
+    } do
+      [:a, :b].each do |x|
+        package x do
+          not_if { node['foo'] == x }
+          action :install
+        end
+      end
+    end
+  }
+end
+
 Given /^a rule that (declares|does not declare) a version constraint(?: of ([^ ]+)? to ([^ ]+)?)?$/ do |constraint, from, to|
   if from || to
     rule_with_version_constraint(from, to)
