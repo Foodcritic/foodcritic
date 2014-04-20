@@ -62,7 +62,7 @@ module FoodCritic
       # is not under the same `cookbook_path` as the cookbook being checked.
       cbk_tree_path = Pathname.new(File.join(recipe_path, '../../..'))
       search_libs = Dir[File.join(cbk_tree_path.realpath,
-        '*/libraries/search.rb')]
+                                  '*/libraries/search.rb')]
 
       # True if any of the candidate library files match the signature:
       #
@@ -556,7 +556,7 @@ module FoodCritic
         call.xpath('aref/args_add_block').size == 0 and
           (call.xpath('descendant::ident').size > 1 and
             ! node_method?(call.xpath('ident/@value').to_s.to_sym,
-                options[:cookbook_dir]))
+                           options[:cookbook_dir]))
       end.sort
     end
 

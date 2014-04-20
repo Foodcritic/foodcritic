@@ -54,12 +54,12 @@ module FoodCritic
           metadata_path(version)
         end.find { |m| File.exists?(m) }
       @dsl_metadata ||= Yajl::Parser.parse(IO.read(metadata_path),
-        symbolize_keys: true)
+                                           symbolize_keys: true)
     end
 
     def metadata_path(chef_version)
       File.join(File.dirname(__FILE__), '..', '..',
-        "chef_dsl_metadata/chef_#{chef_version}.json")
+                "chef_dsl_metadata/chef_#{chef_version}.json")
     end
 
     def resource_check?(key, resource_type, field)

@@ -481,7 +481,7 @@ rule 'FC033', 'Missing template' do
         resource_attributes(resource)['cookbook']
     end.map do |resource|
       file = template_file(resource_attributes(resource,
-        return_expressions: true))
+                                               return_expressions: true))
       { resource: resource, file: file }
     end.reject do |resource|
       resource[:file].respond_to?(:xpath)

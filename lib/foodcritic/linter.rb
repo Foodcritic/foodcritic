@@ -84,7 +84,8 @@ module FoodCritic
           # Convert the matches into warnings
           matches.each do |match|
             warnings << Warning.new(state[:rule],
-              { filename: state[:file] }.merge(match), options)
+                                    { filename: state[:file] }.merge(match),
+                                    options)
             matched_rule_tags << state[:rule].tags
           end
         end
@@ -183,11 +184,11 @@ module FoodCritic
 
     def cookbook_dir(file)
       Pathname.new(File.join(File.dirname(file),
-        case File.basename(file)
-          when 'metadata.rb' then ''
-          when /\.erb$/ then '../..'
-          else '..'
-        end)).cleanpath
+                             case File.basename(file)
+                             when 'metadata.rb' then ''
+                             when /\.erb$/ then '../..'
+                             else '..'
+                             end)).cleanpath
     end
 
     def dsl_method_for_file(file)
