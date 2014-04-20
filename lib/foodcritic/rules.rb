@@ -13,7 +13,7 @@ rule "FC001",
      "Use strings in preference to symbols to access node attributes" do
   tags %w{style attributes}
   recipe do |ast|
-    attribute_access(ast, :type => :symbol)
+    attribute_access(ast, type: :symbol)
   end
 end
 
@@ -40,7 +40,7 @@ end
 rule "FC004", "Use a service resource to start and stop services" do
   tags %w{style services}
   recipe do |ast|
-    find_resources(ast, :type => 'execute').find_all do |cmd|
+    find_resources(ast, type: 'execute').find_all do |cmd|
       cmd_str = (resource_attribute(cmd, 'command') || resource_name(cmd)).to_s
       (cmd_str.include?('/etc/init.d') || ['service ', '/sbin/service ',
        'start ', 'stop ', 'invoke-rc.d '].any? do |service_cmd|
@@ -54,8 +54,8 @@ rule "FC005", "Avoid repetition of resource declarations" do
   tags %w{style}
   recipe do |ast|
     resources = find_resources(ast).map do |res|
-      resource_attributes(res).merge({:type => resource_type(res),
-                                      :ast => res})
+      resource_attributes(res).merge({type: resource_type(res),
+                                      ast: res})
     end.chunk do |res|
       res[:type] +
       res[:ast].xpath("ancestor::*[self::if | self::unless | self::elsif |
@@ -96,7 +96,7 @@ rule "FC007", "Ensure recipe dependencies are reflected in cookbook metadata" do
     metadata_path =Pathname.new(
       File.join(File.dirname(filename), '..', 'metadata.rb')).cleanpath
     next unless File.exists? metadata_path
-    actual_included = included_recipes(ast, :with_partial_names => false)
+    actual_included = included_recipes(ast, with_partial_names: false)
     undeclared = actual_included.keys.map do |recipe|
       recipe.split('::').first
     end - [cookbook_name(filename)] -
@@ -130,7 +130,7 @@ rule "FC009", "Resource attribute not recognised" do
         resource.keys.map(&:to_sym).reject do |att|
           resource_attribute?(type.to_sym, att)
         end.each do |invalid_att|
-          matches << find_resources(ast, :type => type).find do |res|
+          matches << find_resources(ast, type: type).find do |res|
             resource_attributes(res).include?(invalid_att.to_s)
           end
         end
@@ -169,7 +169,7 @@ end
 rule "FC013", "Use file_cache_path rather than hard-coding tmp paths" do
   tags %w{style files}
   recipe do |ast|
-    find_resources(ast, :type => 'remote_file').find_all do |download|
+    find_resources(ast, type: 'remote_file').find_all do |download|
       path = (resource_attribute(download, 'path') ||
         resource_name(download)).to_s
       path.start_with?('/tmp/')
@@ -180,7 +180,7 @@ end
 rule "FC014", "Consider extracting long ruby_block to library" do
   tags %w{style libraries}
   recipe do |ast|
-    find_resources(ast, :type => 'ruby_block').find_all do |rb|
+    find_resources(ast, type: 'ruby_block').find_all do |rb|
       lines = rb.xpath("descendant::fcall[ident/@value='block']/../../
         descendant::*[@line]/@line").map{|n| n.value.to_i}.sort
       (! lines.empty?) && (lines.last - lines.first) > 15
@@ -261,14 +261,14 @@ rule "FC019", "Access node attributes in a consistent manner" do
       relative_path = Pathname.new(file).relative_path_from(Pathname.new(cookbook_dir))
       relative_path.to_s.split(File::SEPARATOR).include?('spec')
     end.map do |file|
-      {:path => file, :ast => read_ast(file)}
+      {path: file, ast: read_ast(file)}
     end
     types = [:string, :symbol, :vivified].map do |type|
-      {:access_type => type, :count => files.map do |file|
-        attribute_access(file[:ast], :type => type, :ignore_calls => true,
-          :cookbook_dir => cookbook_dir, :ignore => 'run_state').tap do |ast|
+      {access_type: type, count: files.map do |file|
+        attribute_access(file[:ast], type: type, ignore_calls: true,
+          cookbook_dir: cookbook_dir, ignore: 'run_state').tap do |ast|
           unless ast.empty?
-            (asts[type] ||= []) << {:ast => ast, :path => file[:path]}
+            (asts[type] ||= []) << {ast: ast, path: file[:path]}
           end
         end.size
       end.inject(:+)}
@@ -276,7 +276,7 @@ rule "FC019", "Access node attributes in a consistent manner" do
     if asts.size > 1
       least_used = asts[types.min{|a,b| a[:count] <=> b[:count]}[:access_type]]
       least_used.map do |file|
-        file[:ast].map{|ast| match(ast).merge(:filename => file[:path])}.flatten
+        file[:ast].map{|ast| match(ast).merge(filename: file[:path])}.flatten
       end
     end
   end
@@ -406,7 +406,7 @@ end
 rule "FC027", "Resource sets internal attribute" do
   tags %w{correctness}
   recipe do |ast|
-    find_resources(ast, :type => :service).map do |service|
+    find_resources(ast, type: :service).map do |service|
       service unless (resource_attributes(service).keys &
                         ['enabled', 'running']).empty?
     end.compact
@@ -472,13 +472,13 @@ end
 rule "FC033", "Missing template" do
   tags %w{correctness}
   recipe do |ast,filename|
-    find_resources(ast, :type => :template).reject do |resource|
+    find_resources(ast, type: :template).reject do |resource|
       resource_attributes(resource)['local'] ||
         resource_attributes(resource)['cookbook']
     end.map do |resource|
       file = template_file(resource_attributes(resource,
-        :return_expressions => true))
-      {:resource => resource, :file => file}
+        return_expressions: true))
+      {resource: resource, file: file}
     end.reject do |resource|
       resource[:file].respond_to?(:xpath)
     end.select do |resource|
@@ -561,9 +561,9 @@ end
 rule "FC039", "Node method cannot be accessed with key" do
   tags %w{correctness}
   recipe do |ast|
-    [{:type => :string, :path => '@value'},
-     {:type => :symbol, :path => 'ident/@value'}].map do |access_type|
-      attribute_access(ast, :type => access_type[:type]).select do |att|
+    [{type: :string, path: '@value'},
+     {type: :symbol, path: 'ident/@value'}].map do |access_type|
+      attribute_access(ast, type: access_type[:type]).select do |att|
         att_name = att.xpath(access_type[:path]).to_s.to_sym
         att_name != :tags && chef_node_methods.include?(att_name)
       end.select do |att|
@@ -582,7 +582,7 @@ rule "FC040", "Execute resource used to run git commands" do
   tags %w{style recipe etsy}
   recipe do |ast|
     possible_git_commands = %w{ clone fetch pull checkout reset }
-    find_resources(ast, :type => 'execute').select do |cmd|
+    find_resources(ast, type: 'execute').select do |cmd|
       cmd_str = (resource_attribute(cmd, 'command') || resource_name(cmd)).to_s
 
       actual_git_commands = cmd_str.scan(/git ([a-z]+)/).map{|c| c.first}
@@ -594,7 +594,7 @@ end
 rule "FC041", "Execute resource used to run curl or wget commands" do
   tags %w{style recipe etsy}
   recipe do |ast|
-    find_resources(ast, :type => 'execute').select do |cmd|
+    find_resources(ast, type: 'execute').select do |cmd|
       cmd_str = (resource_attribute(cmd, 'command') || resource_name(cmd)).to_s
       (cmd_str.include?('curl ') || cmd_str.include?('wget '))
     end

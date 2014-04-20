@@ -16,7 +16,7 @@ module FoodCritic
 
     # Find attribute access by type.
     def attribute_access(ast, options = {})
-      options = {:type => :any, :ignore_calls => false}.merge!(options)
+      options = {type: :any, ignore_calls: false}.merge!(options)
       return [] unless ast.respond_to?(:xpath)
 
       unless [:any, :string, :symbol, :vivified].include?(options[:type])
@@ -133,7 +133,7 @@ module FoodCritic
     # triggers the warning rather than content.
     def file_match(file)
       raise ArgumentError, "Filename cannot be nil" if file.nil?
-      {:filename => file, :matched => file, :line => 1, :column => 1}
+      {filename: file, matched: file, line: 1, column: 1}
     end
 
     # Find Chef resources of the specified type.
@@ -149,7 +149,7 @@ module FoodCritic
     #     find_resources(ast, :type => :service)
     #
     def find_resources(ast, options = {})
-      options = {:type => :any}.merge!(options)
+      options = {type: :any}.merge!(options)
       return [] unless ast.respond_to?(:xpath)
       scope_type = ''
       scope_type = "[@value='#{options[:type]}']" unless options[:type] == :any
@@ -171,7 +171,7 @@ module FoodCritic
     #     included_recipes(ast)
     #     included_recipes(ast, :with_partial_names => true)
     #
-    def included_recipes(ast, options = {:with_partial_names => true})
+    def included_recipes(ast, options = {with_partial_names: true})
       raise_unless_xpath!(ast)
 
       filter = ['[count(descendant::args_add) = 1]']
@@ -207,8 +207,8 @@ module FoodCritic
       raise_unless_xpath!(node)
       pos = node.xpath('descendant::pos').first
       return nil if pos.nil?
-      {:matched => node.respond_to?(:name) ? node.name : '',
-       :line => pos['line'].to_i, :column => pos['column'].to_i}
+      {matched: node.respond_to?(:name) ? node.name : '',
+       line: pos['line'].to_i, column: pos['column'].to_i}
     end
 
     # Read the AST for the given Ruby source file
@@ -249,7 +249,7 @@ module FoodCritic
     # Retrieve the name attribute associated with the specified resource.
     def resource_name(resource, options = {})
       raise_unless_xpath!(resource)
-      options = {:return_expressions => false}.merge(options)
+      options = {return_expressions: false}.merge(options)
       if options[:return_expressions]
         name = resource.xpath('command/args_add_block')
         if name.xpath('descendant::string_add').size == 1 and
@@ -317,7 +317,7 @@ module FoodCritic
       platforms.map do |platform|
         versions = platform.xpath('ancestor::args_add[position() > 1]/
 	  string_literal/descendant::tstring_content/@value').map{|v| v.to_s}
-        {:platform => platform['value'], :versions => versions}
+        {platform: platform['value'], versions: versions}
       end.sort{|a,b| a[:platform] <=> b[:platform]}
     end
 
@@ -514,7 +514,7 @@ module FoodCritic
     def standard_attribute_access(ast, options)
       if options[:type] == :any
         [:string, :symbol].map do |type|
-          standard_attribute_access(ast, options.merge(:type => type))
+          standard_attribute_access(ast, options.merge(type: type))
         end.inject(:+)
       else
         type = if options[:type] == :string

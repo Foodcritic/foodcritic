@@ -66,11 +66,11 @@ module FoodCritic
         active_rules(relevant_tags).each do |rule|
 
           state = {
-            :path_type => p[:path_type],
-            :file => p[:filename],
-            :ast => read_ast(p[:filename]),
-            :rule => rule,
-            :last_dir => last_dir
+            path_type: p[:path_type],
+            file: p[:filename],
+            ast: read_ast(p[:filename]),
+            rule: rule,
+            last_dir: last_dir
           }
 
           matches = if p[:path_type] == :cookbook
@@ -84,7 +84,7 @@ module FoodCritic
           # Convert the matches into warnings
           matches.each do |match|
             warnings << Warning.new(state[:rule],
-              {:filename => state[:file]}.merge(match), options)
+              {filename: state[:file]}.merge(match), options)
             matched_rule_tags << state[:rule].tags
           end
         end
@@ -229,7 +229,7 @@ module FoodCritic
             dir unless exclusions.include?(dir)
           end
         end.compact.flatten.map do |filename|
-          {:filename => filename, :path_type => path_type}
+          {filename: filename, path_type: path_type}
         end
       end.flatten
     end
@@ -271,8 +271,8 @@ module FoodCritic
     end
 
     def setup_defaults(options)
-      {:tags => [], :fail_tags => [], :include_rules => [], :exclude_paths => [],
-       :cookbook_paths => [], :role_paths => []}.merge(options)
+      {tags: [], fail_tags: [], include_rules: [], exclude_paths: [],
+       cookbook_paths: [], role_paths: []}.merge(options)
     end
 
   end

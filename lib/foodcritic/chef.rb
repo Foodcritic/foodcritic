@@ -54,7 +54,7 @@ module FoodCritic
           metadata_path(version)
         end.find{|m| File.exists?(m)}
       @dsl_metadata ||= Yajl::Parser.parse(IO.read(metadata_path),
-        :symbolize_keys => true)
+        symbolize_keys: true)
     end
 
     def metadata_path(chef_version)

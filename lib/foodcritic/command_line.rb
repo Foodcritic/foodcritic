@@ -10,13 +10,13 @@ module FoodCritic
       @args = args
       @original_args = args.dup
       @options = {
-        :fail_tags => [],
-        :tags => [],
-        :include_rules => [],
-        :cookbook_paths => [],
-        :role_paths => [],
-        :environment_paths => [],
-        :exclude_paths => []
+        fail_tags: [],
+        tags: [],
+        include_rules: [],
+        cookbook_paths: [],
+        role_paths: [],
+        environment_paths: [],
+        exclude_paths: []
       }
       @parser = OptionParser.new do |opts|
         opts.banner = 'foodcritic [cookbook_paths]'
@@ -165,9 +165,9 @@ module FoodCritic
     # @return [Hash] The parsed command-line options.
     def options
       original_options.merge({
-        :cookbook_paths => cookbook_paths,
-        :role_paths => role_paths,
-        :environment_paths => environment_paths,
+        cookbook_paths: cookbook_paths,
+        role_paths: role_paths,
+        environment_paths: environment_paths,
       })
     end
 

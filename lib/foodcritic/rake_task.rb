@@ -16,10 +16,10 @@ module FoodCritic
       end
 
       def options
-        {:fail_tags => ['correctness'], # differs to default cmd-line behaviour
-         :cookbook_paths => @files,
-         :exclude_paths => ['test/**/*', 'spec/**/*', 'features/**/*'],
-         :context => false,
+        {fail_tags: ['correctness'], # differs to default cmd-line behaviour
+         cookbook_paths: @files,
+         exclude_paths: ['test/**/*', 'spec/**/*', 'features/**/*'],
+         context: false,
         }.merge(@options)
       end
 

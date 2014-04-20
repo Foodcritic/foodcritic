@@ -42,16 +42,16 @@ module FoodCritic
         # that are common to both styles of notification.
         notified_resource.merge({
           # The `:type` of notification: `:subscribes` or `:notifies`.
-          :type => notification_type(notify),
+          type: notification_type(notify),
 
           # The `:style` of notification: `:new` or `:old`.
-          :style => new_style_notification?(notify) ? :new : :old,
+          style: new_style_notification?(notify) ? :new : :old,
 
           # The target resource action.
-          :action => notification_action(notify),
+          action: notification_action(notify),
 
           # The notification timing. Either `:immediate` or `:delayed`.
-          :timing => notification_timing(notify)
+          timing: notification_timing(notify)
         })
       end.compact
     end
@@ -86,7 +86,7 @@ module FoodCritic
         resource_name =
           notify.xpath('args_add_block/args_add/string_literal')
       end
-      {:resource_name => resource_name, :resource_type => resource_type}
+      {resource_name: resource_name, resource_type: resource_type}
     end
 
     # Extract the `:resource_name` and `:resource_type` from an old-style
@@ -97,7 +97,7 @@ module FoodCritic
       resource_name = resources.xpath('string_add[1][count(../
         descendant::string_add) = 1]/tstring_content/@value').to_s
       resource_name = resources if resource_name.empty?
-      {:resource_name => resource_name, :resource_type => resource_type}
+      {resource_name: resource_name, resource_type: resource_type}
     end
 
     def notification_timing(notify)

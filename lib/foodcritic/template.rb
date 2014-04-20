@@ -18,7 +18,7 @@ module FoodCritic
 
       def add_expr(src, code, indicator)
         if indicator == '='
-          @expressions << {:type => :expression, :code => code.strip}
+          @expressions << {type: :expression, code: code.strip}
         end
       end
 
@@ -35,7 +35,7 @@ module FoodCritic
       end
 
       def add_stmt(src, code)
-        @expressions << {:type => :statement, :code => code.strip}
+        @expressions << {type: :statement, code: code.strip}
       end
 
       private
@@ -44,7 +44,7 @@ module FoodCritic
         expr_lines = expressions_with_lines(template_code)
         expr_lines.map do |expr, line|
           e = @expressions.find{|e| e[:code] == expr}
-          {:code => expr, :type => e[:type], :line => line} if e
+          {code: expr, type: e[:type], line: line} if e
         end.compact
       end
 
