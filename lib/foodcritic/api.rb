@@ -16,7 +16,7 @@ module FoodCritic
 
     # Find attribute access by type.
     def attribute_access(ast, options = {})
-      options = {type: :any, ignore_calls: false}.merge!(options)
+      options = { type: :any, ignore_calls: false }.merge!(options)
       return [] unless ast.respond_to?(:xpath)
 
       unless [:any, :string, :symbol, :vivified].include?(options[:type])
@@ -48,7 +48,7 @@ module FoodCritic
             )
           ]}).empty?) ||
       ast.xpath('//if_mod[return][aref/descendant::ident/@value="solo"]/aref/
-        const_path_ref/descendant::const').map{|c|c['value']} == %w{Chef Config}
+        const_path_ref/descendant::const').map { |c|c['value'] } == %w{Chef Config}
     end
 
     # Is the [chef-solo-search library](https://github.com/edelight/chef-solo-search)
@@ -111,7 +111,7 @@ module FoodCritic
       #       depends cbk
       #     end
       deps = deps.to_a + word_list_values(ast, "//command[ident/@value='depends']")
-      deps.uniq.map{|dep| dep['value'].strip }
+      deps.uniq.map { |dep| dep['value'].strip }
     end
 
     # The key / value pair in an environment or role ruby file
@@ -126,14 +126,14 @@ module FoodCritic
     def field_value(ast, field_name)
       field(ast, field_name).xpath('args_add_block/descendant::tstring_content
         [count(ancestor::args_add) = 1][count(ancestor::string_add) = 1]
-        /@value').map{|a| a.to_s}.last
+        /@value').map { |a| a.to_s }.last
     end
 
     # Create a match for a specified file. Use this if the presence of the file
     # triggers the warning rather than content.
     def file_match(file)
       raise ArgumentError, 'Filename cannot be nil' if file.nil?
-      {filename: file, matched: file, line: 1, column: 1}
+      { filename: file, matched: file, line: 1, column: 1 }
     end
 
     # Find Chef resources of the specified type.
@@ -149,7 +149,7 @@ module FoodCritic
     #     find_resources(ast, :type => :service)
     #
     def find_resources(ast, options = {})
-      options = {type: :any}.merge!(options)
+      options = { type: :any }.merge!(options)
       return [] unless ast.respond_to?(:xpath)
       scope_type = ''
       scope_type = "[@value='#{options[:type]}']" unless options[:type] == :any
@@ -171,7 +171,7 @@ module FoodCritic
     #     included_recipes(ast)
     #     included_recipes(ast, :with_partial_names => true)
     #
-    def included_recipes(ast, options = {with_partial_names: true})
+    def included_recipes(ast, options = { with_partial_names: true })
       raise_unless_xpath!(ast)
 
       filter = ['[count(descendant::args_add) = 1]']
@@ -191,7 +191,7 @@ module FoodCritic
       end.join(' | '))
 
       # Hash keyed by recipe name with matched nodes.
-      included.inject(Hash.new([])){|h, i| h[i['value']] += [i]; h}
+      included.inject(Hash.new([])) { |h, i| h[i['value']] += [i]; h }
     end
 
     # Searches performed by the specified recipe that are literal strings.
@@ -207,8 +207,8 @@ module FoodCritic
       raise_unless_xpath!(node)
       pos = node.xpath('descendant::pos').first
       return nil if pos.nil?
-      {matched: node.respond_to?(:name) ? node.name : '',
-       line: pos['line'].to_i, column: pos['column'].to_i}
+      { matched: node.respond_to?(:name) ? node.name : '',
+       line: pos['line'].to_i, column: pos['column'].to_i }
     end
 
     # Read the AST for the given Ruby source file
@@ -241,7 +241,7 @@ module FoodCritic
     def resource_attributes_by_type(ast)
       result = {}
       resources_by_type(ast).each do |type,resources|
-        result[type] = resources.map{|resource| resource_attributes(resource)}
+        result[type] = resources.map { |resource| resource_attributes(resource) }
       end
       result
     end
@@ -249,7 +249,7 @@ module FoodCritic
     # Retrieve the name attribute associated with the specified resource.
     def resource_name(resource, options = {})
       raise_unless_xpath!(resource)
-      options = {return_expressions: false}.merge(options)
+      options = { return_expressions: false }.merge(options)
       if options[:return_expressions]
         name = resource.xpath('command/args_add_block')
         if name.xpath('descendant::string_add').size == 1 and
@@ -268,7 +268,7 @@ module FoodCritic
     # Resources in an AST, keyed by type.
     def resources_by_type(ast)
       raise_unless_xpath!(ast)
-      result = Hash.new{|hash, key| hash[key] = Array.new}
+      result = Hash.new { |hash, key| hash[key] = Array.new }
       find_resources(ast).each do |resource|
         result[resource_type(resource)] << resource
       end
@@ -316,9 +316,9 @@ module FoodCritic
       platforms = platforms.to_a + word_list_values(ast, "//command[ident/@value='supports']")
       platforms.map do |platform|
         versions = platform.xpath('ancestor::args_add[position() > 1]/
-	  string_literal/descendant::tstring_content/@value').map{|v| v.to_s}
-        {platform: platform['value'], versions: versions}
-      end.sort{|a,b| a[:platform] <=> b[:platform]}
+	  string_literal/descendant::tstring_content/@value').map { |v| v.to_s }
+        { platform: platform['value'], versions: versions }
+      end.sort { |a,b| a[:platform] <=> b[:platform] }
     end
 
     # Template filename
@@ -338,7 +338,7 @@ module FoodCritic
       raise RecursedTooFarError.new(template_path) if depth > 10
       partials = read_ast(template_path).xpath('//*[self::command or
         child::fcall][descendant::ident/@value="render"]//args_add/
-        string_literal//tstring_content/@value').map{|p| p.to_s}
+        string_literal//tstring_content/@value').map { |p| p.to_s }
       Array(template_path) + partials.map do |included_partial|
         partial_path = Array(all_templates).find do |path|
           (Pathname.new(template_path).dirname + included_partial).to_s == path
@@ -377,7 +377,7 @@ module FoodCritic
     end
 
     def block_depth(resource)
-      resource.path.split('/').group_by{|e|e}['method_add_block'].size
+      resource.path.split('/').group_by { |e|e }['method_add_block'].size
     end
 
     # Recurse the nested arrays provided by Ripper to create a tree we can more
@@ -447,7 +447,7 @@ module FoodCritic
       resource.xpath('do_block/descendant::*[self::command or
         self::method_add_arg][count(ancestor::do_block) >= 1]').each do |att|
           blocks = att.xpath('ancestor::method_add_block/method_add_arg/fcall')
-          next if blocks.any?{|a| block_depth(a) > block_depth(resource)}
+          next if blocks.any? { |a| block_depth(a) > block_depth(resource) }
           att_name = att.xpath('string(ident/@value |
             fcall/ident[@value="variables"]/@value)')
           unless att_name.empty?
@@ -539,7 +539,7 @@ module FoodCritic
 
     def template_expressions_only(file)
       exprs = Template::ExpressionExtractor.new.extract(File.read(file))
-      lines = Array.new(exprs.map{|e| e[:line]}.max || 0, '')
+      lines = Array.new(exprs.map { |e| e[:line] }.max || 0, '')
       exprs.each do |e|
         lines[e[:line] -1] += ';' unless lines[e[:line] -1].empty?
         lines[e[:line] -1] += e[:code]

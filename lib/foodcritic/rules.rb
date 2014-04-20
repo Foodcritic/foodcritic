@@ -45,7 +45,7 @@ rule 'FC004', 'Use a service resource to start and stop services' do
       (cmd_str.include?('/etc/init.d') || ['service ', '/sbin/service ',
        'start ', 'stop ', 'invoke-rc.d '].any? do |service_cmd|
           cmd_str.start_with?(service_cmd)
-        end) && %w{start stop restart reload}.any?{|a| cmd_str.include?(a)}
+        end) && %w{start stop restart reload}.any? { |a| cmd_str.include?(a) }
     end
   end
 end
@@ -54,8 +54,8 @@ rule 'FC005', 'Avoid repetition of resource declarations' do
   tags %w{style}
   recipe do |ast|
     resources = find_resources(ast).map do |res|
-      resource_attributes(res).merge({type: resource_type(res),
-                                      ast: res})
+      resource_attributes(res).merge({ type: resource_type(res),
+                                      ast: res })
     end.chunk do |res|
       res[:type] +
       res[:ast].xpath("ancestor::*[self::if | self::unless | self::elsif |
@@ -63,18 +63,18 @@ rule 'FC005', 'Avoid repetition of resource declarations' do
         descendant::pos[position() = 1]").to_s +
       res[:ast].xpath("ancestor::method_add_block/command[
         ident/@value='action']/args_add_block/descendant::ident/@value").to_s
-    end.reject{|res| res[1].size < 3}
+    end.reject { |res| res[1].size < 3 }
     resources.map do |cont_res|
       first_resource = cont_res[1][0][:ast]
       # we have contiguous resources of the same type, but do they share the
       # same attributes?
       sorted_atts = cont_res[1].map do |atts|
-        atts.delete_if{|k| k == :ast}.to_a.sort do |x,y|
+        atts.delete_if { |k| k == :ast }.to_a.sort do |x,y|
           x.first.to_s <=> y.first.to_s
         end
       end
       first_resource if sorted_atts.all? do |att|
-        (att - sorted_atts.inject{|atts,a| atts & a}).length == 1
+        (att - sorted_atts.inject { |atts,a| atts & a }).length == 1
       end
     end.compact
   end
@@ -103,7 +103,7 @@ rule 'FC007', 'Ensure recipe dependencies are reflected in cookbook metadata' do
         declared_dependencies(read_ast(metadata_path))
     actual_included.map do |recipe, include_stmts|
       if undeclared.include?(recipe) ||
-         undeclared.any?{|u| recipe.start_with?("#{u}::")}
+         undeclared.any? { |u| recipe.start_with?("#{u}::") }
         include_stmts
       end
     end.flatten.compact
@@ -113,10 +113,12 @@ end
 rule 'FC008', 'Generated cookbook metadata needs updating' do
   tags %w{style metadata}
   metadata do |ast,filename|
-    {'maintainer' => 'YOUR_COMPANY_NAME',
-     'maintainer_email' => 'YOUR_EMAIL'}.map do |field,value|
+    {
+      'maintainer' => 'YOUR_COMPANY_NAME',
+      'maintainer_email' => 'YOUR_EMAIL'
+    }.map do |field,value|
       ast.xpath(%Q{//command[ident/@value='#{field}']/
-                  descendant::tstring_content[@value='#{value}']})
+                   descendant::tstring_content[@value='#{value}']})
     end
   end
 end
@@ -144,7 +146,7 @@ rule 'FC010', 'Invalid search syntax' do
   tags %w{correctness search}
   recipe do |ast|
     # This only works for literal search strings
-    literal_searches(ast).reject{|search| valid_query?(search['value'])}
+    literal_searches(ast).reject { |search| valid_query?(search['value']) }
   end
 end
 
@@ -182,7 +184,7 @@ rule 'FC014', 'Consider extracting long ruby_block to library' do
   recipe do |ast|
     find_resources(ast, type: 'ruby_block').find_all do |rb|
       lines = rb.xpath("descendant::fcall[ident/@value='block']/../../
-        descendant::*[@line]/@line").map{|n| n.value.to_i}.sort
+        descendant::*[@line]/@line").map { |n| n.value.to_i }.sort
       (! lines.empty?) && (lines.last - lines.first) > 15
     end
   end
@@ -190,21 +192,21 @@ end
 
 rule 'FC015', 'Consider converting definition to a LWRP' do
   tags %w{style definitions lwrp}
-  applies_to {|version| version >= gem_version('0.7.12')}
+  applies_to { |version| version >= gem_version('0.7.12') }
   cookbook do |dir|
     Dir[File.join(dir, 'definitions', '*.rb')].reject do |entry|
       ['.', '..'].include? entry
-    end.map{|entry| file_match(entry)}
+    end.map { |entry| file_match(entry) }
   end
 end
 
 rule 'FC016', 'LWRP does not declare a default action' do
   tags %w{correctness lwrp}
-  applies_to {|version| version >= gem_version('0.7.12')}
+  applies_to { |version| version >= gem_version('0.7.12') }
   resource do |ast, filename|
     unless ["//ident/@value='default_action'",
      "//def/bodystmt/descendant::assign/
-      var_field/ivar/@value='@action'"].any? {|expr| ast.xpath(expr)}
+      var_field/ivar/@value='@action'"].any? { |expr| ast.xpath(expr) }
       [file_match(filename)]
     end
   end
@@ -245,7 +247,7 @@ end
 
 rule 'FC018', 'LWRP uses deprecated notification syntax' do
   tags %w{style lwrp deprecated}
-  applies_to {|version| version >= gem_version('0.9.10')}
+  applies_to { |version| version >= gem_version('0.9.10') }
   provider do |ast|
     ast.xpath("//assign/var_field/ivar[@value='@updated']").map do |class_var|
       match(class_var)
@@ -261,22 +263,24 @@ rule 'FC019', 'Access node attributes in a consistent manner' do
       relative_path = Pathname.new(file).relative_path_from(Pathname.new(cookbook_dir))
       relative_path.to_s.split(File::SEPARATOR).include?('spec')
     end.map do |file|
-      {path: file, ast: read_ast(file)}
+      { path: file, ast: read_ast(file) }
     end
     types = [:string, :symbol, :vivified].map do |type|
-      {access_type: type, count: files.map do |file|
-        attribute_access(file[:ast], type: type, ignore_calls: true,
-          cookbook_dir: cookbook_dir, ignore: 'run_state').tap do |ast|
-          unless ast.empty?
-            (asts[type] ||= []) << {ast: ast, path: file[:path]}
-          end
-        end.size
-      end.inject(:+)}
-    end.reject{|type| type[:count] == 0}
+      {
+        access_type: type, count: files.map do |file|
+          attribute_access(file[:ast], type: type, ignore_calls: true,
+            cookbook_dir: cookbook_dir, ignore: 'run_state').tap do |ast|
+            unless ast.empty?
+              (asts[type] ||= []) << { ast: ast, path: file[:path] }
+            end
+          end.size
+        end.inject(:+)
+      }
+    end.reject { |type| type[:count] == 0 }
     if asts.size > 1
-      least_used = asts[types.min{|a,b| a[:count] <=> b[:count]}[:access_type]]
+      least_used = asts[types.min { |a,b| a[:count] <=> b[:count] }[:access_type]]
       least_used.map do |file|
-        file[:ast].map{|ast| match(ast).merge(filename: file[:path])}.flatten
+        file[:ast].map { |ast| match(ast).merge(filename: file[:path]) }.flatten
       end
     end
   end
@@ -284,7 +288,7 @@ end
 
 rule 'FC021', 'Resource condition in provider may not behave as expected' do
   tags %w{correctness lwrp}
-  applies_to {|version| version >= gem_version('0.10.6')}
+  applies_to { |version| version >= gem_version('0.10.6') }
   provider do |ast|
     find_resources(ast).map do |resource|
       condition = resource.xpath(%q{//method_add_block/
@@ -299,7 +303,7 @@ end
 
 rule 'FC022', 'Resource condition within loop may not behave as expected' do
   tags %w{correctness}
-  applies_to {|version| version >= gem_version('0.10.6')}
+  applies_to { |version| version >= gem_version('0.10.6') }
   recipe do |ast|
     ast.xpath("//call[ident/@value='each']/../do_block[count(ancestor::
               method_add_block/method_add_arg/fcall/ident[@value='only_if' or
@@ -315,7 +319,7 @@ rule 'FC022', 'Resource condition within loop may not behave as expected' do
         unless (block_vars &
           (resource.xpath(%q{descendant::ident[@value='not_if' or
           @value='only_if']/ancestor::*[self::method_add_block or
-          self::command][1]/descendant::ident/@value}).map{|a| a.value})).empty?
+          self::command][1]/descendant::ident/@value}).map { |a| a.value })).empty?
           c = resource.xpath('command[count(descendant::string_embexpr) = 0]')
           next if resource.xpath('command/ident/@value').first.value == 'define'
           resource unless c.empty? || block_vars.any? do |var|
@@ -348,7 +352,7 @@ rule 'FC024', 'Consider adding platform equivalents' do
     metadata_path = Pathname.new(
       File.join(File.dirname(filename), '..', 'metadata.rb')).cleanpath
     md_platforms = if File.exists?(metadata_path)
-      supported_platforms(read_ast(metadata_path)).map{|p| p[:platform]}
+      supported_platforms(read_ast(metadata_path)).map { |p| p[:platform] }
     else
       []
     end
@@ -371,7 +375,7 @@ end
 
 rule 'FC025', 'Prefer chef_gem to compile-time gem install' do
   tags %w{style deprecated}
-  applies_to {|version| version >= gem_version('0.10.10')}
+  applies_to { |version| version >= gem_version('0.10.10') }
   recipe do |ast|
     gem_install = ast.xpath("//stmts_add/assign[method_add_block[command/ident/
       @value='gem_package'][do_block/stmts_add/command[ident/@value='action']
@@ -389,9 +393,9 @@ end
 
 rule 'FC026', 'Conditional execution block attribute contains only string' do
   tags %w{correctness}
-  applies_to {|version| version >= gem_version('0.7.4')}
+  applies_to { |version| version >= gem_version('0.7.4') }
   recipe do |ast|
-    find_resources(ast).map{|r| resource_attributes(r)}.map do |resource|
+    find_resources(ast).map { |r| resource_attributes(r) }.map do |resource|
       [resource['not_if'], resource['only_if']]
     end.flatten.compact.select do |condition|
       condition.respond_to?(:xpath) and
@@ -443,10 +447,10 @@ rule 'FC030', 'Cookbook contains debugger breakpoints' do
     ast.xpath('//call[(vcall|var_ref)/ident/@value="binding"]
       [ident/@value="pry"]')
   end
-  recipe{|ast| pry_bindings(ast)}
-  library{|ast| pry_bindings(ast)}
-  metadata{|ast| pry_bindings(ast)}
-  template{|ast| pry_bindings(ast)}
+  recipe { |ast| pry_bindings(ast) }
+  library { |ast| pry_bindings(ast) }
+  metadata { |ast| pry_bindings(ast) }
+  template { |ast| pry_bindings(ast) }
 end
 
 rule 'FC031', 'Cookbook without metadata file' do
@@ -478,7 +482,7 @@ rule 'FC033', 'Missing template' do
     end.map do |resource|
       file = template_file(resource_attributes(resource,
         return_expressions: true))
-      {resource: resource, file: file}
+      { resource: resource, file: file }
     end.reject do |resource|
       resource[:file].respond_to?(:xpath)
     end.select do |resource|
@@ -490,7 +494,7 @@ rule 'FC033', 'Missing template' do
         end
         File.join(relative_path.reverse) == resource[:file]
       end
-    end.map{|resource| resource[:resource]}
+    end.map { |resource| resource[:resource] }
   end
 end
 
@@ -506,7 +510,7 @@ rule 'FC034', 'Unused template variables' do
       end
       next unless template_paths.any?
       passed_vars = resource['variables'].xpath(
-        'symbol/ident/@value').map{|tv| tv.to_s}
+        'symbol/ident/@value').map { |tv| tv.to_s }
 
       unused_vars_exist = template_paths.all? do |template_path|
         begin
@@ -551,7 +555,7 @@ rule 'FC038', 'Invalid resource action' do
       else
         actions = Array(actions)
       end
-      actions.reject{|a| a.to_s.empty?}.any? do |action|
+      actions.reject { |a| a.to_s.empty? }.any? do |action|
         ! resource_action?(resource_type(resource), action)
       end
     end
@@ -561,8 +565,8 @@ end
 rule 'FC039', 'Node method cannot be accessed with key' do
   tags %w{correctness}
   recipe do |ast|
-    [{type: :string, path: '@value'},
-     {type: :symbol, path: 'ident/@value'}].map do |access_type|
+    [{ type: :string, path: '@value' },
+     { type: :symbol, path: 'ident/@value' }].map do |access_type|
       attribute_access(ast, type: access_type[:type]).select do |att|
         att_name = att.xpath(access_type[:path]).to_s.to_sym
         att_name != :tags && chef_node_methods.include?(att_name)
@@ -585,7 +589,7 @@ rule 'FC040', 'Execute resource used to run git commands' do
     find_resources(ast, type: 'execute').select do |cmd|
       cmd_str = (resource_attribute(cmd, 'command') || resource_name(cmd)).to_s
 
-      actual_git_commands = cmd_str.scan(/git ([a-z]+)/).map{|c| c.first}
+      actual_git_commands = cmd_str.scan(/git ([a-z]+)/).map { |c| c.first }
       (possible_git_commands & actual_git_commands).any?
     end
   end
@@ -610,10 +614,10 @@ end
 
 rule 'FC043', 'Prefer new notification syntax' do
   tags %w{style notifications deprecated}
-  applies_to {|version| version >= gem_version('0.9.10')}
+  applies_to { |version| version >= gem_version('0.9.10') }
   recipe do |ast|
     find_resources(ast).select do |resource|
-      notifications(resource).any?{|notify| notify[:style] == :old}
+      notifications(resource).any? { |notify| notify[:style] == :old }
     end
   end
 end
@@ -621,7 +625,7 @@ end
 rule 'FC044', 'Avoid bare attribute keys' do
   tags %w{style}
   attributes do |ast|
-    declared = ast.xpath('//descendant::var_field/ident/@value').map{|v| v.to_s}
+    declared = ast.xpath('//descendant::var_field/ident/@value').map { |v| v.to_s }
     ast.xpath('//assign/*[self::vcall or self::var_ref]
       [count(child::kw) = 0]/ident').select do |v|
         (v['value'] != 'secure_password') &&
@@ -648,7 +652,7 @@ end
 
 rule 'FC046', 'Attribute assignment uses assign unless nil' do
   attributes do |ast|
-    attribute_access(ast).map{|a| a.xpath('ancestor::opassign/op[@value="||="]')}
+    attribute_access(ast).map { |a| a.xpath('ancestor::opassign/op[@value="||="]') }
   end
 end
 
@@ -693,8 +697,8 @@ rule 'FC050', 'Name includes invalid characters' do
   def invalid_name(ast)
     field(ast, :name) unless field_value(ast, :name) =~ /^[a-zA-Z0-9_\-]+$/
   end
-  environment{|ast| invalid_name(ast)}
-  role{|ast| invalid_name(ast)}
+  environment { |ast| invalid_name(ast) }
+  role { |ast| invalid_name(ast) }
 end
 
 rule 'FC051', 'Template partials loop indefinitely' do
@@ -709,6 +713,6 @@ rule 'FC051', 'Template partials loop indefinitely' do
       rescue RecursedTooFarError
         true
       end
-    end.map{|t| file_match(t)}
+    end.map { |t| file_match(t) }
   end
 end

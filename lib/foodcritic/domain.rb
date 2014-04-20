@@ -53,7 +53,7 @@ module FoodCritic
          w.match[:line].to_i]
       end.sort do |x,y|
         x.first == y.first ? x[1] <=> y[1] : x.first <=> y.first
-      end.map{|w|"#{w.first}:#{w[1]}"}.uniq.join("\n")
+      end.map { |w|"#{w.first}:#{w[1]}" }.uniq.join("\n")
     end
   end
 
@@ -67,7 +67,7 @@ module FoodCritic
     def initialize(code, name)
       @code, @name = code, name
       @tags = [code]
-      @applies_to = Proc.new {|version| true}
+      @applies_to = Proc.new { |version| true }
     end
 
     # The tags associated with this rule. Rule is always tagged with the tag

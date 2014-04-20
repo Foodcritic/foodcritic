@@ -52,7 +52,7 @@ module FoodCritic
       metadata_path = [version, version.sub(/\.[a-z].*/, ''),
         Linter::DEFAULT_CHEF_VERSION].map do |version|
           metadata_path(version)
-        end.find{|m| File.exists?(m)}
+        end.find { |m| File.exists?(m) }
       @dsl_metadata ||= Yajl::Parser.parse(IO.read(metadata_path),
         symbolize_keys: true)
     end

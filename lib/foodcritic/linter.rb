@@ -84,7 +84,7 @@ module FoodCritic
           # Convert the matches into warnings
           matches.each do |match|
             warnings << Warning.new(state[:rule],
-              {filename: state[:file]}.merge(match), options)
+              { filename: state[:file] }.merge(match), options)
             matched_rule_tags << state[:rule].tags
           end
         end
@@ -208,12 +208,12 @@ module FoodCritic
     # Return the files within a cookbook tree that we are interested in trying
     # to match rules against.
     def files_to_process(paths)
-      paths.reject{|type, _| type == :exclude}.map do |path_type, dirs|
+      paths.reject { |type, _| type == :exclude }.map do |path_type, dirs|
         dirs.map do |dir|
           exclusions = []
 
           unless paths[:exclude].empty?
-            exclusions = Dir.glob(paths[:exclude].map{|p| File.join(dir, p, '**/**')})
+            exclusions = Dir.glob(paths[:exclude].map { |p| File.join(dir, p, '**/**') })
           end
 
           if File.directory?(dir)
@@ -229,7 +229,7 @@ module FoodCritic
             dir unless exclusions.include?(dir)
           end
         end.compact.flatten.map do |filename|
-          {filename: filename, path_type: path_type}
+          { filename: filename, path_type: path_type }
         end
       end.flatten
     end
@@ -245,7 +245,7 @@ module FoodCritic
         if m.respond_to?(:node_name)
           match(m)
         elsif m.respond_to?(:xpath)
-          m.to_a.map{|m| match(m)}
+          m.to_a.map { |m| match(m) }
         else
           m
         end
@@ -261,7 +261,7 @@ module FoodCritic
         [key, Array(value)] if key.to_s.end_with?('paths')
       end.compact]
 
-      unless paths.find{|k, v| k != :exclude_paths and ! v.empty?}
+      unless paths.find { |k, v| k != :exclude_paths and ! v.empty? }
         raise ArgumentError, 'A cookbook path or role path must be specified'
       end
 
@@ -271,8 +271,8 @@ module FoodCritic
     end
 
     def setup_defaults(options)
-      {tags: [], fail_tags: [], include_rules: [], exclude_paths: [],
-       cookbook_paths: [], role_paths: []}.merge(options)
+      { tags: [], fail_tags: [], include_rules: [], exclude_paths: [],
+       cookbook_paths: [], role_paths: [] }.merge(options)
     end
 
   end

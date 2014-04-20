@@ -75,7 +75,7 @@ module FoodCritic
 
       # Convert the captured resource type and name to symbols.
       resource_type, resource_name =
-        match.captures.tap{|m| m[0] = m[0].to_sym}
+        match.captures.tap { |m| m[0] = m[0].to_sym }
 
       # Normally the `resource_name` will be a simple string. However in the
       # case where it has an embedded sub-expression then we will return the
@@ -86,7 +86,7 @@ module FoodCritic
         resource_name =
           notify.xpath('args_add_block/args_add/string_literal')
       end
-      {resource_name: resource_name, resource_type: resource_type}
+      { resource_name: resource_name, resource_type: resource_type }
     end
 
     # Extract the `:resource_name` and `:resource_type` from an old-style
@@ -97,7 +97,7 @@ module FoodCritic
       resource_name = resources.xpath('string_add[1][count(../
         descendant::string_add) = 1]/tstring_content/@value').to_s
       resource_name = resources if resource_name.empty?
-      {resource_name: resource_name, resource_type: resource_type}
+      { resource_name: resource_name, resource_type: resource_type }
     end
 
     def notification_timing(notify)

@@ -18,7 +18,7 @@ module FoodCritic
 
       def add_expr(src, code, indicator)
         if indicator == '='
-          @expressions << {type: :expression, code: code.strip}
+          @expressions << { type: :expression, code: code.strip }
         end
       end
 
@@ -35,7 +35,7 @@ module FoodCritic
       end
 
       def add_stmt(src, code)
-        @expressions << {type: :statement, code: code.strip}
+        @expressions << { type: :statement, code: code.strip }
       end
 
       private
@@ -43,15 +43,15 @@ module FoodCritic
       def expressions(template_code)
         expr_lines = expressions_with_lines(template_code)
         expr_lines.map do |expr, line|
-          e = @expressions.find{|e| e[:code] == expr}
-          {code: expr, type: e[:type], line: line} if e
+          e = @expressions.find { |e| e[:code] == expr }
+          { code: expr, type: e[:type], line: line } if e
         end.compact
       end
 
       def expressions_with_lines(template_code)
         lines = lines_with_offsets(template_code)
         expression_offsets(template_code).map do |expr_offset, code|
-          [code, lines.find {|line, offset| offset >= expr_offset}.first]
+          [code, lines.find { |line, offset| offset >= expr_offset }.first]
         end
       end
 
@@ -68,7 +68,7 @@ module FoodCritic
         template_code.scan(/$/) do |m|
           line_offsets << Regexp.last_match.offset(0).first
         end
-        line_offsets.each_with_index.map{| pos, ln| [ln +1, pos]}
+        line_offsets.each_with_index.map { |pos, ln| [ln +1, pos] }
       end
 
     end

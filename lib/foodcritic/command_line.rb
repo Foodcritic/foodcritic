@@ -116,7 +116,7 @@ module FoodCritic
     def valid_paths?
       paths = options[:cookbook_paths] + options[:role_paths] +
         options[:environment_paths]
-      paths.any? && paths.all?{|path| File.exists?(path) }
+      paths.any? && paths.all? { |path| File.exists?(path) }
     end
 
     # Is the search grammar specified valid?

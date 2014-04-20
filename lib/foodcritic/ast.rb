@@ -14,7 +14,7 @@ module FoodCritic
     # If the provided node is the line / column information.
     def position_node?(node)
       node.respond_to?(:length) and node.length == 2 and
-        node.respond_to?(:all?) and node.all?{|child| child.respond_to?(:to_i)}
+        node.respond_to?(:all?) and node.all? { |child| child.respond_to?(:to_i) }
     end
 
   end
