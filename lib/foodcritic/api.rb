@@ -20,7 +20,7 @@ module FoodCritic
       return [] unless ast.respond_to?(:xpath)
 
       unless [:any, :string, :symbol, :vivified].include?(options[:type])
-        raise ArgumentError, "Node type not recognised"
+        raise ArgumentError, 'Node type not recognised'
       end
 
       case options[:type]
@@ -117,7 +117,7 @@ module FoodCritic
     # The key / value pair in an environment or role ruby file
     def field(ast, field_name)
       if field_name.nil? || field_name.to_s.empty?
-        raise ArgumentError, "Field name cannot be nil or empty"
+        raise ArgumentError, 'Field name cannot be nil or empty'
       end
       ast.xpath("//command[ident/@value='#{field_name}']")
     end
@@ -132,7 +132,7 @@ module FoodCritic
     # Create a match for a specified file. Use this if the presence of the file
     # triggers the warning rather than content.
     def file_match(file)
-      raise ArgumentError, "Filename cannot be nil" if file.nil?
+      raise ArgumentError, 'Filename cannot be nil' if file.nil?
       {filename: file, matched: file, line: 1, column: 1}
     end
 
@@ -223,7 +223,7 @@ module FoodCritic
 
     # Retrieve a single-valued attribute from the specified resource.
     def resource_attribute(resource, name)
-      raise ArgumentError, "Attribute name cannot be empty" if name.empty?
+      raise ArgumentError, 'Attribute name cannot be empty' if name.empty?
       resource_attributes(resource)[name.to_s]
     end
 
@@ -280,7 +280,7 @@ module FoodCritic
       raise_unless_xpath!(resource)
       type = resource.xpath('string(command/ident/@value)')
       if type.empty?
-        raise ArgumentError, "Provided AST node is not a resource"
+        raise ArgumentError, 'Provided AST node is not a resource'
       end
       type
     end
@@ -473,7 +473,7 @@ module FoodCritic
 
     def raise_unless_xpath!(ast)
       unless ast.respond_to?(:xpath)
-        raise ArgumentError, "AST must support #xpath"
+        raise ArgumentError, 'AST must support #xpath'
       end
     end
 
@@ -553,9 +553,9 @@ module FoodCritic
         #{ignore_attributes_xpath(options[:ignore])}
         [@value='.'][count(following-sibling::arg_paren) = 0]}, AttFilter.new)
       calls.select do |call|
-        call.xpath("aref/args_add_block").size == 0 and
-          (call.xpath("descendant::ident").size > 1 and
-            ! node_method?(call.xpath("ident/@value").to_s.to_sym,
+        call.xpath('aref/args_add_block').size == 0 and
+          (call.xpath('descendant::ident').size > 1 and
+            ! node_method?(call.xpath('ident/@value').to_s.to_sym,
                 options[:cookbook_dir]))
       end.sort
     end

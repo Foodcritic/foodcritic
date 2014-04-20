@@ -30,7 +30,7 @@ module FoodCritic
     end
 
     def xml_position_node(doc, xml_node, child)
-      pos = Nokogiri::XML::Node.new("pos", doc)
+      pos = Nokogiri::XML::Node.new('pos', doc)
       pos['line'] = child.first.to_s
       pos['column'] = child[1].to_s
       xml_node.add_child(pos)

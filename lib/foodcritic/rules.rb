@@ -9,15 +9,15 @@
 #   query only, as any nodes returned from a `recipe` block will be converted
 #   into warnings.
 
-rule "FC001",
-     "Use strings in preference to symbols to access node attributes" do
+rule 'FC001',
+     'Use strings in preference to symbols to access node attributes' do
   tags %w{style attributes}
   recipe do |ast|
     attribute_access(ast, type: :symbol)
   end
 end
 
-rule "FC002", "Avoid string interpolation where not required" do
+rule 'FC002', 'Avoid string interpolation where not required' do
   tags %w{style strings}
   recipe do |ast|
     ast.xpath(%q{//*[self::string_literal | self::assoc_new]/string_add[
@@ -26,9 +26,9 @@ rule "FC002", "Avoid string interpolation where not required" do
   end
 end
 
-rule "FC003",
-     "Check whether you are running with chef server before using" +
-     " server-specific features" do
+rule 'FC003',
+     'Check whether you are running with chef server before using' +
+     ' server-specific features' do
   tags %w{portability solo}
   recipe do |ast,filename|
     unless checks_for_chef_solo?(ast) or chef_solo_search_supported?(filename)
@@ -37,7 +37,7 @@ rule "FC003",
   end
 end
 
-rule "FC004", "Use a service resource to start and stop services" do
+rule 'FC004', 'Use a service resource to start and stop services' do
   tags %w{style services}
   recipe do |ast|
     find_resources(ast, type: 'execute').find_all do |cmd|
@@ -50,7 +50,7 @@ rule "FC004", "Use a service resource to start and stop services" do
   end
 end
 
-rule "FC005", "Avoid repetition of resource declarations" do
+rule 'FC005', 'Avoid repetition of resource declarations' do
   tags %w{style}
   recipe do |ast|
     resources = find_resources(ast).map do |res|
@@ -80,8 +80,8 @@ rule "FC005", "Avoid repetition of resource declarations" do
   end
 end
 
-rule "FC006",
-     "Mode should be quoted or fully specified when setting file permissions" do
+rule 'FC006',
+     'Mode should be quoted or fully specified when setting file permissions' do
   tags %w{correctness files}
   recipe do |ast|
     ast.xpath(%q{//ident[@value='mode']/parent::command/
@@ -90,7 +90,7 @@ rule "FC006",
   end
 end
 
-rule "FC007", "Ensure recipe dependencies are reflected in cookbook metadata" do
+rule 'FC007', 'Ensure recipe dependencies are reflected in cookbook metadata' do
   tags %w{correctness metadata}
   recipe do |ast,filename|
     metadata_path =Pathname.new(
@@ -110,7 +110,7 @@ rule "FC007", "Ensure recipe dependencies are reflected in cookbook metadata" do
   end
 end
 
-rule "FC008", "Generated cookbook metadata needs updating" do
+rule 'FC008', 'Generated cookbook metadata needs updating' do
   tags %w{style metadata}
   metadata do |ast,filename|
     {'maintainer' => 'YOUR_COMPANY_NAME',
@@ -121,7 +121,7 @@ rule "FC008", "Generated cookbook metadata needs updating" do
   end
 end
 
-rule "FC009", "Resource attribute not recognised" do
+rule 'FC009', 'Resource attribute not recognised' do
   tags %w{correctness}
   recipe do |ast|
     matches = []
@@ -140,7 +140,7 @@ rule "FC009", "Resource attribute not recognised" do
   end
 end
 
-rule "FC010", "Invalid search syntax" do
+rule 'FC010', 'Invalid search syntax' do
   tags %w{correctness search}
   recipe do |ast|
     # This only works for literal search strings
@@ -148,7 +148,7 @@ rule "FC010", "Invalid search syntax" do
   end
 end
 
-rule "FC011", "Missing README in markdown format" do
+rule 'FC011', 'Missing README in markdown format' do
   tags %w{style readme}
   cookbook do |filename|
     unless File.exists?(File.join(filename, 'README.md'))
@@ -157,7 +157,7 @@ rule "FC011", "Missing README in markdown format" do
   end
 end
 
-rule "FC012", "Use Markdown for README rather than RDoc" do
+rule 'FC012', 'Use Markdown for README rather than RDoc' do
   tags %w{style readme}
   cookbook do |filename|
     if File.exists?(File.join(filename, 'README.rdoc'))
@@ -166,7 +166,7 @@ rule "FC012", "Use Markdown for README rather than RDoc" do
   end
 end
 
-rule "FC013", "Use file_cache_path rather than hard-coding tmp paths" do
+rule 'FC013', 'Use file_cache_path rather than hard-coding tmp paths' do
   tags %w{style files}
   recipe do |ast|
     find_resources(ast, type: 'remote_file').find_all do |download|
@@ -177,7 +177,7 @@ rule "FC013", "Use file_cache_path rather than hard-coding tmp paths" do
   end
 end
 
-rule "FC014", "Consider extracting long ruby_block to library" do
+rule 'FC014', 'Consider extracting long ruby_block to library' do
   tags %w{style libraries}
   recipe do |ast|
     find_resources(ast, type: 'ruby_block').find_all do |rb|
@@ -188,9 +188,9 @@ rule "FC014", "Consider extracting long ruby_block to library" do
   end
 end
 
-rule "FC015", "Consider converting definition to a LWRP" do
+rule 'FC015', 'Consider converting definition to a LWRP' do
   tags %w{style definitions lwrp}
-  applies_to {|version| version >= gem_version("0.7.12")}
+  applies_to {|version| version >= gem_version('0.7.12')}
   cookbook do |dir|
     Dir[File.join(dir, 'definitions', '*.rb')].reject do |entry|
       ['.', '..'].include? entry
@@ -198,9 +198,9 @@ rule "FC015", "Consider converting definition to a LWRP" do
   end
 end
 
-rule "FC016", "LWRP does not declare a default action" do
+rule 'FC016', 'LWRP does not declare a default action' do
   tags %w{correctness lwrp}
-  applies_to {|version| version >= gem_version("0.7.12")}
+  applies_to {|version| version >= gem_version('0.7.12')}
   resource do |ast, filename|
     unless ["//ident/@value='default_action'",
      "//def/bodystmt/descendant::assign/
@@ -210,10 +210,10 @@ rule "FC016", "LWRP does not declare a default action" do
   end
 end
 
-rule "FC017", "LWRP does not notify when updated" do
+rule 'FC017', 'LWRP does not notify when updated' do
   tags %w{correctness lwrp}
   applies_to do |version|
-    version >= gem_version("0.7.12")
+    version >= gem_version('0.7.12')
   end
   provider do |ast, filename|
 
@@ -243,9 +243,9 @@ rule "FC017", "LWRP does not notify when updated" do
   end
 end
 
-rule "FC018", "LWRP uses deprecated notification syntax" do
+rule 'FC018', 'LWRP uses deprecated notification syntax' do
   tags %w{style lwrp deprecated}
-  applies_to {|version| version >= gem_version("0.9.10")}
+  applies_to {|version| version >= gem_version('0.9.10')}
   provider do |ast|
     ast.xpath("//assign/var_field/ivar[@value='@updated']").map do |class_var|
       match(class_var)
@@ -254,7 +254,7 @@ rule "FC018", "LWRP uses deprecated notification syntax" do
   end
 end
 
-rule "FC019", "Access node attributes in a consistent manner" do
+rule 'FC019', 'Access node attributes in a consistent manner' do
   tags %w{style attributes}
   cookbook do |cookbook_dir|
     asts = {}; files = Dir["#{cookbook_dir}/*/*.rb"].reject do |file|
@@ -282,9 +282,9 @@ rule "FC019", "Access node attributes in a consistent manner" do
   end
 end
 
-rule "FC021", "Resource condition in provider may not behave as expected" do
+rule 'FC021', 'Resource condition in provider may not behave as expected' do
   tags %w{correctness lwrp}
-  applies_to {|version| version >= gem_version("0.10.6")}
+  applies_to {|version| version >= gem_version('0.10.6')}
   provider do |ast|
     find_resources(ast).map do |resource|
       condition = resource.xpath(%q{//method_add_block/
@@ -297,16 +297,16 @@ rule "FC021", "Resource condition in provider may not behave as expected" do
   end
 end
 
-rule "FC022", "Resource condition within loop may not behave as expected" do
+rule 'FC022', 'Resource condition within loop may not behave as expected' do
   tags %w{correctness}
-  applies_to {|version| version >= gem_version("0.10.6")}
+  applies_to {|version| version >= gem_version('0.10.6')}
   recipe do |ast|
     ast.xpath("//call[ident/@value='each']/../do_block[count(ancestor::
               method_add_block/method_add_arg/fcall/ident[@value='only_if' or
               @value = 'not_if']) = 0]").map do |lp|
-      block_vars = lp.xpath("block_var/params/child::*").map do |n|
+      block_vars = lp.xpath('block_var/params/child::*').map do |n|
         n.name.sub(/^ident/, '')
-      end + lp.xpath("block_var/params/child::*/descendant::ident").map do |v|
+      end + lp.xpath('block_var/params/child::*/descendant::ident').map do |v|
         v['value']
       end
       find_resources(lp).map do |resource|
@@ -328,7 +328,7 @@ rule "FC022", "Resource condition within loop may not behave as expected" do
   end
 end
 
-rule "FC023", "Prefer conditional attributes" do
+rule 'FC023', 'Prefer conditional attributes' do
   tags %w{style}
   recipe do |ast|
     ast.xpath(%q{//method_add_block[command/ident][count(descendant::ident
@@ -340,7 +340,7 @@ rule "FC023", "Prefer conditional attributes" do
   end
 end
 
-rule "FC024", "Consider adding platform equivalents" do
+rule 'FC024', 'Consider adding platform equivalents' do
   tags %w{portability}
   RHEL = %w{amazon centos redhat scientific}
   recipe do |ast, filename|
@@ -355,9 +355,9 @@ rule "FC024", "Consider adding platform equivalents" do
     md_platforms = RHEL if md_platforms.empty?
 
     ['//method_add_arg[fcall/ident/@value="platform?"]/arg_paren/args_add_block',
-     "//when"].map do |expr|
+     '//when'].map do |expr|
       ast.xpath(expr).map do |whn|
-        platforms = whn.xpath("args_add/descendant::tstring_content").map do |p|
+        platforms = whn.xpath('args_add/descendant::tstring_content').map do |p|
           p['value']
         end.sort
         unless platforms.size == 1 || (md_platforms & platforms).empty?
@@ -369,15 +369,15 @@ rule "FC024", "Consider adding platform equivalents" do
   end
 end
 
-rule "FC025", "Prefer chef_gem to compile-time gem install" do
+rule 'FC025', 'Prefer chef_gem to compile-time gem install' do
   tags %w{style deprecated}
-  applies_to {|version| version >= gem_version("0.10.10")}
+  applies_to {|version| version >= gem_version('0.10.10')}
   recipe do |ast|
     gem_install = ast.xpath("//stmts_add/assign[method_add_block[command/ident/
       @value='gem_package'][do_block/stmts_add/command[ident/@value='action']
       [descendant::ident/@value='nothing']]]")
     gem_install.map do |install|
-      gem_var = install.xpath("var_field/ident/@value")
+      gem_var = install.xpath('var_field/ident/@value')
       unless ast.xpath("//method_add_arg[call/var_ref/ident/@value='#{gem_var}']
         [arg_paren/descendant::ident/@value='install' or
          arg_paren/descendant::ident/@value='upgrade']").empty?
@@ -387,9 +387,9 @@ rule "FC025", "Prefer chef_gem to compile-time gem install" do
   end
 end
 
-rule "FC026", "Conditional execution block attribute contains only string" do
+rule 'FC026', 'Conditional execution block attribute contains only string' do
   tags %w{correctness}
-  applies_to {|version| version >= gem_version("0.7.4")}
+  applies_to {|version| version >= gem_version('0.7.4')}
   recipe do |ast|
     find_resources(ast).map{|r| resource_attributes(r)}.map do |resource|
       [resource['not_if'], resource['only_if']]
@@ -403,7 +403,7 @@ rule "FC026", "Conditional execution block attribute contains only string" do
   end
 end
 
-rule "FC027", "Resource sets internal attribute" do
+rule 'FC027', 'Resource sets internal attribute' do
   tags %w{correctness}
   recipe do |ast|
     find_resources(ast, type: :service).map do |service|
@@ -413,7 +413,7 @@ rule "FC027", "Resource sets internal attribute" do
   end
 end
 
-rule "FC028", "Incorrect #platform? usage" do
+rule 'FC028', 'Incorrect #platform? usage' do
   tags %w{correctness}
   recipe do |ast|
     ast.xpath(%q{//*[self::call | self::command_call]
@@ -422,7 +422,7 @@ rule "FC028", "Incorrect #platform? usage" do
   end
 end
 
-rule "FC029", "No leading cookbook name in recipe metadata" do
+rule 'FC029', 'No leading cookbook name in recipe metadata' do
   tags %w{correctness metadata}
   metadata do |ast,filename|
     ast.xpath('//command[ident/@value="recipe"]').map do |declared_recipe|
@@ -437,7 +437,7 @@ rule "FC029", "No leading cookbook name in recipe metadata" do
   end
 end
 
-rule "FC030", "Cookbook contains debugger breakpoints" do
+rule 'FC030', 'Cookbook contains debugger breakpoints' do
   tags %w{annoyances}
   def pry_bindings(ast)
     ast.xpath('//call[(vcall|var_ref)/ident/@value="binding"]
@@ -449,7 +449,7 @@ rule "FC030", "Cookbook contains debugger breakpoints" do
   template{|ast| pry_bindings(ast)}
 end
 
-rule "FC031", "Cookbook without metadata file" do
+rule 'FC031', 'Cookbook without metadata file' do
   tags %w{correctness metadata}
   cookbook do |filename|
     if ! File.exists?(File.join(filename, 'metadata.rb'))
@@ -458,7 +458,7 @@ rule "FC031", "Cookbook without metadata file" do
   end
 end
 
-rule "FC032", "Invalid notification timing" do
+rule 'FC032', 'Invalid notification timing' do
   tags %w{correctness notifications}
   recipe do |ast|
     find_resources(ast).select do |resource|
@@ -469,7 +469,7 @@ rule "FC032", "Invalid notification timing" do
   end
 end
 
-rule "FC033", "Missing template" do
+rule 'FC033', 'Missing template' do
   tags %w{correctness}
   recipe do |ast,filename|
     find_resources(ast, type: :template).reject do |resource|
@@ -494,7 +494,7 @@ rule "FC033", "Missing template" do
   end
 end
 
-rule "FC034", "Unused template variables" do
+rule 'FC034', 'Unused template variables' do
   tags %w{correctness}
   recipe do |ast,filename|
     Array(resource_attributes_by_type(ast)['template']).select do |t|
@@ -526,7 +526,7 @@ rule "FC034", "Unused template variables" do
   end
 end
 
-rule "FC037", "Invalid notification action" do
+rule 'FC037', 'Invalid notification action' do
   tags %w{correctness}
   recipe do |ast|
     find_resources(ast).select do |resource|
@@ -541,7 +541,7 @@ rule "FC037", "Invalid notification action" do
   end
 end
 
-rule "FC038", "Invalid resource action" do
+rule 'FC038', 'Invalid resource action' do
   tags %w{correctness}
   recipe do |ast|
     find_resources(ast).select do |resource|
@@ -558,7 +558,7 @@ rule "FC038", "Invalid resource action" do
   end
 end
 
-rule "FC039", "Node method cannot be accessed with key" do
+rule 'FC039', 'Node method cannot be accessed with key' do
   tags %w{correctness}
   recipe do |ast|
     [{type: :string, path: '@value'},
@@ -578,7 +578,7 @@ rule "FC039", "Node method cannot be accessed with key" do
   end
 end
 
-rule "FC040", "Execute resource used to run git commands" do
+rule 'FC040', 'Execute resource used to run git commands' do
   tags %w{style recipe etsy}
   recipe do |ast|
     possible_git_commands = %w{ clone fetch pull checkout reset }
@@ -591,7 +591,7 @@ rule "FC040", "Execute resource used to run git commands" do
   end
 end
 
-rule "FC041", "Execute resource used to run curl or wget commands" do
+rule 'FC041', 'Execute resource used to run curl or wget commands' do
   tags %w{style recipe etsy}
   recipe do |ast|
     find_resources(ast, type: 'execute').select do |cmd|
@@ -601,16 +601,16 @@ rule "FC041", "Execute resource used to run curl or wget commands" do
   end
 end
 
-rule "FC042", "Prefer include_recipe to require_recipe" do
+rule 'FC042', 'Prefer include_recipe to require_recipe' do
   tags %w{deprecated}
   recipe do |ast|
     ast.xpath('//command[ident/@value="require_recipe"]')
   end
 end
 
-rule "FC043", "Prefer new notification syntax" do
+rule 'FC043', 'Prefer new notification syntax' do
   tags %w{style notifications deprecated}
-  applies_to {|version| version >= gem_version("0.9.10")}
+  applies_to {|version| version >= gem_version('0.9.10')}
   recipe do |ast|
     find_resources(ast).select do |resource|
       notifications(resource).any?{|notify| notify[:style] == :old}
@@ -618,7 +618,7 @@ rule "FC043", "Prefer new notification syntax" do
   end
 end
 
-rule "FC044", "Avoid bare attribute keys" do
+rule 'FC044', 'Avoid bare attribute keys' do
   tags %w{style}
   attributes do |ast|
     declared = ast.xpath('//descendant::var_field/ident/@value').map{|v| v.to_s}
@@ -632,7 +632,7 @@ rule "FC044", "Avoid bare attribute keys" do
   end
 end
 
-rule "FC045", "Consider setting cookbook name in metadata" do
+rule 'FC045', 'Consider setting cookbook name in metadata' do
   tags %w{annoyances metadata}
   metadata do |ast, filename|
     unless ast.xpath('descendant::stmts_add/command/ident/@value="name"')
@@ -646,13 +646,13 @@ rule "FC045", "Consider setting cookbook name in metadata" do
   end
 end
 
-rule "FC046", "Attribute assignment uses assign unless nil" do
+rule 'FC046', 'Attribute assignment uses assign unless nil' do
   attributes do |ast|
     attribute_access(ast).map{|a| a.xpath('ancestor::opassign/op[@value="||="]')}
   end
 end
 
-rule "FC047", "Attribute assignment does not specify precedence" do
+rule 'FC047', 'Attribute assignment does not specify precedence' do
   tags %w{attributes correctness}
   recipe do |ast|
     attribute_access(ast).map do |att|
@@ -668,7 +668,7 @@ rule "FC047", "Attribute assignment does not specify precedence" do
   end
 end
 
-rule "FC048", "Prefer Mixlib::ShellOut" do
+rule 'FC048', 'Prefer Mixlib::ShellOut' do
   tags %w{style processes}
   recipe do |ast|
     ast.xpath('//xstring_literal | //*[self::command or self::fcall]/
@@ -677,7 +677,7 @@ rule "FC048", "Prefer Mixlib::ShellOut" do
   end
 end
 
-rule "FC049", "Role name does not match containing file name" do
+rule 'FC049', 'Role name does not match containing file name' do
   tags %w{style roles}
   role do |ast, filename|
     role_name_specified = field_value(ast, :name)
@@ -688,7 +688,7 @@ rule "FC049", "Role name does not match containing file name" do
   end
 end
 
-rule "FC050", "Name includes invalid characters" do
+rule 'FC050', 'Name includes invalid characters' do
   tags %w{correctness environments roles}
   def invalid_name(ast)
     field(ast, :name) unless field_value(ast, :name) =~ /^[a-zA-Z0-9_\-]+$/
@@ -697,7 +697,7 @@ rule "FC050", "Name includes invalid characters" do
   role{|ast| invalid_name(ast)}
 end
 
-rule "FC051", "Template partials loop indefinitely" do
+rule 'FC051', 'Template partials loop indefinitely' do
   tags %w{correctness}
   recipe do |_,filename|
     cbk_templates = template_paths(filename)

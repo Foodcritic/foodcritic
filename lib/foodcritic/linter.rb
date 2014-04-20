@@ -11,7 +11,7 @@ module FoodCritic
 
     # The default version that will be used to determine relevant rules. This
     # can be over-ridden at the command line with the `--chef-version` option.
-    DEFAULT_CHEF_VERSION = "11.10.4"
+    DEFAULT_CHEF_VERSION = '11.10.4'
     attr_reader :chef_version
 
     # Perform a lint check. This method is intended for use by the command-line
@@ -262,7 +262,7 @@ module FoodCritic
       end.compact]
 
       unless paths.find{|k, v| k != :exclude_paths and ! v.empty?}
-        raise ArgumentError, "A cookbook path or role path must be specified"
+        raise ArgumentError, 'A cookbook path or role path must be specified'
       end
 
       Hash[paths.map do |key, value|
