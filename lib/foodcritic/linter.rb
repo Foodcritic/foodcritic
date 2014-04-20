@@ -21,7 +21,7 @@ module FoodCritic
       # The first item is the string output, the second is exit code.
       return [cmd_line.help, 0] if cmd_line.show_help?
       return [cmd_line.version, 0] if cmd_line.show_version?
-      if ! cmd_line.valid_grammar?
+      if !cmd_line.valid_grammar?
         [cmd_line.help, 4]
       elsif cmd_line.valid_paths?
         review = FoodCritic::Linter.new.check(cmd_line.options)
@@ -150,7 +150,7 @@ module FoodCritic
     def ignore_line_match?(line, rule)
       ignores = line.to_s[/\s+#\s*(.*)/, 1]
       if ignores and ignores.include?('~')
-        ! rule.matches_tags?(ignores.split(/[ ,]/))
+        !rule.matches_tags?(ignores.split(/[ ,]/))
       else
         false
       end
@@ -262,7 +262,7 @@ module FoodCritic
         [key, Array(value)] if key.to_s.end_with?('paths')
       end.compact]
 
-      unless paths.find { |k, v| k != :exclude_paths and ! v.empty? }
+      unless paths.find { |k, v| k != :exclude_paths and !v.empty? }
         raise ArgumentError, 'A cookbook path or role path must be specified'
       end
 

@@ -185,7 +185,7 @@ rule 'FC014', 'Consider extracting long ruby_block to library' do
     find_resources(ast, type: 'ruby_block').find_all do |rb|
       lines = rb.xpath("descendant::fcall[ident/@value='block']/../../
         descendant::*[@line]/@line").map { |n| n.value.to_i }.sort
-      (! lines.empty?) && (lines.last - lines.first) > 15
+      (!lines.empty?) && (lines.last - lines.first) > 15
     end
   end
 end
@@ -219,7 +219,7 @@ rule 'FC017', 'LWRP does not notify when updated' do
   end
   provider do |ast, filename|
 
-    use_inline_resources = ! ast.xpath('//*[self::vcall or self::var_ref]/ident
+    use_inline_resources = !ast.xpath('//*[self::vcall or self::var_ref]/ident
       [@value="use_inline_resources"]').empty?
 
     unless use_inline_resources
@@ -229,11 +229,11 @@ rule 'FC017', 'LWRP does not notify when updated' do
       actions.reject do |action|
         blk = action.xpath('ancestor::command[1]/
           following-sibling::*[self::do_block or self::brace_block]')
-        empty = ! blk.xpath('stmts_add/void_stmt').empty?
-        converge_by = ! blk.xpath('descendant::*[self::command or self::fcall]
+        empty = !blk.xpath('stmts_add/void_stmt').empty?
+        converge_by = !blk.xpath('descendant::*[self::command or self::fcall]
           /ident[@value="converge_by"]').empty?
 
-        updated_by_last_action = ! blk.xpath('descendant::*[self::call or
+        updated_by_last_action = !blk.xpath('descendant::*[self::call or
           self::command_call]/*[self::vcall or self::var_ref/ident/
           @value="new_resource"]/../ident[@value="updated_by_last_action"]
         ').empty?
@@ -323,7 +323,7 @@ rule 'FC022', 'Resource condition within loop may not behave as expected' do
           c = resource.xpath('command[count(descendant::string_embexpr) = 0]')
           next if resource.xpath('command/ident/@value').first.value == 'define'
           resource unless c.empty? || block_vars.any? do |var|
-            ! resource.xpath(%Q{command/args_add_block/args_add/
+            !resource.xpath(%Q{command/args_add_block/args_add/
               var_ref/ident[@value='#{var}']}).empty?
           end
         end
@@ -399,8 +399,8 @@ rule 'FC026', 'Conditional execution block attribute contains only string' do
       [resource['not_if'], resource['only_if']]
     end.flatten.compact.select do |condition|
       condition.respond_to?(:xpath) and
-      ! condition.xpath('descendant::string_literal').empty? and
-        ! condition.xpath('stmts_add/string_literal').empty? and
+      !condition.xpath('descendant::string_literal').empty? and
+        !condition.xpath('stmts_add/string_literal').empty? and
         condition.xpath('descendant::stmts_add[count(ancestor::
           string_literal) = 0]').size == 1
     end
@@ -456,7 +456,7 @@ end
 rule 'FC031', 'Cookbook without metadata file' do
   tags %w(correctness metadata)
   cookbook do |filename|
-    if ! File.exists?(File.join(filename, 'metadata.rb'))
+    if !File.exists?(File.join(filename, 'metadata.rb'))
       [file_match(File.join(filename, 'metadata.rb'))]
     end
   end
@@ -539,7 +539,7 @@ rule 'FC037', 'Invalid notification action' do
           when :notifies then n[:resource_type]
           when :subscribes then resource_type(resource).to_sym
         end
-        n[:action].size > 0 and ! resource_action?(type, n[:action])
+        n[:action].size > 0 and !resource_action?(type, n[:action])
       end
     end
   end
@@ -556,7 +556,7 @@ rule 'FC038', 'Invalid resource action' do
         actions = Array(actions)
       end
       actions.reject { |a| a.to_s.empty? }.any? do |action|
-        ! resource_action?(resource_type(resource), action)
+        !resource_action?(resource_type(resource), action)
       end
     end
   end
@@ -571,7 +571,7 @@ rule 'FC039', 'Node method cannot be accessed with key' do
         att_name = att.xpath(access_type[:path]).to_s.to_sym
         att_name != :tags && chef_node_methods.include?(att_name)
       end.select do |att|
-        ! att.xpath('ancestor::args_add_block[position() = 1]
+        !att.xpath('ancestor::args_add_block[position() = 1]
           [preceding-sibling::vcall | preceding-sibling::var_ref]').empty?
       end.select do |att|
         att_type = att.xpath('ancestor::args_add_block[position() = 1]
@@ -629,9 +629,9 @@ rule 'FC044', 'Avoid bare attribute keys' do
     ast.xpath('//assign/*[self::vcall or self::var_ref]
       [count(child::kw) = 0]/ident').select do |v|
         (v['value'] != 'secure_password') &&
-          ! declared.include?(v['value']) &&
-	  ! v.xpath("ancestor::*[self::brace_block or self::do_block]/block_var/
-                     descendant::ident/@value='#{v['value']}'")
+          !declared.include?(v['value']) &&
+          !v.xpath("ancestor::*[self::brace_block or self::do_block]/block_var/
+                    descendant::ident/@value='#{v['value']}'")
     end
   end
 end
@@ -644,7 +644,7 @@ rule 'FC045', 'Consider setting cookbook name in metadata' do
     end
   end
   cookbook do |filename|
-    if ! File.exists?(File.join(filename, 'metadata.rb'))
+    if !File.exists?(File.join(filename, 'metadata.rb'))
       [file_match(File.join(filename, 'metadata.rb'))]
     end
   end

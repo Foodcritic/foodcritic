@@ -39,7 +39,7 @@ module FoodCritic
       raise_unless_xpath!(ast)
       # TODO: This expression is too loose, but also will fail to match other
       # types of conditionals.
-      (! ast.xpath(%q{//*[self::if or self::ifop or self::unless]/*[self::aref or
+      (!ast.xpath(%q{//*[self::if or self::ifop or self::unless]/*[self::aref or
         child::aref or self::call]
         [count(descendant::const[@value = 'Chef' or @value = 'Config']) = 2
           and
@@ -54,7 +54,7 @@ module FoodCritic
     # Is the [chef-solo-search library](https://github.com/edelight/chef-solo-search)
     # available?
     def chef_solo_search_supported?(recipe_path)
-      return false if recipe_path.nil? || ! File.exists?(recipe_path)
+      return false if recipe_path.nil? || !File.exists?(recipe_path)
 
       # Look for the chef-solo-search library.
       #
@@ -69,7 +69,7 @@ module FoodCritic
       #     class Chef
       #       def search
       search_libs.any? do |lib|
-        ! read_ast(lib).xpath(%q{//class[count(descendant::const[@value='Chef']
+        !read_ast(lib).xpath(%q{//class[count(descendant::const[@value='Chef']
           ) = 1]/descendant::def/ident[@value='search']}).empty?
       end
     end
@@ -292,7 +292,7 @@ module FoodCritic
 
       checker = FoodCritic::ErrorChecker.new(str)
       checker.parse
-      ! checker.error?
+      !checker.error?
     end
 
     # Searches performed by the provided AST.
@@ -369,7 +369,7 @@ module FoodCritic
       resource.xpath("do_block/descendant::method_add_block[
         count(ancestor::do_block) = 1][brace_block | do_block]").each do |batt|
           att_name = batt.xpath('string(method_add_arg/fcall/ident/@value)')
-          if att_name and ! att_name.empty? and batt.children.length > 1
+          if att_name and !att_name.empty? and batt.children.length > 1
             atts[att_name] = batt.children[1]
           end
       end
@@ -409,20 +409,20 @@ module FoodCritic
     end
 
     def extract_attribute_value(att, options = {})
-      if ! att.xpath('args_add_block[count(descendant::args_add)>1]').empty?
+      if !att.xpath('args_add_block[count(descendant::args_add)>1]').empty?
         att.xpath('args_add_block').first
-      elsif ! att.xpath('args_add_block/args_add/
+      elsif !att.xpath('args_add_block/args_add/
         var_ref/kw[@value="true" or @value="false"]').empty?
         att.xpath('string(args_add_block/args_add/
           var_ref/kw/@value)') == 'true'
-      elsif ! att.xpath('descendant::assoc_new').empty?
+      elsif !att.xpath('descendant::assoc_new').empty?
         att.xpath('descendant::assoc_new')
-      elsif ! att.xpath('descendant::int').empty?
+      elsif !att.xpath('descendant::int').empty?
         att.xpath('descendant::int/@value').to_s
       elsif att.xpath('descendant::symbol').empty?
         if options[:return_expressions] and
            (att.xpath('descendant::string_add').size != 1 or
-           ! att.xpath('descendant::*[self::call or self::string_embexpr]').empty?)
+           !att.xpath('descendant::*[self::call or self::string_embexpr]').empty?)
           att
         else
           att.xpath('string(descendant::tstring_content/@value)')
@@ -458,14 +458,14 @@ module FoodCritic
     end
 
     def patched_node_method?(meth, cookbook_dir)
-      return false if cookbook_dir.nil? || ! Dir.exists?(cookbook_dir)
+      return false if cookbook_dir.nil? || !Dir.exists?(cookbook_dir)
 
       # TODO: Modify this to work with multiple cookbook paths
       cbk_tree_path = Pathname.new(File.join(cookbook_dir, '..'))
       libs = Dir[File.join(cbk_tree_path.realpath, '*/libraries/*.rb')]
 
       libs.any? do |lib|
-        ! read_ast(lib).xpath(%Q{//class[count(descendant::const[@value='Chef'])
+        !read_ast(lib).xpath(%Q{//class[count(descendant::const[@value='Chef'])
           > 0][count(descendant::const[@value='Node']) > 0]/descendant::def/
           ident[@value='#{meth.to_s}']}).empty?
       end
@@ -555,8 +555,8 @@ module FoodCritic
       calls.select do |call|
         call.xpath('aref/args_add_block').size == 0 and
           (call.xpath('descendant::ident').size > 1 and
-            ! node_method?(call.xpath('ident/@value').to_s.to_sym,
-                           options[:cookbook_dir]))
+            !node_method?(call.xpath('ident/@value').to_s.to_sym,
+                          options[:cookbook_dir]))
       end.sort
     end
 
