@@ -431,7 +431,7 @@ module FoodCritic
         att.xpath('descendant::int/@value').to_s
       elsif att.xpath('descendant::symbol').empty?
         if options[:return_expressions] &&
-           (att.xpath('descendant::string_add').size != 1 or
+           (att.xpath('descendant::string_add').size != 1 ||
             att.xpath('descendant::*[self::call or
               self::string_embexpr]').any?)
           att

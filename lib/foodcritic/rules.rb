@@ -31,7 +31,7 @@ rule 'FC003',
      ' server-specific features' do
   tags %w(portability solo)
   recipe do |ast, filename|
-    unless checks_for_chef_solo?(ast) or chef_solo_search_supported?(filename)
+    unless checks_for_chef_solo?(ast) || chef_solo_search_supported?(filename)
       searches(ast)
     end
   end
