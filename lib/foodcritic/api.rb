@@ -48,7 +48,7 @@ module FoodCritic
             )
           ]}).empty?) ||
       ast.xpath('//if_mod[return][aref/descendant::ident/@value="solo"]/aref/
-        const_path_ref/descendant::const').map { |c|c['value'] } == %w{Chef Config}
+        const_path_ref/descendant::const').map { |c|c['value'] } == %w(Chef Config)
     end
 
     # Is the [chef-solo-search library](https://github.com/edelight/chef-solo-search)
@@ -303,8 +303,8 @@ module FoodCritic
 
     # The list of standard cookbook sub-directories.
     def standard_cookbook_subdirs
-      %w{attributes definitions files libraries providers recipes resources
-         templates}
+      %w(attributes definitions files libraries providers recipes resources
+         templates)
     end
 
     # Platforms declared as supported in cookbook metadata
@@ -491,7 +491,7 @@ module FoodCritic
       def is_att_type(value)
         return [] unless value.respond_to?(:select)
         value.select do |n|
-          %w{
+          %w(
             automatic_attrs
             default
             default!
@@ -506,7 +506,7 @@ module FoodCritic
             override_unless
             set
             set_unless
-          }.include?(n.to_s)
+          ).include?(n.to_s)
         end
       end
     end
