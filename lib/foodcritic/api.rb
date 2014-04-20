@@ -263,7 +263,7 @@ module FoodCritic
           name.xpath('descendant::string_literal').size == 1 &&
           name.xpath(
             'descendant::*[self::call or self::string_embexpr]').empty?
-            name.xpath('descendant::tstring_content/@value').to_s
+          name.xpath('descendant::tstring_content/@value').to_s
         else
           name
         end
@@ -378,10 +378,10 @@ module FoodCritic
       atts = {}
       resource.xpath("do_block/descendant::method_add_block[
         count(ancestor::do_block) = 1][brace_block | do_block]").each do |batt|
-          att_name = batt.xpath('string(method_add_arg/fcall/ident/@value)')
-          if att_name && !att_name.empty? && batt.children.length > 1
-            atts[att_name] = batt.children[1]
-          end
+        att_name = batt.xpath('string(method_add_arg/fcall/ident/@value)')
+        if att_name && !att_name.empty? && batt.children.length > 1
+          atts[att_name] = batt.children[1]
+        end
       end
       atts
     end
@@ -458,13 +458,13 @@ module FoodCritic
       atts = {}
       resource.xpath('do_block/descendant::*[self::command or
         self::method_add_arg][count(ancestor::do_block) >= 1]').each do |att|
-          blocks = att.xpath('ancestor::method_add_block/method_add_arg/fcall')
-          next if blocks.any? { |a| block_depth(a) > block_depth(resource) }
-          att_name = att.xpath('string(ident/@value |
-            fcall/ident[@value="variables"]/@value)')
-          unless att_name.empty?
-            atts[att_name] = extract_attribute_value(att, options)
-          end
+        blocks = att.xpath('ancestor::method_add_block/method_add_arg/fcall')
+        next if blocks.any? { |a| block_depth(a) > block_depth(resource) }
+        att_name = att.xpath('string(ident/@value |
+          fcall/ident[@value="variables"]/@value)')
+        unless att_name.empty?
+          atts[att_name] = extract_attribute_value(att, options)
+        end
       end
       atts
     end
@@ -491,10 +491,10 @@ module FoodCritic
 
     def uncached_read_ast(file)
       source = if file.to_s.split(File::SEPARATOR).include?('templates')
-        template_expressions_only(file)
-      else
-        File.read(file)
-      end
+                 template_expressions_only(file)
+               else
+                 File.read(file)
+               end
       build_xml(Ripper::SexpBuilder.new(source).parse)
     end
 
@@ -530,10 +530,10 @@ module FoodCritic
         end.inject(:+)
       else
         type = if options[:type] == :string
-          'tstring_content'
-        else
-          '*[self::symbol or self::dyna_symbol]'
-        end
+                 'tstring_content'
+               else
+                 '*[self::symbol or self::dyna_symbol]'
+               end
         expr = '//*[self::aref_field or self::aref][count(method_add_arg) = 0]'
         expr += '[count(is_att_type(descendant::var_ref/ident/@value)) =
           count(descendant::var_ref/ident/@value)]'

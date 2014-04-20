@@ -56,10 +56,10 @@ module FoodCritic
       files_to_process(paths).each do |p|
 
         relevant_tags = if options[:tags].any?
-          options[:tags]
-        else
-          cookbook_tags(p[:filename])
-        end
+                          options[:tags]
+                        else
+                          cookbook_tags(p[:filename])
+                        end
 
         active_rules(relevant_tags).each do |rule|
 
@@ -72,10 +72,10 @@ module FoodCritic
           }
 
           matches = if p[:path_type] == :cookbook
-            cookbook_matches(state)
-          else
-            other_matches(state)
-          end
+                      cookbook_matches(state)
+                    else
+                      other_matches(state)
+                    end
 
           matches = remove_ignored(matches, state[:rule], state[:file])
 
@@ -218,11 +218,11 @@ module FoodCritic
 
           if File.directory?(dir)
             glob = if path_type == :cookbook
-              '{metadata.rb,{attributes,definitions,libraries,providers,'\
-              'recipes,resources}/*.rb,templates/*/*.erb}'
-            else
-              '*.rb'
-            end
+                     '{metadata.rb,{attributes,definitions,libraries,'\
+                     'providers,recipes,resources}/*.rb,templates/*/*.erb}'
+                   else
+                     '*.rb'
+                   end
 
             (Dir.glob(File.join(dir, glob)) +
              Dir.glob(File.join(dir, "*/#{glob}")) - exclusions)

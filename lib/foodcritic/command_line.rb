@@ -167,11 +167,13 @@ module FoodCritic
     #
     # @return [Hash] The parsed command-line options.
     def options
-      original_options.merge({
-        cookbook_paths: cookbook_paths,
-        role_paths: role_paths,
-        environment_paths: environment_paths,
-      })
+      original_options.merge(
+        {
+          cookbook_paths: cookbook_paths,
+          role_paths: role_paths,
+          environment_paths: environment_paths,
+        }
+      )
     end
 
     # The original command-line options

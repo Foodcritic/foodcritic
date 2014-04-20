@@ -365,10 +365,11 @@ rule 'FC024', 'Consider adding platform equivalents' do
     metadata_path = Pathname.new(
       File.join(File.dirname(filename), '..', 'metadata.rb')).cleanpath
     md_platforms = if File.exist?(metadata_path)
-      supported_platforms(read_ast(metadata_path)).map { |p| p[:platform] }
-    else
-      []
-    end
+                     supported_platforms(read_ast(
+                       metadata_path)).map { |p| p[:platform] }
+                   else
+                     []
+                   end
     md_platforms = RHEL if md_platforms.empty?
 
     ['//method_add_arg[fcall/ident/@value="platform?"]/
@@ -451,7 +452,7 @@ rule 'FC029', 'No leading cookbook name in recipe metadata' do
         descendant::tstring_content[1]/@value').to_s
       unless recipe_name.empty? ||
         recipe_name.split('::').first == cookbook_name(filename.to_s)
-          declared_recipe
+        declared_recipe
       end
     end.compact
   end
@@ -532,9 +533,9 @@ rule 'FC034', 'Unused template variables' do
         begin
           template_vars = templates_included(
             all_templates, template_path).map do |template|
-              read_ast(template).xpath('//var_ref/ivar/@value').map do |v|
-                v.to_s.sub(/^@/, '')
-              end
+            read_ast(template).xpath('//var_ref/ivar/@value').map do |v|
+              v.to_s.sub(/^@/, '')
+            end
           end.flatten
           ! (passed_vars - template_vars).empty?
         rescue RecursedTooFarError
@@ -646,11 +647,11 @@ rule 'FC044', 'Avoid bare attribute keys' do
       v.to_s
     end
     ast.xpath('//assign/*[self::vcall or self::var_ref]
-      [count(child::kw) = 0]/ident').select do |v|
-        (v['value'] != 'secure_password') &&
-          !declared.include?(v['value']) &&
-          !v.xpath("ancestor::*[self::brace_block or self::do_block]/block_var/
-                    descendant::ident/@value='#{v['value']}'")
+              [count(child::kw) = 0]/ident').select do |v|
+      (v['value'] != 'secure_password') &&
+        !declared.include?(v['value']) &&
+        !v.xpath("ancestor::*[self::brace_block or self::do_block]/block_var/
+                  descendant::ident/@value='#{v['value']}'")
     end
   end
 end

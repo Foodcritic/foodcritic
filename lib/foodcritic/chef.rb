@@ -96,15 +96,15 @@ module FoodCritic
       def create_parser(grammar_paths)
         @search_parser ||=
           grammar_paths.inject(nil) do |parser, lucene_grammar|
-            begin
-              break parser unless parser.nil?
-              # Don't instantiate custom nodes
-              Treetop.load_from_string(
-                IO.read(lucene_grammar).gsub(/<[^>]+>/, ''))
-              LuceneParser.new
-            rescue
-              # Silently swallow and try the next grammar
-            end
+          begin
+            break parser unless parser.nil?
+            # Don't instantiate custom nodes
+            Treetop.load_from_string(
+              IO.read(lucene_grammar).gsub(/<[^>]+>/, ''))
+            LuceneParser.new
+          rescue
+            # Silently swallow and try the next grammar
+          end
         end
       end
 
