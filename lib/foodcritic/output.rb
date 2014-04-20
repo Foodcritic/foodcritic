@@ -30,7 +30,7 @@ module FoodCritic
 
       key_by_file_and_line(review).each do |fn, warnings|
         print_fn.call fn
-        unless File.exists?(fn)
+        unless File.exist?(fn)
           print_rule.call warnings[1].to_a.join("\n")
           next
         end

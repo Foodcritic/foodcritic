@@ -119,7 +119,7 @@ module FoodCritic
     def valid_paths?
       paths = options[:cookbook_paths] + options[:role_paths] +
         options[:environment_paths]
-      paths.any? && paths.all? { |path| File.exists?(path) }
+      paths.any? && paths.all? { |path| File.exist?(path) }
     end
 
     # Is the search grammar specified valid?
@@ -128,7 +128,7 @@ module FoodCritic
     #   loaded.
     def valid_grammar?
       return true unless options.key?(:search_grammar)
-      return false unless File.exists?(options[:search_grammar])
+      return false unless File.exist?(options[:search_grammar])
       search = FoodCritic::Chef::Search.new
       search.create_parser([options[:search_grammar]])
       search.parser?

@@ -55,7 +55,7 @@ module FoodCritic
     # [chef-solo-search library](https://github.com/edelight/chef-solo-search)
     # available?
     def chef_solo_search_supported?(recipe_path)
-      return false if recipe_path.nil? || !File.exists?(recipe_path)
+      return false if recipe_path.nil? || !File.exist?(recipe_path)
 
       # Look for the chef-solo-search library.
       #
@@ -88,7 +88,7 @@ module FoodCritic
       # We also need to consult the metadata in case the cookbook name has been
       # overridden there. This supports only string literals.
       md_path = File.join(file, 'metadata.rb')
-      if File.exists?(md_path)
+      if File.exist?(md_path)
         name = read_ast(md_path).xpath("//stmts_add/
           command[ident/@value='name']/
           descendant::tstring_content/@value").to_s

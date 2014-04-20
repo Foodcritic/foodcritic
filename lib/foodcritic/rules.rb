@@ -99,7 +99,7 @@ rule 'FC007', 'Ensure recipe dependencies are reflected '\
   recipe do |ast, filename|
     metadata_path = Pathname.new(
       File.join(File.dirname(filename), '..', 'metadata.rb')).cleanpath
-    next unless File.exists? metadata_path
+    next unless File.exist? metadata_path
     actual_included = included_recipes(ast, with_partial_names: false)
     undeclared = actual_included.keys.map do |recipe|
       recipe.split('::').first
@@ -157,7 +157,7 @@ end
 rule 'FC011', 'Missing README in markdown format' do
   tags %w(style readme)
   cookbook do |filename|
-    unless File.exists?(File.join(filename, 'README.md'))
+    unless File.exist?(File.join(filename, 'README.md'))
       [file_match(File.join(filename, 'README.md'))]
     end
   end
@@ -166,7 +166,7 @@ end
 rule 'FC012', 'Use Markdown for README rather than RDoc' do
   tags %w(style readme)
   cookbook do |filename|
-    if File.exists?(File.join(filename, 'README.rdoc'))
+    if File.exist?(File.join(filename, 'README.rdoc'))
       [file_match(File.join(filename, 'README.rdoc'))]
     end
   end
@@ -364,7 +364,7 @@ rule 'FC024', 'Consider adding platform equivalents' do
     next if Pathname.new(filename).basename.to_s == 'metadata.rb'
     metadata_path = Pathname.new(
       File.join(File.dirname(filename), '..', 'metadata.rb')).cleanpath
-    md_platforms = if File.exists?(metadata_path)
+    md_platforms = if File.exist?(metadata_path)
       supported_platforms(read_ast(metadata_path)).map { |p| p[:platform] }
     else
       []
@@ -472,7 +472,7 @@ end
 rule 'FC031', 'Cookbook without metadata file' do
   tags %w(correctness metadata)
   cookbook do |filename|
-    if !File.exists?(File.join(filename, 'metadata.rb'))
+    if !File.exist?(File.join(filename, 'metadata.rb'))
       [file_match(File.join(filename, 'metadata.rb'))]
     end
   end
@@ -663,7 +663,7 @@ rule 'FC045', 'Consider setting cookbook name in metadata' do
     end
   end
   cookbook do |filename|
-    if !File.exists?(File.join(filename, 'metadata.rb'))
+    if !File.exist?(File.join(filename, 'metadata.rb'))
       [file_match(File.join(filename, 'metadata.rb'))]
     end
   end
