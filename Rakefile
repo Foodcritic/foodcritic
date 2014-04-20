@@ -3,6 +3,7 @@ require 'bundler'
 require 'rake/testtask'
 require 'cucumber'
 require 'cucumber/rake/task'
+require 'rubocop/rake_task'
 
 task :default => [:man, :install, :test, :features]
 
@@ -25,6 +26,12 @@ Cucumber::Rake::Task.new(:features) do |t|
     t.cucumber_opts += ['-t', '~@context']
   end
   t.cucumber_opts += ['features']
+end
+
+desc 'Run RuboCop'
+Rubocop::RakeTask.new(:rubocop) do |task|
+  task.patterns = ['bin/*']
+  task.patterns = ['lib/**/*.rb']
 end
 
 desc 'Build the manpage'
