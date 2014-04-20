@@ -142,7 +142,7 @@ module FoodCritic
       matches.reject do |m|
         matched_file = m[:filename] || file
         (line = m[:line]) && File.exist?(matched_file) &&
-           ignore_line_match?(File.readlines(matched_file)[line-1], rule)
+           ignore_line_match?(File.readlines(matched_file)[line - 1], rule)
       end
     end
 

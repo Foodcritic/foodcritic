@@ -68,7 +68,7 @@ module FoodCritic
         template_code.scan(/$/) do |m|
           line_offsets << Regexp.last_match.offset(0).first
         end
-        line_offsets.each_with_index.map { |pos, ln| [ln +1, pos] }
+        line_offsets.each_with_index.map { |pos, ln| [ln + 1, pos] }
       end
 
     end

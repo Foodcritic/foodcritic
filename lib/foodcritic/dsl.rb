@@ -27,7 +27,7 @@ module FoodCritic
 
     include Api
 
-    def initialize(chef_version=Linter::DEFAULT_CHEF_VERSION)
+    def initialize(chef_version = Linter::DEFAULT_CHEF_VERSION)
       @chef_version = chef_version
     end
 
@@ -73,7 +73,7 @@ module FoodCritic
     rule_block :role
 
     # Load the ruleset(s).
-    def self.load(paths, chef_version=Linter::DEFAULT_CHEF_VERSION)
+    def self.load(paths, chef_version = Linter::DEFAULT_CHEF_VERSION)
       dsl = RuleDsl.new(chef_version)
       paths.map do |path|
         File.directory?(path) ? Dir["#{path}/**/*.rb"].sort : path

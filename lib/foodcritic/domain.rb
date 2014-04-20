@@ -11,7 +11,7 @@ module FoodCritic
     #     Warning.new(rule, :filename => 'foo/recipes.default.rb',
     #       :line => 5, :column=> 40)
     #
-    def initialize(rule, match={}, options={})
+    def initialize(rule, match = {}, options = {})
       @rule, @match = rule, match
       @is_failed = options[:fail_tags].empty? ? false : rule.matches_tags?(options[:fail_tags])
     end

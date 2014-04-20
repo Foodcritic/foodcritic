@@ -228,7 +228,7 @@ module FoodCritic
     end
 
     # Retrieve all attributes from the specified resource.
-    def resource_attributes(resource, options={})
+    def resource_attributes(resource, options = {})
       atts = {}
       name = resource_name(resource, options)
       atts[:name] = name unless name.empty?
@@ -334,7 +334,7 @@ module FoodCritic
       end
     end
 
-    def templates_included(all_templates, template_path, depth=1)
+    def templates_included(all_templates, template_path, depth = 1)
       raise RecursedTooFarError.new(template_path) if depth > 10
       partials = read_ast(template_path).xpath('//*[self::command or
         child::fcall][descendant::ident/@value="render"]//args_add/
@@ -382,7 +382,7 @@ module FoodCritic
 
     # Recurse the nested arrays provided by Ripper to create a tree we can more
     # easily apply expressions to.
-    def build_xml(node, doc = nil, xml_node=nil)
+    def build_xml(node, doc = nil, xml_node = nil)
       doc, xml_node = xml_document(doc, xml_node)
 
       if node.respond_to?(:each)
@@ -541,13 +541,13 @@ module FoodCritic
       exprs = Template::ExpressionExtractor.new.extract(File.read(file))
       lines = Array.new(exprs.map { |e| e[:line] }.max || 0, '')
       exprs.each do |e|
-        lines[e[:line] -1] += ';' unless lines[e[:line] -1].empty?
-        lines[e[:line] -1] += e[:code]
+        lines[e[:line] - 1] += ';' unless lines[e[:line] - 1].empty?
+        lines[e[:line] - 1] += e[:code]
       end
       lines.join("\n")
     end
 
-    def vivified_attribute_access(ast, options={})
+    def vivified_attribute_access(ast, options = {})
       calls = ast.xpath(%Q{//*[self::call or self::field]
         [is_att_type(vcall/ident/@value) or is_att_type(var_ref/ident/@value)]
         #{ignore_attributes_xpath(options[:ignore])}
