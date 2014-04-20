@@ -49,7 +49,7 @@ module FoodCritic
       @warnings.map do |w|
         ["#{w.rule.code}: #{w.rule.name}: #{w.match[:filename]}",
          w.match[:line].to_i]
-      end.sort do |x,y|
+      end.sort do |x, y|
         x.first == y.first ? x[1] <=> y[1] : x.first <=> y.first
       end.map { |w|"#{w.first}:#{w[1]}" }.uniq.join("\n")
     end

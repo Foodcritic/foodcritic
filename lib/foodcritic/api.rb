@@ -238,7 +238,7 @@ module FoodCritic
     # Resources keyed by type, with an array of matching nodes for each.
     def resource_attributes_by_type(ast)
       result = {}
-      resources_by_type(ast).each do |type,resources|
+      resources_by_type(ast).each do |type, resources|
         result[type] = resources.map { |resource| resource_attributes(resource) }
       end
       result
@@ -316,7 +316,7 @@ module FoodCritic
         versions = platform.xpath('ancestor::args_add[position() > 1]/
 	  string_literal/descendant::tstring_content/@value').map { |v| v.to_s }
         { platform: platform['value'], versions: versions }
-      end.sort { |a,b| a[:platform] <=> b[:platform] }
+      end.sort { |a, b| a[:platform] <=> b[:platform] }
     end
 
     # Template filename

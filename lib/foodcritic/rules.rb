@@ -30,7 +30,7 @@ rule 'FC003',
      'Check whether you are running with chef server before using' +
      ' server-specific features' do
   tags %w(portability solo)
-  recipe do |ast,filename|
+  recipe do |ast, filename|
     unless checks_for_chef_solo?(ast) or chef_solo_search_supported?(filename)
       searches(ast)
     end
@@ -69,12 +69,12 @@ rule 'FC005', 'Avoid repetition of resource declarations' do
       # we have contiguous resources of the same type, but do they share the
       # same attributes?
       sorted_atts = cont_res[1].map do |atts|
-        atts.delete_if { |k| k == :ast }.to_a.sort do |x,y|
+        atts.delete_if { |k| k == :ast }.to_a.sort do |x, y|
           x.first.to_s <=> y.first.to_s
         end
       end
       first_resource if sorted_atts.all? do |att|
-        (att - sorted_atts.inject { |atts,a| atts & a }).length == 1
+        (att - sorted_atts.inject { |atts, a| atts & a }).length == 1
       end
     end.compact
   end
@@ -92,7 +92,7 @@ end
 
 rule 'FC007', 'Ensure recipe dependencies are reflected in cookbook metadata' do
   tags %w(correctness metadata)
-  recipe do |ast,filename|
+  recipe do |ast, filename|
     metadata_path = Pathname.new(
       File.join(File.dirname(filename), '..', 'metadata.rb')).cleanpath
     next unless File.exists? metadata_path
@@ -112,11 +112,11 @@ end
 
 rule 'FC008', 'Generated cookbook metadata needs updating' do
   tags %w(style metadata)
-  metadata do |ast,filename|
+  metadata do |ast, filename|
     {
       'maintainer' => 'YOUR_COMPANY_NAME',
       'maintainer_email' => 'YOUR_EMAIL'
-    }.map do |field,value|
+    }.map do |field, value|
       ast.xpath(%Q{//command[ident/@value='#{field}']/
                    descendant::tstring_content[@value='#{value}']})
     end
@@ -127,7 +127,7 @@ rule 'FC009', 'Resource attribute not recognised' do
   tags %w(correctness)
   recipe do |ast|
     matches = []
-    resource_attributes_by_type(ast).each do |type,resources|
+    resource_attributes_by_type(ast).each do |type, resources|
       resources.each do |resource|
         resource.keys.map(&:to_sym).reject do |att|
           resource_attribute?(type.to_sym, att)
@@ -278,7 +278,7 @@ rule 'FC019', 'Access node attributes in a consistent manner' do
       }
     end.reject { |type| type[:count] == 0 }
     if asts.size > 1
-      least_used = asts[types.min { |a,b| a[:count] <=> b[:count] }[:access_type]]
+      least_used = asts[types.min { |a, b| a[:count] <=> b[:count] }[:access_type]]
       least_used.map do |file|
         file[:ast].map { |ast| match(ast).merge(filename: file[:path]) }.flatten
       end
@@ -428,7 +428,7 @@ end
 
 rule 'FC029', 'No leading cookbook name in recipe metadata' do
   tags %w(correctness metadata)
-  metadata do |ast,filename|
+  metadata do |ast, filename|
     ast.xpath('//command[ident/@value="recipe"]').map do |declared_recipe|
       next unless declared_recipe.xpath('count(//vcall|//var_ref)').to_i == 0
       recipe_name = declared_recipe.xpath('args_add_block/
@@ -475,7 +475,7 @@ end
 
 rule 'FC033', 'Missing template' do
   tags %w(correctness)
-  recipe do |ast,filename|
+  recipe do |ast, filename|
     find_resources(ast, type: :template).reject do |resource|
       resource_attributes(resource)['local'] ||
         resource_attributes(resource)['cookbook']
@@ -500,7 +500,7 @@ end
 
 rule 'FC034', 'Unused template variables' do
   tags %w(correctness)
-  recipe do |ast,filename|
+  recipe do |ast, filename|
     Array(resource_attributes_by_type(ast)['template']).select do |t|
       t['variables'] && t['variables'].respond_to?(:xpath)
     end.map do |resource|
@@ -703,7 +703,7 @@ end
 
 rule 'FC051', 'Template partials loop indefinitely' do
   tags %w(correctness)
-  recipe do |_,filename|
+  recipe do |_, filename|
     cbk_templates = template_paths(filename)
 
     cbk_templates.select do |template|

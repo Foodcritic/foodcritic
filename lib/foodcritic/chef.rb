@@ -90,7 +90,7 @@ module FoodCritic
 
       # Create the search parser from the first loadable grammar.
       def create_parser(grammar_paths)
-        @search_parser ||= grammar_paths.inject(nil) do |parser,lucene_grammar|
+        @search_parser ||= grammar_paths.inject(nil) do |parser, lucene_grammar|
             begin
               break parser unless parser.nil?
               # Don't instantiate custom nodes
