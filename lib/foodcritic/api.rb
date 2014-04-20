@@ -37,8 +37,8 @@ module FoodCritic
       raise_unless_xpath!(ast)
       # TODO: This expression is too loose, but also will fail to match other
       # types of conditionals.
-      (!ast.xpath(%q{//*[self::if or self::ifop or self::unless]/*[self::aref or
-        child::aref or self::call]
+      (!ast.xpath(%q{//*[self::if or self::ifop or self::unless]/
+        *[self::aref or child::aref or self::call]
         [count(descendant::const[@value = 'Chef' or @value = 'Config']) = 2
           and
             (   count(descendant::ident[@value='solo']) > 0
@@ -46,10 +46,13 @@ module FoodCritic
             )
           ]}).empty?) ||
       ast.xpath('//if_mod[return][aref/descendant::ident/@value="solo"]/aref/
-        const_path_ref/descendant::const').map { |c|c['value'] } == %w(Chef Config)
+        const_path_ref/descendant::const').map do |c|
+        c['value']
+      end == %w(Chef Config)
     end
 
-    # Is the [chef-solo-search library](https://github.com/edelight/chef-solo-search)
+    # Is the
+    # [chef-solo-search library](https://github.com/edelight/chef-solo-search)
     # available?
     def chef_solo_search_supported?(recipe_path)
       return false if recipe_path.nil? || !File.exists?(recipe_path)
@@ -87,7 +90,8 @@ module FoodCritic
       md_path = File.join(file, 'metadata.rb')
       if File.exists?(md_path)
         name = read_ast(md_path).xpath("//stmts_add/
-          command[ident/@value='name']/descendant::tstring_content/@value").to_s
+          command[ident/@value='name']/
+          descendant::tstring_content/@value").to_s
         return name unless name.empty?
       end
       File.basename(file)
@@ -108,7 +112,8 @@ module FoodCritic
       #     %w{foo bar baz}.each do |cbk|
       #       depends cbk
       #     end
-      deps = deps.to_a + word_list_values(ast, "//command[ident/@value='depends']")
+      deps = deps.to_a +
+        word_list_values(ast, "//command[ident/@value='depends']")
       deps.uniq.map { |dep| dep['value'].strip }
     end
 
@@ -180,10 +185,12 @@ module FoodCritic
         filter << '[count(descendant::string_embexpr) = 0]'
       end
 
-      string_desc = '[descendant::args_add/string_literal]/descendant::tstring_content'
+      string_desc = '[descendant::args_add/string_literal]/
+        descendant::tstring_content'
       included = ast.xpath([
         "//command[ident/@value = 'include_recipe']",
-        "//fcall[ident/@value = 'include_recipe']/following-sibling::arg_paren",
+        "//fcall[ident/@value = 'include_recipe']/
+         following-sibling::arg_paren",
       ].map do |recipe_include|
         recipe_include + filter.join + string_desc
       end.join(' | '))
@@ -239,7 +246,9 @@ module FoodCritic
     def resource_attributes_by_type(ast)
       result = {}
       resources_by_type(ast).each do |type, resources|
-        result[type] = resources.map { |resource| resource_attributes(resource) }
+        result[type] = resources.map do |resource|
+          resource_attributes(resource)
+        end
       end
       result
     end
@@ -252,7 +261,8 @@ module FoodCritic
         name = resource.xpath('command/args_add_block')
         if name.xpath('descendant::string_add').size == 1 &&
           name.xpath('descendant::string_literal').size == 1 &&
-          name.xpath('descendant::*[self::call or self::string_embexpr]').empty?
+          name.xpath(
+            'descendant::*[self::call or self::string_embexpr]').empty?
             name.xpath('descendant::tstring_content/@value').to_s
         else
           name
@@ -308,10 +318,12 @@ module FoodCritic
     # Platforms declared as supported in cookbook metadata
     def supported_platforms(ast)
       platforms = ast.xpath('//command[ident/@value="supports"]/
-        descendant::*[self::string_literal or self::symbol_literal][position() = 1]
+        descendant::*[self::string_literal or self::symbol_literal]
+        [position() = 1]
         [self::symbol_literal or count(descendant::string_add) = 1]/
         descendant::*[self::tstring_content | self::ident]')
-      platforms = platforms.to_a + word_list_values(ast, "//command[ident/@value='supports']")
+      platforms = platforms.to_a +
+        word_list_values(ast, "//command[ident/@value='supports']")
       platforms.map do |platform|
         versions = platform.xpath('ancestor::args_add[position() > 1]/
 	  string_literal/descendant::tstring_content/@value').map { |v| v.to_s }
@@ -420,7 +432,8 @@ module FoodCritic
       elsif att.xpath('descendant::symbol').empty?
         if options[:return_expressions] &&
            (att.xpath('descendant::string_add').size != 1 or
-           !att.xpath('descendant::*[self::call or self::string_embexpr]').empty?)
+            att.xpath('descendant::*[self::call or
+              self::string_embexpr]').any?)
           att
         else
           att.xpath('string(descendant::tstring_content/@value)')
@@ -437,7 +450,8 @@ module FoodCritic
     end
 
     def node_method?(meth, cookbook_dir)
-      chef_dsl_methods.include?(meth) || patched_node_method?(meth, cookbook_dir)
+      chef_dsl_methods.include?(meth) ||
+        patched_node_method?(meth, cookbook_dir)
     end
 
     def normal_attributes(resource, options = {})
@@ -563,8 +577,9 @@ module FoodCritic
       if var_ref.empty?
         []
       else
-        ast.xpath(%Q{descendant::block_var/params/ident#{var_ref.first['value']}/
-          ancestor::method_add_block/call/descendant::tstring_content})
+        ast.xpath(%Q{descendant::block_var/params/
+          ident#{var_ref.first['value']}/ancestor::method_add_block/call/
+          descendant::tstring_content})
       end
     end
   end

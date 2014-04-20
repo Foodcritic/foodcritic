@@ -1,6 +1,7 @@
 module FoodCritic
   # This module contains the logic for the parsing of
-  # [Chef Notifications](http://wiki.opscode.com/display/chef/Resources#Resources-Notifications).
+  # [Chef Notifications]
+  # (http://docs.opscode.com/resource_common.html#notifications).
   module Notifications
     # Extracts notification details from the provided AST, returning an
     # array of notification hashes.
@@ -98,7 +99,8 @@ module FoodCritic
     end
 
     def notification_timing(notify)
-      # The notification timing should be the last symbol on the notifies element.
+      # The notification timing should be the last symbol
+      # on the notifies element.
       timing = notify.xpath('args_add_block/args_add/symbol_literal[last()]/
         symbol/ident[1]/@value')
       if timing.empty?
@@ -122,7 +124,8 @@ module FoodCritic
 
     def notification_action(notify)
       notify.xpath('descendant::symbol[1]/ident/@value |
-        descendant::dyna_symbol[1]/xstring_add/tstring_content/@value').first.to_s.to_sym
+        descendant::dyna_symbol[1]/xstring_add/
+        tstring_content/@value').first.to_s.to_sym
     end
 
     def notification_nodes(ast, &block)

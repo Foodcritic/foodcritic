@@ -12,7 +12,11 @@ module FoodCritic
     #
     def initialize(rule, match = {}, options = {})
       @rule, @match = rule, match
-      @is_failed = options[:fail_tags].empty? ? false : rule.matches_tags?(options[:fail_tags])
+      @is_failed = if options[:fail_tags].empty?
+                     false
+                   else
+                     rule.matches_tags?(options[:fail_tags])
+                   end
     end
 
     # If this warning has failed or not.
@@ -75,7 +79,7 @@ module FoodCritic
       ['any'] + @tags
     end
 
-    # Checks the rule's tags to see if they match a Gherkin (Cucumber) expression
+    # Checks the rule tags to see if they match a Gherkin (Cucumber) expression
     def matches_tags?(tag_expr)
       Gherkin::TagExpression.new(tag_expr).evaluate(tags.map do |t|
         Gherkin::Formatter::Model::Tag.new(t, 1)

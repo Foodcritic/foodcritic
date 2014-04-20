@@ -37,8 +37,8 @@ module FoodCritic
       yield self
     end
 
-    # Add tags to the rule which can be used by the end user to filter the rules
-    # to be applied.
+    # Add tags to the rule which can be used by the end user to filter the
+    # rules to be applied.
     def tags(tags)
       rules.last.tags += tags
     end

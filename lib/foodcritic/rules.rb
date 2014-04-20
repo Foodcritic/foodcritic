@@ -1,8 +1,8 @@
 # This file contains all of the rules that ship with foodcritic.
 #
-# * Foodcritic rules perform static code analysis - rather than the cookbook code
-#   being loaded by the interpreter it is parsed into a tree (AST) that is then
-#   passed to each rule.
+# * Foodcritic rules perform static code analysis - rather than the cookbook
+#   code being loaded by the interpreter it is parsed into a tree (AST) that is
+#   then passed to each rule.
 # * Rules can use a number of API functions that ship with foodcritic to make
 #   sense of the parse tree.
 # * Rules can also use XPath to query the AST. A rule can consist of a XPath
@@ -27,7 +27,7 @@ rule 'FC002', 'Avoid string interpolation where not required' do
 end
 
 rule 'FC003',
-     'Check whether you are running with chef server before using' +
+     'Check whether you are running with chef server before using'\
      ' server-specific features' do
   tags %w(portability solo)
   recipe do |ast, filename|
@@ -81,16 +81,20 @@ rule 'FC005', 'Avoid repetition of resource declarations' do
 end
 
 rule 'FC006',
-     'Mode should be quoted or fully specified when setting file permissions' do
+     'Mode should be quoted or fully specified when '\
+     'setting file permissions' do
   tags %w(correctness files)
   recipe do |ast|
     ast.xpath(%q{//ident[@value='mode']/parent::command/
-      descendant::int[string-length(@value) < 5 and not(starts-with(@value, "0")
-      and string-length(@value) = 4)][count(ancestor::aref) = 0]/ancestor::method_add_block})
+      descendant::int[string-length(@value) < 5
+      and not(starts-with(@value, "0")
+      and string-length(@value) = 4)][count(ancestor::aref) = 0]/
+      ancestor::method_add_block})
   end
 end
 
-rule 'FC007', 'Ensure recipe dependencies are reflected in cookbook metadata' do
+rule 'FC007', 'Ensure recipe dependencies are reflected '\
+              'in cookbook metadata' do
   tags %w(correctness metadata)
   recipe do |ast, filename|
     metadata_path = Pathname.new(
@@ -260,7 +264,8 @@ rule 'FC019', 'Access node attributes in a consistent manner' do
   tags %w(style attributes)
   cookbook do |cookbook_dir|
     asts = {}; files = Dir["#{cookbook_dir}/*/*.rb"].reject do |file|
-      relative_path = Pathname.new(file).relative_path_from(Pathname.new(cookbook_dir))
+      relative_path = Pathname.new(file).relative_path_from(
+        Pathname.new(cookbook_dir))
       relative_path.to_s.split(File::SEPARATOR).include?('spec')
     end.map do |file|
       { path: file, ast: read_ast(file) }
@@ -278,9 +283,13 @@ rule 'FC019', 'Access node attributes in a consistent manner' do
       }
     end.reject { |type| type[:count] == 0 }
     if asts.size > 1
-      least_used = asts[types.min { |a, b| a[:count] <=> b[:count] }[:access_type]]
+      least_used = asts[types.min do |a, b|
+        a[:count] <=> b[:count]
+      end[:access_type]]
       least_used.map do |file|
-        file[:ast].map { |ast| match(ast).merge(filename: file[:path]) }.flatten
+        file[:ast].map do |ast|
+          match(ast).merge(filename: file[:path])
+        end.flatten
       end
     end
   end
@@ -319,9 +328,13 @@ rule 'FC022', 'Resource condition within loop may not behave as expected' do
         unless (block_vars &
           (resource.xpath(%q{descendant::ident[@value='not_if' or
           @value='only_if']/ancestor::*[self::method_add_block or
-          self::command][1]/descendant::ident/@value}).map { |a| a.value })).empty?
+          self::command][1]/descendant::ident/@value}).map do |a|
+            a.value
+          end)).empty?
           c = resource.xpath('command[count(descendant::string_embexpr) = 0]')
-          next if resource.xpath('command/ident/@value').first.value == 'define'
+          if resource.xpath('command/ident/@value').first.value == 'define'
+            next
+          end
           resource unless c.empty? || block_vars.any? do |var|
             !resource.xpath(%Q{command/args_add_block/args_add/
               var_ref/ident[@value='#{var}']}).empty?
@@ -358,10 +371,12 @@ rule 'FC024', 'Consider adding platform equivalents' do
     end
     md_platforms = RHEL if md_platforms.empty?
 
-    ['//method_add_arg[fcall/ident/@value="platform?"]/arg_paren/args_add_block',
+    ['//method_add_arg[fcall/ident/@value="platform?"]/
+      arg_paren/args_add_block',
      '//when'].map do |expr|
       ast.xpath(expr).map do |whn|
-        platforms = whn.xpath('args_add/descendant::tstring_content').map do |p|
+        platforms = whn.xpath('args_add/
+                               descendant::tstring_content').map do |p|
           p['value']
         end.sort
         unless platforms.size == 1 || (md_platforms & platforms).empty?
@@ -382,7 +397,8 @@ rule 'FC025', 'Prefer chef_gem to compile-time gem install' do
       [descendant::ident/@value='nothing']]]")
     gem_install.map do |install|
       gem_var = install.xpath('var_field/ident/@value')
-      unless ast.xpath("//method_add_arg[call/var_ref/ident/@value='#{gem_var}']
+      unless ast.xpath("//method_add_arg[call/
+        var_ref/ident/@value='#{gem_var}']
         [arg_paren/descendant::ident/@value='install' or
          arg_paren/descendant::ident/@value='upgrade']").empty?
         gem_install
@@ -551,7 +567,8 @@ rule 'FC038', 'Invalid resource action' do
     find_resources(ast).select do |resource|
       actions = resource_attributes(resource)['action']
       if actions.respond_to?(:xpath)
-        actions = actions.xpath('descendant::array/descendant::symbol/ident/@value')
+        actions = actions.xpath('descendant::array/
+          descendant::symbol/ident/@value')
       else
         actions = Array(actions)
       end
@@ -625,7 +642,9 @@ end
 rule 'FC044', 'Avoid bare attribute keys' do
   tags %w(style)
   attributes do |ast|
-    declared = ast.xpath('//descendant::var_field/ident/@value').map { |v| v.to_s }
+    declared = ast.xpath('//descendant::var_field/ident/@value').map do |v|
+      v.to_s
+    end
     ast.xpath('//assign/*[self::vcall or self::var_ref]
       [count(child::kw) = 0]/ident').select do |v|
         (v['value'] != 'secure_password') &&
@@ -652,7 +671,9 @@ end
 
 rule 'FC046', 'Attribute assignment uses assign unless nil' do
   attributes do |ast|
-    attribute_access(ast).map { |a| a.xpath('ancestor::opassign/op[@value="||="]') }
+    attribute_access(ast).map do |a|
+      a.xpath('ancestor::opassign/op[@value="||="]')
+    end
   end
 end
 
@@ -665,7 +686,8 @@ rule 'FC047', 'Attribute assignment does not specify precedence' do
       att.xpath(%Q{ancestor::assign[*[self::field | self::aref_field]
         [descendant::*[self::vcall | self::var_ref][ident/@value="node"]
         #{exclude_att_types}]]}, AttFilter.new) +
-        att.xpath(%Q{ancestor::binary[@value="<<"]/*[position() = 1][self::aref]
+        att.xpath(%Q{ancestor::binary[@value="<<"]/*[position() = 1]
+          [self::aref]
           [descendant::*[self::vcall | self::var_ref]#{exclude_att_types}
           /ident/@value="node"]}, AttFilter.new)
     end

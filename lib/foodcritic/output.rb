@@ -50,7 +50,8 @@ module FoodCritic
             # Find the first warning within our context
             context_warns = context_set & warn_lines
             next_warn = context_warns.min
-            # We may need to interrupt the trailing context of a previous warning
+            # We may need to interrupt the trailing context
+            # of a previous warning
             next_warn = file.lineno if warn_lines.include? file.lineno
 
             # Display a warning

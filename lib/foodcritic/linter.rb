@@ -211,12 +211,15 @@ module FoodCritic
           exclusions = []
 
           unless paths[:exclude].empty?
-            exclusions = Dir.glob(paths[:exclude].map { |p| File.join(dir, p, '**/**') })
+            exclusions = Dir.glob(paths[:exclude].map do |p|
+              File.join(dir, p, '**/**')
+            end)
           end
 
           if File.directory?(dir)
             glob = if path_type == :cookbook
-              '{metadata.rb,{attributes,definitions,libraries,providers,recipes,resources}/*.rb,templates/*/*.erb}'
+              '{metadata.rb,{attributes,definitions,libraries,providers,'\
+              'recipes,resources}/*.rb,templates/*/*.erb}'
             else
               '*.rb'
             end

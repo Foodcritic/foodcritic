@@ -46,7 +46,11 @@ module FoodCritic
     # The DSL metadata doesn't necessarily reflect the version of Chef in the
     # local user gemset.
     def load_metadata
-      version = self.respond_to?(:chef_version) ? chef_version : Linter::DEFAULT_CHEF_VERSION
+      version = if self.respond_to?(:chef_version)
+                  chef_version
+                else
+                  Linter::DEFAULT_CHEF_VERSION
+                end
       metadata_path = [version, version.sub(/\.[a-z].*/, ''),
         Linter::DEFAULT_CHEF_VERSION].map do |version|
           metadata_path(version)
@@ -90,7 +94,8 @@ module FoodCritic
 
       # Create the search parser from the first loadable grammar.
       def create_parser(grammar_paths)
-        @search_parser ||= grammar_paths.inject(nil) do |parser, lucene_grammar|
+        @search_parser ||=
+          grammar_paths.inject(nil) do |parser, lucene_grammar|
             begin
               break parser unless parser.nil?
               # Don't instantiate custom nodes
