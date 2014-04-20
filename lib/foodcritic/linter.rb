@@ -147,7 +147,7 @@ module FoodCritic
 
     def ignore_line_match?(line, rule)
       ignores = line.to_s[/\s+#\s*(.*)/, 1]
-      if ignores and ignores.include?('~')
+      if ignores && ignores.include?('~')
         !rule.matches_tags?(ignores.split(/[ ,]/))
       else
         false
@@ -175,8 +175,7 @@ module FoodCritic
 
     def active_rules(tags)
       @rules.select do |rule|
-        rule.matches_tags?(tags) and
-        applies_to_version?(rule, chef_version)
+        rule.matches_tags?(tags) && applies_to_version?(rule, chef_version)
       end
     end
 
@@ -260,7 +259,7 @@ module FoodCritic
         [key, Array(value)] if key.to_s.end_with?('paths')
       end.compact]
 
-      unless paths.find { |k, v| k != :exclude_paths and !v.empty? }
+      unless paths.find { |k, v| k != :exclude_paths && !v.empty? }
         raise ArgumentError, 'A cookbook path or role path must be specified'
       end
 

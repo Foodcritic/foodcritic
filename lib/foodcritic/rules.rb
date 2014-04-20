@@ -398,9 +398,9 @@ rule 'FC026', 'Conditional execution block attribute contains only string' do
     find_resources(ast).map { |r| resource_attributes(r) }.map do |resource|
       [resource['not_if'], resource['only_if']]
     end.flatten.compact.select do |condition|
-      condition.respond_to?(:xpath) and
-      !condition.xpath('descendant::string_literal').empty? and
-        !condition.xpath('stmts_add/string_literal').empty? and
+      condition.respond_to?(:xpath) &&
+      !condition.xpath('descendant::string_literal').empty? &&
+        !condition.xpath('stmts_add/string_literal').empty? &&
         condition.xpath('descendant::stmts_add[count(ancestor::
           string_literal) = 0]').size == 1
     end
@@ -502,7 +502,7 @@ rule 'FC034', 'Unused template variables' do
   tags %w(correctness)
   recipe do |ast,filename|
     Array(resource_attributes_by_type(ast)['template']).select do |t|
-      t['variables'] and t['variables'].respond_to?(:xpath)
+      t['variables'] && t['variables'].respond_to?(:xpath)
     end.map do |resource|
       all_templates = template_paths(filename)
       template_paths = all_templates.select do |path|
@@ -539,7 +539,7 @@ rule 'FC037', 'Invalid notification action' do
           when :notifies then n[:resource_type]
           when :subscribes then resource_type(resource).to_sym
         end
-        n[:action].size > 0 and !resource_action?(type, n[:action])
+        n[:action].size > 0 && !resource_action?(type, n[:action])
       end
     end
   end
@@ -686,7 +686,7 @@ rule 'FC049', 'Role name does not match containing file name' do
   role do |ast, filename|
     role_name_specified = field_value(ast, :name)
     role_name_file = Pathname.new(filename).basename.sub_ext('').to_s
-    if role_name_specified and role_name_specified != role_name_file
+    if role_name_specified && role_name_specified != role_name_file
       field(ast, :name)
     end
   end

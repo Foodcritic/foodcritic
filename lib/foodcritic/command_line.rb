@@ -84,7 +84,7 @@ module FoodCritic
     #
     # @return [Boolean] True if help should be shown.
     def show_help?
-      @args.length == 1 and @args.first == '--help'
+      @args.length == 1 && @args.first == '--help'
     end
 
     # The help text.

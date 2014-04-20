@@ -250,8 +250,8 @@ module FoodCritic
       options = { return_expressions: false }.merge(options)
       if options[:return_expressions]
         name = resource.xpath('command/args_add_block')
-        if name.xpath('descendant::string_add').size == 1 and
-          name.xpath('descendant::string_literal').size == 1 and
+        if name.xpath('descendant::string_add').size == 1 &&
+          name.xpath('descendant::string_literal').size == 1 &&
           name.xpath('descendant::*[self::call or self::string_embexpr]').empty?
             name.xpath('descendant::tstring_content/@value').to_s
         else
@@ -367,7 +367,7 @@ module FoodCritic
       resource.xpath("do_block/descendant::method_add_block[
         count(ancestor::do_block) = 1][brace_block | do_block]").each do |batt|
           att_name = batt.xpath('string(method_add_arg/fcall/ident/@value)')
-          if att_name and !att_name.empty? and batt.children.length > 1
+          if att_name && !att_name.empty? && batt.children.length > 1
             atts[att_name] = batt.children[1]
           end
       end
@@ -418,7 +418,7 @@ module FoodCritic
       elsif !att.xpath('descendant::int').empty?
         att.xpath('descendant::int/@value').to_s
       elsif att.xpath('descendant::symbol').empty?
-        if options[:return_expressions] and
+        if options[:return_expressions] &&
            (att.xpath('descendant::string_add').size != 1 or
            !att.xpath('descendant::*[self::call or self::string_embexpr]').empty?)
           att
@@ -551,8 +551,8 @@ module FoodCritic
         #{ignore_attributes_xpath(options[:ignore])}
         [@value='.'][count(following-sibling::arg_paren) = 0]}, AttFilter.new)
       calls.select do |call|
-        call.xpath('aref/args_add_block').size == 0 and
-          (call.xpath('descendant::ident').size > 1 and
+        call.xpath('aref/args_add_block').size == 0 &&
+          (call.xpath('descendant::ident').size > 1 &&
             !node_method?(call.xpath('ident/@value').to_s.to_sym,
                           options[:cookbook_dir]))
       end.sort
