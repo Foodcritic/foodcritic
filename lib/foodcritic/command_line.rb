@@ -1,8 +1,6 @@
 module FoodCritic
-
   # Command line parsing.
   class CommandLine
-
     # Create a new instance of CommandLine
     #
     # @param [Array] args The command line arguments
@@ -177,7 +175,5 @@ module FoodCritic
     def original_options
       @options
     end
-
   end
-
 end

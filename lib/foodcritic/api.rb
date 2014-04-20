@@ -2,10 +2,8 @@ require 'nokogiri'
 require 'rufus-lru'
 
 module FoodCritic
-
   # Helper methods that form part of the Rules DSL.
   module Api
-
     include FoodCritic::AST
     include FoodCritic::XML
 
@@ -569,7 +567,5 @@ module FoodCritic
           ancestor::method_add_block/call/descendant::tstring_content})
       end
     end
-
   end
-
 end

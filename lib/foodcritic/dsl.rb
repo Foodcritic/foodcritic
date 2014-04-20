@@ -1,7 +1,6 @@
 require 'pathname'
 
 module FoodCritic
-
   # The DSL methods exposed for defining rules. A minimal example rule:
   #
   #     rule "FC123", "My rule name" do
@@ -82,7 +81,5 @@ module FoodCritic
       end
       dsl.rules
     end
-
   end
-
 end

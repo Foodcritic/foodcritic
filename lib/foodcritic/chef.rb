@@ -1,8 +1,6 @@
 module FoodCritic
-
   # Encapsulates functions that previously were calls to the Chef gem.
   module Chef
-
     def chef_dsl_methods
       load_metadata
       @dsl_metadata[:dsl_methods].map(&:to_sym)
@@ -80,7 +78,6 @@ module FoodCritic
     end
 
     class Search
-
       # The search grammars that ship with any Chef gems installed locally.
       # These are returned in descending version order (a newer Chef version
       #   could break our ability to load the grammar).
@@ -115,8 +112,6 @@ module FoodCritic
       def parser
         @search_parser
       end
-
     end
   end
-
 end

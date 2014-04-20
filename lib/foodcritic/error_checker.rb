@@ -1,8 +1,6 @@
 module FoodCritic
-
   # Expose if any errors are found in parsing
   class ErrorChecker < Ripper::SexpBuilder
-
     # Create a new instance of ErrorChecker
     #
     # @see Ripper::SexpBuilder#initialize
@@ -25,6 +23,5 @@ module FoodCritic
     end
 
     self.register_error_handlers
-
   end
 end

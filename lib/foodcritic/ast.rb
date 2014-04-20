@@ -1,6 +1,5 @@
 module FoodCritic
   module AST
-
     private
 
     def ast_hash_node?(node)
@@ -16,7 +15,5 @@ module FoodCritic
       node.respond_to?(:length) and node.length == 2 and
         node.respond_to?(:all?) and node.all? { |child| child.respond_to?(:to_i) }
     end
-
   end
-
 end

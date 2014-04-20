@@ -6,7 +6,6 @@ require 'set'
 module FoodCritic
   # The main entry point for linting your Chef cookbooks.
   class Linter
-
     include FoodCritic::Api
 
     # The default version that will be used to determine relevant rules. This
@@ -45,7 +44,6 @@ module FoodCritic
     # * `:exclude_paths` - Paths to exclude from linting
     #
     def check(options = {})
-
       options = setup_defaults(options)
       @options = options
       @chef_version = options[:chef_version] || DEFAULT_CHEF_VERSION
@@ -275,6 +273,5 @@ module FoodCritic
       { tags: [], fail_tags: [], include_rules: [], exclude_paths: [],
        cookbook_paths: [], role_paths: [] }.merge(options)
     end
-
   end
 end

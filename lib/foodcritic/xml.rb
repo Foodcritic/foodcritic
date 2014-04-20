@@ -1,6 +1,5 @@
 module FoodCritic
   module XML
-
     private
 
     def xml_array_node(doc, xml_node, child)
@@ -36,5 +35,4 @@ module FoodCritic
       xml_node.add_child(pos)
     end
   end
-
 end

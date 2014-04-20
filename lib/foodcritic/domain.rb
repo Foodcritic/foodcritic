@@ -1,7 +1,6 @@
 require 'gherkin/tag_expression'
 
 module FoodCritic
-
   # A warning of a possible issue
   class Warning
     attr_reader :rule, :match, :is_failed
@@ -24,7 +23,6 @@ module FoodCritic
 
   # The collected warnings (if any) raised against a cookbook tree.
   class Review
-
     attr_reader :cookbook_paths, :warnings
 
     def initialize(cookbook_paths, warnings)
@@ -89,5 +87,4 @@ module FoodCritic
       "#{@code}: #{@name}"
     end
   end
-
 end

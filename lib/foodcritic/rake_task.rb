@@ -33,7 +33,6 @@ module FoodCritic
           abort if result.failed?
         end
       end
-
     end
   end
 end

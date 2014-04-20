@@ -1,9 +1,7 @@
 module FoodCritic
   module Template
-
     # Extract expressions <%= expr %> from Erb templates.
     class ExpressionExtractor
-
       include Erubis::Basic::Converter
 
       def initialize
@@ -23,15 +21,12 @@ module FoodCritic
       end
 
       def add_text(src, text)
-
       end
 
       def add_preamble(codebuf)
-
       end
 
       def add_postamble(codebuf)
-
       end
 
       def add_stmt(src, code)
@@ -70,8 +65,6 @@ module FoodCritic
         end
         line_offsets.each_with_index.map { |pos, ln| [ln + 1, pos] }
       end
-
     end
-
   end
 end

@@ -1,7 +1,6 @@
 require 'set'
 
 module FoodCritic
-
   # Default output showing a summary view.
   class SummaryOutput
     # Output a summary view only listing the matching rules, file and line
@@ -15,7 +14,6 @@ module FoodCritic
 
   # Display rule matches with surrounding context.
   class ContextOutput
-
     # Output the review showing matching lines with context.
     #
     # @param [Review] review The review to output.
@@ -120,7 +118,5 @@ module FoodCritic
         puts text
       end
     end
-
   end
-
 end

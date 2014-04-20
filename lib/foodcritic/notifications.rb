@@ -1,9 +1,7 @@
 module FoodCritic
-
   # This module contains the logic for the parsing of
   # [Chef Notifications](http://wiki.opscode.com/display/chef/Resources#Resources-Notifications).
   module Notifications
-
     # Extracts notification details from the provided AST, returning an
     # array of notification hashes.
     #
@@ -61,7 +59,6 @@ module FoodCritic
     # Extract the `:resource_name` and `:resource_type` from a new-style
     # notification.
     def new_style_notification(notify)
-
       # Given `notifies :restart, "service[foo]"` the target is the
       # `"service[foo]"` string portion.
       target_path = 'args_add_block/args_add/descendant::
@@ -142,6 +139,5 @@ module FoodCritic
       ast.xpath('descendant::method_add_arg[fcall/ident/
         @value="resources"]/descendant::assoc_new')
     end
-
   end
 end
