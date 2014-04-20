@@ -23,7 +23,7 @@ module FoodCritic
 
     # Is this a valid Lucene query?
     def valid_query?(query)
-      raise ArgumentError, 'Query cannot be nil or empty' if query.to_s.empty?
+      fail ArgumentError, 'Query cannot be nil or empty' if query.to_s.empty?
 
       # Attempt to create a search query parser
       search = FoodCritic::Chef::Search.new
@@ -66,7 +66,7 @@ module FoodCritic
 
     def resource_check?(key, resource_type, field)
       if resource_type.to_s.empty? || field.to_s.empty?
-        raise ArgumentError, 'Arguments cannot be nil or empty.'
+        fail ArgumentError, 'Arguments cannot be nil or empty.'
       end
 
       load_metadata

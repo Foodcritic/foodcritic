@@ -263,7 +263,7 @@ module FoodCritic
       end.compact]
 
       unless paths.find { |k, v| k != :exclude_paths && !v.empty? }
-        raise ArgumentError, 'A cookbook path or role path must be specified'
+        fail ArgumentError, 'A cookbook path or role path must be specified'
       end
 
       Hash[paths.map do |key, value|

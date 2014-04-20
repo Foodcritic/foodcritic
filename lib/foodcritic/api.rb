@@ -18,7 +18,7 @@ module FoodCritic
       return [] unless ast.respond_to?(:xpath)
 
       unless [:any, :string, :symbol, :vivified].include?(options[:type])
-        raise ArgumentError, 'Node type not recognised'
+        fail ArgumentError, 'Node type not recognised'
       end
 
       case options[:type]
@@ -77,7 +77,7 @@ module FoodCritic
 
     # The name of the cookbook containing the specified file.
     def cookbook_name(file)
-      raise ArgumentError, 'File cannot be nil or empty' if file.to_s.empty?
+      fail ArgumentError, 'File cannot be nil or empty' if file.to_s.empty?
 
       until (file.split(File::SEPARATOR) & standard_cookbook_subdirs).empty? do
         file = File.absolute_path(File.dirname(file.to_s))
@@ -120,7 +120,7 @@ module FoodCritic
     # The key / value pair in an environment or role ruby file
     def field(ast, field_name)
       if field_name.nil? || field_name.to_s.empty?
-        raise ArgumentError, 'Field name cannot be nil or empty'
+        fail ArgumentError, 'Field name cannot be nil or empty'
       end
       ast.xpath("//command[ident/@value='#{field_name}']")
     end
@@ -135,7 +135,7 @@ module FoodCritic
     # Create a match for a specified file. Use this if the presence of the file
     # triggers the warning rather than content.
     def file_match(file)
-      raise ArgumentError, 'Filename cannot be nil' if file.nil?
+      fail ArgumentError, 'Filename cannot be nil' if file.nil?
       { filename: file, matched: file, line: 1, column: 1 }
     end
 
@@ -228,7 +228,7 @@ module FoodCritic
 
     # Retrieve a single-valued attribute from the specified resource.
     def resource_attribute(resource, name)
-      raise ArgumentError, 'Attribute name cannot be empty' if name.empty?
+      fail ArgumentError, 'Attribute name cannot be empty' if name.empty?
       resource_attributes(resource)[name.to_s]
     end
 
@@ -288,7 +288,7 @@ module FoodCritic
       raise_unless_xpath!(resource)
       type = resource.xpath('string(command/ident/@value)')
       if type.empty?
-        raise ArgumentError, 'Provided AST node is not a resource'
+        fail ArgumentError, 'Provided AST node is not a resource'
       end
       type
     end
@@ -345,7 +345,7 @@ module FoodCritic
     end
 
     def templates_included(all_templates, template_path, depth = 1)
-      raise RecursedTooFarError.new(template_path) if depth > 10
+      fail RecursedTooFarError.new(template_path) if depth > 10
       partials = read_ast(template_path).xpath('//*[self::command or
         child::fcall][descendant::ident/@value="render"]//args_add/
         string_literal//tstring_content/@value').map { |p| p.to_s }
@@ -485,7 +485,7 @@ module FoodCritic
 
     def raise_unless_xpath!(ast)
       unless ast.respond_to?(:xpath)
-        raise ArgumentError, 'AST must support #xpath'
+        fail ArgumentError, 'AST must support #xpath'
       end
     end
 
