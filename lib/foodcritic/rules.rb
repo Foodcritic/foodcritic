@@ -121,8 +121,8 @@ rule 'FC008', 'Generated cookbook metadata needs updating' do
       'maintainer' => 'YOUR_COMPANY_NAME',
       'maintainer_email' => 'YOUR_EMAIL'
     }.map do |field, value|
-      ast.xpath(%Q{//command[ident/@value='#{field}']/
-                   descendant::tstring_content[@value='#{value}']})
+      ast.xpath(%Q(//command[ident/@value='#{field}']/
+                   descendant::tstring_content[@value='#{value}']))
     end
   end
 end
@@ -336,8 +336,8 @@ rule 'FC022', 'Resource condition within loop may not behave as expected' do
             next
           end
           resource unless c.empty? || block_vars.any? do |var|
-            !resource.xpath(%Q{command/args_add_block/args_add/
-              var_ref/ident[@value='#{var}']}).empty?
+            !resource.xpath(%Q(command/args_add_block/args_add/
+              var_ref/ident[@value='#{var}'])).empty?
           end
         end
       end
@@ -684,9 +684,9 @@ rule 'FC047', 'Attribute assignment does not specify precedence' do
     attribute_access(ast).map do |att|
       exclude_att_types = '[count(following-sibling::ident[
         is_att_type(@value) or @value = "run_state"]) = 0]'
-      att.xpath(%Q{ancestor::assign[*[self::field | self::aref_field]
+      att.xpath(%Q(ancestor::assign[*[self::field | self::aref_field]
         [descendant::*[self::vcall | self::var_ref][ident/@value="node"]
-        #{exclude_att_types}]]}, AttFilter.new) +
+        #{exclude_att_types}]]), AttFilter.new) +
         att.xpath(%Q{ancestor::binary[@value="<<"]/*[position() = 1]
           [self::aref]
           [descendant::*[self::vcall | self::var_ref]#{exclude_att_types}

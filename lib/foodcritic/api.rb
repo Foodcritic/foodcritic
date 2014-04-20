@@ -577,9 +577,9 @@ module FoodCritic
       if var_ref.empty?
         []
       else
-        ast.xpath(%Q{descendant::block_var/params/
+        ast.xpath(%Q(descendant::block_var/params/
           ident#{var_ref.first['value']}/ancestor::method_add_block/call/
-          descendant::tstring_content})
+          descendant::tstring_content))
       end
     end
   end
