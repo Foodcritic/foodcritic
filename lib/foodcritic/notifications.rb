@@ -110,12 +110,11 @@ module FoodCritic
         :delayed
       else
         case timing.first.to_s.to_sym
-          # Both forms are valid, but we return `:immediate` for both to avoid
-          # the caller having to recognise both.
-          when :immediately, :immediate then :immediate
-
-          # Pass the timing through unmodified if we don't recognise it.
-          else timing.first.to_s.to_sym
+        # Both forms are valid, but we return `:immediate` for both to avoid
+        # the caller having to recognise both.
+        when :immediately, :immediate then :immediate
+        # Pass the timing through unmodified if we don't recognise it.
+        else timing.first.to_s.to_sym
         end
       end
     end

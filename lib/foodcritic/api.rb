@@ -22,12 +22,12 @@ module FoodCritic
       end
 
       case options[:type]
-        when :any then
+      when :any then
           vivified_attribute_access(ast, options) +
             standard_attribute_access(ast, options)
-        when :vivified then
+      when :vivified then
           vivified_attribute_access(ast, options)
-        else
+      else
           standard_attribute_access(ast, options)
       end
     end
