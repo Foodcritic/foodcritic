@@ -162,13 +162,15 @@ module FoodCritic
 
     def cookbook_tags(file)
       tags = []
-      fc_file = "#{cookbook_dir(file)}/.foodcritic"
-      if File.exist? fc_file
-        begin
-          tag_text = File.read fc_file
-          tags = tag_text.split(/\s/)
-        rescue Errno::EACCES
-        end
+      fc_files = [ "#{cookbook_dir(file)}/.foodcritic", Pathname.new('~/.foodcritic').expand_path.to_s, Pathname.new('~/.chef/.foodcritic').expand_path.to_s ]
+      fc_files.each do |fc_file|
+       if File.exist? fc_file
+         begin
+           tag_text = File.read fc_file
+           tags.concat ( tag_text.split(/\s/) )
+         rescue Errno::EACCES
+         end
+       end
       end
       tags
     end
