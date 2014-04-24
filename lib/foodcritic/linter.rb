@@ -162,7 +162,12 @@ module FoodCritic
 
     def cookbook_tags(file)
       tags = []
-      fc_files = [ "#{cookbook_dir(file)}/.foodcritic", Pathname.new('~/.foodcritic').expand_path.to_s, Pathname.new('~/.chef/.foodcritic').expand_path.to_s ]
+      fc_files = [
+        "#{cookbook_dir(file)}/.foodcritic",
+        Pathname.new('~/.foodcritic').expand_path.to_s,
+        Pathname.new('~/.chef/.foodcritic').expand_path.to_s,
+        Pathname.new( cookbook_dir(file)).parent.parent.to_s+"/config/.foodcritic"
+      ]
       fc_files.each do |fc_file|
        if File.exist? fc_file
          begin
