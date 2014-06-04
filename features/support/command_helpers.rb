@@ -253,13 +253,13 @@ module FoodCritic
     # Assert that warnings have not been raised against the test code which
     # should have been excluded from linting.
     def assert_no_test_warnings
-      has_test_warnings?(@review).should be_false
+      has_test_warnings?(@review).should be_falsey
     end
 
     # Assert that warnings have been raised against the test code which
     # shouldn't have been excluded from linting.
     def assert_test_warnings
-      has_test_warnings?(@review).should be_true
+      has_test_warnings?(@review).should be_truthy
     end
 
     # Run a lint check with the provided command line arguments.
