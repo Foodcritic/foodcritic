@@ -14,6 +14,8 @@ module FoodCritic
       @rule, @match = rule, match
       @is_failed = if options[:fail_tags].empty?
                      false
+                   elsif options[:fail_tags] == ["all"]
+                     true
                    else
                      rule.matches_tags?(options[:fail_tags])
                    end
