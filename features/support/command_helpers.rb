@@ -5,6 +5,13 @@ module FoodCritic
   # Unless the environment variable FC_FORK_PROCESS is set to 'true' then the features will be run in the same process.
   module CommandHelpers
 
+    include MiniTest::Assertions
+
+    attr_writer :assertions
+    def assertions
+      @assertions ||= 0
+    end
+
     # The warning codes and messages displayed to the end user.
     WARNINGS = {
       'FC001' => 'Use strings in preference to symbols to access node attributes',
@@ -223,9 +230,9 @@ module FoodCritic
     # @param [String] output The warning to check for.
     def expect_output(output)
       if output.respond_to?(:~)
-        @review.should match(output)
+        @review.must_match(output)
       else
-        @review.should include(output)
+        @review.must_include(output)
       end
     end
 
@@ -234,32 +241,32 @@ module FoodCritic
     # @param [String] output The output to check for.
     def expect_no_output(output)
       if output.respond_to?(:~)
-        @review.should_not match(output)
+        @review.wont_match(output)
       else
-        @review.should_not include(output)
+        @review.wont_include(output)
       end
     end
 
     # Assert that an error occurred following a lint check.
     def assert_error_occurred
-      @status.should_not == 0
+      @status.wont_equal 0
     end
 
     # Assert that no error occurred following a lint check.
     def assert_no_error_occurred
-      @status.should == 0
+      @status.must_equal 0
     end
 
     # Assert that warnings have not been raised against the test code which
     # should have been excluded from linting.
     def assert_no_test_warnings
-      has_test_warnings?(@review).should be_false
+      refute has_test_warnings?(@review)
     end
 
     # Assert that warnings have been raised against the test code which
     # shouldn't have been excluded from linting.
     def assert_test_warnings
-      has_test_warnings?(@review).should be_true
+      assert has_test_warnings?(@review)
     end
 
     # Run a lint check with the provided command line arguments.
@@ -300,13 +307,13 @@ module FoodCritic
     # Assert that warnings have not been raised against the test code which
     # should have been excluded from linting.
     def assert_no_test_warnings
-      has_test_warnings?(all_output).should be_false
+      refute has_test_warnings?(all_output)
     end
 
     # Assert that warnings have been raised against the test code which
     # shouldn't have been excluded from linting.
     def assert_test_warnings
-      has_test_warnings?(all_output).should be_true
+      assert has_test_warnings?(all_output)
     end
 
     # The available tasks for this build
