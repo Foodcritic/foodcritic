@@ -170,6 +170,15 @@ describe FoodCritic::Api do
   end
 
   describe "#cookbook_name" do
+    def mock_cookbook_metadata(f)
+      dir = File.dirname(f)
+      unless File.directory?(dir)
+          FileUtils.mkdir_p(dir)
+      end
+      File.open(f, 'w') { |file| file.write('name "YOUR_COOKBOOK_NAME"') }
+    end
+
+    metadata_path='/tmp/fc/mock/cb/metadata.rb'
     it "raises if passed a nil" do
       lambda{api.cookbook_name(nil)}.must_raise ArgumentError
     end
@@ -186,6 +195,10 @@ describe FoodCritic::Api do
     it "returns the cookbook name when passed a template" do
       erb_path = 'cookbooks/apache2/templates/default/a2ensite.erb'
       api.cookbook_name(erb_path).must_equal 'apache2'
+    end
+    it "returns the cookbook name when passed the cookbook metadata with a name field" do
+      mock_cookbook_metadata(metadata_path)
+      api.cookbook_name(metadata_path).must_equal 'YOUR_COOKBOOK_NAME'
     end
   end
 
