@@ -87,9 +87,10 @@ module FoodCritic
         value = read_ast(md_path).xpath("//stmts_add/
           command[ident/@value='#{field}']/
           descendant::tstring_content/@value").to_s
+        raise RuntimeError, "Cant read name from #{md_path}" if value.to_s.empty?
         return value
       else
-        raise IOError, "Cant read #{md_path}"
+        raise RuntimeError, "Cant find #{md_path}"
       end
     end
 
@@ -101,7 +102,7 @@ module FoodCritic
       # name if metadata_field fails
       begin
         metadata_field(file, 'name')
-      rescue IOError
+      rescue RuntimeError
         until (file.split(File::SEPARATOR) & standard_cookbook_subdirs).empty? do
           file = File.absolute_path(File.dirname(file.to_s))
         end
