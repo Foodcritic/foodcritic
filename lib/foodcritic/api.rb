@@ -75,26 +75,53 @@ module FoodCritic
       end
     end
 
-    # The name of the cookbook containing the specified file.
-    def cookbook_name(file)
-      fail ArgumentError, 'File cannot be nil or empty' if file.to_s.empty?
-
+    # Support function to retrieve a metadata field
+    def metadata_field(file, field)
       until (file.split(File::SEPARATOR) & standard_cookbook_subdirs).empty? do
         file = File.absolute_path(File.dirname(file.to_s))
       end
       file = File.dirname(file) unless File.extname(file).empty?
-      # We now have the name of the directory that contains the cookbook.
 
-      # We also need to consult the metadata in case the cookbook name has been
-      # overridden there. This supports only string literals.
       md_path = File.join(file, 'metadata.rb')
       if File.exist?(md_path)
-        name = read_ast(md_path).xpath("//stmts_add/
-          command[ident/@value='name']/
+        value = read_ast(md_path).xpath("//stmts_add/
+          command[ident/@value='#{field}']/
           descendant::tstring_content/@value").to_s
-        return name unless name.empty?
+        return value
+      else
+        raise IOError, "Cant read #{md_path}"
       end
-      File.basename(file)
+    end
+
+    # The name of the cookbook containing the specified file.
+    def cookbook_name(file)
+      fail ArgumentError, 'File cannot be nil or empty' if file.to_s.empty?
+
+      # Name is a special case as we want to fallback to the cookbook directory
+      # name if metadata_field fails
+      begin
+        metadata_field(file, 'name')
+      rescue IOError
+        until (file.split(File::SEPARATOR) & standard_cookbook_subdirs).empty? do
+          file = File.absolute_path(File.dirname(file.to_s))
+        end
+        file = File.dirname(file) unless File.extname(file).empty?
+        File.basename(file)
+      end
+    end
+
+    # The maintainer of the cookbook containing the specified file.
+    def cookbook_maintainer(file)
+      fail ArgumentError, 'File cannot be nil or empty' if file.to_s.empty?
+
+      metadata_field(file, 'maintainer')
+    end
+
+    # The maintainer email of the cookbook containing the specified file.
+    def cookbook_maintainer_email(file)
+      fail ArgumentError, 'File cannot be nil or empty' if file.to_s.empty?
+
+      metadata_field(file, 'maintainer_email')
     end
 
     # The dependencies declared in cookbook metadata.
