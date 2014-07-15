@@ -202,6 +202,72 @@ describe FoodCritic::Api do
     end
   end
 
+  describe "#cookbook_maintainer" do
+    def mock_cookbook_metadata(f)
+      dir = File.dirname(f)
+      unless File.directory?(dir)
+          FileUtils.mkdir_p(dir)
+      end
+      File.open(f, 'w') { |file| file.write('maintainer "YOUR_COMPANY_NAME"') }
+    end
+
+    metadata_path='/tmp/fc/mock/cb/metadata.rb'
+    it "raises if passed a nil" do
+      lambda{api.cookbook_maintainer(nil)}.must_raise ArgumentError
+    end
+    it "raises if passed an empty string" do
+      lambda{api.cookbook_maintainer('')}.must_raise ArgumentError
+    end
+    it "raises if the path does not exist" do
+      lambda{api.cookbook_maintainer('/tmp/non-existent-path')}.must_raise RuntimeError
+    end
+    it "returns the cookbook maintainer when passed the cookbook metadata" do
+      mock_cookbook_metadata(metadata_path)
+      api.cookbook_maintainer(metadata_path).must_equal 'YOUR_COMPANY_NAME'
+    end
+    it "returns the cookbook maintainer when passed a recipe" do
+      mock_cookbook_metadata(metadata_path)
+      api.cookbook_maintainer('/tmp/fc/mock/cb/recipes/default.rb').must_equal 'YOUR_COMPANY_NAME'
+    end
+    it "returns the cookbook maintainer when passed a template" do
+      mock_cookbook_metadata(metadata_path)
+      api.cookbook_maintainer('/tmp/fc/mock/cb/templates/default/mock.erb').must_equal 'YOUR_COMPANY_NAME'
+    end
+  end
+
+  describe "#cookbook_maintainer_email" do
+    def mock_cookbook_metadata(f)
+      dir = File.dirname(f)
+      unless File.directory?(dir)
+          FileUtils.mkdir_p(dir)
+      end
+      File.open(f, 'w') { |file| file.write('maintainer_email "YOUR_EMAIL"') }
+    end
+
+    metadata_path='/tmp/fc/mock/cb/metadata.rb'
+    it "raises if passed a nil" do
+      lambda{api.cookbook_maintainer_email(nil)}.must_raise ArgumentError
+    end
+    it "raises if passed an empty string" do
+      lambda{api.cookbook_maintainer_email('')}.must_raise ArgumentError
+    end
+    it "raises if the path does not exist" do
+      lambda{api.cookbook_maintainer_email('/tmp/non-existent-path')}.must_raise RuntimeError
+    end
+    it "returns the cookbook maintainer_email when passed the cookbook metadata" do
+      mock_cookbook_metadata(metadata_path)
+      api.cookbook_maintainer_email(metadata_path).must_equal 'YOUR_EMAIL'
+    end
+    it "returns the cookbook maintainer_email when passed a recipe" do
+      mock_cookbook_metadata(metadata_path)
+      api.cookbook_maintainer_email('/tmp/fc/mock/cb/recipes/default.rb').must_equal 'YOUR_EMAIL'
+    end
+    it "returns the cookbook maintainer_email when passed a template" do
+      mock_cookbook_metadata(metadata_path)
+      api.cookbook_maintainer_email('/tmp/fc/mock/cb/templates/default/mock.erb').must_equal 'YOUR_EMAIL'
+    end
+  end
+
   describe "#declared_dependencies" do
     it "raises if the ast does not support XPath" do
       lambda{api.declared_dependencies(nil)}.must_raise ArgumentError
