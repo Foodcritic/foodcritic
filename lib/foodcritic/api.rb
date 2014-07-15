@@ -87,7 +87,7 @@ module FoodCritic
         value = read_ast(md_path).xpath("//stmts_add/
           command[ident/@value='#{field}']/
           descendant::tstring_content/@value").to_s
-        raise RuntimeError, "Cant read name from #{md_path}" if value.to_s.empty?
+        raise RuntimeError, "Cant read #{field} from #{md_path}" if value.to_s.empty?
         return value
       else
         raise RuntimeError, "Cant find #{md_path}"
