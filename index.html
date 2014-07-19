@@ -9,9 +9,27 @@ rules:
       - attributes
     applies_to: '>= 0.7.12'
     summary: |
-      This rule has been deprecated. See the discussion against
-      [issue #86](https://github.com/acrmp/foodcritic/issues/86) for more
-      detail.
+      Opscode recommend that you use strings rather than symbols when referencing node attributes.
+      See [this explanation from @jtimberman](https://github.com/acrmp/foodcritic/issues/1).
+
+      Atomic Penguin has [gisted a fixer script](https://gist.github.com/2968356)
+      you can use to convert symbol access to strings.
+    examples:
+      - title: Uses symbols to reference attributes
+        text: This example would match the FC001 rule because the `version` attribute has been referenced with a symbol.
+        code: |
+          # Don't do this
+          package "mysql-server" do
+            version node[:mysql][:version]
+            action :install
+          end
+      - title: Modified version
+        text: 'This modified example would not match the FC001 rule:'
+        code: |
+          package "mysql-server" do
+            version node['mysql']['version']
+            action :install
+          end
   - code: FC002
     name: Avoid string interpolation where not required
     tags:
