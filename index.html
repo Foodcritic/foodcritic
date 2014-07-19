@@ -9,11 +9,7 @@ rules:
       - attributes
     applies_to: '>= 0.7.12'
     summary: |
-      Opscode recommend that you use strings rather than symbols when referencing node attributes.
-      See [this explanation from @jtimberman](https://github.com/acrmp/foodcritic/issues/1).
-
-      Atomic Penguin has [gisted a fixer script](https://gist.github.com/2968356)
-      you can use to convert symbol access to strings.
+      Use strings rather than symbols when referencing node attributes.
     examples:
       - title: Uses symbols to reference attributes
         text: This example would match the FC001 rule because the `version` attribute has been referenced with a symbol.
