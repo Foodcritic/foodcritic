@@ -51,9 +51,10 @@ module FoodCritic
       warnings = []; last_dir = nil; matched_rule_tags = Set.new
       load_rules
       paths = specified_paths!(options)
+      files = expand_paths(paths)
 
       # Loop through each file to be processed and apply the rules
-      files_to_process(paths).each do |p|
+      files[:to_process].each do |p|
 
         relevant_tags = if options[:tags].any?
                           options[:tags]
@@ -78,6 +79,7 @@ module FoodCritic
                     end
 
           matches = remove_ignored(matches, state[:rule], state[:file])
+          matches = remove_exclusions(matches, paths)
 
           # Convert the matches into warnings
           matches.each do |match|
@@ -91,6 +93,14 @@ module FoodCritic
       end
 
       Review.new(paths, warnings)
+    end
+
+    def remove_exclusions(matches, exclusions)
+      matches.reject do |m|
+        matched_file = m[:filename]
+        next unless matched_file
+        exclusions.include?(matched_file)
+      end
     end
 
     def cookbook_matches(state)
@@ -204,14 +214,14 @@ module FoodCritic
     end
 
     # Return the files within a cookbook tree that we are interested in trying
-    # to match rules against.
-    def files_to_process(paths)
-      paths.reject { |type, _| type == :exclude }.map do |path_type, dirs|
+    # to match rules against, as well as the files we are excluded from matching
+    def expand_paths(paths)
+      exclusions = []
+      to_process = paths.reject { |type, _| type == :exclude }.map do |path_type, dirs|
         dirs.map do |dir|
-          exclusions = []
 
           unless paths[:exclude].empty?
-            exclusions = Dir.glob(paths[:exclude].map do |p|
+            exclusions += Dir.glob(paths[:exclude].map do |p|
               File.join(dir, p, '**/**')
             end)
           end
@@ -233,6 +243,7 @@ module FoodCritic
           { filename: filename, path_type: path_type }
         end
       end.flatten
+      {to_process: to_process, exclusions: exclusions}
     end
 
     # Invoke the DSL method with the provided parameters.
