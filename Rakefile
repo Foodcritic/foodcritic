@@ -29,7 +29,7 @@ Cucumber::Rake::Task.new(:features) do |t|
 end
 
 desc 'Run RuboCop'
-Rubocop::RakeTask.new(:rubocop) do |task|
+RuboCop::RakeTask.new(:rubocop) do |task|
   task.patterns = ['bin/*']
   task.patterns = ['lib/**/*.rb']
 end

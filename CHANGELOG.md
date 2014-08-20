@@ -1,3 +1,68 @@
+## 4.0.0 (12th June, 2014)
+
+Features:
+
+  - AST parsing is cached with a LRU cache, significantly reducing execution time
+    ([related issue](https://github.com/acrmp/foodcritic/issues/200)).
+    Thanks @dougbarth.
+  - [FC001: Use strings in preference to symbols to access node attributes](http://foodcritic.io/#FC001)
+    rule re-instated
+    ([related issue](https://github.com/acrmp/foodcritic/issues/97)).
+    Thanks @sethvargo.
+  - Relaxed nokogiri and yajl-ruby dependencies for bundling with other gems
+    ([related issue](https://github.com/acrmp/foodcritic/issues/217))
+    ([related issue](https://github.com/acrmp/foodcritic/issues/197)).
+    Thanks @lamont-granquist, @elgalu.
+  - DSL metadata for Chef versions 11.6.2 through 11.10.4 added
+    ([related issue](https://github.com/acrmp/foodcritic/issues/220)).
+    Thanks @lamont-granquist.
+  - Improved rake task output on failure
+    ([related issue](https://github.com/acrmp/foodcritic/issues/190)).
+    Thanks @mlafeldt.
+  - Allow rake task description to be specified
+    ([related issue](https://github.com/acrmp/foodcritic/issues/190)).
+    Thanks @mlafeldt.
+  - Allow the rake task to use context output
+    ([related issue](https://github.com/acrmp/foodcritic/issues/204)).
+    Thanks @docwhat.
+  - Add support for excluding paths at the command line with `-X`
+    ([related issue](https://github.com/acrmp/foodcritic/issues/207)).
+    Thanks @juanje, @docwhat.
+
+Bugfixes:
+
+  - [FC003: Check whether you are running with chef server before using server-specific features](http://foodcritic.io/#FC003)
+    would warn incorrectly against ternary expressions
+    ([related issue](https://github.com/acrmp/foodcritic/issues/185)). Thanks @zts.
+  - [FC006: Mode should be quoted or fully specified when setting file permissions](http://foodcritic.io/#FC006)
+    would warn incorrectly if the mode was a reference to an array
+    ([related issue](https://github.com/acrmp/foodcritic/issues/211)). Thanks @zts.
+  - [FC022: Resource condition within loop may not behave as expected](http://foodcritic.io/#FC022)
+    could warn incorrectly if the resource guard contained a loop
+    ([related issue](https://github.com/acrmp/foodcritic/issues/69)). Thanks
+    @jaymzh.
+  - [FC022: Resource condition within loop may not behave as expected](http://foodcritic.io/#FC022)
+    could warn incorrectly against definitions
+    ([related issue](https://github.com/acrmp/foodcritic/issues/195)). Thanks
+    @bpaquet.
+  - [FC034: Unused template variables](http://foodcritic.io/#FC034)
+    could warn incorrectly when different templates may be used based on platform.
+  - [FC040: Execute resource used to run git commands](http://foodcritic.io/#FC040)
+    would fail to warn for subsequent resources
+    ([related issue](https://github.com/acrmp/foodcritic/issues/186)). Thanks
+    @nkammah.
+  - [FC047: Attribute assignment does not specify precedence](http://foodcritic.io/#FC047)
+    would warn incorrectly on force attributes
+    ([related issue](https://github.com/acrmp/foodcritic/issues/226)). Thanks
+    @v-a.
+
+Other:
+
+  - Ruby 1.9.2 support has been removed.
+  - The default DSL metadata version has been bumped to 11.10.4
+    ([related issue](https://github.com/acrmp/foodcritic/issues/210)).
+    Thanks @kmshultz.
+
 ## 3.0.3 (13th October, 2013)
 
 Bugfixes:

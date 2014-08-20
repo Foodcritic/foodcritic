@@ -1908,11 +1908,11 @@ Then 'a warning for the custom rule should be displayed' do
 end
 
 Then 'all options should be documented in the man page' do
-  man_page_options.should == usage_options_for_diff
+  man_page_options.must_equal usage_options_for_diff
 end
 
 Then /^an? '([^']+)' error should be displayed$/ do |expected_error|
-  last_error.should include expected_error
+  last_error.must_include expected_error
 end
 
 Then 'the attribute consistency warning 019 should be shown for both of the recipes that use symbols' do
@@ -1974,7 +1974,7 @@ end
 
 Then /^the lint task will be listed( under the different name)?$/ do |diff_name|
   expected_name = diff_name ? 'lint' : 'foodcritic'
-  build_tasks.should include([expected_name, 'Lint Chef cookbooks'])
+  build_tasks.must_include([expected_name, 'Lint Chef cookbooks'])
 end
 
 Then 'no error should have occurred' do
