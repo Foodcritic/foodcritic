@@ -739,3 +739,19 @@ rule 'FC051', 'Template partials loop indefinitely' do
     end.map { |t| file_match(t) }
   end
 end
+
+rule 'FC052', 'Invalid data bag JSON' do
+  require 'JSON'
+  tags %w(correctness files)
+  cookbook do |dir|
+    Dir[File.join(dir, 'data_bags', '*', '*.json')].reject do |file|
+      begin
+        contents = File.open(file, 'rb').read
+        bag = JSON.parse(contents)
+        bag.fetch('id', nil) == File.basename(file, '.json')
+      rescue JSON::ParserError
+        false
+      end
+    end.map { |file| file_match(file) }
+  end
+end
