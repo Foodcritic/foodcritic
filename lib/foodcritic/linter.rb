@@ -63,13 +63,17 @@ module FoodCritic
     # * `:tags` - The tags to filter rules based on
     # * `:fail_tags` - The tags to fail the build on
     # * `:exclude_paths` - Paths to exclude from linting
+
+    ####### Add a way for Fail tag to override an ingnore tag
     #
     def check(options = {})
       options = setup_defaults(options)
       @options = options
       @chef_version = options[:chef_version] || DEFAULT_CHEF_VERSION
 
-      warnings = []; last_dir = nil; matched_rule_tags = Set.new
+      warnings = []
+      last_dir = nil
+      matched_rule_tags = Set.new
       load_rules
       paths = specified_paths!(options)
 
@@ -81,11 +85,12 @@ module FoodCritic
       end
 
       files.each do |p|
-        relevant_tags = if options[:tags].any?
-                          options[:tags]
-                        else
-                          cookbook_tags(p[:filename])
-                        end
+        relevant_tags = []
+        relevant_tags = options[:tags] if options[:tags].any?
+        local_tags = cookbook_tags(p[:filename])
+        relevant_tags << local_tags if local_tags.any?
+        relevant_tags.flatten!
+        relevant_tags.uniq!
 
         progress = "."
 
@@ -157,10 +162,25 @@ module FoodCritic
     end
 
     def load_rules!(options)
-      rule_files = [File.join(File.dirname(__FILE__), "rules.rb")]
+      rl_files = []
+      rule_files = [File.join(File.dirname(__FILE__), 'rules.rb')]
       rule_files << options[:include_rules]
       rule_files << rule_files_in_gems if options[:search_gems]
-      @rules = RuleDsl.load(rule_files.flatten.compact, chef_version)
+      rule_files.delete_if {|x| x == nil}
+      rule_files.flatten!
+      rule_files.uniq!
+      rule_files.each do |rl|
+        rl_files << File.expand_path(rl) if File.file?(File.expand_path(rl))
+        if File.directory?(File.expand_path(rl))
+          Dir.foreach(File.expand_path(rl)) do |r|
+            rl_files << File.join(rl, r) if File.extname(r) == '.rb'
+          end
+        end
+      end
+
+      ### Would like to include config directory under chef repo, but not sure how to correctly reference it.
+      # Pathname.new( cookbook_dir(file)).parent.parent + "/config/foodcritic/rules"
+      @rules = RuleDsl.load(rl_files.flatten.compact, chef_version)
     end
 
     private
@@ -199,20 +219,13 @@ module FoodCritic
 
     def cookbook_tags(file)
       tags = []
-      fc_files = [
-        "#{cookbook_dir(file)}/.foodcritic",
-        Pathname.new('~/.foodcritic').expand_path.to_s,
-        Pathname.new('~/.chef/.foodcritic').expand_path.to_s,
-        Pathname.new( cookbook_dir(file)).parent.parent.to_s+"/config/.foodcritic"
-      ]
-      fc_files.each do |fc_file|
-       if File.exist? fc_file
-         begin
-           tag_text = File.read fc_file
-           tags.concat ( tag_text.split(/\s/) )
-         rescue Errno::EACCES
-         end
-       end
+      fc_file = "#{cookbook_dir(file)}/.foodcritic"
+      if File.exist?(fc_file)
+        begin
+          tag_text = File.read fc_file
+          tags = tag_text.split(/\s/)
+        rescue Errno::EACCES
+        end
       end
       tags
     end
@@ -290,7 +303,7 @@ module FoodCritic
         if m.respond_to?(:node_name)
           match(m)
         elsif m.respond_to?(:xpath)
-          m.to_a.map { |m| match(m) }
+          m.to_a.map { |ma| match(ma) }
         else
           m
         end

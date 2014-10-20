@@ -60,6 +60,58 @@ poor style.
 
  * `-X`, `--exclude` <PATH>:
    Exclude path(s) from being linted.
+   
+ * '--config' <PATH>:
+   Path to foodcritic.yml config file
+
+## CONFIGURATION
+
+Foodcritic will look for and load configuration files (must be named 'foodcritic.yml') in ascending order (i.e each overriding or appending the previous settings).
+ * '~/.chef/foodcritic.yml'
+ * './.chef/foodcritic.yml', '../.chef/foodcritic.yml', '../../.chef/foodcritic.yml', etc.
+ * '<cookbook_path>/.chef/foodcritic.yml', '../<cookbook_path>/.chef/foodcritic.yml', '../../<cookbook_path>/.chef/foodcritic.yml', etc.
+ * Path specified on the command line with the '--config <PATH>' option.  PATH can be path to foodcritic.yml file, or directory containing either foodcritic.yml or .chef/foodcritic.yml
+ * Options specified on the command line.
+
+Below is a sample config of all supported options, (NOTE: some of these are contradictory, this is not a recomended config, simply a demonstration of syntax).
+Options match those described on the command line above.
+Options listed with mulitple entries are cumulative (i.e. if the 'tags' option is set from multiple foodcritic.yml files and the command line, all tags listed will be incudedd).
+Options with only one entry will take the last setting seen (command line being final).
+
+```yaml
+fail_tags:
+  - FC048
+  - FC016
+  - correctness
+tags:
+  - FC018
+  - ~FC019
+  - ~style
+include_rules:
+  - <PATH to Rules>
+  - <PATH2 to Rules>
+role_paths:
+  - <PATH to role directory>
+  - <PATH2 to role directory>
+environment_paths:
+  - <PATH to environment directory>
+  - <PATH2 to environment directory>
+exclude_paths:
+  - <PATH to exclude>
+  - <PATH2 to exclude>
+chef_version: <Chef version>
+search_gramar: <PATH> 
+context: <true/false>
+search_gems: <true/false>
+```
+
+NOTE: <COOKBOOK DIR>/.foodcritic can also be used to list tags that should be run / excluded for a given cookbook.  This only applied to the 'tags' config setting.
+```
+- FC011
+- recipe
+- ~FC016
+
+```
 
 ## RETURN VALUES
 
