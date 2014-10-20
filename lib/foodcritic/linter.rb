@@ -126,6 +126,12 @@ module FoodCritic
       rule_files = [File.join(File.dirname(__FILE__), 'rules.rb')]
       rule_files << options[:include_rules]
       rule_files << rule_files_in_gems if options[:search_gems]
+      rl_file = Pathname.new('~/.chef/foodcritic/rules.rb').expand_path
+      rule_files << rl_file.to_s if rl_file.exist?
+      rl_dir = Pathname.new('~/.chef/foodcritic/rules').expand_path
+      rule_files << rl_dir.to_s if rl_dir.exist? && rl_dir.directory?
+      ### Would like to include config directory under chef repo, but not sure how to correctly reference it.
+      #Pathname.new( cookbook_dir(file)).parent.parent + "/config/foodcritic/rules"
       @rules = RuleDsl.load(rule_files.flatten.compact, chef_version)
     end
 
