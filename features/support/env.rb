@@ -1,6 +1,10 @@
-require 'simplecov'
-SimpleCov.start do
-  add_filter '/features/'
+begin
+  require 'simplecov'
+  SimpleCov.start do
+    add_filter '/features/'
+  end
+rescue LoadError
+  warn 'warning: simplecov gem not found; skipping coverage'
 end
 
 require 'aruba/cucumber'
