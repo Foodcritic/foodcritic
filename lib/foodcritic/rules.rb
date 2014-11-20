@@ -698,9 +698,18 @@ end
 rule 'FC048', 'Prefer Mixlib::ShellOut' do
   tags %w(style processes)
   recipe do |ast|
-    ast.xpath('//xstring_literal | //*[self::command or self::fcall]/
-      ident[@value="system"][count(following-sibling::args_add_block/
-      descendant::kw[@value="true" or @value="false"]) = 0]')
+
+    xstring_literal=ast.xpath('//xstring_literal')
+    next xstring_literal if xstring_literal.any?
+
+    ast.xpath('//*[self::command or self::fcall]/ident[@value="system"]').select do |x|
+      resource_name = x.xpath('ancestor::do_block/preceding-sibling::command/ident/@value')
+      if resource_name.any? && resource_attribute?(resource_name.to_s, 'system')
+        next false
+      end
+      next x.xpath('count(following-sibling::args_add_block/descendant::kw[@value="true" or @value="false"]) = 0')
+    end
+
   end
 end
 

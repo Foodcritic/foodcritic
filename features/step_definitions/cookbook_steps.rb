@@ -42,10 +42,18 @@ Given /^a cookbook (attributes|recipe) file with assignment (.*)$/ do |type, ass
   end
 end
 
-Given "a cookbook recipe that contains a group resource that uses the 'system' attribute" do
+Given "a cookbook recipe that contains a group resource that uses the 'system' bool attribute" do
   write_recipe %q{
     group "senge" do
       system true
+    end
+  }
+end
+
+Given "a cookbook recipe that contains a user resource that uses the 'system' string attribute" do
+  write_recipe %q{
+    user "foo" do
+      system "bar"
     end
   }
 end
@@ -1949,6 +1957,10 @@ Then /^the invalid environment name warning 050 should( not)? be shown against t
 end
 
 Then 'the prefer mixlib shellout warning 048 should not be displayed against the group resource' do
+  expect_warning 'FC048', {:expect_warning => false, :line => 2}
+end
+
+Then 'the prefer mixlib shellout warning 048 should not be displayed against the user resource' do
   expect_warning 'FC048', {:expect_warning => false, :line => 2}
 end
 

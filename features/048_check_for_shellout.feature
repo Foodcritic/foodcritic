@@ -29,6 +29,11 @@ Feature: Check for spawning without Mixlib::ShellOut
      Then the prefer mixlib shellout warning 048 should not be displayed
 
   Scenario: Group resource
-    Given a cookbook recipe that contains a group resource that uses the 'system' attribute
+    Given a cookbook recipe that contains a group resource that uses the 'system' bool attribute
      When I check the cookbook
      Then the prefer mixlib shellout warning 048 should not be displayed against the group resource
+
+  Scenario: User resource
+    Given a cookbook recipe that contains a user resource that uses the 'system' string attribute
+     When I check the cookbook
+     Then the prefer mixlib shellout warning 048 should not be displayed against the user resource
