@@ -152,6 +152,8 @@ module FoodCritic
       else
         false
       end
+    rescue
+      false
     end
 
     # Some rules are version specific.
