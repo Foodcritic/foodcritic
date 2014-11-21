@@ -34,6 +34,22 @@ Given 'a cookbook attributes file with a do block that takes arguments' do
   }
 end
 
+Given 'a cookbook attributes file that sets an attribute to have line break' do
+  write_attributes %q{
+    default['foo']['bar']['baz'][
+     'bing']['blonk'] = 'stupendous'
+  }
+end
+
+Given 'a cookbook attributes file that sets an attribute to have line break and arguments' do
+  write_attributes %q{
+    %w{ foo bar }.each do |baz|
+      default['foo']["bing_#{baz}"][
+        'blonk'] = baz
+    end
+  }
+end
+
 Given /^a cookbook (attributes|recipe) file with assignment (.*)$/ do |type, assignment|
   if type == 'attributes'
     write_attributes assignment
@@ -1935,6 +1951,10 @@ end
 
 Then /^the bare attribute keys warning 044 should not be displayed against the (?:local variable|library call)$/ do
   expect_warning 'FC044', {:expect_warning => false, :line => 2, :file_type => :attributes}
+end
+
+Then /^the bare attribute keys warning 044 should not be displayed against the new line$/ do
+  expect_warning 'FC044', {:expect_warning => false, :line => 3, :file_type => :attributes}
 end
 
 Then 'the execute resource used to run git commands warning 040 should be displayed against the last resource' do

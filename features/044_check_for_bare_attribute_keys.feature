@@ -41,3 +41,13 @@ Feature: Check for bare attribute keys
     Given a cookbook attributes file that sets an attribute to be the result of a library call
      When I check the cookbook
      Then the bare attribute keys warning 044 should not be displayed against the library call
+
+  Scenario: Attribute chain with new line
+    Given a cookbook attributes file that sets an attribute to have line break
+     When I check the cookbook
+     Then the bare attribute keys warning 044 should not be displayed against the local variable
+
+  Scenario: Attribute chain with new line and parameterized name
+    Given a cookbook attributes file that sets an attribute to have line break and arguments
+     When I check the cookbook
+     Then the bare attribute keys warning 044 should not be displayed against the new line
