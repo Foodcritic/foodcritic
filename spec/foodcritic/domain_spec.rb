@@ -37,7 +37,7 @@ describe FoodCritic::RuleList do
     end
 
     it 'contains the given rule' do
-      assert FoodCritic::RuleList.new([rule]).rules.contains?(rule)
+      assert FoodCritic::RuleList.new([rule]).rules.include?(rule)
     end
   end
 end

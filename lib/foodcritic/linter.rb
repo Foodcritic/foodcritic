@@ -16,12 +16,15 @@ module FoodCritic
     # Perform a lint check. This method is intended for use by the command-line
     # wrapper. If you are programatically using foodcritic you should use
     # `#check` below.
-    def self.check(cmd_line)
+    def self.run(cmd_line)
       # The first item is the string output, the second is exit code.
       return [cmd_line.help, 0] if cmd_line.show_help?
       return [cmd_line.version, 0] if cmd_line.show_version?
       if !cmd_line.valid_grammar?
         [cmd_line.help, 4]
+      elsif cmd_line.list_rules?
+        listing = FoodCritic::Linter.new.list(cmd_line.options)
+        [listing, 0]
       elsif cmd_line.valid_paths?
         review = FoodCritic::Linter.new.check(cmd_line.options)
         [review, review.failed? ? 3 : 0]
@@ -29,6 +32,26 @@ module FoodCritic
         [cmd_line.help, 2]
       end
     end
+
+    # List the rules that are currently in effect.
+    #
+    # The `options` are a hash where the valid keys are:
+    #
+    # * `:include_rules` - Paths to additional rules to apply
+    # * `:search_gems - If true then search for custom rules in installed gems.
+    # * `:tags` - The tags to filter rules based on
+    def list(options = {})
+      options = setup_defaults(options)
+      @options = options
+      load_rules
+
+      if options[:tags].any?
+        @rules = active_rules(options[:tags])
+      end
+
+      RuleList.new(@rules)
+    end
+
 
     # Review the cookbooks at the provided path, identifying potential
     # improvements.

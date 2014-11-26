@@ -23,6 +23,10 @@ module FoodCritic
                 'specified tags.') do |t|
           @options[:tags] << t
         end
+        opts.on('-l', '--list',
+                'List all enabled rules and their descriptions.') do |t|
+          @options[:list] = t
+        end                
         opts.on('-f', '--epic-fail TAGS',
                 "Fail the build based on tags. Use 'any' to fail "\
                 'on all warnings.') do |t|
@@ -104,6 +108,13 @@ module FoodCritic
     # @return [Boolean] True if the version should be shown.
     def show_version?
       @options.key?(:version)
+    end
+
+    # Just list enabled rules, don't actually run a lint check?
+    #
+    # @return [Boolean] True if a rule listing is requested.
+    def list_rules?
+      @options.key?(:list)
     end
 
     # The version string.

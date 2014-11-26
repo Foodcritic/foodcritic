@@ -63,12 +63,12 @@ describe FoodCritic::CommandLine do
   end
 
   describe "#list_rules?" do
-    it "returns false if -l is not specified" do
+    it "returns false if ---list is not specified" do
       refute FoodCritic::CommandLine.new([]).list_rules?
     end
 
-    it "returns true if -l is specified" do
-      assert FoodCritic::CommandLine.new(["list"]).list_rules?
+    it "returns true if --list is specified" do
+      assert FoodCritic::CommandLine.new(['--list']).list_rules?
     end
   end
 end
