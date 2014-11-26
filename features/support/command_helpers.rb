@@ -275,7 +275,7 @@ module FoodCritic
     def run_lint(cmd_args)
       in_current_dir do
         show_context = cmd_args.include?('-C')
-        review, @status = FoodCritic::Linter.check(CommandLine.new(cmd_args))
+        review, @status = FoodCritic::Linter.run(CommandLine.new(cmd_args))
         @review =
           if review.nil? || (review.respond_to?(:warnings) && review.warnings.empty?)
             ''
