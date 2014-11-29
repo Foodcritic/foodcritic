@@ -183,6 +183,9 @@ module FoodCritic
         {:short => 'f', :long => 'epic-fail TAGS',
          :description => "Fail the build based on tags. Use 'any' to fail on all warnings."},
 
+        {:short => 'l', :long => 'list',
+         :description => 'List all enabled rules and their descriptions.'},
+
         {:short => 't', :long => 'tags TAGS',
          :description => 'Check against (or exclude ~) rules with the specified tags.'},
 
