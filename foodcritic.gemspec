@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.license = 'MIT'
   s.executables << 'foodcritic'
   s.add_dependency('gherkin', '~> 2.11')
-  s.add_dependency('nokogiri', '~> 1.5')
+  s.add_dependency('nokogiri', '>= 1.5', '< 2.0')
   s.add_dependency('rake')
   s.add_dependency('treetop', '~> 1.4')
   s.add_dependency('yajl-ruby', '~> 1.1')
