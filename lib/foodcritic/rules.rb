@@ -780,3 +780,12 @@ rule 'FC055', 'Ensure maintainer is set in metadata' do
     end
   end
 end
+
+rule 'FC056', 'Ensure maintainer_email is set in metadata' do
+  tags %w(correctness metadata)
+  metadata do |ast, filename|
+    unless ast.xpath('descendant::stmts_add/command/ident/@value="maintainer_email"')
+      [file_match(filename)]
+    end
+  end
+end

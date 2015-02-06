@@ -66,6 +66,7 @@ module FoodCritic
       'FC053' => 'Metadata uses the unimplemented "recommends" keyword',
       # FC054 was yanked and is considered reserved, do not reuse it
       'FC055' => 'Ensure maintainer is set in metadata',
+      'FC056' => 'Ensure maintainer_email is set in metadata',
       'FCTEST001' => 'Test Rule'
     }
 
