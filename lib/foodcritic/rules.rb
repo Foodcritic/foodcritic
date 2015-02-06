@@ -755,3 +755,31 @@ rule 'FC051', 'Template partials loop indefinitely' do
     end.map { |t| file_match(t) }
   end
 end
+
+rule 'FC052', 'Ensure maintainer is set in metadata' do
+  tags %w(correctness metadata)
+  metadata do |ast, filename|
+    unless ast.xpath('descendant::stmts_add/command/ident/@value="maintainer"')
+      [file_match(filename)]
+    end
+  end
+  cookbook do |filename|
+    if !File.exist?(File.join(filename, 'metadata.rb'))
+      [file_match(File.join(filename, 'metadata.rb'))]
+    end
+  end
+end
+
+rule 'FC053', 'Ensure maintainer_email is set in metadata' do
+  tags %w(correctness metadata)
+  metadata do |ast, filename|
+    unless ast.xpath('descendant::stmts_add/command/ident/@value="maintainer_email"')
+      [file_match(filename)]
+    end
+  end
+  cookbook do |filename|
+    if !File.exist?(File.join(filename, 'metadata.rb'))
+      [file_match(File.join(filename, 'metadata.rb'))]
+    end
+  end
+end
