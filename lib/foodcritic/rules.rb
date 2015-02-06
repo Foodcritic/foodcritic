@@ -771,3 +771,12 @@ rule 'FC053', 'Metadata uses the unimplemented "recommends" keyword' do
 end
 
 # NOTE: FC054 was yanked and should be considered reserved, do not reuse it
+
+rule 'FC055', 'Ensure maintainer is set in metadata' do
+  tags %w(correctness metadata)
+  metadata do |ast, filename|
+    unless ast.xpath('descendant::stmts_add/command/ident/@value="maintainer"')
+      [file_match(filename)]
+    end
+  end
+end
