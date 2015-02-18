@@ -1328,7 +1328,7 @@ Given 'a file resource declared without a mode' do
 end
 
 Given /^a file with multiple errors on one line(?: with comment (.*))?$/ do |comment|
-  write_file "cookbooks/example/recipes/default.rb", %Q{node['run_state']['nginx_force_recompile'] = "\#{foo}"#{comment}}
+  write_file "cookbooks/example/recipes/default.rb", %Q(node['run_state']['nginx_force_recompile'] = "\#{foo}"#{comment})
 end
 
 Given(/^a LWRP with an action :create that notifies with (converge_by|updated_by_last_action) and another :delete that does not notify$/) do |notify_type|
