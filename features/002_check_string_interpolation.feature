@@ -43,3 +43,8 @@ Feature: Check String Interpolation
     Given a cookbook with a single recipe for which the first hash value is an interpolated string
      When I check the cookbook
      Then the string interpolation warning 002 should be displayed
+
+  Scenario: String interpolation in heredoc
+    Given a cookbook with a single recipe that logs an interpolated string heredoc
+     When I check the cookbook
+     Then the string interpolation warning 002 should be displayed
