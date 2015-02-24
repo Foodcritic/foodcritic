@@ -656,7 +656,6 @@ FC023: Prefer conditional attributes: ./application_ruby/providers/rails.rb:100
 FC023: Prefer conditional attributes: ./apt/providers/repository.rb:26
 FC023: Prefer conditional attributes: ./apt/providers/repository.rb:68
 FC023: Prefer conditional attributes: ./chef-client/recipes/config.rb:62
-FC023: Prefer conditional attributes: ./cloudkick/recipes/default.rb:48
 FC023: Prefer conditional attributes: ./database/recipes/ebs_backup.rb:81
 FC023: Prefer conditional attributes: ./gecode/recipes/package.rb:29
 FC023: Prefer conditional attributes: ./gnu_parallel/recipes/homebrew.rb:22
@@ -708,7 +707,6 @@ FC043: Prefer new notification syntax: ./application_java/providers/tomcat.rb:46
 FC043: Prefer new notification syntax: ./application_nginx/providers/nginx_load_balancer.rb:39
 FC043: Prefer new notification syntax: ./apt/providers/repository.rb:112
 FC043: Prefer new notification syntax: ./apt/recipes/default.rb:48
-FC043: Prefer new notification syntax: ./cloudkick/recipes/default.rb:77
 FC043: Prefer new notification syntax: ./database/recipes/ebs_volume.rb:104
 FC043: Prefer new notification syntax: ./drbd/recipes/pair.rb:45
 FC043: Prefer new notification syntax: ./drbd/recipes/pair.rb:58
