@@ -1,3 +1,12 @@
+## 4.0.1 (2nd March, 2015)
+
+Bugfixes:
+
+  - Added metadata for missing Chef 11 versions. Thanks [jdmundrawala](https://github.com/jdmundrawala).
+  - [FC044: Avoid bare attribute keys](http://acrmp.github.com/foodcritic/#FC044) would fire on parameterized attributes. Thanks [odcinek](https://github.com/odcinek).
+  - [FC048: Prefer Mixlib::ShellOut](http://foodcritic.io/#FC048) would false positive on system attribute of user resource. Thanks [odcinek](https://github.com/odcinek).
+  - Handle flagging binary files properly. Thanks [odcinek](https://github.com/odcinek).
+
 ## 4.0.0 (12th June, 2014)
 
 Features:
