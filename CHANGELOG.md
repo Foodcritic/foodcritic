@@ -1,3 +1,14 @@
+## Unreleased
+
+Features:
+
+Bugfixes:
+  - pinned moustache gem to 0.99 for ruby 1.9.3 compatibility
+  - add metadata for chef 11 versions up to 11.16.4 and bump default version to 11.16.4
+
+Other:
+  - removed cloudkick cookbook from regression tests
+
 ## 4.0.0 (12th June, 2014)
 
 Features:
