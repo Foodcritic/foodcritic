@@ -3,20 +3,20 @@
 Features:
 
 Bugfixes:
+
   - pinned moustache gem to 0.99 for ruby 1.9.3 compatibility
-  - add metadata for chef 11 versions up to 11.16.4 and bump default version to 11.16.4
-  - Make FC044 not false positive on parameterized attributes
-    ([related issue])(https://github.com/acrmp/foodcritic/issues/253)
-    ([related issue])(https://github.com/acrmp/foodcritic/issues/105)
-    ([related issue])(https://github.com/acrmp/foodcritic/issues/194)
-    thanks @odcinek
-  - Handle system attribute of user resource correctly
-    ([related issue])(https://github.com/acrmp/foodcritic/issues/252)
-    thanks @odcinek
-  - Handle flagging binary files properly
-    thanks @odcinek
+    Thanks @jdmundrawala
+  - Added metadata for missing Chef 11 versions. 
+    Thanks @jdmundrawala
+  - [FC044: Avoid bare attribute keys](http://acrmp.github.com/foodcritic/#FC044) would fire on parameterized attributes.
+    Thanks @odcinek
+  - [FC048: Prefer Mixlib::ShellOut](http://foodcritic.io/#FC048) would false positive on system attribute of user resource.
+    Thanks @odcinek
+  - Handle flagging binary files properly.
+    Thanks @odcinek
 
 Other:
+
   - removed cloudkick cookbook from regression tests
 
 ## 4.0.0 (12th June, 2014)
