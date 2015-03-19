@@ -62,6 +62,8 @@ module FoodCritic
       'FC049' => 'Role name does not match containing file name',
       'FC050' => 'Name includes invalid characters',
       'FC051' => 'Template partials loop indefinitely',
+      'FC052' => 'Metadata uses the unimplemented "suggests" keyword',
+      'FC053' => 'Metadata uses the unimplemented "recommends" keyword',
       'FCTEST001' => 'Test Rule'
     }
 
