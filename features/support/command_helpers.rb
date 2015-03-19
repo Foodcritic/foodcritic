@@ -62,6 +62,8 @@ module FoodCritic
       'FC049' => 'Role name does not match containing file name',
       'FC050' => 'Name includes invalid characters',
       'FC051' => 'Template partials loop indefinitely',
+      'FC052' => 'Ensure maintainer is set in metadata',
+      'FC053' => 'Ensure maintainer_email is set in metadata',
       'FCTEST001' => 'Test Rule'
     }
 
