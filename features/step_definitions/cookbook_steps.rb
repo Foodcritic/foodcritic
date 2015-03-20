@@ -1217,6 +1217,14 @@ Given /^a cookbook with a single recipe that creates a directory resource with (
                         'a literal and interpolated variable' => :literal_and_interpolated_symbol}[path_type])
 end
 
+Given 'a cookbook with a single recipe that logs an interpolated string heredoc' do
+  write_recipe %q(
+    Chef::Log.warn <<-LOG
+      Warning stuff has gone wrong: #{stuff}
+    LOG
+  )
+end
+
 Given 'a cookbook with a single recipe that searches but checks first (alternation) to see if this is server' do
   write_recipe %q{
     if Chef::Config[:solo] || we_dont_want_to_use_search
@@ -1342,7 +1350,7 @@ Given 'a file resource declared without a mode' do
 end
 
 Given /^a file with multiple errors on one line(?: with comment (.*))?$/ do |comment|
-  write_file "cookbooks/example/recipes/default.rb", %Q{node['run_state']['nginx_force_recompile'] = "\#{foo}"#{comment}}
+  write_file "cookbooks/example/recipes/default.rb", %Q(node['run_state']['nginx_force_recompile'] = "\#{foo}"#{comment})
 end
 
 Given(/^a LWRP with an action :create that notifies with (converge_by|updated_by_last_action) and another :delete that does not notify$/) do |notify_type|
