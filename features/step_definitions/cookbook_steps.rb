@@ -1299,6 +1299,20 @@ Given /^a cookbook with metadata that (specifies|does not specify) the cookbook 
   }
 end
 
+Given /^a cookbook with metadata that (includes|does not include) a recommends keyword$/ do |includes|
+  write_metadata %Q{
+    depends "bar"
+    #{"recommends 'foo'" if includes == 'includes'}
+  }
+end
+
+Given /^a cookbook with metadata that (includes|does not include) a suggests keyword$/ do |includes|
+  write_metadata %Q{
+    depends "bar"
+    #{"suggests 'foo'" if includes == 'includes'}
+  }
+end
+
 Given /^a directory that contains a role file ([^ ]+) in (json|ruby) that defines role name (.*)$/ do |file_name, format, role_name|
   role(:role_name => %Q{"#{role_name}"}, :file_name => file_name, :format => format.to_sym)
 end
@@ -2272,4 +2286,12 @@ Given(/^a cookbook with an? (.*) file with an interpolated name$/) do |file_type
   write_resource "site", content if file_type == "resource"
   write_definition "apache_site", content if file_type == "definition"
   write_library "lib", content if file_type == "library"
+end
+
+Then /^the metadata using suggests warning 052 should be (shown|not shown) against the metadata file$/ do |show_warning|
+  expect_warning('FC052', :file => "metadata.rb", :line => 2, :expect_warning => show_warning == 'shown')
+end
+
+Then /^the metadata using recommends warning 053 should be (shown|not shown) against the metadata file$/ do |show_warning|
+  expect_warning('FC053', :file => "metadata.rb", :line => 2, :expect_warning => show_warning == 'shown')
 end

@@ -755,3 +755,17 @@ rule 'FC051', 'Template partials loop indefinitely' do
     end.map { |t| file_match(t) }
   end
 end
+
+rule 'FC052', 'Metadata uses the unimplemented "suggests" keyword' do
+  tags %w(style metadata)
+  metadata do |ast, filename|
+    ast.xpath(%Q(//command[ident/@value='suggests']))
+  end
+end
+
+rule 'FC053', 'Metadata uses the unimplemented "recommends" keyword' do
+  tags %w(style metadata)
+  metadata do |ast, filename|
+    ast.xpath(%Q(//command[ident/@value='recommends']))
+  end
+end
