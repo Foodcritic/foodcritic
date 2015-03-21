@@ -31,7 +31,11 @@ end
 
 def chef_resource_actions
   chef_resources do |resource_klazz,resource|
-    next if resource.to_s == 'Chef::Resource::WindowsScript'
+    next if [
+        'Chef::Resource::WindowsScript',
+        'Chef::Resource::WindowsPackage',
+      ].include?(resource.to_s)
+
     instance = resource.new('dsl')
     actions = Array(instance.action).map{|a| a.to_sym}
     if instance.respond_to?(:allowed_actions)
@@ -80,5 +84,5 @@ def chef_resources
       yield resource_klazz, resource
     end
   end
-  Hash[resources]
+  Hash[resources.compact]
 end
