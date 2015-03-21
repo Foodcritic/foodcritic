@@ -14,6 +14,8 @@ Bugfixes:
     Thanks @odcinek
   - Handle flagging binary files properly.
     Thanks @odcinek
+  - [FC002: Avoid string interpolation where not required](http://acrmp.github.com/foodcritic/#FC002) would erroneously trigger on heredoc on ruby 2.2
+    Thanks @ryansouza and @odcinek
 
 Other:
 
