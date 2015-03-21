@@ -25,6 +25,20 @@ module FoodCritic
     end
   end
 
+  # Simple container for rule listings.
+  class RuleList
+    attr_reader :rules
+    def initialize(rules = [])
+      @rules = rules
+    end
+
+    def to_s
+      @rules.sort { |a,b| a.code <=> b.code }.
+        map { |r| r.to_s }.join("\n")
+    end
+
+  end
+
   # The collected warnings (if any) raised against a cookbook tree.
   class Review
     attr_reader :cookbook_paths, :warnings

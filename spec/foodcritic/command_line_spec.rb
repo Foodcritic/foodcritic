@@ -61,4 +61,14 @@ describe FoodCritic::CommandLine do
       refute FoodCritic::CommandLine.new(["lib", "lib2"]).valid_paths?
     end
   end
+
+  describe "#list_rules?" do
+    it "returns false if ---list is not specified" do
+      refute FoodCritic::CommandLine.new([]).list_rules?
+    end
+
+    it "returns true if --list is specified" do
+      assert FoodCritic::CommandLine.new(['--list']).list_rules?
+    end
+  end
 end

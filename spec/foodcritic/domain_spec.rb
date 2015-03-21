@@ -23,6 +23,25 @@ describe FoodCritic::Review do
   end
 end
 
+describe FoodCritic::RuleList do
+  it "is instantiable with no warnings" do
+    FoodCritic::RuleList.new([])
+  end
+
+  let(:rule) { FoodCritic::Rule.new('FCTEST001', 'Test rule') }
+
+  describe "#rules" do
+
+    it 'is empty when instantiated with an empty rule list' do
+      assert FoodCritic::RuleList.new([]).rules.empty?
+    end
+
+    it 'contains the given rule' do
+      assert FoodCritic::RuleList.new([rule]).rules.include?(rule)
+    end
+  end
+end
+
 describe FoodCritic::Rule do
   let(:rule) { FoodCritic::Rule.new('FCTEST001', 'Test rule') }
 

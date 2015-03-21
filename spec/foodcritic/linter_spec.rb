@@ -42,6 +42,18 @@ describe FoodCritic::Linter do
 
   end
 
+  describe "#list_rules" do
+
+    it "does not require cookbook_path, role_path or environment_path to be specified" do
+      linter.list(:list => true)
+    end
+
+    it "returns a rule listing" do
+      linter.list(:list => true).must_respond_to(:rules)
+    end
+  end
+
+
   describe "#load_files!" do
     let(:default_rules_file) do
       File.expand_path(File.join(File.dirname(__FILE__), '../../lib/foodcritic/rules.rb'))
