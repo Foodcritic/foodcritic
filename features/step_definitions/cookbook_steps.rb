@@ -1217,6 +1217,14 @@ Given /^a cookbook with a single recipe that creates a directory resource with (
                         'a literal and interpolated variable' => :literal_and_interpolated_symbol}[path_type])
 end
 
+Given 'a cookbook with a single recipe that logs an interpolated string heredoc' do
+  write_recipe %q(
+    Chef::Log.warn <<-LOG
+      Warning stuff has gone wrong: #{stuff}
+    LOG
+  )
+end
+
 Given 'a cookbook with a single recipe that searches but checks first (alternation) to see if this is server' do
   write_recipe %q{
     if Chef::Config[:solo] || we_dont_want_to_use_search
