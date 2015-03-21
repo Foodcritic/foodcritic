@@ -53,16 +53,23 @@ module FoodCritic
       paths = specified_paths!(options)
 
       # Loop through each file to be processed and apply the rules
-      files_to_process(paths).each do |p|
+      files = files_to_process(paths)
 
+      if options[:progress]
+        puts "Food Critic"
+        puts "Checking #{files.count} files"
+      end
+
+      files.each do |p|
         relevant_tags = if options[:tags].any?
                           options[:tags]
                         else
                           cookbook_tags(p[:filename])
                         end
 
-        active_rules(relevant_tags).each do |rule|
+        progress = '.'
 
+        active_rules(relevant_tags).each do |rule|
           state = {
             path_type: p[:path_type],
             file: p[:filename],
@@ -79,6 +86,8 @@ module FoodCritic
 
           matches = remove_ignored(matches, state[:rule], state[:file])
 
+          progress = 'x' if matches.any?
+
           # Convert the matches into warnings
           matches.each do |match|
             warnings << Warning.new(state[:rule],
@@ -87,8 +96,13 @@ module FoodCritic
             matched_rule_tags << state[:rule].tags
           end
         end
+
+        putc progress if options[:progress]
+
         last_dir = cookbook_dir(p[:filename])
       end
+
+      puts '' if options[:progress]
 
       Review.new(paths, warnings)
     end

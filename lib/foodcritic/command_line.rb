@@ -55,6 +55,10 @@ module FoodCritic
                 'foodcritic/rules/**/*.rb') do |g|
           @options[:search_gems] = true
         end
+        opts.on("-P", "--progress",
+                "Show progress of files being checked") do
+          @options[:progress] = true
+        end
         opts.on('-R', '--role-path PATH',
                 'Role path(s) to check.') do |r|
           @options[:role_paths] << r
