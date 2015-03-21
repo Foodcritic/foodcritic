@@ -97,14 +97,14 @@ module FoodCritic
       File.basename(file)
     end
 
-    # The dependencies declared in cookbook metadata.
+    # The dependencies, recommendations and suggestions declared in cookbook metadata.
     def declared_dependencies(ast)
       raise_unless_xpath!(ast)
 
       # String literals.
       #
       #     depends 'foo'
-      deps = ast.xpath(%q{//command[ident/@value='depends']/
+      deps = ast.xpath(%q{//command[ident/@value='depends' or ident/@value='recommends' or ident/@value='suggests']/
         descendant::args_add/descendant::tstring_content[1]})
 
       # Quoted word arrays are also common.
@@ -113,7 +113,7 @@ module FoodCritic
       #       depends cbk
       #     end
       deps = deps.to_a +
-        word_list_values(ast, "//command[ident/@value='depends']")
+        word_list_values(ast, "//command[ident/@value='depends' or ident/@value='recommends' or ident/@value='suggests']/")
       deps.uniq.map { |dep| dep['value'].strip }
     end
 
