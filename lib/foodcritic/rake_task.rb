@@ -1,5 +1,6 @@
 require 'rake'
 require 'rake/tasklib'
+require 'foodcritic'
 
 module FoodCritic
   module Rake
