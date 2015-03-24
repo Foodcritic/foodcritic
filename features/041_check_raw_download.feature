@@ -12,7 +12,9 @@ Feature: Check for direct usage of curl or wget
     | name                       | display    |
     | curl 'http://example.org/' | should not |
     | wget 'http://example.org/' | should     |
-    | which foo                  | should not |
+    | which curl                 | should not |
+    | sudo wget                  | should not |
+    | reboot                     | should not |
 
   Scenario Outline: Execute resource
     Given a cookbook recipe with an execute resource that runs the command <command>
@@ -20,7 +22,8 @@ Feature: Check for direct usage of curl or wget
     Then the execute resource used to run curl or wget commands warning 041 <display> be displayed
   Examples:
     | command                                    | display     |
-    | which foo                                  | should not  |
+    | which curl                                 | should not  |
+    | sudo wget                                  | should not  |
     | curl -X POST 'http://example.org/'         | should not  |
     | curl 'http://example.org/'                 | should not  |
     | curl 'http://example.org/' -o foo          | should      |
