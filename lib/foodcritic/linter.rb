@@ -166,7 +166,7 @@ module FoodCritic
       rule_files = [File.join(File.dirname(__FILE__), 'rules.rb')]
       rule_files << options[:include_rules]
       rule_files << rule_files_in_gems if options[:search_gems]
-      rule_files.delete_if {|x| x == nil}
+      rule_files.compact!
       rule_files.flatten!
       rule_files.uniq!
       rule_files.each do |rl|

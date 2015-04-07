@@ -1,4 +1,5 @@
-module FoodCritic # Command line parsing.
+module FoodCritic
+  # Command line parsing.
   class CommandLine
     # Create a new instance of CommandLine
     #
@@ -116,7 +117,7 @@ module FoodCritic # Command line parsing.
         end
       end
 
-      [:cookbook_paths, :role_paths, :environment_paths, :include_rules, :exclude_paths].each do | pth|
+      [:cookbook_paths, :role_paths, :environment_paths, :include_rules, :exclude_paths].each do |pth|
         @options[pth].map! { |c| File.expand_path(c, '.') } if @options[pth] && @options[pth] != [nil]
         @options[pth].flatten!
         @options[pth].uniq!
@@ -128,11 +129,11 @@ module FoodCritic # Command line parsing.
       require 'app_conf'
       files_to_load = []
       files_to_load << File.expand_path('~/.chef/foodcritic.yml', '.') if File.file?(File.expand_path('~/.chef/foodcritic.yml'))
-      ['.', cbs].flatten!.each do |mypth|
+      ['.', cbs].flatten.each do |mypth|
         tmp_path = File.expand_path(mypth, '.')
         until File.basename(tmp_path) == '/'
           files_to_load << "#{tmp_path}/.chef/foodcritic.yml" if File.file?("#{tmp_path}/.chef/foodcritic.yml")
-          tmp_path = File.expand_path(tmp_path + '/..','.')
+          tmp_path = File.expand_path("#{tmp_path}/..",'.')
         end
       end
       if @original_args.include?('--config')
@@ -153,7 +154,7 @@ module FoodCritic # Command line parsing.
       files_to_load.each do |load_path|
         next unless File.exist?(load_path)
         tmp_config.load(load_path)
-        @fc_config.merge!(tmp_config.to_hash)do |key, v1, v2 |
+        @fc_config.merge!(tmp_config.to_hash) do |key, v1, v2|
           if v1 == v2
             v1
           elsif %w(chef_version config search_grammar search_gems context).include? key
