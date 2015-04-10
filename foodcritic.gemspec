@@ -22,5 +22,5 @@ Gem::Specification.new do |s|
     Dir['misc/**/*']
   s.files += Dir['spec/**/*'] + Dir['features/**/*']
   s.files += Dir['*.md'] + Dir['LICENSE'] + Dir['man/*']
-  s.required_ruby_version = '>= 1.9.3'
+  s.required_ruby_version = '>= 2.0.0'
 end
