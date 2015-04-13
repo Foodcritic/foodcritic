@@ -17,8 +17,10 @@ Gem::Specification.new do |s|
   s.add_dependency('yajl-ruby', '~> 1.1')
   s.add_dependency('erubis')
   s.add_dependency('rufus-lru', '~> 1.0')
-  s.files = Dir['chef_dsl_metadata/*.json'] + Dir['lib/**/*.rb']
+  s.files = Dir['chef_dsl_metadata/*.json'] +
+    Dir['lib/**/*.rb'] +
+    Dir['misc/**/*']
   s.files += Dir['spec/**/*'] + Dir['features/**/*']
   s.files += Dir['*.md'] + Dir['LICENSE'] + Dir['man/*']
-  s.required_ruby_version = '>= 1.9.3'
+  s.required_ruby_version = '>= 2.0.0'
 end

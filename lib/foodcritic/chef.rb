@@ -82,14 +82,10 @@ module FoodCritic
     end
 
     class Search
-      # The search grammars that ship with any Chef gems installed locally.
-      # These are returned in descending version order (a newer Chef version
-      #   could break our ability to load the grammar).
-      # Grammars are not available from Chef 11+.
+      # lucene.treetop used to be provided by chef gem
+      # We're keeping a local copy from chef 10.x
       def chef_search_grammars
-        Gem.path.map do |gem_path|
-          Dir["#{gem_path}/gems/chef-*/**/lucene.treetop"]
-        end.flatten.sort.reverse
+        [File.expand_path('../../..', __FILE__) + "/misc/lucene.treetop"]
       end
 
       # Create the search parser from the first loadable grammar.
