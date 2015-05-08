@@ -73,6 +73,7 @@ module FoodCritic
       'FC060' => 'LWRP provider declares use_inline_resources and declares #action_<name> methods',
       'FC061' => 'Valid cookbook versions are of the form x.y or x.y.z',
       'FC062' => 'Cookbook should have version metadata',
+      'FC063' => 'Cookbook incorrectly depends on itself',
       'FCTEST001' => 'Test Rule'
     }
 
