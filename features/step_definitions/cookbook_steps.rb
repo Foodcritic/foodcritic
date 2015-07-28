@@ -971,7 +971,7 @@ Given /^a cookbook that declares ([a-z]+) attributes via symbols$/ do |attribute
 end
 
 Given /^a cookbook that does not contain a definition and has (no|a) definitions directory$/ do |has_dir|
-  create_dir 'cookbooks/example/definitions/' unless has_dir == 'no'
+  create_directory 'cookbooks/example/definitions/' unless has_dir == 'no'
   write_recipe %q{
     log "A defining characteristic of this cookbook is that it has no definitions"
   }
