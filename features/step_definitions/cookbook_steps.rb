@@ -1810,7 +1810,7 @@ end
 
 When /^I check the cookbook specifying ([^ ]+) as the Chef version$/ do |version|
   options = ['-c', version, 'cookbooks/example']
-  in_current_dir do
+  cd '.' do
     options = ['-I', 'rules/test.rb'] + options if Dir.exists?('rules')
   end
   run_lint(options)

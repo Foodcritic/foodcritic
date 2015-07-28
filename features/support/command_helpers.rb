@@ -279,7 +279,7 @@ module FoodCritic
     #
     # @param [Array] cmd_args The command line arguments.
     def run_lint(cmd_args)
-      in_current_dir do
+      cd '.' do
         show_context = cmd_args.include?('-C')
         review, @status = FoodCritic::Linter.run(CommandLine.new(cmd_args))
         @review =
