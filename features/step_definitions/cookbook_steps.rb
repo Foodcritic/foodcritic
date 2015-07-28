@@ -1763,7 +1763,7 @@ Given /^a template directory that contains a binary file (.*) that is not valid 
   template_dir = 'cookbooks/example/templates/default'
   write_recipe ''
   write_file "#{template_dir}/innocent_template.erb", '<%= hello %>'
-  File.open("#{current_dir}/#{template_dir}/#{filename}", 'wb'){|f| f.putc(0x93)}
+  File.open("#{expand_path('.')}/#{template_dir}/#{filename}", 'wb'){|f| f.putc(0x93)}
 end
 
 Given 'each role directory has a role with a name that does not match the containing file name' do
