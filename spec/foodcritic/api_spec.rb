@@ -54,18 +54,18 @@ describe FoodCritic::Api do
   describe "#attribute_access" do
     let(:ast) { MiniTest::Mock.new }
     it "returns empty if the provided ast does not support XPath" do
-      api.attribute_access(nil, :type => :vivified).must_be_empty
+      api.attribute_access(nil, type: :vivified).must_be_empty
     end
     it "returns empty if the provided ast has no matches" do
       ast.expect :xpath, [], [String]
       [:vivified, :string, :symbol].each do |access_type|
-        api.attribute_access([], :type => :vivified).must_be_empty
+        api.attribute_access([], type: :vivified).must_be_empty
       end
     end
     it "raises if the specified node type is not recognised" do
       ast.expect :xpath, [], [String]
       lambda do
-        api.attribute_access(ast, :type => :cymbals)
+        api.attribute_access(ast, type: :cymbals)
       end.must_raise(ArgumentError)
     end
     it "does not raise if the specified node type is valid" do
@@ -73,7 +73,7 @@ describe FoodCritic::Api do
       ast.expect :xpath, [], [/symbol/, FoodCritic::Api::AttFilter]
       ast.expect :xpath, [], [/tstring_content/, FoodCritic::Api::AttFilter]
       [:vivified, :symbol, :string].each do |access_type|
-        api.attribute_access(ast, :type => access_type)
+        api.attribute_access(ast, type: access_type)
       end
     end
     it "returns vivified attributes access" do
@@ -82,13 +82,13 @@ describe FoodCritic::Api do
       call.expect :xpath, ["node", "bar"], [/ident/]
       call.expect :xpath, ["foo"], [/@value/]
       ast.expect :xpath, [call], [String, FoodCritic::Api::AttFilter]
-      api.attribute_access(ast, :type => :vivified).must_equal([call])
+      api.attribute_access(ast, type: :vivified).must_equal([call])
       ast.verify
       call.verify
     end
     it "doesn't flag searching for a node by name as symbol access" do
       ast = parse_ast(%q{baz = search(:node, "name:#{node['foo']['bar']}")[0]})
-      api.attribute_access(ast, :type => :symbol).must_be_empty
+      api.attribute_access(ast, type: :symbol).must_be_empty
     end
     describe :ignoring_attributes do
       it "doesn't ignore run_state by default for backwards compatibility" do
@@ -97,23 +97,23 @@ describe FoodCritic::Api do
       end
       it "allows run_state to be ignored" do
         ast = parse_ast("node.run_state['bar'] = 'baz'")
-        api.attribute_access(ast, :ignore => ['run_state']).must_be_empty
+        api.attribute_access(ast, ignore: ['run_state']).must_be_empty
       end
       it "allows run_state to be ignored (symbols access)" do
         ast = parse_ast("node.run_state[:bar] = 'baz'")
-        api.attribute_access(ast, :ignore => ['run_state']).must_be_empty
+        api.attribute_access(ast, ignore: ['run_state']).must_be_empty
       end
       it "allows any attribute to be ignored" do
         ast = parse_ast("node['bar'] = 'baz'")
-        api.attribute_access(ast, :ignore => ['bar']).must_be_empty
+        api.attribute_access(ast, ignore: ['bar']).must_be_empty
       end
       it "allows any attribute to be ignored (symbols access)" do
         ast = parse_ast("node[:bar] = 'baz'")
-        api.attribute_access(ast, :ignore => ['bar']).must_be_empty
+        api.attribute_access(ast, ignore: ['bar']).must_be_empty
       end
       it "allows any attribute to be ignored (dot access)" do
         ast = parse_ast("node.bar = 'baz'")
-        api.attribute_access(ast, :ignore => ['bar']).must_be_empty
+        api.attribute_access(ast, ignore: ['bar']).must_be_empty
       end
       it "includes the children of attributes" do
         ast = parse_ast("node['foo']['bar'] = 'baz'")
@@ -121,18 +121,18 @@ describe FoodCritic::Api do
       end
       it "does not include children of removed attributes" do
         ast = parse_ast("node['foo']['bar'] = 'baz'")
-        api.attribute_access(ast, :ignore => ['foo']).must_be_empty
+        api.attribute_access(ast, ignore: ['foo']).must_be_empty
       end
       it "coerces ignore values to enumerate them" do
         ast = parse_ast("node.run_state['bar'] = 'baz'")
-        api.attribute_access(ast, :ignore => 'run_state').must_be_empty
+        api.attribute_access(ast, ignore: 'run_state').must_be_empty
       end
       it "can ignore multiple attributes" do
         ast = parse_ast(%q{
           node['bar'] = 'baz'
           node.foo = 'baz'
         })
-        api.attribute_access(ast, :ignore => %w{foo bar}).must_be_empty
+        api.attribute_access(ast, ignore: %w{foo bar}).must_be_empty
       end
     end
   end
@@ -338,7 +338,7 @@ describe FoodCritic::Api do
       ast.expect :xpath, ['method_add_block'],
         ["//method_add_block[command/ident[@value='file']]" +
          "[command/ident/@value != 'action']"]
-      api.find_resources(ast, :type => 'file')
+      api.find_resources(ast, type: 'file')
       ast.verify
     end
     it "does not restrict by resource type when not provided" do
@@ -352,7 +352,7 @@ describe FoodCritic::Api do
       ast.expect :xpath, ['method_add_block'],
                          ["//method_add_block[command/ident]" +
                           "[command/ident/@value != 'action']"]
-      api.find_resources(ast, :type => :any)
+      api.find_resources(ast, type: :any)
       ast.verify
     end
     it "returns any matches" do
@@ -397,10 +397,10 @@ describe FoodCritic::Api do
         api.included_recipes(ast)['foo::'].first.must_respond_to(:xpath)
       end
       it "returns empty if asked to exclude statements with embedded expressions" do
-        api.included_recipes(ast, :with_partial_names => false).must_be_empty
+        api.included_recipes(ast, with_partial_names: false).must_be_empty
       end
       it "returns the literals if asked to include statements with embedded expressions" do
-        api.included_recipes(ast, :with_partial_names => true).keys.must_equal ["foo::"]
+        api.included_recipes(ast, with_partial_names: true).keys.must_equal ["foo::"]
       end
     end
     describe "embedded expression - cookbook name" do
@@ -416,7 +416,7 @@ describe FoodCritic::Api do
         api.included_recipes(ast)['::bar'].first.must_respond_to(:xpath)
       end
       it "returns empty if asked to exclude statements with embedded expressions" do
-        api.included_recipes(ast, :with_partial_names => false).must_be_empty
+        api.included_recipes(ast, with_partial_names: false).must_be_empty
       end
     end
     describe "embedded expression - partial cookbook name" do
@@ -432,7 +432,7 @@ describe FoodCritic::Api do
         api.included_recipes(ast)['_foo::bar'].first.must_respond_to(:xpath)
       end
       it "returns empty if asked to exclude statements with embedded expressions" do
-        api.included_recipes(ast, :with_partial_names => false).must_be_empty
+        api.included_recipes(ast, with_partial_names: false).must_be_empty
       end
     end
   end
@@ -504,11 +504,11 @@ describe FoodCritic::Api do
       end
       it "includes the name of the node in the match" do
         node.expect :name, 'command'
-        api.match(node).must_equal({:matched => 'command', :line => 1,
-                                    :column => 10})
+        api.match(node).must_equal({matched: 'command', line: 1,
+                                    column: 10})
       end
       it "sets the matched name to empty if the element does not have a name" do
-        api.match(node).must_equal({:matched => '', :line => 1, :column => 10})
+        api.match(node).must_equal({matched: '', line: 1, column: 10})
       end
     end
   end
@@ -720,16 +720,16 @@ describe FoodCritic::Api do
           source "nscd.conf"
           owner "root"
           group "root"
-          notifies :restart, resources(:service => "nscd")
+          notifies :restart, resources(service: "nscd")
         end
       })).must_equal(
         [{
-          :type => :notifies,
-          :action => :restart,
-          :resource_type => :service,
-          :resource_name => 'nscd',
-          :timing => :delayed,
-          :style => :old
+          type: :notifies,
+          action: :restart,
+          resource_type: :service,
+          resource_name: 'nscd',
+          timing: :delayed,
+          style: :old
         }]
       )
     end
@@ -739,16 +739,16 @@ describe FoodCritic::Api do
           source "nscd.conf"
           owner "root"
           group "root"
-          notifies :'soft-restart', resources(:service => "nscd")
+          notifies :'soft-restart', resources(service: "nscd")
         end
       })).must_equal(
         [{
-          :type => :notifies,
-          :action => :'soft-restart',
-          :resource_type => :service,
-          :resource_name => 'nscd',
-          :timing => :delayed,
-          :style => :old
+          type: :notifies,
+          action: :'soft-restart',
+          resource_type: :service,
+          resource_name: 'nscd',
+          timing: :delayed,
+          style: :old
         }]
       )
     end
@@ -758,16 +758,16 @@ describe FoodCritic::Api do
           source "nscd.conf"
           owner "root"
           group "root"
-          notifies(:restart, resources(:service => "nscd"))
+          notifies(:restart, resources(service: "nscd"))
         end
       })).must_equal(
         [{
-          :type => :notifies,
-          :action => :restart,
-          :resource_type => :service,
-          :resource_name => 'nscd',
-          :timing => :delayed,
-          :style => :old
+          type: :notifies,
+          action: :restart,
+          resource_type: :service,
+          resource_name: 'nscd',
+          timing: :delayed,
+          style: :old
         }]
       )
     end
@@ -777,16 +777,16 @@ describe FoodCritic::Api do
           source "nscd.conf"
           owner "root"
           group "root"
-          subscribes :restart, resources(:service => "nscd")
+          subscribes :restart, resources(service: "nscd")
         end
       })).must_equal(
         [{
-          :type => :subscribes,
-          :action => :restart,
-          :resource_type => :service,
-          :resource_name => 'nscd',
-          :timing => :delayed,
-          :style => :old
+          type: :subscribes,
+          action: :restart,
+          resource_type: :service,
+          resource_name: 'nscd',
+          timing: :delayed,
+          style: :old
         }]
       )
     end
@@ -796,16 +796,16 @@ describe FoodCritic::Api do
           source "nscd.conf"
           owner "root"
           group "root"
-          subscribes(:restart, resources(:service => "nscd"))
+          subscribes(:restart, resources(service: "nscd"))
         end
       })).must_equal(
         [{
-          :type => :subscribes,
-          :action => :restart,
-          :resource_type => :service,
-          :resource_name => 'nscd',
-          :timing => :delayed,
-          :style => :old
+          type: :subscribes,
+          action: :restart,
+          resource_type: :service,
+          resource_name: 'nscd',
+          timing: :delayed,
+          style: :old
         }]
       )
     end
@@ -819,12 +819,12 @@ describe FoodCritic::Api do
         end
       })).must_equal(
         [{
-          :type => :notifies,
-          :action => :restart,
-          :resource_type => :service,
-          :resource_name => 'nscd',
-          :timing => :delayed,
-          :style => :new
+          type: :notifies,
+          action: :restart,
+          resource_type: :service,
+          resource_name: 'nscd',
+          timing: :delayed,
+          style: :new
         }]
       )
     end
@@ -838,12 +838,12 @@ describe FoodCritic::Api do
         end
       })).must_equal(
         [{
-          :type => :notifies,
-          :action => :'soft-restart',
-          :resource_type => :service,
-          :resource_name => 'nscd',
-          :timing => :delayed,
-          :style => :new
+          type: :notifies,
+          action: :'soft-restart',
+          resource_type: :service,
+          resource_name: 'nscd',
+          timing: :delayed,
+          style: :new
         }]
       )
     end
@@ -857,12 +857,12 @@ describe FoodCritic::Api do
         end
       })).must_equal(
         [{
-          :type => :notifies,
-          :action => :restart,
-          :resource_type => :service,
-          :resource_name => 'nscd',
-          :timing => :delayed,
-          :style => :new
+          type: :notifies,
+          action: :restart,
+          resource_type: :service,
+          resource_name: 'nscd',
+          timing: :delayed,
+          style: :new
         }]
       )
     end
@@ -876,12 +876,12 @@ describe FoodCritic::Api do
         end
       })).must_equal(
         [{
-          :type => :subscribes,
-          :action => :restart,
-          :resource_type => :service,
-          :resource_name => 'nscd',
-          :timing => :delayed,
-          :style => :new
+          type: :subscribes,
+          action: :restart,
+          resource_type: :service,
+          resource_name: 'nscd',
+          timing: :delayed,
+          style: :new
         }]
       )
     end
@@ -895,12 +895,12 @@ describe FoodCritic::Api do
         end
       })).must_equal(
         [{
-          :type => :subscribes,
-          :action => :restart,
-          :resource_type => :service,
-          :resource_name => 'nscd',
-          :timing => :delayed,
-          :style => :new
+          type: :subscribes,
+          action: :restart,
+          resource_type: :service,
+          resource_name: 'nscd',
+          timing: :delayed,
+          style: :new
         }]
       )
     end
@@ -911,25 +911,25 @@ describe FoodCritic::Api do
             source "nscd.conf"
             owner "root"
             group "root"
-            notifies :restart, resources(:service => "nscd")
-            subscribes :create, resources(:template => "/etc/nscd.conf")
+            notifies :restart, resources(service: "nscd")
+            subscribes :create, resources(template: "/etc/nscd.conf")
           end
         })).must_equal([
           {
-            :type => :notifies,
-            :action => :restart,
-            :resource_type => :service,
-            :resource_name => 'nscd',
-            :timing => :delayed,
-            :style => :old
+            type: :notifies,
+            action: :restart,
+            resource_type: :service,
+            resource_name: 'nscd',
+            timing: :delayed,
+            style: :old
           },
           {
-            :type => :subscribes,
-            :action => :create,
-            :resource_type => :template,
-            :resource_name => '/etc/nscd.conf',
-            :timing => :delayed,
-            :style => :old
+            type: :subscribes,
+            action: :create,
+            resource_type: :template,
+            resource_name: '/etc/nscd.conf',
+            timing: :delayed,
+            style: :old
           }
         ])
       end
@@ -944,20 +944,20 @@ describe FoodCritic::Api do
           end
         })).must_equal([
           {
-            :type => :notifies,
-            :action => :restart,
-            :resource_type => :service,
-            :resource_name => 'nscd',
-            :timing => :delayed,
-            :style => :new
+            type: :notifies,
+            action: :restart,
+            resource_type: :service,
+            resource_name: 'nscd',
+            timing: :delayed,
+            style: :new
           },
           {
-            :type => :subscribes,
-            :action => :create,
-            :resource_type => :template,
-            :resource_name => '/etc/nscd.conf',
-            :timing => :delayed,
-            :style => :new
+            type: :subscribes,
+            action: :create,
+            resource_type: :template,
+            resource_name: '/etc/nscd.conf',
+            timing: :delayed,
+            style: :new
           }
         ])
       end
@@ -968,16 +968,16 @@ describe FoodCritic::Api do
           source "nscd.conf"
           owner "root"
           group "root"
-          notifies :restart, resources(:service => "nscd"), :immediately
+          notifies :restart, resources(service: "nscd"), :immediately
         end
       })).must_equal(
         [{
-          :type => :notifies,
-          :action => :restart,
-          :resource_type => :service,
-          :resource_name => 'nscd',
-          :timing => :immediate,
-          :style => :old
+          type: :notifies,
+          action: :restart,
+          resource_type: :service,
+          resource_name: 'nscd',
+          timing: :immediate,
+          style: :old
         }]
       )
     end
@@ -987,16 +987,16 @@ describe FoodCritic::Api do
           source "nscd.conf"
           owner "root"
           group "root"
-          subscribes :restart, resources(:service => "nscd"), :immediately
+          subscribes :restart, resources(service: "nscd"), :immediately
         end
       })).must_equal(
         [{
-          :type => :subscribes,
-          :action => :restart,
-          :resource_type => :service,
-          :resource_name => 'nscd',
-          :timing => :immediate,
-          :style => :old
+          type: :subscribes,
+          action: :restart,
+          resource_type: :service,
+          resource_name: 'nscd',
+          timing: :immediate,
+          style: :old
         }]
       )
     end
@@ -1010,12 +1010,12 @@ describe FoodCritic::Api do
         end
       })).must_equal(
         [{
-          :type => :notifies,
-          :action => :restart,
-          :resource_type => :service,
-          :resource_name => 'nscd',
-          :timing => :immediate,
-          :style => :new
+          type: :notifies,
+          action: :restart,
+          resource_type: :service,
+          resource_name: 'nscd',
+          timing: :immediate,
+          style: :new
         }]
       )
     end
@@ -1029,12 +1029,12 @@ describe FoodCritic::Api do
         end
       })).must_equal(
         [{
-          :type => :subscribes,
-          :action => :restart,
-          :resource_type => :service,
-          :resource_name => 'nscd',
-          :timing => :immediate,
-          :style => :new
+          type: :subscribes,
+          action: :restart,
+          resource_type: :service,
+          resource_name: 'nscd',
+          timing: :immediate,
+          style: :new
         }]
       )
     end
@@ -1048,12 +1048,12 @@ describe FoodCritic::Api do
             source "nscd.conf"
             owner "root"
             group "root"
-            notifies :restart, resources(:service => "nscd")
+            notifies :restart, resources(service: "nscd")
           end
-        }), :type => :template).first).must_equal([
-          {:type => :notifies, :action => :restart, :resource_type => :service,
-           :resource_name => 'nscd', :timing => :delayed,
-           :style => :old}
+        }), type: :template).first).must_equal([
+          {type: :notifies, action: :restart, resource_type: :service,
+           resource_name: 'nscd', timing: :delayed,
+           style: :old}
         ])
       end
       it "old-style subscriptions" do
@@ -1065,12 +1065,12 @@ describe FoodCritic::Api do
             source "nscd.conf"
             owner "root"
             group "root"
-            subscribes :restart, resources(:service => "nscd")
+            subscribes :restart, resources(service: "nscd")
           end
-        }), :type => :template).first).must_equal([
-          {:type => :subscribes, :action => :restart, :resource_type => :service,
-           :resource_name => 'nscd', :timing => :delayed,
-           :style => :old}
+        }), type: :template).first).must_equal([
+          {type: :subscribes, action: :restart, resource_type: :service,
+           resource_name: 'nscd', timing: :delayed,
+           style: :old}
         ])
       end
       it "new-style notifications" do
@@ -1084,10 +1084,10 @@ describe FoodCritic::Api do
             group "root"
             notifies :restart, "service[nscd]"
           end
-        }), :type => :template).first).must_equal([
-          {:type => :notifies, :action => :restart, :resource_type => :service,
-           :resource_name => 'nscd', :timing => :delayed,
-           :style => :new}
+        }), type: :template).first).must_equal([
+          {type: :notifies, action: :restart, resource_type: :service,
+           resource_name: 'nscd', timing: :delayed,
+           style: :new}
         ])
       end
       it "new-style subscriptions" do
@@ -1101,10 +1101,10 @@ describe FoodCritic::Api do
             group "root"
             subscribes :restart, "service[nscd]"
           end
-        }), :type => :template).first).must_equal([
-          {:type => :subscribes, :action => :restart, :resource_type => :service,
-           :resource_name => 'nscd', :timing => :delayed,
-           :style => :new}
+        }), type: :template).first).must_equal([
+          {type: :subscribes, action: :restart, resource_type: :service,
+           resource_name: 'nscd', timing: :delayed,
+           style: :new}
         ])
       end
     end
@@ -1115,17 +1115,17 @@ describe FoodCritic::Api do
             source "nscd.conf"
             owner "root"
             group "root"
-            notifies :stop, resources(:service => "nscd")
-            notifies :start, resources(:service => "nscd")
+            notifies :stop, resources(service: "nscd")
+            notifies :start, resources(service: "nscd")
           end
         })).must_equal(
           [
-            {:type => :notifies, :action => :stop, :resource_type => :service,
-             :resource_name => 'nscd', :timing => :delayed,
-             :style => :old},
-            {:type => :notifies, :action => :start, :resource_type => :service,
-             :resource_name => 'nscd', :timing => :delayed,
-             :style => :old}
+            {type: :notifies, action: :stop, resource_type: :service,
+             resource_name: 'nscd', timing: :delayed,
+             style: :old},
+            {type: :notifies, action: :start, resource_type: :service,
+             resource_name: 'nscd', timing: :delayed,
+             style: :old}
           ]
         )
       end
@@ -1135,17 +1135,17 @@ describe FoodCritic::Api do
             source "nscd.conf"
             owner "root"
             group "root"
-            subscribes :stop, resources(:service => "nscd")
-            subscribes :start, resources(:service => "nscd")
+            subscribes :stop, resources(service: "nscd")
+            subscribes :start, resources(service: "nscd")
           end
         })).must_equal(
           [
-            {:type => :subscribes, :action => :stop, :resource_type => :service,
-             :resource_name => 'nscd', :timing => :delayed,
-             :style => :old},
-            {:type => :subscribes, :action => :start, :resource_type => :service,
-             :resource_name => 'nscd', :timing => :delayed,
-             :style => :old}
+            {type: :subscribes, action: :stop, resource_type: :service,
+             resource_name: 'nscd', timing: :delayed,
+             style: :old},
+            {type: :subscribes, action: :start, resource_type: :service,
+             resource_name: 'nscd', timing: :delayed,
+             style: :old}
           ]
         )
       end
@@ -1160,12 +1160,12 @@ describe FoodCritic::Api do
           end
         })).must_equal(
           [
-            {:type => :notifies, :action => :stop, :resource_type => :service,
-             :resource_name => 'nscd', :timing => :delayed,
-             :style => :new},
-            {:type => :notifies, :action => :start, :resource_type => :service,
-             :resource_name => 'nscd', :timing => :delayed,
-             :style => :new}
+            {type: :notifies, action: :stop, resource_type: :service,
+             resource_name: 'nscd', timing: :delayed,
+             style: :new},
+            {type: :notifies, action: :start, resource_type: :service,
+             resource_name: 'nscd', timing: :delayed,
+             style: :new}
           ]
         )
       end
@@ -1180,12 +1180,12 @@ describe FoodCritic::Api do
           end
         })).must_equal(
           [
-            {:type => :subscribes, :action => :stop, :resource_type => :service,
-             :resource_name => 'nscd', :timing => :delayed,
-             :style => :new},
-            {:type => :subscribes, :action => :start, :resource_type => :service,
-             :resource_name => 'nscd', :timing => :delayed,
-             :style => :new}
+            {type: :subscribes, action: :stop, resource_type: :service,
+             resource_name: 'nscd', timing: :delayed,
+             style: :new},
+            {type: :subscribes, action: :start, resource_type: :service,
+             resource_name: 'nscd', timing: :delayed,
+             style: :new}
           ]
         )
       end
@@ -1195,24 +1195,24 @@ describe FoodCritic::Api do
         api.notifications(parse_ast(%q{
           template "/tmp/foo.bar" do
             source "foo.bar.erb"
-            notifies :run, resources(:execute => "foo")
+            notifies :run, resources(execute: "foo")
           end
         })).must_equal(
-          [{:type => :notifies, :action => :run, :resource_type => :execute,
-           :resource_name => 'foo', :timing => :delayed,
-           :style => :old}]
+          [{type: :notifies, action: :run, resource_type: :execute,
+           resource_name: 'foo', timing: :delayed,
+           style: :old}]
         )
       end
       it "old-style subscriptions" do
         api.notifications(parse_ast(%q{
           template "/tmp/foo.bar" do
             source "foo.bar.erb"
-            subscribes :run, resources(:execute => "foo")
+            subscribes :run, resources(execute: "foo")
           end
         })).must_equal(
-          [{:type => :subscribes, :action => :run, :resource_type => :execute,
-           :resource_name => 'foo', :timing => :delayed,
-           :style => :old}]
+          [{type: :subscribes, action: :run, resource_type: :execute,
+           resource_name: 'foo', timing: :delayed,
+           style: :old}]
         )
       end
       it "old-style notifications" do
@@ -1222,9 +1222,9 @@ describe FoodCritic::Api do
             notifies :run, "execute[foo]"
           end
         })).must_equal(
-          [{:type => :notifies, :action => :run, :resource_type => :execute,
-           :resource_name => 'foo', :timing => :delayed,
-           :style => :new}]
+          [{type: :notifies, action: :run, resource_type: :execute,
+           resource_name: 'foo', timing: :delayed,
+           style: :new}]
         )
       end
       it "old-style subscriptions" do
@@ -1234,9 +1234,9 @@ describe FoodCritic::Api do
             subscribes :run, "execute[foo]"
           end
         })).must_equal(
-          [{:type => :subscribes, :action => :run, :resource_type => :execute,
-           :resource_name => 'foo', :timing => :delayed,
-           :style => :new}]
+          [{type: :subscribes, action: :run, resource_type: :execute,
+           resource_name: 'foo', timing: :delayed,
+           style: :new}]
         )
       end
     end
@@ -1343,7 +1343,7 @@ describe FoodCritic::Api do
         it "old-style notifications" do
           assert api.notifications(parse_ast(%q{
             template "/etc/foo.conf" do
-              notifies :create, resources(:template => "/etc/bar/#{resource}.bar")
+              notifies :create, resources(template: "/etc/bar/#{resource}.bar")
             end
           })).first[:resource_name].respond_to?(:xpath),
             "Expected resource_name with string expression to respond to #xpath"
@@ -1369,7 +1369,7 @@ describe FoodCritic::Api do
         it "old-style notifications" do
           assert api.notifications(parse_ast(%q{
             template "/etc/foo.conf" do
-              notifies :restart, resources(:service => node['foo']['service'])
+              notifies :restart, resources(service: node['foo']['service'])
             end
           })).first[:resource_name].respond_to?(:xpath),
             "Expected resource_name with node attribute to respond to #xpath"
@@ -1387,7 +1387,7 @@ describe FoodCritic::Api do
         it "old-style notifications" do
           assert api.notifications(parse_ast(%q{
             template "/etc/foo.conf" do
-              notifies :restart, resources(:service => my_service)
+              notifies :restart, resources(service: my_service)
             end
           })).first[:resource_name].respond_to?(:xpath),
             "Expected resource_name with var ref to respond to #xpath"
@@ -1406,7 +1406,7 @@ describe FoodCritic::Api do
       it "specifies that the notification was in the old style" do
           assert api.notifications(parse_ast(%q{
             template "/etc/foo.conf" do
-              notifies :restart, resources(:service => 'foo')
+              notifies :restart, resources(service: 'foo')
             end
           })).first[:style].must_equal :old
       end
@@ -1566,7 +1566,7 @@ describe FoodCritic::Api do
       it "includes old-style notifications in the result" do
         atts = str_to_atts(%q{
           template "/etc/httpd.conf" do
-            notifies :restart, resources(:service => "apache")
+            notifies :restart, resources(service: "apache")
           end
         })
         atts['notifies'].wont_be_nil
@@ -1697,46 +1697,46 @@ describe FoodCritic::Api do
       supports(%q{
         supports "redhat"
         supports "scientific"
-      }).must_equal([{:platform => 'redhat', :versions => []},
-	             {:platform => 'scientific', :versions => []}])
+      }).must_equal([{platform: 'redhat', versions: []},
+	             {platform: 'scientific', versions: []}])
     end
     it "sorts the platform names in alphabetical order" do
       supports(%q{
         supports "scientific"
         supports "redhat"
-      }).must_equal([{:platform => 'redhat', :versions => []},
-	             {:platform => 'scientific', :versions => []}])
+      }).must_equal([{platform: 'redhat', versions: []},
+	             {platform: 'scientific', versions: []}])
     end
     it "handles support declarations that include version constraints" do
       supports(%q{
         supports "redhat", '>= 6'
-      }).must_equal([{:platform => 'redhat', :versions => ['>= 6']}])
+      }).must_equal([{platform: 'redhat', versions: ['>= 6']}])
     end
     it "handles support declarations that include obsoleted version constraints" do
       supports(%q{
         supports 'redhat', '> 5.0', '< 7.0'
         supports 'scientific', '> 5.0', '< 6.0'
-      }).must_equal([{:platform => 'redhat', :versions => ['> 5.0', '< 7.0']},
-                     {:platform => 'scientific', :versions => ['> 5.0', '< 6.0']}])
+      }).must_equal([{platform: 'redhat', versions: ['> 5.0', '< 7.0']},
+                     {platform: 'scientific', versions: ['> 5.0', '< 6.0']}])
     end
     it "normalises platform symbol references to strings" do
       supports(%q{
         supports :ubuntu
-      }).must_equal([{:platform => 'ubuntu', :versions => []}])
+      }).must_equal([{platform: 'ubuntu', versions: []}])
     end
     it "handles support declarations as symbols that include version constraints" do
       supports(%q{
         supports :redhat, '>= 6'
-      }).must_equal([{:platform => 'redhat', :versions => ['>= 6']}])
+      }).must_equal([{platform: 'redhat', versions: ['>= 6']}])
     end
     it "understands support declarations that use word lists" do
       supports(%q{
         %w{redhat centos fedora}.each do |os|
 	  supports os
 	end
-      }).must_equal([{:platform => 'centos', :versions => []},
-                     {:platform => 'fedora', :versions => []},
-	             {:platform => 'redhat', :versions => []}])
+      }).must_equal([{platform: 'centos', versions: []},
+                     {platform: 'fedora', versions: []},
+	             {platform: 'redhat', versions: []}])
     end
   end
 
@@ -1764,9 +1764,9 @@ describe FoodCritic::Api do
 
     it "returns the path of the containing template and any partials" do
       api.instance_variable_set(:@asts, {
-        :main =>  template_ast('<%= render "included_1.erb" %>
+        main:  template_ast('<%= render "included_1.erb" %>
                                 <%= render "included_2.erb" %>'),
-        :ok => template_ast('<%= @foo %>')
+        ok: template_ast('<%= @foo %>')
       })
       def api.read_ast(path)
         case path
@@ -1784,9 +1784,9 @@ describe FoodCritic::Api do
 
     it "doesn't mistake render options for partial template names" do
       api.instance_variable_set(:@asts, {
-        :main =>  template_ast('<%= render "included_1.erb",
-                               :variables => {:foo => "included_2.erb"} %>'),
-        :ok => template_ast('<%= @foo %>')
+        main:  template_ast('<%= render "included_1.erb",
+                               variables: {foo: "included_2.erb"} %>'),
+        ok: template_ast('<%= @foo %>')
       })
       def api.read_ast(path)
         case path
@@ -1802,10 +1802,10 @@ describe FoodCritic::Api do
 
     it "raises if included partials have cycles" do
       api.instance_variable_set(:@asts, {
-        :main =>  template_ast('<%= render "included_1.erb" %>
+        main:  template_ast('<%= render "included_1.erb" %>
                                 <%= render "included_2.erb" %>'),
-        :loop => template_ast('<%= render "main.erb" %>'),
-        :ok => template_ast('<%= foo %>')
+        loop: template_ast('<%= render "main.erb" %>'),
+        ok: template_ast('<%= foo %>')
       })
       def api.read_ast(path)
         case path

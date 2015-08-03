@@ -145,11 +145,11 @@ module FoodCritic
     # These are equivalent:
     #
     #     find_resources(ast)
-    #     find_resources(ast, :type => :any)
+    #     find_resources(ast, type: :any)
     #
     # Restrict to a specific type of resource:
     #
-    #     find_resources(ast, :type => :service)
+    #     find_resources(ast, type: :service)
     #
     def find_resources(ast, options = {})
       options = { type: :any }.merge!(options)
@@ -172,7 +172,7 @@ module FoodCritic
     # These two usages are equivalent:
     #
     #     included_recipes(ast)
-    #     included_recipes(ast, :with_partial_names => true)
+    #     included_recipes(ast, with_partial_names: true)
     #
     def included_recipes(ast, options = { with_partial_names: true })
       raise_unless_xpath!(ast)
@@ -492,7 +492,7 @@ module FoodCritic
       source = if file.to_s.split(File::SEPARATOR).include?('templates')
                  template_expressions_only(file)
                else
-                 File.read(file).encode('utf-8', 'binary', :undef => :replace)
+                 File.read(file).encode('utf-8', 'binary', undef: :replace)
                end
       build_xml(Ripper::SexpBuilder.new(source).parse)
     end
@@ -550,7 +550,7 @@ module FoodCritic
 
     def template_expressions_only(file)
       exprs = Template::ExpressionExtractor.new.extract(
-        File.read(file).encode('utf-8', 'binary', :undef => :replace)
+        File.read(file).encode('utf-8', 'binary', undef: :replace)
       )
       lines = Array.new(exprs.map { |e| e[:line] }.max || 0, '')
       exprs.each do |e|

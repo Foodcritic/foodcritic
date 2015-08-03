@@ -124,7 +124,7 @@ Given 'a cookbook recipe with a deploy resource that contains a template resourc
         template "/tmp/config.conf" do
           source "foo.conf.erb"
           variables({
-            :config_var => 'foo'
+            config_var: 'foo'
           })
 	end
       end
@@ -317,7 +317,7 @@ Given 'a cookbook recipe that declares multiple package resources mixed with oth
       action :install
     end
     service "apache" do
-      supports :restart => true, :reload => true
+      supports restart: true, reload: true
       action :enable
     end
     template "/tmp/somefile" do
@@ -395,7 +395,7 @@ Given 'a cookbook recipe that declares non contiguous package resources mixed wi
       action :install
     end
     service "apache" do
-      supports :restart => true, :reload => true
+      supports restart: true, reload: true
       action :enable
     end
     package "erlang-crypto" do
@@ -478,8 +478,8 @@ Given /^a cookbook recipe that includes a recipe name from an( embedded)? expres
 end
 
 Given /^a cookbook recipe that includes a(n un| )?declared recipe dependency(?: {0,1})(unscoped)?( with parentheses)?$/ do |undeclared,unscoped, parens|
-  recipe_with_dependency(:is_declared => undeclared.strip.empty?,
-                         :is_scoped => unscoped.nil?, :parentheses => parens)
+  recipe_with_dependency(is_declared: undeclared.strip.empty?,
+                         is_scoped: unscoped.nil?, parentheses: parens)
 end
 
 Given 'a cookbook recipe that includes both declared and undeclared recipe dependencies' do
@@ -532,7 +532,7 @@ Given /^a cookbook recipe that refers to a (missing |local )?template( in a subd
       #{'local true' if missing_or_local == 'local '}
       source "#{sub_dir}config.conf.erb"
       variables({
-        :config_var => 'foo'
+        config_var: 'foo'
       })
     end
   }
@@ -556,7 +556,7 @@ Given 'a cookbook recipe that defines a template where name is a complex express
   write_recipe %q{
     template ::File.join(new_resource.foo.bar, "str", new_resource.baz) do
       variables({
-        :config_var => 'foo'
+        config_var: 'foo'
       })
     end
   }
@@ -570,7 +570,7 @@ Given 'a cookbook recipe that defines a template where both the name and source 
     template ::File.join(new_resource.foo.bar, "str", new_resource.baz) do
       source new_resource.foo.template
       variables({
-        :config_var => 'foo'
+        config_var: 'foo'
       })
     end
   }
@@ -585,7 +585,7 @@ Given 'a cookbook recipe that defines a template where name and source are both 
     template "/tmp/config-#{foo}.conf" do
       source "config-#{foo}.erb"
       variables({
-        :config_var => 'foo'
+        config_var: 'foo'
       })
     end
   }
@@ -603,7 +603,7 @@ Given /^a cookbook recipe that (refers to|infers) a template with an expression$
       %q{
         template "/tmp/config-#{node['foo']['name']}.conf" do
           variables({
-            :config_var => 'foo'
+            config_var: 'foo'
           })
         end
       }
@@ -612,7 +612,7 @@ Given /^a cookbook recipe that (refers to|infers) a template with an expression$
         template "/tmp/config.conf" do
           source "config-#{node['foo']['name']}.erb"
           variables({
-            :config_var => 'foo'
+            config_var: 'foo'
           })
         end
       }
@@ -635,7 +635,7 @@ Given /^a cookbook recipe that uses a(?:n)? (missing )?inferred template$/ do |m
   write_recipe %Q{
     template "/tmp/config.conf" do
       variables({
-        :config_var => 'foo'
+        config_var: 'foo'
       })
     end
   }
@@ -672,7 +672,7 @@ Given /^a cookbook recipe with a ([^ ]+) resource that subscribes to ([^ ]+) whe
   write_recipe %Q{
     #{source} "foo" do
       action :nothing
-      subscribes :#{action}, resources(:remote_file => "/foo/bar"), :immediately
+      subscribes :#{action}, resources(remote_file: "/foo/bar"), :immediately
     end
   }
 end
@@ -731,7 +731,7 @@ end
 Given 'a cookbook recipe with a resource that uses the old notification syntax' do
   write_recipe %q{
     template "/etc/www/configures-apache.conf" do
-      notifies :restart, resources(:service => "apache")
+      notifies :restart, resources(service: "apache")
     end
   }
 end
@@ -801,7 +801,7 @@ Given 'a cookbook template that uses all variables passed' do
     template "/tmp/config.conf" do
       source "config.conf.erb"
       variables(
-        :config_var => node[:configs][:config_var]
+        config_var: node[:configs][:config_var]
       )
     end
   }
@@ -845,7 +845,7 @@ end
 
 Given 'a cookbook that contains a definition' do
   write_definition("apache_site", %q{
-    define :apache_site, :enable => true do
+    define :apache_site, enable: true do
       log "I am a definition"
     end
   })
@@ -855,17 +855,17 @@ Given 'a cookbook that contains a definition' do
 end
 
 Given /^a cookbook that contains a LWRP (?:with a single notification|that uses the current notification syntax)$/ do
-  cookbook_with_lwrp({:notifies => :does_notify})
+  cookbook_with_lwrp({notifies: :does_notify})
 end
 
 Given 'a cookbook that contains a LWRP with a single notification without parentheses' do
-  cookbook_with_lwrp({:notifies => :does_notify_without_parens})
+  cookbook_with_lwrp({notifies: :does_notify_without_parens})
 end
 
 Given /^a cookbook that contains a LWRP that declares a resource called ([^ ]+) with the condition (.*)$/ do |name,condition|
   write_resource("site", %q{
     actions :create
-    attribute :name, :name_attribute => true
+    attribute :name, name_attribute: true
   })
   write_provider("site", %Q{
     action :create do
@@ -880,7 +880,7 @@ end
 Given /^a cookbook that contains a LWRP that (?:does not trigger notifications|declares a resource with no condition)$/ do
   write_resource("site", %q{
     actions :create
-    attribute :name, :kind_of => String, :name_attribute => true
+    attribute :name, kind_of: String, name_attribute: true
   })
   write_provider("site", %q{
     action :create do
@@ -892,7 +892,7 @@ end
 Given /^a cookbook that contains a LWRP that uses converge_by - (brace|do) block (with|without) parentheses$/ do |block_type, with_parens|
   write_resource("site", %q{
     actions :create
-    attribute :name, :kind_of => String, :name_attribute => true
+    attribute :name, kind_of: String, name_attribute: true
   })
   if block_type == 'brace'
     write_provider("site", %q{
@@ -922,17 +922,17 @@ Given /^a cookbook that contains a LWRP that uses converge_by - (brace|do) block
 end
 
 Given /^a cookbook that contains a LWRP that uses the deprecated notification syntax(.*)$/ do |qualifier|
-  cookbook_with_lwrp({:notifies => qualifier.include?('class variable') ? :class_variable : :deprecated_syntax})
+  cookbook_with_lwrp({notifies: qualifier.include?('class variable') ? :class_variable : :deprecated_syntax})
 end
 
 Given 'a cookbook that contains a LWRP that uses use_inline_resources' do
-  cookbook_with_lwrp({:use_inline_resources => true})
+  cookbook_with_lwrp({use_inline_resources: true})
 end
 
 Given 'a cookbook that contains a LWRP with multiple notifications' do
   write_resource("site", %q{
     actions :create, :delete
-    attribute :name, :kind_of => String, :name_attribute => true
+    attribute :name, kind_of: String, name_attribute: true
   })
   write_provider("site", %q{
     action :create do
@@ -954,8 +954,8 @@ Given /^a cookbook that contains a LWRP with (no|a) default action( defined via 
   else
     :ruby_default_action
   end
-  cookbook_with_lwrp({:default_action => default_action,
-                      :notifies => :does_notify})
+  cookbook_with_lwrp({default_action: default_action,
+                      notifies: :does_notify})
 end
 
 Given 'a cookbook that contains no ruby blocks' do
@@ -1137,8 +1137,8 @@ Given 'a cookbook with a single recipe that passes node attributes accessed via 
     template "/etc/foo" do
       source "foo.erb"
       variables({
-        :port => node[:foo][:port],
-        :user => node[:foo][:user]
+        port: node[:foo][:port],
+        user: node[:foo][:user]
       })
     end
   }.strip
@@ -1147,7 +1147,7 @@ end
 Given 'a cookbook with a single recipe that uses a hash value to access a node attribute' do
   write_recipe %q{
     some_hash = {
-      :key => "value"
+      key: "value"
     }
     execute "accesses-hash" do
       command "echo #{node['foo'][some_hash[:key]]}"
@@ -1158,8 +1158,8 @@ end
 Given /a(nother)? cookbook with a single recipe that (reads|updates|ignores)(nested)? node attributes via ([a-z,]*)(?:(?: and calls node\.)?([a-z_?]+)?| with (.*)?)(?: only)?$/ do |more_than_one,op,nested,types,method,expr|
   cookbook_name = more_than_one.nil? ? 'example' : 'another_example'
 
-  access = nested.nil? ? {:strings => "['foo']", :symbols => '[:foo]', :vivified => '.foo'} :
-           {:strings => "['bar']['baz']", :symbols => '[:fee][:fi][:fo][:fum]', :vivified => '.bar.baz'}
+  access = nested.nil? ? {strings: "['foo']", symbols: '[:foo]', vivified: '.foo'} :
+           {strings: "['bar']['baz']", symbols: '[:fee][:fi][:fo][:fum]', vivified: '.bar.baz'}
 
   recipe_content =
       (if types == 'none'
@@ -1174,9 +1174,9 @@ Given /a(nother)? cookbook with a single recipe that (reads|updates|ignores)(nes
 
   unless method.nil?
     recipe_content += {:platform? => "node.platform?('redhat')",
-      :run_list => "log 'hello' if node.run_list.roles.include?(node[:foo][:bar])",
-      :run_state => "node.run_state[:reboot_requested] = true",
-      :set => "node.set['foo']['bar']['baz'] = 'secret'"}[method.to_sym]
+      run_list: "log 'hello' if node.run_list.roles.include?(node[:foo][:bar])",
+      run_state: "node.run_state[:reboot_requested] = true",
+      set: "node.set['foo']['bar']['baz'] = 'secret'"}[method.to_sym]
   end
 
   write_recipe(recipe_content, cookbook_name)
@@ -1331,19 +1331,19 @@ Given /^a cookbook with metadata that includes a (matched|mismatched) cookbook n
 end
 
 Given /^a directory that contains a role file ([^ ]+) in (json|ruby) that defines role name (.*)$/ do |file_name, format, role_name|
-  role(:role_name => %Q{"#{role_name}"}, :file_name => file_name, :format => format.to_sym)
+  role(role_name: %Q{"#{role_name}"}, file_name: file_name, format: format.to_sym)
 end
 
 Given 'a directory that contains a ruby role that declares the role name more than once' do
-  role(:role_name => ['"webserver"', '"apache"'], :file_name => 'webserver.rb')
+  role(role_name: ['"webserver"', '"apache"'], file_name: 'webserver.rb')
 end
 
 Given 'a directory that contains a ruby role with an expression as its name' do
-  role(:role_name => '"#{foo}#{bar}"', :file_name => 'webserver.rb')
+  role(role_name: '"#{foo}#{bar}"', file_name: 'webserver.rb')
 end
 
 Given /^a directory that contains an environment file (.*) in ruby that defines environment name (.*)$/ do |file_name, env_name|
-  environment(:environment_name => %Q{"#{env_name}"}, :file_name => 'production.rb')
+  environment(environment_name: %Q{"#{env_name}"}, file_name: 'production.rb')
 end
 
 Given /^a ([a-z_]+) resource declared with the mode ([^\s]+)(?: with comment (.*)?)?$/ do |resource,mode,comment|
@@ -1364,8 +1364,8 @@ end
 
 Given(/^a LWRP with an action :create that notifies with (converge_by|updated_by_last_action) and another :delete that does not notify$/) do |notify_type|
   cookbook_with_lwrp_actions([
-    {:name => :create, :notify_type => notify_type.to_sym},
-    {:name => :delete, :notify_type => :none}
+    {name: :create, notify_type: notify_type.to_sym},
+    {name: :delete, notify_type: :none}
   ])
 end
 
@@ -1380,15 +1380,15 @@ Given /^a Rakefile that defines (no lint task|a lint task with no block|a lint t
       when /empty block/ then :empty_block
       when /a block/ then :block
     end,
-  options.strip.empty? ? {} : {:options => options.strip})
+  options.strip.empty? ? {} : {options: options.strip})
 end
 
 Given /^a Rakefile that defines a lint task specifying files to lint as (.*)$/ do |files|
-  rakefile(:block, :files => files)
+  rakefile(:block, files: files)
 end
 
 Given 'a Rakefile that defines a lint task specifying a different name' do
-  rakefile(:block, :name => 'lint')
+  rakefile(:block, name: 'lint')
 end
 
 Given 'a recipe that contains a ruby block without a block attribute' do
@@ -1560,7 +1560,7 @@ Given /^a template that includes a partial( that includes the original template 
     template "/tmp/a" do
       source "a.erb"
       variables({
-        :config_var => "foo"
+        config_var: "foo"
       })
     end
   }
@@ -1578,7 +1578,7 @@ Given /^a template that includes a (missing )?partial with a relative subdirecto
     template "/tmp/a" do
       source "a.erb"
       variables({
-        :config_var => "foo"
+        config_var: "foo"
       })
     end
   }
@@ -1738,7 +1738,7 @@ Given /^a recipe that uses include_recipe$/ do
 end
 
 Given /^a ruby environment file that defines an environment with name (.*)$/ do |env_name|
-  environment(:environment_name => %Q{"#{env_name}"}, :file_name => 'production.rb')
+  environment(environment_name: %Q{"#{env_name}"}, file_name: 'production.rb')
 end
 
 Given /^a ruby environment that triggers FC050 with comment (.*)$/ do |comment|
@@ -1749,7 +1749,7 @@ Given /^a ruby environment that triggers FC050 with comment (.*)$/ do |comment|
 end
 
 Given /^a ruby role file that defines a role with name (.*)$/ do |role_name|
-  role(:role_name => [%Q{"#{role_name}"}], :file_name => 'webserver.rb')
+  role(role_name: [%Q{"#{role_name}"}], file_name: 'webserver.rb')
 end
 
 Given /^a ruby role that triggers FC049 with comment (.*)$/ do |comment|
@@ -1767,16 +1767,16 @@ Given /^a template directory that contains a binary file (.*) that is not valid 
 end
 
 Given 'each role directory has a role with a name that does not match the containing file name' do
-  role(:dir => 'roles1', :role_name => '"apache"', :file_name => 'webserver.rb')
-  role(:dir => 'roles2', :role_name => '"postgresql"', :file_name => 'database.rb')
+  role(dir: 'roles1', role_name: '"apache"', file_name: 'webserver.rb')
+  role(dir: 'roles2', role_name: '"postgresql"', file_name: 'database.rb')
 end
 
 Given /^it contains an environment file (.*\.rb) that defines the environment name (.*)$/ do |file_name, env_name|
-  environment(:environment_name => env_name, :file_name => file_name)
+  environment(environment_name: env_name, file_name: file_name)
 end
 
 Given /^it contains a role file ([a-z]+\.rb) that defines the role name (.*)$/ do |file_name, role_name|
-  role(:role_name => role_name, :file_name => file_name)
+  role(role_name: role_name, file_name: file_name)
 end
 
 Given /^the cookbook metadata declares support for (.*)$/ do |supported_platforms|
@@ -1905,7 +1905,7 @@ When /^I run it on the command line including a custom rule (file|directory) con
       rule "BAR001", "Use symbols in preference to strings to access node attributes" do
         tags %w{style attributes}
         recipe do |ast|
-          attribute_access(ast, :type => :string).map{|ar| match(ar)}
+          attribute_access(ast, type: :string).map{|ar| match(ar)}
         end
       end
   }
@@ -1971,68 +1971,68 @@ Then /^an? '([^']+)' error should be displayed$/ do |expected_error|
 end
 
 Then 'the attribute consistency warning 019 should be shown for both of the recipes that use symbols' do
-  expect_warning 'FC019', :file => 'recipes/symbol_1.rb'
-  expect_warning 'FC019', :file => 'recipes/symbol_2.rb'
+  expect_warning 'FC019', file: 'recipes/symbol_1.rb'
+  expect_warning 'FC019', file: 'recipes/symbol_2.rb'
 end
 
 Then /^the bare attribute keys warning 044 should not be displayed against the (brace|do) block$/ do |block_type|
   line = block_type == 'brace' ? 2 : 3
-  expect_warning 'FC044', {:expect_warning => false, :line => line, :file_type => :attributes}
+  expect_warning 'FC044', {expect_warning: false, line: line, file_type: :attributes}
 end
 
 Then /^the bare attribute keys warning 044 should not be displayed against the (?:local variable|library call)$/ do
-  expect_warning 'FC044', {:expect_warning => false, :line => 2, :file_type => :attributes}
+  expect_warning 'FC044', {expect_warning: false, line: 2, file_type: :attributes}
 end
 
 Then /^the bare attribute keys warning 044 should not be displayed against the new line$/ do
-  expect_warning 'FC044', {:expect_warning => false, :line => 3, :file_type => :attributes}
+  expect_warning 'FC044', {expect_warning: false, line: 3, file_type: :attributes}
 end
 
 Then 'the execute resource used to run git commands warning 040 should be displayed against the last resource' do
-  expect_warning 'FC040', {:line => 7}
+  expect_warning 'FC040', {line: 7}
 end
 
 Then /^the LWRP does not notify when updated warning 017 should( not)? be shown against the :([^ ]+) action$/ do |not_shown, action|
   line = action == 'create' ? 1 : 8
-  expect_warning('FC017', :file_type => :provider, :expect_warning => ! not_shown, :line => line)
+  expect_warning('FC017', file_type: :provider, expect_warning: ! not_shown, line: line)
 end
 
 Then /^the invalid (role|environment) name warning 050 should( not)? be shown$/ do |type, not_shown|
   file = type == 'role' ? 'roles/webserver.rb' : 'environments/production.rb'
-  expect_warning 'FC050', {:expect_warning => ! not_shown, :file => file}
+  expect_warning 'FC050', {expect_warning: ! not_shown, file: file}
 end
 
 Then /^the invalid environment name warning 050 should( not)? be shown against the (eu|us) environment$/ do |not_shown, env|
-  expect_warning 'FC050', {:expect_warning => ! not_shown,
-    :file => "environments/production_#{env}.rb", :line => 1}
+  expect_warning 'FC050', {expect_warning: ! not_shown,
+    file: "environments/production_#{env}.rb", line: 1}
 end
 
 Then 'the prefer mixlib shellout warning 048 should not be displayed against the group resource' do
-  expect_warning 'FC048', {:expect_warning => false, :line => 2}
+  expect_warning 'FC048', {expect_warning: false, line: 2}
 end
 
 Then 'the prefer mixlib shellout warning 048 should not be displayed against the user resource' do
-  expect_warning 'FC048', {:expect_warning => false, :line => 2}
+  expect_warning 'FC048', {expect_warning: false, line: 2}
 end
 
 Then /^the role name does not match file name warning 049 should( not)? be shown( against the second name)?$/ do |not_shown, second|
-  expect_warning 'FC049', {:expect_warning => ! not_shown,
-                           :file => 'roles/webserver.rb', :line => second ? 2 : 1}
+  expect_warning 'FC049', {expect_warning: ! not_shown,
+                           file: 'roles/webserver.rb', line: second ? 2 : 1}
 end
 
 Then 'the role name does not match file name warning 049 should be shown against the files in both directories' do
-  expect_warning 'FC049', {:file => "roles1/webserver.rb", :line => 1}
-  expect_warning 'FC049', {:file => "roles2/database.rb", :line => 1}
+  expect_warning 'FC049', {file: "roles1/webserver.rb", line: 1}
+  expect_warning 'FC049', {file: "roles2/database.rb", line: 1}
 end
 
 Then /^the role name does not match file name warning 049 should( not)? be shown against the (webserver|database) role$/ do |not_shown, role|
-  expect_warning 'FC049', {:expect_warning => ! not_shown,
-                           :file => "roles/#{role}.rb", :line => 1}
+  expect_warning 'FC049', {expect_warning: ! not_shown,
+                           file: "roles/#{role}.rb", line: 1}
 end
 
 Then 'the long ruby block warning 014 should be displayed against the long block only' do
-  expect_warning 'FC014', {:expect_warning => false, :line => 1}
-  expect_warning 'FC014', {:expect_warning => true, :line => 11}
+  expect_warning 'FC014', {expect_warning: false, line: 1}
+  expect_warning 'FC014', {expect_warning: true, line: 11}
 end
 
 Then /^the lint task will be listed( under the different name)?$/ do |diff_name|
@@ -2060,16 +2060,16 @@ Then 'the attribute consistency warning 019 should warn on lines 2 and 10 in tha
 end
 
 Then 'the attribute consistency warning 019 should be displayed for the recipe' do
-  expect_warning('FC019', :line => 2)
+  expect_warning('FC019', line: 2)
 end
 
 Then 'the attribute consistency warning 019 should not be displayed for the attributes' do
-  expect_warning('FC019', :file_type => :attributes, :line => 1, :expect_warning => false)
+  expect_warning('FC019', file_type: :attributes, line: 1, expect_warning: false)
 end
 
 Then /^the warning ([0-9]+ )?should (not )?be (?:displayed|shown)$/ do |warning,should_not|
   code = warning.nil? ? 'FCTEST001' : "FC#{warning.strip}"
-  expect_warning code, {:expect_warning => should_not.nil?}
+  expect_warning code, {expect_warning: should_not.nil?}
 end
 
 Then /^the (?:[a-zA-Z \-_]+) warning ([0-9]+) should (not )?be displayed(?: against the (attributes|libraries|definition|metadata|provider|resource|README.md|README.rdoc) file)?( below)?$/ do |code, no_display, file, warning_only|
@@ -2089,14 +2089,14 @@ Then /^the (?:[a-zA-Z \-_]+) warning ([0-9]+) should (not )?be displayed(?: agai
 end
 
 Then /^the attribute consistency warning 019 should be (shown|not shown)$/ do |show_warning|
-  expect_warning('FC019', :line => nil, :expect_warning => show_warning == 'shown')
+  expect_warning('FC019', line: nil, expect_warning: show_warning == 'shown')
 end
 
 Then /^the boilerplate metadata warning 008 should warn on lines (.*)$/ do |lines_to_warn|
   if lines_to_warn.strip == ''
     expect_no_warning('FC008')
   else
-    lines_to_warn.split(',').each{|line| expect_warning('FC008', :line => line, :file => 'metadata.rb')}
+    lines_to_warn.split(',').each{|line| expect_warning('FC008', line: line, file: 'metadata.rb')}
   end
 end
 
@@ -2109,24 +2109,24 @@ Then /^the build will (succeed|fail) with (?:no )?warnings(.*)$/ do |build_outco
 end
 
 Then 'the check for server warning 003 should not be displayed against the condition' do
-  expect_warning("FC003", :line => nil, :expect_warning => false)
+  expect_warning("FC003", line: nil, expect_warning: false)
 end
 
 Then /^the check for server warning 003 should not be displayed against the search after the (.*) conditional$/ do |format|
   line = format == 'oneline' ? 2 : 4
-  expect_warning("FC003", :line => line, :expect_warning => false)
+  expect_warning("FC003", line: line, expect_warning: false)
 end
 
 Then 'the check for server warning 003 should not be displayed given we have checked' do
-  expect_warning("FC003", :line => 4, :expect_warning => false)
+  expect_warning("FC003", line: 4, expect_warning: false)
 end
 
 Then /^the consider adding platform warning 024 should( not)? be shown$/ do |should_not|
-  expect_warning('FC024', :line => should_not.nil? ? @expected_line : nil, :expect_warning => should_not.nil?)
+  expect_warning('FC024', line: should_not.nil? ? @expected_line : nil, expect_warning: should_not.nil?)
 end
 
 Then /^the conditional block contains only string warning 026 should be (shown|not shown)$/ do |show_warning|
-  expect_warning('FC026', :line => nil, :expect_warning => show_warning == 'shown')
+  expect_warning('FC026', line: nil, expect_warning: show_warning == 'shown')
 end
 
 Then /^the current version should( not)? be displayed$/ do |no_display|
@@ -2147,11 +2147,11 @@ Then /^the debugger breakpoint warning 030 should be (not )?shown against the (.
     when 'resource' then 'resources/foo.rb'
     when 'template' then 'templates/default/foo.erb'
   end
-  expect_warning('FC030', :line => nil, :expect_warning => should_not.nil?, :file => filename)
+  expect_warning('FC030', line: nil, expect_warning: should_not.nil?, file: filename)
 end
 
 Then 'the dodgy resource condition warning 022 should not be shown' do
-  expect_warning('FC022', {:line => nil, :expect_warning => false})
+  expect_warning('FC022', {line: nil, expect_warning: false})
 end
 
 Then /^the warning (\d+) should be (valid|invalid)$/ do |code, valid|
@@ -2160,7 +2160,7 @@ Then /^the warning (\d+) should be (valid|invalid)$/ do |code, valid|
 end
 
 Then /^the incorrect platform usage warning 028 should be (not )?shown$/ do |should_not|
-  expect_warning('FC028', :line => nil, :expect_warning => should_not.nil?)
+  expect_warning('FC028', line: nil, expect_warning: should_not.nil?)
 end
 
 Then /^the line number and line of code that triggered the warning(s)? should be displayed$/ do |multiple|
@@ -2173,25 +2173,25 @@ Then /^the line number and line of code that triggered the warning(s)? should be
 end
 
 Then 'the missing template warning 033 should not be displayed against the template' do
-  expect_warning('FC033', :line => 3, :expect_warning => false)
+  expect_warning('FC033', line: 3, expect_warning: false)
 end
 
 Then /^the no leading cookbook name warning 029 should be (not )?shown$/ do |should_not|
-  expect_warning('FC029', :line => 1, :expect_warning => should_not.nil?, :file => 'metadata.rb')
+  expect_warning('FC029', line: 1, expect_warning: should_not.nil?, file: 'metadata.rb')
 end
 
 Then 'the node access warning 001 should be displayed for each match' do
-  expect_warning('FC001', :line => 1)
-  expect_warning('FC001', :line => 2)
+  expect_warning('FC001', line: 1)
+  expect_warning('FC001', line: 2)
 end
 
 Then 'the node access warning 001 should be displayed against the variables' do
-  expect_warning('FC001', :line => 4)
-  expect_warning('FC001', :line => 5)
+  expect_warning('FC001', line: 4)
+  expect_warning('FC001', line: 5)
 end
 
 Then 'the node access warning 001 should be displayed twice for the same line' do
-  expect_warning('FC001', :line => 1, :num_occurrences => 2)
+  expect_warning('FC001', line: 1, num_occurrences: 2)
 end
 
 Then 'the node access warning 001 should warn on lines 2 and 10 in that order' do
@@ -2206,11 +2206,11 @@ Then 'the node access warning 001 should be displayed for the recipe' do
 end
 
 Then 'the node access warning 001 should not be displayed for the attributes' do
-  expect_warning("FC001", :file_type => :attributes, :line => 1, :expect_warning => false)
+  expect_warning("FC001", file_type: :attributes, line: 1, expect_warning: false)
 end
 
 Then 'the prefer chef_gem to manual install warning 025 should be shown' do
-  expect_warning('FC025', :line => nil)
+  expect_warning('FC025', line: nil)
 end
 
 Then 'the recipe filename should be displayed' do
@@ -2218,20 +2218,20 @@ Then 'the recipe filename should be displayed' do
 end
 
 Then /^the resource sets internal attribute warning 027 should be (not )?shown$/ do |should_not|
-  expect_warning('FC027', :line => nil, :expect_warning => should_not.nil?)
+  expect_warning('FC027', line: nil, expect_warning: should_not.nil?)
 end
 
 Then /^the service resource warning 005 should( not)? be visible$/ do |dont_show|
-  expect_warning('FC005', :line => dont_show ? 2 : 7, :expect_warning => ! dont_show)
+  expect_warning('FC005', line: dont_show ? 2 : 7, expect_warning: ! dont_show)
 end
 
 Then /^the service resource warning 005 should( not)? be displayed against the first resource in the block$/ do |dont_show|
-  expect_warning('FC005', :line => 2, :expect_warning => ! dont_show)
+  expect_warning('FC005', line: 2, expect_warning: ! dont_show)
 end
 
 Then /^the service resource warning 005 should( not)? be shown$/ do |dont_show|
-  expect_warning('FC005', :line => 2, :file_type => :provider,
-                 :expect_warning => ! dont_show)
+  expect_warning('FC005', line: 2, file_type: :provider,
+                 expect_warning: ! dont_show)
 end
 
 Then /^the simple usage text should be displayed along with a (non-)?zero exit code$/ do |non_zero|
@@ -2239,16 +2239,16 @@ Then /^the simple usage text should be displayed along with a (non-)?zero exit c
 end
 
 Then /^the template partials loop indefinitely warning 051 should (not )?be displayed against the templates$/ do |not_shown|
-  expect_warning('FC051', :file => 'templates/default/a.erb', :line => 1,
-                 :expect_warning => ! not_shown)
-  expect_warning('FC051', :file => 'templates/default/b.erb', :line => 1,
-                 :expect_warning => ! not_shown)
+  expect_warning('FC051', file: 'templates/default/a.erb', line: 1,
+                 expect_warning: ! not_shown)
+  expect_warning('FC051', file: 'templates/default/b.erb', line: 1,
+                 expect_warning: ! not_shown)
 end
 
 Then 'the undeclared dependency warning 007 should be displayed only for the undeclared dependencies' do
-  expect_warning("FC007", :file => 'recipes/default.rb', :line => 1, :expect_warning => false)
-  expect_warning("FC007", :file => 'recipes/default.rb', :line => 2, :expect_warning => false)
-  expect_warning("FC007", :file => 'recipes/default.rb', :line => 6, :expect_warning => true)
+  expect_warning("FC007", file: 'recipes/default.rb', line: 1, expect_warning: false)
+  expect_warning("FC007", file: 'recipes/default.rb', line: 2, expect_warning: false)
+  expect_warning("FC007", file: 'recipes/default.rb', line: 6, expect_warning: true)
 end
 
 Then /^the unused template variables warning 034 should (not )?be displayed against the (?:inferred )?template(.*)?$/ do |not_shown, ext|
@@ -2257,8 +2257,8 @@ Then /^the unused template variables warning 034 should (not )?be displayed agai
   else
     "templates/default/config#{ext.strip}"
   end
-  expect_warning('FC034', :file => file, :line => 1,
-		 :expect_warning => ! not_shown)
+  expect_warning('FC034', file: file, line: 1,
+		 expect_warning: ! not_shown)
 end
 
 Then /^the unrecognised attribute warning 009 should be (true|false)$/ do |shown|
@@ -2266,7 +2266,7 @@ Then /^the unrecognised attribute warning 009 should be (true|false)$/ do |shown
 end
 
 Then 'the unrecognised attribute warning 009 should be displayed against the correct resource' do
-  expect_warning('FC009', :line => 7)
+  expect_warning('FC009', line: 7)
 end
 
 Then 'the usage text should include an option for specifying tags that will fail the build' do
@@ -2275,7 +2275,7 @@ Then 'the usage text should include an option for specifying tags that will fail
 end
 
 Then /^the warnings shown should be (.*)$/ do |warnings|
-  warnings.split(',').each {|warning| expect_warning(warning, :line => nil)}
+  warnings.split(',').each {|warning| expect_warning(warning, line: nil)}
 end
 
 When /^I check the cookbook specifying a search grammar that (does not exist|is not in treetop format|is a valid treetop grammar)$/ do |search_grammar|
@@ -2306,9 +2306,9 @@ Given(/^a cookbook with an? (.*) file with an interpolated name$/) do |file_type
 end
 
 Then /^the metadata using suggests warning 052 should be (shown|not shown) against the metadata file$/ do |show_warning|
-  expect_warning('FC052', :file => "metadata.rb", :line => 2, :expect_warning => show_warning == 'shown')
+  expect_warning('FC052', file: "metadata.rb", line: 2, expect_warning: show_warning == 'shown')
 end
 
 Then /^the metadata using recommends warning 053 should be (shown|not shown) against the metadata file$/ do |show_warning|
-  expect_warning('FC053', :file => "metadata.rb", :line => 2, :expect_warning => show_warning == 'shown')
+  expect_warning('FC053', file: "metadata.rb", line: 2, expect_warning: show_warning == 'shown')
 end

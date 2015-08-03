@@ -16,7 +16,7 @@ end
 def pinned_cookbooks(path)
   File.read(path).lines.map do |line|
     name, ref = line.strip.split(':')
-    {:name => name, :ref => ref}
+    {name: name, ref: ref}
   end
 end
 

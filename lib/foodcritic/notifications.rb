@@ -10,12 +10,12 @@ module FoodCritic
     #       notifies :restart, "service[apache]"
     #     end
     #
-    #     => [{:resource_name=>"apache",
-    #       :resource_type=>:service,
-    #       :type=>:notifies,
-    #       :style=>:new,
-    #       :action=>:restart,
-    #       :timing=>:delayed}]
+    #     => [{resource_name:"apache",
+    #       resource_type::service,
+    #       type::notifies,
+    #       style::new,
+    #       action::restart,
+    #       timing::delayed}]
     #
     def notifications(ast)
       # Sanity check the AST provided.

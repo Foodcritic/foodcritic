@@ -108,11 +108,11 @@ module FoodCritic
     #   :metadata, :provider, :resource
     def expect_warning(code, options={})
       if options.has_key?(:file_type)
-        options[:file] = {:attributes => 'attributes/default.rb', :definition => 'definitions/apache_site.rb',
-                          :metadata => 'metadata.rb', :provider => 'providers/site.rb',
-                          :resource => 'resources/site.rb', :libraries => 'libraries/lib.rb'}[options[:file_type]]
+        options[:file] = {attributes: 'attributes/default.rb', definition: 'definitions/apache_site.rb',
+                          metadata: 'metadata.rb', provider: 'providers/site.rb',
+                          resource: 'resources/site.rb', libraries: 'libraries/lib.rb'}[options[:file_type]]
       end
-      options = {:line => 1, :expect_warning => true, :file => 'recipes/default.rb'}.merge!(options)
+      options = {line: 1, expect_warning: true, file: 'recipes/default.rb'}.merge!(options)
       unless options[:file].include?('roles') ||
         options[:file].include?('environments')
           options[:file] = "cookbooks/example/#{options[:file]}"
@@ -128,7 +128,7 @@ module FoodCritic
     # Expect a warning not to be included in the command output.
     #
     # @see CommandHelpers#expect_warning
-    def expect_no_warning(code, options={:expect_warning => false})
+    def expect_no_warning(code, options={expect_warning: false})
       expect_warning(code, options)
     end
 
@@ -156,8 +156,8 @@ module FoodCritic
       option_lines.map do |o|
         o.sub('`[`no-`]`', '').split('`').select{|f| f.include?('-')}
       end.map do |option|
-        {:short => option.first.sub(/^-/, ''),
-         :long => option.last.sub(/^--/, '')}
+        {short: option.first.sub(/^-/, ''),
+         long: option.last.sub(/^--/, '')}
       end.sort_by{|o| o[:short]}
     end
 
@@ -180,49 +180,49 @@ module FoodCritic
 
     def usage_options
       [
-        {:short => 'c', :long => 'chef-version VERSION',
-         :description => 'Only check against rules valid for this version of Chef.'},
+        {short: 'c', long: 'chef-version VERSION',
+         description: 'Only check against rules valid for this version of Chef.'},
 
-        {:short => 'f', :long => 'epic-fail TAGS',
-         :description => "Fail the build based on tags. Use 'any' to fail on all warnings."},
+        {short: 'f', long: 'epic-fail TAGS',
+         description: "Fail the build based on tags. Use 'any' to fail on all warnings."},
 
-        {:short => 'l', :long => 'list',
-         :description => 'List all enabled rules and their descriptions.'},
+        {short: 'l', long: 'list',
+         description: 'List all enabled rules and their descriptions.'},
 
-        {:short => 't', :long => 'tags TAGS',
-         :description => 'Check against (or exclude ~) rules with the specified tags.'},
+        {short: 't', long: 'tags TAGS',
+         description: 'Check against (or exclude ~) rules with the specified tags.'},
 
-        {:short => 'B', :long => 'cookbook-path PATH',
-         :description => 'Cookbook path(s) to check.'},
+        {short: 'B', long: 'cookbook-path PATH',
+         description: 'Cookbook path(s) to check.'},
 
-        {:short => 'C', :long => '[no-]context',
-         :description => 'Show lines matched against rather than the default summary.'},
+        {short: 'C', long: '[no-]context',
+         description: 'Show lines matched against rather than the default summary.'},
 
-        {:short => 'E', :long => 'environment-path PATH',
-         :description => 'Environment path(s) to check.'},
+        {short: 'E', long: 'environment-path PATH',
+         description: 'Environment path(s) to check.'},
 
-        {:short => 'I', :long => 'include PATH',
-         :description => 'Additional rule file path(s) to load.'},
+        {short: 'I', long: 'include PATH',
+         description: 'Additional rule file path(s) to load.'},
 
-        {:short => 'R', :long => 'role-path PATH',
-         :description => 'Role path(s) to check.'},
+        {short: 'R', long: 'role-path PATH',
+         description: 'Role path(s) to check.'},
 
-        {:short => 'S', :long => 'search-grammar PATH',
-         :description => 'Specify grammar to use when validating search syntax.'},
+        {short: 'S', long: 'search-grammar PATH',
+         description: 'Specify grammar to use when validating search syntax.'},
 
-        {:short => 'V', :long => 'version',
-         :description => 'Display the foodcritic version.'},
+        {short: 'V', long: 'version',
+         description: 'Display the foodcritic version.'},
 
-        {:short => 'X', :long => 'exclude PATH',
-         :description => 'Exclude path(s) from being linted.'}
+        {short: 'X', long: 'exclude PATH',
+         description: 'Exclude path(s) from being linted.'}
 
       ]
     end
 
     def usage_options_for_diff
       usage_options.map do |o|
-        {:short => o[:short],
-         :long => o[:long].split(' ').first.sub(/^\[no-\]/, '')}
+        {short: o[:short],
+         long: o[:long].split(' ').first.sub(/^\[no-\]/, '')}
       end.sort_by{|o| o[:short]}
     end
 
@@ -306,7 +306,7 @@ module FoodCritic
     def assert_build_result(success, warnings)
       success ? assert_no_error_occurred : assert_error_occurred
       warnings.each do |code|
-        expect_warning(code, :warning_only => true)
+        expect_warning(code, warning_only: true)
       end
     end
 
