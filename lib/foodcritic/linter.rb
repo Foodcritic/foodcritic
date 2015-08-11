@@ -178,6 +178,7 @@ module FoodCritic
       matches.reject do |m|
         matched_file = m[:filename] || file
         (line = m[:line]) && File.exist?(matched_file) &&
+           !File.directory?(matched_file) &&
            ignore_line_match?(File.readlines(matched_file)[line - 1], rule)
       end
     end
