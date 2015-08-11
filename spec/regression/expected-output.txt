@@ -86,10 +86,6 @@ FC001: Use strings in preference to symbols to access node attributes: ./gems/re
 FC001: Use strings in preference to symbols to access node attributes: ./gems/templates/default/gem_server.conf.erb:6
 FC001: Use strings in preference to symbols to access node attributes: ./gems/templates/default/gem_server.conf.erb:29
 FC001: Use strings in preference to symbols to access node attributes: ./gems/templates/default/gem_server.conf.erb:35
-FC001: Use strings in preference to symbols to access node attributes: ./getting-started/attributes/default.rb:1
-FC001: Use strings in preference to symbols to access node attributes: ./getting-started/templates/default/chef-getting-started.txt.erb:3
-FC001: Use strings in preference to symbols to access node attributes: ./getting-started/templates/default/chef-getting-started.txt.erb:4
-FC001: Use strings in preference to symbols to access node attributes: ./getting-started/templates/default/chef-getting-started.txt.erb:5
 FC001: Use strings in preference to symbols to access node attributes: ./god/definitions/god_monitor.rb:32
 FC001: Use strings in preference to symbols to access node attributes: ./god/templates/default/master.god.erb:2
 FC001: Use strings in preference to symbols to access node attributes: ./god/templates/default/master.god.erb:7
@@ -258,42 +254,6 @@ FC001: Use strings in preference to symbols to access node attributes: ./whiteli
 FC001: Use strings in preference to symbols to access node attributes: ./windows/providers/reboot.rb:22
 FC001: Use strings in preference to symbols to access node attributes: ./windows/providers/reboot.rb:23
 FC001: Use strings in preference to symbols to access node attributes: ./windows/providers/reboot.rb:24
-FC001: Use strings in preference to symbols to access node attributes: ./zenoss/attributes/default.rb:24
-FC001: Use strings in preference to symbols to access node attributes: ./zenoss/attributes/default.rb:26
-FC001: Use strings in preference to symbols to access node attributes: ./zenoss/attributes/default.rb:27
-FC001: Use strings in preference to symbols to access node attributes: ./zenoss/attributes/default.rb:28
-FC001: Use strings in preference to symbols to access node attributes: ./zenoss/attributes/default.rb:29
-FC001: Use strings in preference to symbols to access node attributes: ./zenoss/attributes/default.rb:30
-FC001: Use strings in preference to symbols to access node attributes: ./zenoss/attributes/default.rb:31
-FC001: Use strings in preference to symbols to access node attributes: ./zenoss/attributes/default.rb:32
-FC001: Use strings in preference to symbols to access node attributes: ./zenoss/attributes/default.rb:35
-FC001: Use strings in preference to symbols to access node attributes: ./zenoss/attributes/default.rb:37
-FC001: Use strings in preference to symbols to access node attributes: ./zenoss/attributes/default.rb:41
-FC001: Use strings in preference to symbols to access node attributes: ./zenoss/attributes/default.rb:49
-FC001: Use strings in preference to symbols to access node attributes: ./zenoss/providers/zenbatchload.rb:105
-FC001: Use strings in preference to symbols to access node attributes: ./zenoss/providers/zenbatchload.rb:106
-FC001: Use strings in preference to symbols to access node attributes: ./zenoss/providers/zenbatchload.rb:107
-FC001: Use strings in preference to symbols to access node attributes: ./zenoss/providers/zenbatchload.rb:109
-FC001: Use strings in preference to symbols to access node attributes: ./zenoss/providers/zendmd.rb:19
-FC001: Use strings in preference to symbols to access node attributes: ./zenoss/providers/zendmd.rb:20
-FC001: Use strings in preference to symbols to access node attributes: ./zenoss/providers/zendmd.rb:21
-FC001: Use strings in preference to symbols to access node attributes: ./zenoss/providers/zendmd.rb:23
-FC001: Use strings in preference to symbols to access node attributes: ./zenoss/providers/zenpack.rb:40
-FC001: Use strings in preference to symbols to access node attributes: ./zenoss/providers/zenpack.rb:41
-FC001: Use strings in preference to symbols to access node attributes: ./zenoss/providers/zenpack.rb:42
-FC001: Use strings in preference to symbols to access node attributes: ./zenoss/providers/zenpack.rb:44
-FC001: Use strings in preference to symbols to access node attributes: ./zenoss/providers/zenpack.rb:57
-FC001: Use strings in preference to symbols to access node attributes: ./zenoss/providers/zenpack.rb:58
-FC001: Use strings in preference to symbols to access node attributes: ./zenoss/providers/zenpack.rb:59
-FC001: Use strings in preference to symbols to access node attributes: ./zenoss/providers/zenpack.rb:61
-FC001: Use strings in preference to symbols to access node attributes: ./zenoss/providers/zenpack.rb:72
-FC001: Use strings in preference to symbols to access node attributes: ./zenoss/providers/zenpatch.rb:4
-FC001: Use strings in preference to symbols to access node attributes: ./zenoss/providers/zenpatch.rb:9
-FC001: Use strings in preference to symbols to access node attributes: ./zenoss/providers/zenpatch.rb:11
-FC001: Use strings in preference to symbols to access node attributes: ./zenoss/recipes/server.rb:22
-FC001: Use strings in preference to symbols to access node attributes: ./zenoss/recipes/server.rb:123
-FC001: Use strings in preference to symbols to access node attributes: ./zenoss/recipes/server.rb:173
-FC001: Use strings in preference to symbols to access node attributes: ./zenoss/recipes/server.rb:177
 FC002: Avoid string interpolation where not required: ./ant/resources/library.rb:29
 FC002: Avoid string interpolation where not required: ./application_php/templates/default/php.conf.erb:3
 FC002: Avoid string interpolation where not required: ./application_python/providers/gunicorn.rb:80
@@ -342,8 +302,6 @@ FC002: Avoid string interpolation where not required: ./windows/libraries/window
 FC002: Avoid string interpolation where not required: ./wordpress/recipes/default.rb:66
 FC002: Avoid string interpolation where not required: ./wordpress/recipes/default.rb:148
 FC002: Avoid string interpolation where not required: ./wordpress/templates/default/wordpress.conf.erb:3
-FC002: Avoid string interpolation where not required: ./zenoss/providers/zendmd.rb:4
-FC002: Avoid string interpolation where not required: ./zenoss/recipes/server.rb:164
 FC003: Check whether you are running with chef server before using server-specific features: ./application/libraries/default.rb:97
 FC003: Check whether you are running with chef server before using server-specific features: ./application_ruby/providers/memcached.rb:28
 FC003: Check whether you are running with chef server before using server-specific features: ./database/recipes/ebs_backup.rb:33
@@ -379,10 +337,6 @@ FC003: Check whether you are running with chef server before using server-specif
 FC003: Check whether you are running with chef server before using server-specific features: ./sbuild/recipes/default.rb:56
 FC003: Check whether you are running with chef server before using server-specific features: ./ssh_known_hosts/recipes/default.rb:23
 FC003: Check whether you are running with chef server before using server-specific features: ./ufw/recipes/databag.rb:32
-FC003: Check whether you are running with chef server before using server-specific features: ./zenoss/recipes/client.rb:41
-FC003: Check whether you are running with chef server before using server-specific features: ./zenoss/recipes/server.rb:129
-FC003: Check whether you are running with chef server before using server-specific features: ./zenoss/recipes/server.rb:186
-FC003: Check whether you are running with chef server before using server-specific features: ./zenoss/recipes/server.rb:213
 FC004: Use a service resource to start and stop services: ./runit/recipes/default.rb:22
 FC005: Avoid repetition of resource declarations: ./apache2/recipes/default.rb:131
 FC007: Ensure recipe dependencies are reflected in cookbook metadata: ./apache2/recipes/logrotate.rb:25
@@ -398,7 +352,6 @@ FC007: Ensure recipe dependencies are reflected in cookbook metadata: ./postgres
 FC007: Ensure recipe dependencies are reflected in cookbook metadata: ./postgresql/recipes/ruby.rb:30
 FC007: Ensure recipe dependencies are reflected in cookbook metadata: ./tmux/recipes/package.rb:2
 FC009: Resource attribute not recognised: ./chef-server/recipes/default.rb:46
-FC013: Use file_cache_path rather than hard-coding tmp paths: ./zenoss/providers/zenpack.rb:30
 FC014: Consider extracting long ruby_block to library: ./java/recipes/openjdk.rb:51
 FC014: Consider extracting long ruby_block to library: ./lvm/providers/logical_volume.rb:18
 FC014: Consider extracting long ruby_block to library: ./pxe_dust/recipes/bootstrap_template.rb:77
@@ -438,10 +391,6 @@ FC016: LWRP does not declare a default action: ./python/resources/pip.rb:1
 FC016: LWRP does not declare a default action: ./python/resources/virtualenv.rb:1
 FC016: LWRP does not declare a default action: ./samba/resources/user.rb:1
 FC016: LWRP does not declare a default action: ./transmission/resources/torrent_file.rb:1
-FC016: LWRP does not declare a default action: ./zenoss/resources/zenbatchload.rb:1
-FC016: LWRP does not declare a default action: ./zenoss/resources/zendmd.rb:1
-FC016: LWRP does not declare a default action: ./zenoss/resources/zenpack.rb:1
-FC016: LWRP does not declare a default action: ./zenoss/resources/zenpatch.rb:1
 FC017: LWRP does not notify when updated: ./application/providers/default.rb:23
 FC017: LWRP does not notify when updated: ./application/providers/default.rb:33
 FC017: LWRP does not notify when updated: ./application/providers/default.rb:43
@@ -555,14 +504,6 @@ FC017: LWRP does not notify when updated: ./windows/providers/zipfile.rb:44
 FC017: LWRP does not notify when updated: ./yum/providers/key.rb:25
 FC017: LWRP does not notify when updated: ./yum/providers/repository.rb:28
 FC017: LWRP does not notify when updated: ./yum/providers/repository.rb:45
-FC017: LWRP does not notify when updated: ./zenoss/providers/zenbatchload.rb:2
-FC017: LWRP does not notify when updated: ./zenoss/providers/zendmd.rb:2
-FC017: LWRP does not notify when updated: ./zenoss/providers/zendmd.rb:33
-FC017: LWRP does not notify when updated: ./zenoss/providers/zendmd.rb:63
-FC017: LWRP does not notify when updated: ./zenoss/providers/zendmd.rb:77
-FC017: LWRP does not notify when updated: ./zenoss/providers/zendmd.rb:88
-FC017: LWRP does not notify when updated: ./zenoss/providers/zendmd.rb:97
-FC017: LWRP does not notify when updated: ./zenoss/providers/zenpatch.rb:1
 FC018: LWRP uses deprecated notification syntax: ./pacman/providers/aur.rb:94
 FC018: LWRP uses deprecated notification syntax: ./pacman/providers/aur.rb:104
 FC018: LWRP uses deprecated notification syntax: ./windows/providers/shortcut.rb:54
@@ -642,15 +583,6 @@ FC019: Access node attributes in a consistent manner: runit/definitions/runit_se
 FC019: Access node attributes in a consistent manner: trac/recipes/default.rb:53
 FC019: Access node attributes in a consistent manner: ufw/attributes/default.rb:1
 FC019: Access node attributes in a consistent manner: ufw/attributes/default.rb:2
-FC019: Access node attributes in a consistent manner: zenoss/attributes/default.rb:33
-FC019: Access node attributes in a consistent manner: zenoss/recipes/server.rb:62
-FC019: Access node attributes in a consistent manner: zenoss/recipes/server.rb:86
-FC019: Access node attributes in a consistent manner: zenoss/recipes/server.rb:95
-FC019: Access node attributes in a consistent manner: zenoss/recipes/server.rb:96
-FC019: Access node attributes in a consistent manner: zenoss/recipes/server.rb:106
-FC019: Access node attributes in a consistent manner: zenoss/recipes/server.rb:163
-FC019: Access node attributes in a consistent manner: zenoss/recipes/server.rb:226
-FC019: Access node attributes in a consistent manner: zenoss/recipes/server.rb:227
 FC023: Prefer conditional attributes: ./apache2/definitions/apache_module.rb:30
 FC023: Prefer conditional attributes: ./application_ruby/providers/rails.rb:100
 FC023: Prefer conditional attributes: ./apt/providers/repository.rb:26
@@ -658,7 +590,6 @@ FC023: Prefer conditional attributes: ./apt/providers/repository.rb:68
 FC023: Prefer conditional attributes: ./chef-client/recipes/config.rb:62
 FC023: Prefer conditional attributes: ./database/recipes/ebs_backup.rb:81
 FC023: Prefer conditional attributes: ./gecode/recipes/package.rb:29
-FC023: Prefer conditional attributes: ./gnu_parallel/recipes/homebrew.rb:22
 FC023: Prefer conditional attributes: ./homebrew/providers/tap.rb:14
 FC023: Prefer conditional attributes: ./homebrew/providers/tap.rb:22
 FC023: Prefer conditional attributes: ./lvm/providers/volume_group.rb:12
@@ -689,8 +620,6 @@ FC033: Missing template: ./pdns/recipes/server.rb:43
 FC034: Unused template variables: ./activemq/templates/default/wrapper.conf.erb:1
 FC034: Unused template variables: ./application_java/templates/default/context.xml.erb:1
 FC034: Unused template variables: ./application_python/templates/default/celeryconfig.py.erb:1
-FC034: Unused template variables: ./horizon/templates/default/local_settings.py.erb:1
-FC034: Unused template variables: ./nova/templates/default/libvirtd.conf.erb:1
 FC034: Unused template variables: ./sbuild/templates/default/mk_chroot.sh.erb:1
 FC041: Execute resource used to run curl or wget commands: ./hadoop/recipes/default.rb:33
 FC042: Prefer include_recipe to require_recipe: ./postfix/recipes/aliases.rb:17
@@ -714,19 +643,8 @@ FC043: Prefer new notification syntax: ./drbd/recipes/pair.rb:65
 FC043: Prefer new notification syntax: ./drbd/recipes/pair.rb:85
 FC043: Prefer new notification syntax: ./dynect/recipes/ec2.rb:69
 FC043: Prefer new notification syntax: ./gems/recipes/server.rb:50
-FC043: Prefer new notification syntax: ./glance/recipes/api.rb:51
-FC043: Prefer new notification syntax: ./glance/recipes/api.rb:102
-FC043: Prefer new notification syntax: ./glance/recipes/api.rb:128
-FC043: Prefer new notification syntax: ./glance/recipes/api.rb:145
-FC043: Prefer new notification syntax: ./glance/recipes/api.rb:160
-FC043: Prefer new notification syntax: ./glance/recipes/registry.rb:76
-FC043: Prefer new notification syntax: ./glance/recipes/registry.rb:84
-FC043: Prefer new notification syntax: ./glance/recipes/registry.rb:143
-FC043: Prefer new notification syntax: ./glance/recipes/registry.rb:161
 FC043: Prefer new notification syntax: ./god/definitions/god_monitor.rb:20
 FC043: Prefer new notification syntax: ./god/definitions/god_monitor.rb:23
-FC043: Prefer new notification syntax: ./horizon/recipes/server.rb:159
-FC043: Prefer new notification syntax: ./horizon/recipes/server.rb:165
 FC043: Prefer new notification syntax: ./iptables/definitions/iptables_rule.rb:20
 FC043: Prefer new notification syntax: ./iptables/definitions/iptables_rule.rb:23
 FC043: Prefer new notification syntax: ./jetty/recipes/cargo.rb:41
@@ -736,9 +654,6 @@ FC043: Prefer new notification syntax: ./jetty/recipes/cargo.rb:80
 FC043: Prefer new notification syntax: ./jetty/recipes/default.rb:53
 FC043: Prefer new notification syntax: ./jetty/recipes/default.rb:61
 FC043: Prefer new notification syntax: ./jpackage/recipes/default.rb:33
-FC043: Prefer new notification syntax: ./keystone/recipes/server.rb:63
-FC043: Prefer new notification syntax: ./keystone/recipes/server.rb:89
-FC043: Prefer new notification syntax: ./keystone/recipes/server.rb:112
 FC043: Prefer new notification syntax: ./maradns/recipes/default.rb:37
 FC043: Prefer new notification syntax: ./maradns/recipes/default.rb:46
 FC043: Prefer new notification syntax: ./memcached/recipes/default.rb:41
@@ -751,25 +666,6 @@ FC043: Prefer new notification syntax: ./munin/recipes/server_apache.rb:21
 FC043: Prefer new notification syntax: ./nagios/providers/nrpecheck.rb:31
 FC043: Prefer new notification syntax: ./nagios/providers/nrpecheck.rb:44
 FC043: Prefer new notification syntax: ./nginx/recipes/http_geoip_module.rb:41
-FC043: Prefer new notification syntax: ./nova/recipes/api-ec2.rb:46
-FC043: Prefer new notification syntax: ./nova/recipes/api-ec2.rb:113
-FC043: Prefer new notification syntax: ./nova/recipes/api-metadata.rb:42
-FC043: Prefer new notification syntax: ./nova/recipes/api-metadata.rb:53
-FC043: Prefer new notification syntax: ./nova/recipes/api-os-compute.rb:47
-FC043: Prefer new notification syntax: ./nova/recipes/api-os-compute.rb:112
-FC043: Prefer new notification syntax: ./nova/recipes/api-os-volume.rb:42
-FC043: Prefer new notification syntax: ./nova/recipes/api-os-volume.rb:53
-FC043: Prefer new notification syntax: ./nova/recipes/compute.rb:48
-FC043: Prefer new notification syntax: ./nova/recipes/libvirt.rb:70
-FC043: Prefer new notification syntax: ./nova/recipes/libvirt.rb:81
-FC043: Prefer new notification syntax: ./nova/recipes/libvirt.rb:90
-FC043: Prefer new notification syntax: ./nova/recipes/network.rb:31
-FC043: Prefer new notification syntax: ./nova/recipes/nova-cert.rb:30
-FC043: Prefer new notification syntax: ./nova/recipes/nova-scheduler-patch.rb:24
-FC043: Prefer new notification syntax: ./nova/recipes/scheduler.rb:38
-FC043: Prefer new notification syntax: ./nova/recipes/vncproxy.rb:38
-FC043: Prefer new notification syntax: ./nova/recipes/vncproxy.rb:45
-FC043: Prefer new notification syntax: ./nova/recipes/volume.rb:36
 FC043: Prefer new notification syntax: ./ntp/recipes/default.rb:44
 FC043: Prefer new notification syntax: ./openldap/recipes/auth.rb:46
 FC043: Prefer new notification syntax: ./openldap/recipes/auth.rb:56
@@ -795,8 +691,6 @@ FC043: Prefer new notification syntax: ./tomcat/recipes/default.rb:67
 FC043: Prefer new notification syntax: ./tomcat/recipes/users.rb:22
 FC043: Prefer new notification syntax: ./yum/providers/key.rb:60
 FC043: Prefer new notification syntax: ./yum/providers/repository.rb:94
-FC043: Prefer new notification syntax: ./zenoss/recipes/server.rb:155
-FC043: Prefer new notification syntax: ./zenoss/recipes/server.rb:164
 FC044: Avoid bare attribute keys: ./resolver/attributes/default.rb:20
 FC045: Consider setting cookbook name in metadata: ./maven/metadata.rb:1
 FC047: Attribute assignment does not specify precedence: ./jetty/recipes/cargo.rb:35
