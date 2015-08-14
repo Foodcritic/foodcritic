@@ -5,8 +5,7 @@ Given 'a cookbook attributes file that declares and refers to a local variable' 
   }
 end
 
-Given /^a cookbook attributes file that refers to an attribute with (.*)$/ do |reference|
-  write_attributes %Q{
+Given /^a cookbook attributes file that refers to an attribute with (.*)$/ do |reference| write_attributes %Q{
     default['myhostname'] = #{reference}
   }
 end
@@ -2314,15 +2313,19 @@ Then /^the metadata using recommends warning 053 should be (shown|not shown) aga
 end
 
 Given 'a cookbook with metadata that includes the version keyword and a valid version string' do
-  write_metadata {version '1.2.3'}
+  write_metadata %Q{version '1.2.3'}
 end
 
 Given 'a cookbook with metadata that does not include a version keyword' do
-  write_metadata {
+  write_metadata %Q{
     name '#{cookbook}'
   }
 end
 
 Given 'a cookbook with metadata that includes the version keyword and an invalid version string' do
-  write_metadata {version '1.a.3'}
+  write_metadata %Q{version '1.a.3'}
+end
+
+Then /^the metadata defines valid version warning 055 should be (shown| not shown) against the metadata file$/ do |show_warning|
+  expect_warning('FC055', :file => "metadata.rb", :expect_warning => show_warning == 'shown')
 end
