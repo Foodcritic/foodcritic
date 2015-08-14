@@ -2312,3 +2312,21 @@ end
 Then /^the metadata using recommends warning 053 should be (shown|not shown) against the metadata file$/ do |show_warning|
   expect_warning('FC053', :file => "metadata.rb", :line => 2, :expect_warning => show_warning == 'shown')
 end
+
+Given 'a cookbook with metadata that includes the version keyword and a valid version string' do
+  write_metadata %Q{version '1.2.3'}
+end
+
+Given 'a cookbook with metadata that does not include a version keyword' do
+  write_metadata %Q{
+    name 'test'
+  }
+end
+
+Given 'a cookbook with metadata that includes the version keyword and an invalid version string' do
+  write_metadata %Q{version '1.a.3'}
+end
+
+Then /^the metadata defines valid version warning 055 should be (shown|not shown) against the metadata file$/ do |show_warning|
+  expect_warning('FC055', :file => "metadata.rb", :expect_warning => show_warning == 'shown')
+end
