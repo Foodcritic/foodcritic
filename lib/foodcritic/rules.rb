@@ -779,3 +779,37 @@ rule 'FC054', 'Name should match cookbook dir name in metadata' do
     end
   end
 end
+
+rule 'FC055', 'Valid Cookbook version should be defined' do
+  tags %w{metadata}
+  cookbook do |cb|
+    v_missing = true
+    pass = true
+    noln = 0
+    metafile = File.join(cb, 'metadata.rb')
+    f=open(metafile)
+    while mline=f.gets
+      if mline.include?('version')
+        lnno = $.
+        vers = mline.split
+        if vers.length > 1
+          parts = vers[1].gsub(/\s|'|"/, '').split('.')
+          if parts.length > 1
+            parts.each do |p|
+              if !/\A\d+\z/.match(p)
+                pass = false
+              end
+            end
+            if pass
+              v_missing = false
+            end
+          end
+        end
+      end
+    end
+    if v_missing
+      [ {:filename=>metafile, :matched=>metafile, :line=>lnno, :column=>1 } ]
+    end
+  end
+end
+
