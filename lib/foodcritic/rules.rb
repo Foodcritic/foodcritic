@@ -780,7 +780,7 @@ rule 'FC054', 'Name should match cookbook dir name in metadata' do
   end
 end
 
-rule 'FC055', 'Valid Cookbook version should be defined' do
+rule 'FC055', 'Valid cookbook version should be defined' do
   tags %w{metadata}
   metadata do |ast, filename|
     ver = ast.xpath(%Q(//command[ident/@value='version']/descendant::tstring_content/@value))
