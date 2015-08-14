@@ -774,6 +774,7 @@ rule 'FC054', 'Name should match cookbook dir name in metadata' do
   tags %w(annoyances metadata)
   applies_to { |version| version >= gem_version('12.0.0') }
   metadata do |ast, filename|
+    puts filename
     unless cookbook_name(filename) == filename.split(File::SEPARATOR)[-2]
       [file_match(filename)]
     end
@@ -782,34 +783,25 @@ end
 
 rule 'FC055', 'Valid Cookbook version should be defined' do
   tags %w{metadata}
-  cookbook do |cb|
-    v_missing = true
-    pass = true
-    noln = 0
-    metafile = File.join(cb, 'metadata.rb')
-    f=open(metafile)
-    while mline=f.gets
-      if mline.include?('version')
-        lnno = $.
-        vers = mline.split
-        if vers.length > 1
-          parts = vers[1].gsub(/\s|'|"/, '').split('.')
-          if parts.length > 1
-            parts.each do |p|
-              if !/\A\d+\z/.match(p)
-                pass = false
-              end
-            end
-            if pass
-              v_missing = false
-            end
+  metadata do |ast, filename|
+    ver = ast.xpath(%Q(//command[ident/@value='version']/descendant::tstring_content/@value))
+    if ver.nil? || ver == ''
+      [file_match(filename)]
+    else
+      pass = true
+      parts = ver.to_s.gsub(/\s|'|"/, '').split('.')
+      if parts.length > 1
+        parts.each do |p|
+          if !/\A\d+\z/.match(p)
+            pass = false
           end
         end
+      else
+        pass = false
       end
-    end
-    if v_missing
-      [ {:filename=>metafile, :matched=>metafile, :line=>lnno, :column=>1 } ]
+      unless pass
+        [file_match(filename)]
+      end
     end
   end
 end
-
