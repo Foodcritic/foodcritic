@@ -826,3 +826,28 @@ rule 'FC060', 'LWRP provider declares use_inline_resources and declares #action_
     end
   end
 end
+
+rule 'FC061', 'Valid cookbook version should be defined' do
+  tags %w{metadata}
+  metadata do |ast, filename|
+    ver = ast.xpath(%Q(//command[ident/@value='version']/descendant::tstring_content/@value))
+    if ver.nil? || ver == ''
+      [file_match(filename)]
+    else
+      pass = true
+      parts = ver.to_s.gsub(/\s|'|"/, '').split('.')
+      if parts.length > 1
+        parts.each do |p|
+          if !/\A\d+\z/.match(p)
+            pass = false
+          end
+        end
+      else
+        pass = false
+      end
+      unless pass
+        [file_match(filename)]
+      end
+    end
+  end
+end

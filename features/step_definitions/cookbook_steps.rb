@@ -2411,3 +2411,21 @@ Given /^a cookbook that contains a library resource$/ do
   }
   write_library('lib', library_file)
 end
+
+Given 'a cookbook with metadata that includes the version keyword and a valid version string' do
+  write_metadata %Q{version '1.2.3'}
+end
+
+Given 'a cookbook with metadata that does not include a version keyword' do
+  write_metadata %Q{
+    name 'test'
+  }
+end
+
+Given 'a cookbook with metadata that includes the version keyword and an invalid version string' do
+  write_metadata %Q{version '1.a.3'}
+end
+
+Then /^the metadata defines valid version warning 061 should be (shown|not shown) against the metadata file$/ do |show_warning|
+  expect_warning('FC061', :file => "metadata.rb", :expect_warning => show_warning == 'shown')
+end
