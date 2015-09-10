@@ -19,6 +19,8 @@ def require_chef
 end
 
 def chef_dsl_methods
+  # FIXME: `default` is not valid (in Chef-12 anyway) in a recipe, you must use
+  # node.default so adding Chef::Node.public_instance_methods here seems wrong
   (Chef::Node.public_instance_methods +
    chef_dsl_module.included_modules.map do |mixin|
      mixin.public_instance_methods
@@ -26,7 +28,7 @@ def chef_dsl_methods
 end
 
 def chef_node_methods
-  Chef::Node.public_instance_methods.flatten.sort.uniq
+  (Chef::Node.public_instance_methods + Chef::Node::Attribute.public_instance_methods).flatten.sort.uniq
 end
 
 def chef_resource_actions
