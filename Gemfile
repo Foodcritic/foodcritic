@@ -10,7 +10,7 @@ group :test do
 end
 
 group :development do
-  gem 'chef', '~> 12.1.1'
+  gem 'chef', '~> 12.1'
   gem 'ronn', '~> 0.7'
 
   # We need to lock mustache because ronn does not correctly
