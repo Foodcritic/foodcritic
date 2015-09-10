@@ -45,11 +45,11 @@ describe FoodCritic::Linter do
   describe "#list_rules" do
 
     it "does not require cookbook_path, role_path or environment_path to be specified" do
-      linter.list(:list => true)
+      linter.list(list: true)
     end
 
     it "returns a rule listing" do
-      linter.list(:list => true).must_respond_to(:rules)
+      linter.list(list: true).must_respond_to(:rules)
     end
   end
 
@@ -76,7 +76,7 @@ describe FoodCritic::Linter do
         gem_rules
       end
 
-      verify_loaded :search_gems => true
+      verify_loaded search_gems: true
     end
 
     it "should include files found in :include_rules option" do
@@ -84,7 +84,7 @@ describe FoodCritic::Linter do
       expected_rules = [default_rules_file, include_rules].flatten
       rule_dsl_load_mock.expect(:call, nil, [expected_rules, nil])
 
-      verify_loaded :include_rules => include_rules
+      verify_loaded include_rules: include_rules
     end
 
     def verify_loaded(options = {})

@@ -15,7 +15,7 @@ module FoodCritic
       write_file 'cookbooks/example/Gemfile', %q{
         source 'https://rubygems.org/'
         gem 'rake'
-        gem 'foodcritic', :path => '../../../..'
+        gem 'foodcritic', path: '../../../..'
       }
     end
 
@@ -84,8 +84,8 @@ module FoodCritic
     # @option lwrp [Symbol] :notifies One of :does_not_notify, :does_notify, :does_notify_without_parens, :deprecated_syntax, :class_variable
     # @option lwrp [Symbol] :use_inline_resources Defaults to false
     def cookbook_with_lwrp(lwrp)
-      lwrp = {:default_action => false, :notifies => :does_not_notify,
-              :use_inline_resources => false}.merge!(lwrp)
+      lwrp = {default_action: false, notifies: :does_not_notify,
+              use_inline_resources: false}.merge!(lwrp)
       ruby_default_action = %q{
         def initialize(*args)
           super
@@ -94,14 +94,14 @@ module FoodCritic
       }.strip
       write_resource("site", %Q{
         actions :create
-        attribute :name, :kind_of => String, :name_attribute => true
+        attribute :name, kind_of: String, name_attribute: true
         #{ruby_default_action if lwrp[:default_action] == :ruby_default_action}
         #{'default_action :create' if lwrp[:default_action] == :dsl_default_action}
       })
-      notifications = {:does_notify => 'new_resource.updated_by_last_action(true)',
-                       :does_notify_without_parens => 'new_resource.updated_by_last_action true',
-                       :deprecated_syntax => 'new_resource.updated = true',
-                       :class_variable => '@updated = true'}
+      notifications = {does_notify: 'new_resource.updated_by_last_action(true)',
+                       does_notify_without_parens: 'new_resource.updated_by_last_action true',
+                       deprecated_syntax: 'new_resource.updated = true',
+                       class_variable: '@updated = true'}
       write_provider("site", %Q{
         #{'use_inline_resources' if lwrp[:use_inline_resources]}
         action :create do
@@ -114,7 +114,7 @@ module FoodCritic
     def cookbook_with_lwrp_actions(actions)
       write_resource("site", %Q{
         actions #{actions.map{|a| a[:name].inspect}.join(', ')}
-        attribute :name, :kind_of => String, :name_attribute => true
+        attribute :name, kind_of: String, name_attribute: true
       })
       write_provider("site", actions.map{|a| provider_action(a)}.join("\n"))
     end
@@ -154,7 +154,7 @@ module FoodCritic
     # @option options [String] :environment_name The name of the environment declared in the file
     # @option options [String] :file_name The containing file relative to the environments directory
     def environment(options={})
-      options = {:dir => 'environments'}.merge(options)
+      options = {dir: 'environments'}.merge(options)
       write_file "#{options[:dir]}/#{options[:file_name]}", %Q{
         #{Array(options[:environment_name]).map{|r| "name #{r}"}.join("\n")}
         cookbook "apache2"
@@ -202,7 +202,7 @@ module FoodCritic
     # @option options [String] :files Files to process
     # @option options [String] :options The options to set on the rake task
     def rakefile(task, options)
-      rakefile_content = 'task :default => []'
+      rakefile_content = 'task default: []'
       task_def = case task
         when :no_block then 'FoodCritic::Rake::LintTask.new'
         else %Q{
@@ -216,7 +216,7 @@ module FoodCritic
       if task_def
         rakefile_content = %Q{
           require 'foodcritic'
-          task :default => [:#{options[:name] ? options[:name] : 'foodcritic'}]
+          task default: [:#{options[:name] ? options[:name] : 'foodcritic'}]
           #{task_def}
         }
       end
@@ -227,10 +227,10 @@ module FoodCritic
     #
     # @param [Symbol] path_type The type of path, one of: :tmp_dir, :chef_file_cache_dir, :home_dir
     def recipe_downloads_file(path_type)
-      download_path = {:tmp_dir => '/tmp/large-file.tar.gz',
-        :tmp_dir_expr => '/tmp/#{file}',
-        :home_dir => '/home/ernie/large-file.tar.gz',
-        :chef_file_cache_dir => '#{Chef::Config[:file_cache_path]}/large-file.tar.gz'}[path_type]
+      download_path = {tmp_dir: '/tmp/large-file.tar.gz',
+        tmp_dir_expr: '/tmp/#{file}',
+        home_dir: '/home/ernie/large-file.tar.gz',
+        chef_file_cache_dir: '#{Chef::Config[:file_cache_path]}/large-file.tar.gz'}[path_type]
       write_recipe %Q{
         remote_file "#{download_path}" do
           source "http://www.example.org/large-file.tar.gz"
@@ -307,8 +307,8 @@ module FoodCritic
     # @param [Boolean] do_sleep Whether to prefix the service cmd with a bash sleep
     # @param [Symbol] action The action to take (start, stop, reload, restart)
     def recipe_controls_service(method = :service, do_sleep = false, action = :start)
-      cmds = {:init_d => "/etc/init.d/foo #{action}", :invoke_rc_d => "invoke-rc.d foo #{action}", :upstart => "#{action} foo",
-              :service => "service foo #{action}", :service_full_path => "/sbin/service foo #{action}"}
+      cmds = {init_d: "/etc/init.d/foo #{action}", invoke_rc_d: "invoke-rc.d foo #{action}", upstart: "#{action} foo",
+              service: "service foo #{action}", service_full_path: "/sbin/service foo #{action}"}
       write_recipe %Q{
         execute "#{action}-foo-service" do
           command "#{do_sleep ? 'sleep 5; ' : ''}#{cmds[method]}"
@@ -324,8 +324,8 @@ module FoodCritic
     # @option dep [Boolean] :is_scoped True if the include_recipe references a specific recipe or the cookbook
     # @option dep [Boolean] :parentheses True if the include_recipe is called with parentheses
     def recipe_with_dependency(dep)
-      dep = {:is_scoped => true, :is_declared => true,
-             :parentheses => false}.merge!(dep)
+      dep = {is_scoped: true, is_declared: true,
+             parentheses: false}.merge!(dep)
       recipe = "foo#{dep[:is_scoped] ? '::default' : ''}"
       write_recipe(if dep[:parentheses]
         "include_recipe('#{recipe}')"
@@ -343,9 +343,9 @@ module FoodCritic
     # @param [Symbol] path_expr_type The type of path expression, one of: :compound_symbols, :interpolated_string,
     #   :interpolated_symbol, :interpolated_symbol_and_literal, :literal_and_interpolated_symbol, :string_literal.
     def recipe_with_dir_path(path_expr_type)
-      path = {:compound_symbols => '#{node[:base_dir]}#{node[:sub_dir]}', :interpolated_string => %q{#{node['base_dir']}},
-              :interpolated_symbol => '#{node[:base_dir]}', :interpolated_symbol_and_literal => '#{node[:base_dir]}/sub_dir',
-              :literal_and_interpolated_symbol => 'base_dir/#{node[:sub_dir]}', :string_literal => '/var/lib/foo' }[path_expr_type]
+      path = {compound_symbols: '#{node[:base_dir]}#{node[:sub_dir]}', interpolated_string: %q{#{node['base_dir']}},
+              interpolated_symbol: '#{node[:base_dir]}', interpolated_symbol_and_literal: '#{node[:base_dir]}/sub_dir',
+              literal_and_interpolated_symbol: 'base_dir/#{node[:sub_dir]}', string_literal: '/var/lib/foo' }[path_expr_type]
       write_recipe %Q{
         directory "#{path}" do
           owner "root"
@@ -422,8 +422,8 @@ module FoodCritic
     #
     # @param [Symbol] type The type of search. One of: :invalid_syntax, :valid_syntax, :with_subexpression.
     def recipe_with_search(type)
-      search = {:invalid_syntax => 'run_list:recipe[foo::bar]', :valid_syntax => 'run_list:recipe\[foo\:\:bar\]',
-                :with_subexpression => %q{roles:#{node['foo']['role']}}}[type]
+      search = {invalid_syntax: 'run_list:recipe[foo::bar]', valid_syntax: 'run_list:recipe\[foo\:\:bar\]',
+                with_subexpression: %q{roles:#{node['foo']['role']}}}[type]
       write_recipe %Q{
         search(:node, "#{search}") do |matching_node|
           puts matching_node.to_s
@@ -438,7 +438,7 @@ module FoodCritic
     # @option options [String] :file_name The containing file relative to the roles directory
     # @option options [Symbol] :format Either :ruby or :json. Default is :ruby
     def role(options={})
-      options = {:format => :ruby, :dir => 'roles'}.merge(options)
+      options = {format: :ruby, dir: 'roles'}.merge(options)
       content = if options[:format] == :json
         %Q{
           {

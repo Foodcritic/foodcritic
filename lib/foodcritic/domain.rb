@@ -7,8 +7,8 @@ module FoodCritic
 
     # Create a new warning.
     #
-    #     Warning.new(rule, :filename => 'foo/recipes.default.rb',
-    #       :line => 5, :column=> 40)
+    #     Warning.new(rule, filename: 'foo/recipes.default.rb',
+    #       line: 5, column: 40)
     #
     def initialize(rule, match = {}, options = {})
       @rule, @match = rule, match
