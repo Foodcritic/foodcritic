@@ -22,9 +22,9 @@ end
 
 def clone_cookbook(clone_path, cbk)
   target_path = clone_path + cbk[:name]
-  unless Dir.exists?(target_path)
-    %x{git clone -q https://github.com/opscode-cookbooks/#{cbk[:name]}.git #{target_path}}
-    raise 'Unable to clone cookbook' unless $?.success?
+  unless Dir.exist?(target_path)
+    %x{git clone -q git://github.com/chef-cookbooks/#{cbk[:name]}.git #{target_path}}
+    raise "Unable to clone git://github.com/chef-cookbooks/#{cbk[:name]}.git" unless $?.success?
   end
   %x{cd #{target_path} && git checkout -q #{cbk[:ref]}}
   raise 'Unable to checkout revision' unless $?.success?
