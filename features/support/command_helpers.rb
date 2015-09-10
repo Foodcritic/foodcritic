@@ -64,7 +64,6 @@ module FoodCritic
       'FC051' => 'Template partials loop indefinitely',
       'FC052' => 'Metadata uses the unimplemented "suggests" keyword',
       'FC053' => 'Metadata uses the unimplemented "recommends" keyword',
-      'FC054' => 'Name should match cookbook dir name in metadata',
       'FCTEST001' => 'Test Rule'
     }
 
