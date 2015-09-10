@@ -1,4 +1,11 @@
+sudo: false
+language: ruby
+cache: bundler
 rvm:
-  - 2.0.0
-  - 2.1.0
-  - 2.2.0
+  - 2.0
+  - 2.1
+  - 2.2
+bundler_args: --jobs 3 --retry 3
+branches:
+  only:
+    - master
