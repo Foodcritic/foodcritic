@@ -18,10 +18,12 @@ module FoodCritic
       def define
         desc 'Lint Chef cookbooks' unless ::Rake.application.last_comment
         task(name) do
+          puts "Starting Foodcritic linting..."
           result = FoodCritic::Linter.new.check(options.merge(default_options))
           printer = options[:context] ? ContextOutput.new : SummaryOutput.new
           printer.output(result) if result.warnings.any?
           abort if result.failed?
+          puts "Completed!"
         end
       end
 
