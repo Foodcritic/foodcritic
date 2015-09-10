@@ -27,11 +27,11 @@ def clone_cookbook(clone_path, cbk)
     raise "Unable to clone git://github.com/chef-cookbooks/#{cbk[:name]}.git" unless $?.success?
   end
   %x{cd #{target_path} && git checkout -q #{cbk[:ref]}}
-  raise 'Unable to checkout revision' unless $?.success?
+  raise "Unable to checkout revision for #{cbk[:name]}" unless $?.success?
 end
 
 def lint_cookbooks(cookbook_path)
   result = %x{cd #{cookbook_path} && foodcritic .}
-  raise 'Unable to lint' unless $?.success?
+  raise "Unable to lint #{cookbook_path}" unless $?.success?
   result
 end
