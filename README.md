@@ -1,4 +1,6 @@
-# Food Critic
+# Foodcritic
+[![Build Status](https://travis-ci.org/acrmp/foodcritic.svg?branch=master)](https://travis-ci.org/acrmp/foodcritic)
+[![Gem Version](https://badge.fury.io/rb/foodcritic.svg)](http://badge.fury.io/rb/foodcritic)
 
 Food Critic is a lint tool for Chef cookbooks. It requires Ruby 2.0.0+.
 
@@ -12,8 +14,6 @@ Food Critic is a lint tool for Chef cookbooks. It requires Ruby 2.0.0+.
 
 # Continuous Integration
 [Food Critic on Travis CI](http://travis-ci.org/acrmp/foodcritic)
-
-![Built on Travis](https://secure.travis-ci.org/acrmp/foodcritic.png?branch=master)
 
 # License
 MIT - see the accompanying [LICENSE](https://github.com/acrmp/foodcritic/blob/master/LICENSE) file for details.
