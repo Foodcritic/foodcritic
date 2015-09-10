@@ -36,7 +36,7 @@ def chef_resource_actions
         'Chef::Resource::WindowsPackage',
       ].include?(resource.to_s)
 
-    instance = resource.new('dsl')
+    instance = resource.new('dsl', nil)
     actions = Array(instance.action).map{|a| a.to_sym}
     if instance.respond_to?(:allowed_actions)
       actions += instance.allowed_actions
