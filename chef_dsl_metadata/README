@@ -1,0 +1,12 @@
+
+1. update Appraisals file with new chef versions
+
+2. run 'appraisal' to generate the gemfiles for all the chef versions
+
+3. run 'appraisal rake generate_chef_metdata' to generate the json for all the chef versions
+
+4. run 'appraisal chef_12.1.1 rake generate_chef_metadata' to generate json for one chef version
+
+The Rakefile is not intended to be run directly without invoking appraisal to essentially bundle
+exec it against the correct gemfile.
+
