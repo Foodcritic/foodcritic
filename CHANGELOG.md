@@ -2,6 +2,9 @@
 
 Features:
 
+  - DSL metadata updated for Chef 11.18.x and up to Chef 12.4.1.
+  ([related issue](https://github.com/acrmp/foodcritic/issues/362)).
+
 Bugfixes:
 
   - pinned moustache gem to 0.99 for ruby 1.9.3 compatibility
