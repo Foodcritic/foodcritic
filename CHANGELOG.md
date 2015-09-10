@@ -22,7 +22,7 @@ Bugfixes:
 
 Other:
 
-  - removed cloudkick cookbook from regression tests
+  - removed cookbooks no longer present in the chef-cookbooks repo from regression tests
 
 ## 4.0.0 (12th June, 2014)
 
