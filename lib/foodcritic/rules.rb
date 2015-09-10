@@ -769,3 +769,5 @@ rule 'FC053', 'Metadata uses the unimplemented "recommends" keyword' do
     ast.xpath(%Q(//command[ident/@value='recommends']))
   end
 end
+
+# NOTE: FC054 was yanked and should be considered reserved, do not reuse it
