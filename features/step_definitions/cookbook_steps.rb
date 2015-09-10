@@ -1321,15 +1321,6 @@ Given /^a cookbook with metadata that (includes|does not include) a suggests key
   }
 end
 
-Given /^a cookbook with metadata that includes a (matched|mismatched) cookbook name$/ do |match|
-  write_metadata %Q{
-    name 'example'
-  } if match == 'matched'
-  write_metadata %Q{
-    name 'bogart'
-  } if match == 'mismatched'
-end
-
 Given /^a directory that contains a role file ([^ ]+) in (json|ruby) that defines role name (.*)$/ do |file_name, format, role_name|
   role(:role_name => %Q{"#{role_name}"}, :file_name => file_name, :format => format.to_sym)
 end
