@@ -20,7 +20,7 @@ MIT - see the accompanying [LICENSE](https://github.com/acrmp/foodcritic/blob/ma
 
 # Changelog
 To see what has changed in recent versions see the [CHANGELOG](https://github.com/acrmp/foodcritic/blob/master/CHANGELOG.md).
-Foodcritic follows the [Rubygems RationalVersioningPolicy](http://docs.rubygems.org/read/chapter/7).
+Foodcritic follows the [Rubygems Semantic Versioning Policy](http://guides.rubygems.org/patterns/#semantic-versioning).
 
 # Contributing
 Additional [rules](http://acrmp.github.com/foodcritic/#writing-a-new-rule) and bugfixes are welcome! Please fork and
