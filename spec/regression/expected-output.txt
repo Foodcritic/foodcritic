@@ -166,9 +166,7 @@ FC002: Avoid string interpolation where not required: ./application_python/provi
 FC002: Avoid string interpolation where not required: ./ark/libraries/provider_ark.rb:247
 FC002: Avoid string interpolation where not required: ./ark/libraries/provider_ark.rb:249
 FC002: Avoid string interpolation where not required: ./ark/libraries/provider_ark.rb:263
-FC002: Avoid string interpolation where not required: ./ark/libraries/provider_ark.rb:413
 FC002: Avoid string interpolation where not required: ./chef-client/recipes/cron.rb:103
-FC002: Avoid string interpolation where not required: ./daemontools/recipes/source.rb:26
 FC002: Avoid string interpolation where not required: ./dynect/recipes/ec2.rb:70
 FC002: Avoid string interpolation where not required: ./gems/recipes/mirror.rb:23
 FC002: Avoid string interpolation where not required: ./gems/recipes/server.rb:44
@@ -187,7 +185,6 @@ FC002: Avoid string interpolation where not required: ./windows/libraries/regist
 FC002: Avoid string interpolation where not required: ./windows/libraries/registry_helper.rb:173
 FC002: Avoid string interpolation where not required: ./windows/libraries/windows_privileged.rb:42
 FC002: Avoid string interpolation where not required: ./windows/libraries/windows_privileged.rb:56
-FC002: Avoid string interpolation where not required: ./yum/providers/key.rb:38
 FC003: Check whether you are running with chef server before using server-specific features: ./application/libraries/default.rb:97
 FC003: Check whether you are running with chef server before using server-specific features: ./application_ruby/providers/memcached.rb:28
 FC003: Check whether you are running with chef server before using server-specific features: ./database/recipes/ebs_backup.rb:33
@@ -454,3 +451,8 @@ FC048: Prefer Mixlib::ShellOut: ./dmg/providers/package.rb:44
 FC048: Prefer Mixlib::ShellOut: ./dmg/providers/package.rb:47
 FC048: Prefer Mixlib::ShellOut: ./dmg/providers/package.rb:76
 FC048: Prefer Mixlib::ShellOut: ./windows/providers/task.rb:106
+FC052: Metadata uses the unimplemented "suggests" keyword: ./build-essential/metadata.rb:14
+FC052: Metadata uses the unimplemented "suggests" keyword: ./mysql/metadata.rb:19
+FC052: Metadata uses the unimplemented "suggests" keyword: ./mysql/metadata.rb:20
+FC052: Metadata uses the unimplemented "suggests" keyword: ./nscd/metadata.rb:7
+FC053: Metadata uses the unimplemented "recommends" keyword: ./boost/metadata.rb:12
