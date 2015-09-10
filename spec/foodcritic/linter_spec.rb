@@ -11,7 +11,7 @@ describe FoodCritic::Linter do
 
   describe "chef version" do
     it "should be the latest stable version of Chef" do
-      FoodCritic::Linter::DEFAULT_CHEF_VERSION.must_equal "12.1.1"
+      FoodCritic::Linter::DEFAULT_CHEF_VERSION.must_equal "12.4.1"
     end
   end
 
