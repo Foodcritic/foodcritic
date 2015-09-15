@@ -853,6 +853,25 @@ describe FoodCritic::Api do
         }]
       )
     end
+    it "understands old-style notifications with ruby 1.9 hash syntax" do
+      api.notifications(parse_ast(%q{
+        template "/etc/nscd.conf" do
+          source "nscd.conf"
+          owner "root"
+          group "root"
+          notifies :restart, resources(service: "nscd")
+        end
+      })).must_equal(
+        [{
+          :type => :notifies,
+          :action => :restart,
+          :resource_type => :service,
+          :resource_name => "nscd",
+          :timing => :delayed,
+          :style => :old,
+        }]
+      )
+    end
     it "understands the old-style subscriptions" do
       api.notifications(parse_ast(%q{
         template "/etc/nscd.conf" do

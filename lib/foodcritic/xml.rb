@@ -23,7 +23,20 @@ module FoodCritic
       child.each do |c|
         n = xml_create_node(doc, c)
         c.drop(1).each do |a|
-          xml_node.add_child(build_xml(a, doc, n))
+          if a.first == :@label
+            # if the ruby 1.9 hash syntax is used,
+            # the ast like below is generated.
+            # ast:
+            #  [:assoc_new,
+            #   [:@label, "service:", [6, 39]]]
+
+            # create a label node and add it to the accos_new children nodes
+            label_node = xml_create_node(doc, a)
+            n.add_child(build_xml(a, doc, label_node))
+            xml_node.add_child(n)
+          else
+            xml_node.add_child(build_xml(a, doc, n))
+          end
         end
       end
     end
