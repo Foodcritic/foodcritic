@@ -774,7 +774,7 @@ rule 'FC054', 'Name should match cookbook dir name in metadata' do
   tags %w(annoyances metadata)
   applies_to { |version| version >= gem_version('12.0.0') }
   metadata do |ast, filename|
-    unless cookbook_name(filename) == File.expand_path(filename).split(File::SEPARATOR)[-2]
+    unless cookbook_name(filename) == filename.split(File::SEPARATOR)[-2]
       [file_match(filename)]
     end
   end

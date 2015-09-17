@@ -1822,11 +1822,6 @@ When /^I check the cookbook( tree)?(?: specifying tags(.*))?(, specifying that c
   run_lint(options + ["cookbooks/#{whole_tree.nil? ? 'example' : ''}"])
 end
 
-When /^I check the cookbook with dot as the argument$/ do
-  cd "cookbooks/example"
-  run_lint(["."])
-end
-
 Given /^the cookbook directory has a \.foodcritic file specifying tags (.*)$/ do |tags|
   write_file "cookbooks/example/.foodcritic", tags
   run_lint(["cookbooks/example"])
@@ -2316,9 +2311,4 @@ end
 
 Then /^the metadata using recommends warning 053 should be (shown|not shown) against the metadata file$/ do |show_warning|
   expect_warning('FC053', :file => "metadata.rb", :line => 2, :expect_warning => show_warning == 'shown')
-end
-
-# use of "foodcritic ." and "./metadata.rb" in the FC054 rules seems to badly confuse expect_warning
-Then 'the FC054 warning should not be displayed against the ./metadata.rb file' do
-  expect_no_output('FC054')
 end
