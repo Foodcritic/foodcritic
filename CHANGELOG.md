@@ -12,10 +12,6 @@ Features:
   ([related issue](https://github.com/acrmp/foodcritic/pull/244)).
   - Added -l option to list enabled rules and descriptions
   ([related issue](https://github.com/acrmp/foodcritic/pull/285)).
-  - FC054, Name should match cookbook dir name in metadata
-  ([related issue](https://github.com/acrmp/foodcritic/pull/282))
-  ([related issue](https://github.com/acrmp/foodcritic/pull/358))
-  ([related issue](https://github.com/acrmp/foodcritic/pull/374)).
 
 Bugfixes:
 
