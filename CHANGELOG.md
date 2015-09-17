@@ -12,9 +12,6 @@ Features:
   ([related issue](https://github.com/acrmp/foodcritic/pull/244)).
   - Added -l option to list enabled rules and descriptions
   ([related issue](https://github.com/acrmp/foodcritic/pull/285)).
-  - Fixed `node.force_default` and `node.force_override` along with many other methods on Chef::Node::Attribute that
-  `Chef::Node#method_missing` was forwarding methods to.
-  ([related issue](https://github.com/acrmp/foodcritic/pull/364)).
   - FC054, Name should match cookbook dir name in metadata
   ([related issue](https://github.com/acrmp/foodcritic/pull/282))
   ([related issue](https://github.com/acrmp/foodcritic/pull/358))
@@ -22,6 +19,9 @@ Features:
 
 Bugfixes:
 
+  - Fixed `node.force_default` and `node.force_override` along with many other methods on Chef::Node::Attribute that
+  `Chef::Node#method_missing` was forwarding methods to.
+  ([related issue](https://github.com/acrmp/foodcritic/pull/364)).
   - merge default options before check instead of during intialization (in Rake task)
     ([related issue](https://github.com/acrmp/foodcritic/pull/321)).
   - Fix UTF-8 errors in template checking
