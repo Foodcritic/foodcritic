@@ -1321,15 +1321,6 @@ Given /^a cookbook with metadata that (includes|does not include) a suggests key
   }
 end
 
-Given /^a cookbook with metadata that includes a (matched|mismatched) cookbook name$/ do |match|
-  write_metadata %Q{
-    name 'example'
-  } if match == 'matched'
-  write_metadata %Q{
-    name 'bogart'
-  } if match == 'mismatched'
-end
-
 Given /^a directory that contains a role file ([^ ]+) in (json|ruby) that defines role name (.*)$/ do |file_name, format, role_name|
   role(:role_name => %Q{"#{role_name}"}, :file_name => file_name, :format => format.to_sym)
 end
@@ -1822,11 +1813,6 @@ When /^I check the cookbook( tree)?(?: specifying tags(.*))?(, specifying that c
   run_lint(options + ["cookbooks/#{whole_tree.nil? ? 'example' : ''}"])
 end
 
-When /^I check the cookbook with dot as the argument$/ do
-  cd "cookbooks/example"
-  run_lint(["."])
-end
-
 Given /^the cookbook directory has a \.foodcritic file specifying tags (.*)$/ do |tags|
   write_file "cookbooks/example/.foodcritic", tags
   run_lint(["cookbooks/example"])
@@ -2316,9 +2302,4 @@ end
 
 Then /^the metadata using recommends warning 053 should be (shown|not shown) against the metadata file$/ do |show_warning|
   expect_warning('FC053', :file => "metadata.rb", :line => 2, :expect_warning => show_warning == 'shown')
-end
-
-# use of "foodcritic ." and "./metadata.rb" in the FC054 rules seems to badly confuse expect_warning
-Then 'the FC054 warning should not be displayed against the ./metadata.rb file' do
-  expect_no_output('FC054')
 end
