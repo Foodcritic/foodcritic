@@ -4,7 +4,7 @@ require 'foodcritic/version'
 Gem::Specification.new do |s|
   s.name = 'foodcritic'
   s.version = FoodCritic::VERSION
-  s.description = 'Lint tool for Opscode Chef cookbooks.'
+  s.description = 'Lint tool for Chef cookbooks.'
   s.summary = "foodcritic-#{s.version}"
   s.authors = ['Andrew Crump']
   s.homepage = 'http://foodcritic.io'
