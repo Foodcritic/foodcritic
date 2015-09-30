@@ -49,6 +49,7 @@ end
 
 def chef_resource_attributes
   chef_resources do |resource_klazz,resource|
+    next if 'Chef::Resource::WindowsPackage' == resource.to_s
     resource_name = convert_to_snake_case(resource_klazz.to_s)
     attributes = resource.public_instance_methods(true)
 
