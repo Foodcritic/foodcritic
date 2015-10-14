@@ -13774,6 +13774,7 @@
       "state",
       "state_for_resource_reporter",
       "subscribes",
+      "success_codes",
       "supports",
       "supports=",
       "taint",
