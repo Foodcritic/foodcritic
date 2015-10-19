@@ -79,7 +79,6 @@ module FoodCritic
       files = files_to_process(paths)
 
       if options[:progress]
-        puts "Food Critic"
         puts "Checking #{files.count} files"
       end
 
