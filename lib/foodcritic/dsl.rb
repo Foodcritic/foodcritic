@@ -21,13 +21,15 @@ module FoodCritic
   #
 
   class RuleDsl
+    attr_reader :options
     attr_reader :rules
     attr_reader :chef_version
 
     include Api
 
-    def initialize(chef_version = Linter::DEFAULT_CHEF_VERSION)
+    def initialize(chef_version = Linter::DEFAULT_CHEF_VERSION, options = {})
       @chef_version = chef_version
+      @options = options
     end
 
     # Define a new rule, the outer block of a rule definition.
@@ -72,8 +74,8 @@ module FoodCritic
     rule_block :role
 
     # Load the ruleset(s).
-    def self.load(paths, chef_version = Linter::DEFAULT_CHEF_VERSION)
-      dsl = RuleDsl.new(chef_version)
+    def self.load(paths, chef_version = Linter::DEFAULT_CHEF_VERSION, options)
+      dsl = RuleDsl.new(chef_version, options)
       paths.map do |path|
         File.directory?(path) ? Dir["#{path}/**/*.rb"].sort : path
       end.flatten.each do |path|

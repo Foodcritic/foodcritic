@@ -1,0 +1,1513 @@
+---
+FC001:
+  code: FC001
+  name: Use strings in preference to symbols to access node attributes
+  tags:
+  - style
+  - attributes
+  applies_to: ">= 0.7.12"
+  deprecated: true
+  remediation_points: 350000
+  summary: |
+    This rule has been deprecated. See the discussion against
+    [issue #86](https://github.com/acrmp/foodcritic/issues/86) for more
+    detail.
+FC002:
+  code: FC002
+  name: Avoid string interpolation where not required
+  tags:
+  - style
+  - strings
+  summary: |
+    When you declare a resource in your recipes you frequently want to
+    reference dynamic values such as node attributes. This warning will be
+    shown if you are unnecessarily wrapping an attribute reference in a
+    string.
+  examples:
+  - title: Unnecessary string interpolation
+    text: This example would match the FC002 rule because the `version` attribute
+      has been unnecessarily quoted.
+    code: |
+      # Don't do this
+      package "mysql-server" do
+        version "#{node['mysql']['version']}"
+        action :install
+      end
+  - title: Modified version
+    text: 'This modified example would not match the FC002 rule:'
+    code: |
+      package "mysql-server" do
+        version node['mysql']['version']
+        action :install
+      end
+  remediation_points: 350000
+FC003:
+  code: FC003
+  name: Check whether you are running with chef server before using server-specific
+    features
+  tags:
+  - portability
+  - solo
+  summary: |
+    Chef Server extends the feature-set of a Chef deployment and is probably
+    the most popular configuration. It is also possible to run the Chef client
+    in a standalone mode with Chef Solo.
+    Where your cookbooks make use of features that only exist in a Chef Server
+    based setup you should check whether you are running in solo mode.
+
+    * [http://docs.chef.io/chef_solo.html](http://docs.chef.io/chef_solo.html)
+  examples:
+  - title: Does not check for Chef Solo
+    text: |
+      This example would match the FC003 rule because it does not check if
+      it is running in Chef Solo before using search which is a
+      server-specific feature.
+    code: |
+      nodes = search(:node, "hostname:[* TO *] AND chef_environment:#{node.chef_environment}")
+  - title: Modified version
+    text: 'This modified example would not match the FC003 rule:'
+    code: |
+      if Chef::Config[:solo]
+        Chef::Log.warn("This recipe uses search. Chef Solo does not support search.")
+      else
+        nodes = search(:node, "hostname:[* TO *] AND chef_environment:#{node.chef_environment}")
+      end
+  remediation_points: 550000
+FC004:
+  code: FC004
+  name: Use a service resource to start and stop services
+  tags:
+  - style
+  - services
+  summary: |
+    This warning is shown if you are starting or stopping a service using the
+    Chef `execute` resource rather than the more idiomatic `service` resource.
+    You can read more about the service resource here:
+
+    * [http://docs.chef.io/resource_service.html](http://docs.chef.io/resource_service.html)
+  examples:
+  - title: Uses execute to control a service
+    text: |
+      This example would match the FC004 rule because it uses `execute` for
+      service control. There is no reason to use execute because the service
+      resource exposes the `start_command` attribute to give you full
+      control over the command issued.
+    code: |
+      # Don't do this
+      execute "start-tomcat" do
+        command "/etc/init.d/tomcat6 start"
+        action :run
+      end
+  - title: Modified version
+    text: 'This modified example would not match the FC004 rule:'
+    code: |
+      service "tomcat" do
+        action :start
+      end
+  remediation_points: 550000
+FC005:
+  code: FC005
+  name: Avoid repetition of resource declarations
+  tags:
+  - style
+  summary: |
+    When writing Chef recipes you have the full power of Ruby at your
+    disposal. One of the cases where this is helpful is where you need to
+    declare a large number of resources that only differ in a single attribute
+    - the canonical example is installing a long list of packages.
+  examples:
+  - title: Unnecessarily repetitive
+    text: |
+      This example matches the FC005 rule because all the resources of type
+      `package` differ only in a single attribute - the name of the package
+      to be upgraded. This rule is very simple and looks only for resources
+      that all differ in only a single attribute. For example - if only one
+      of the packages specified the version then this rule would not match.
+    code: |
+      # You could do this
+      package "erlang-base" do
+        action :upgrade
+      end
+      package "erlang-corba" do
+        action :upgrade
+      end
+      package "erlang-crypto" do
+        action :upgrade
+      end
+      package "rabbitmq-server" do
+        action :upgrade
+      end
+  - title: Modified version
+    text: |
+      This modified example would not match the FC005 rule. It takes
+      advantage of the fact that Chef processes recipes in two distinct
+      phases. In the first 'compile' phase it builds the resource
+      collection. In the second phase it configures the node against the
+      resource collection.
+
+      * [http://docs.chef.io/essentials_nodes_chef_run.html](http://docs.chef.io/essentials_nodes_chef_run.html)
+
+      Don't worry about changing your recipe if it already does what you
+      want - the amount of Ruby syntactic sugar to apply is very much a
+      matter of personal taste. Note that this rule also isn't clever enough
+      yet to detect if your resources are wrapped in a control structure and
+      not suitable for 'rolling up' into a loop.
+    code: |
+      # It's shorter to do this
+      %w{erlang-base erlang-corba erlang-crypto rabbitmq-server}.each do |pkg|
+        package pkg do
+          action :upgrade
+        end
+      end
+  remediation_points: 350000
+FC006:
+  code: FC006
+  name: Mode should be quoted or fully specified when setting file permissions
+  tags:
+  - correctness
+  - files
+  summary: |
+    When setting file or directory permissions via the mode attribute you
+    should either quote the octal number or ensure it is specified to five
+    digits. Otherwise the permissions that are set after Ruby coerces the
+    number may not match what you expect.
+  examples:
+  - title: File mode won't be interpreted correctly
+    code: |
+      # Don't do this
+      directory "/var/lib/foo" do
+        owner "root"
+        group "root"
+        mode 644
+        action :create
+      end
+  - title: Modified versions
+    text: 'These modified examples would not match the FC006 rule:'
+    code: |
+      # This is ok
+      directory "/var/lib/foo" do
+        owner "root"
+        group "root"
+        mode "644"
+        action :create
+      end
+
+      # And so is this
+      directory "/var/lib/foo" do
+        owner "root"
+        group "root"
+        mode 00644
+        action :create
+      end
+  remediation_points: 750000
+FC007:
+  code: FC007
+  name: Ensure recipe dependencies are reflected in cookbook metadata
+  tags:
+  - correctness
+  - metadata
+  summary: |
+    This warning is shown when you include a recipe that is not in the current
+    cookbook and not defined as a dependency in your cookbook metadata. This
+    is potentially a big problem because things will blow up if the necessary
+    dependency cannot be found when Chef tries to converge your node. For more
+    information refer to the Chef metadata page:
+
+    * [http://docs.chef.io/essentials_cookbook_metadata.html](http://docs.chef.io/essentials_cookbook_metadata.html)
+
+    The fix is to declare the cookbook of the recipe you are including as a
+    dependency in your `metadata.rb` file.
+
+    You may also see this warning if foodcritic has not been able to infer the
+    name of your cookbook correctly when the cookbook directory does not match
+    the name of the cookbook specified in the include.
+  examples:
+  - title: Example depency on another cookbook
+    text: |
+      Assuming you have a recipe that had the following line:
+    code: |
+      include_recipe "apache2::default"
+  - title: Adding metadata dependency for Chef
+    text: |
+      Then to remove this warning you would add the `apache2` cookbook as a
+      dependency to your own cookbook metadata in the `metadata.rb` file at
+      the root of your cookbook.
+    code: |
+      depends "apache2"
+  remediation_points: 750000
+FC008:
+  code: FC008
+  name: Generated cookbook metadata needs updating
+  tags:
+  - style
+  - metadata
+  summary: |
+    This warning is shown if you used `knife cookbook create` to create a new
+    cookbook and didn't override the maintainer and maintainer email. You need
+    to set these to real values in `metadata.rb` or run knife again with the
+    real values.
+
+    * [http://docs.chef.io/knife_cookbook.html#create](http://docs.chef.io/knife_cookbook.html#create)
+  examples:
+  - title: Maintainer metadata is boilerplate default
+    code: |
+      # Don't do this
+      maintainer "YOUR_COMPANY_NAME"
+      maintainer_email "YOUR_EMAIL"
+      license "All rights reserved"
+      description "Installs/Configures example"
+      long_description IO.read(File.join(File.dirname(__FILE__), 'README.rdoc'))
+      version "0.0.1"
+  - title: Modified version
+    text: 'This modified example would not match the FC008 rule:'
+    code: |
+      maintainer "Example Ltd"
+      maintainer_email "postmaster@example.com"
+      license "All rights reserved"
+      description "Installs/Configures example"
+      long_description IO.read(File.join(File.dirname(__FILE__), 'README.rdoc'))
+      version "0.0.1"
+  remediation_points: 550000
+FC009:
+  code: FC009
+  name: Resource attribute not recognised
+  tags:
+  - correctness
+  summary: |
+    This warning is likely to mean that your recipe will fail to run when
+    you attempt to converge. Your recipe may be syntactically valid Ruby,
+    but the attribute you have attempted to set on a built-in Chef resource
+    is not recognised. This is commonly a typo or you need to check the
+    documentation to see what the attribute you are trying to set is called:
+
+      * [http://docs.chef.io/resource.html#resources](http://docs.chef.io/resource.html#resources)
+  examples:
+  - title: Resource with an unrecognised attribute
+    text: |
+      This example matches the FC009 rule because `punter` is not a
+      recognised attribute for the file resource.
+    code: |
+      # Don't do this
+      file "/tmp/something" do
+        punter "root"
+        group "root"
+        mode "0755"
+        action :create
+      end
+  - title: Modified version
+    text: |
+      Checking the documentation we can see the correct attribute is
+      `owner`.
+    code: |
+      file "/tmp/something" do
+        owner "root"
+        group "root"
+        mode "0755"
+        action :create
+      end
+  remediation_points: 750000
+FC010:
+  code: FC010
+  name: Invalid search syntax
+  tags:
+  - correctness
+  - search
+  summary: |
+    The search syntax used is not recognised as valid Lucene search criteria.
+    This is commonly because you have made a typo or are not escaping special
+    characters in the query syntax.
+
+    * [http://docs.chef.io/essentials_search.html#query-syntax](http://docs.chef.io/essentials_search.html#query-syntax)
+
+    Note that this rule will not identify syntax errors in searches composed
+    of subexpressions. It checks only for literal search strings.
+  examples:
+  - title: Unescaped search syntax
+    text: |
+      This example matches the FC010 rule because search metacharacters -
+      in this case the square brackets - have not been properly escaped.
+    code: |
+      # Don't do this
+      search(:node, 'run_list:recipe[foo::bar]') do |matching_node|
+        puts matching_node.to_s
+      end
+  - title: Modified version
+    text: |
+      With the characters escaped this will no longer match the rule.
+    code: |
+      search(:node, 'run_list:recipe\[foo\:\:bar\]') do |matching_node|
+        puts matching_node.to_s
+      end
+  remediation_points: 750000
+FC011:
+  code: FC011
+  name: Missing README in markdown format
+  tags:
+  - style
+  - readme
+  summary: |
+    The [Chef Community site](http://supermarket.chef.io/) will now
+    render your cookbook README documentation inline - [see this example for
+    the mysql cookbook](http://supermarket.chef.io/cookbooks/mysql).
+
+    Your README needs to be in
+    [Markdown format](http://daringfireball.net/projects/markdown/syntax) for
+    this to work. This rule will match any cookbook that does not have a
+    `README.md` file in the root directory.
+  remediation_points: 350000
+FC012:
+  code: FC012
+  name: Use Markdown for README rather than RDoc
+  tags:
+  - style
+  - readme
+  summary: |
+    Writing cookbook documentation in RDoc has been deprecated in favour of
+    [Markdown format](http://daringfireball.net/projects/markdown/syntax).
+    This rule will match any cookbook that has a `README.rdoc` file in the
+    root directory.
+  remediation_points: 350000
+FC013:
+  code: FC013
+  name: Use file_cache_path rather than hard-coding tmp paths
+  tags:
+  - style
+  - files
+  summary: |
+    This warning means that you have hard-coded a file download path in your
+    cookbook to a temporary directory. This can be a problem on boxes built
+    with a small `/tmp` mount point. Chef has its own configuration option
+    `file_cache_path` you should use instead:
+
+    * [http://docs.chef.io/config_rb_client.html](http://docs.chef.io/config_rb_client.html)
+  examples:
+  - title: Downloading to a hard-coded temp directory
+    text: |
+      This example matches the FC013 rule because it hard-codes the download
+      path to `/tmp`.
+    code: |
+      # Don't do this
+      remote_file "/tmp/large-file.tar.gz" do
+        source "http://www.example.org/large-file.tar.gz"
+      end
+  - title: Modified version
+    text: 'To remove this warning use the configured `file_cache_path`:'
+    code: |
+      remote_file "#{Chef::Config[:file_cache_path]}/large-file.tar.gz" do
+        source "http://www.example.org/large-file.tar.gz"
+      end
+  remediation_points: 350000
+FC014:
+  code: FC014
+  name: Consider extracting long ruby_block to library
+  tags:
+  - style
+  - libraries
+  summary: |
+    Your cookbook has a fairly long `ruby_block` resource. Long `ruby_block`
+    resources are often candidates for extraction to a separate module or
+    class under the `libraries` directory.
+
+    * [http://docs.chef.io/essentials_cookbook_libraries.html](http://docs.chef.io/essentials_cookbook_libraries.html)
+  remediation_points: 350000
+FC015:
+  code: FC015
+  name: Consider converting definition to a LWRP
+  tags:
+  - style
+  - definitions
+  - lwrp
+  summary: |
+    Chef definitions are an older approach to creating a higher-level
+    abstraction for a group of resources. Unlike LWRPs they are not first
+    class resources and cannot receive notifications. You should prefer LWRPs
+    for new development.
+
+    * [http://docs.chef.io/lwrp_custom_resource.html](http://docs.chef.io/lwrp_custom_resource.html)
+  remediation_points: 750000
+FC016:
+  code: FC016
+  name: LWRP does not declare a default action
+  tags:
+  - correctness
+  - lwrp
+  applies_to: ">= 0.7.12"
+  summary: |
+    This warning means that the LWRP does not declare a default action. You
+    should normally define a default action on your resource to avoid
+    confusing users. Most resources have an intuitive default action.
+
+    * [http://docs.chef.io/lwrp_custom_resource.html#default-action](http://docs.chef.io/lwrp_custom_resource.html#default-action)
+  examples:
+  - title: Resource without a default action
+    text: |
+      This example matches the FC016 rule because it does not declare a
+      default action.
+    code: |
+      # Don't do this
+      actions :create
+  - title: Modified version
+    text: |
+      With a default action specified this warning will no longer be
+      displayed.
+    code: |
+      actions :create
+
+      # Chef 0.10.10 or greater
+      default_action :create
+
+      # In earlier versions of Chef the LWRP DSL doesn't support specifying
+      # a default action, so you need to drop into Ruby.
+      def initialize(*args)
+        super
+        @action = :create
+      end
+  remediation_points: 750000
+FC017:
+  code: FC017
+  name: LWRP does not notify when updated
+  tags:
+  - correctness
+  - lwrp
+  applies_to: ">= 0.7.12"
+  summary: |
+    This warning means that the LWRP will not currently trigger
+    [notifications](http://docs.chef.io/chef/resources.html#notifications)
+    to other resources. This can be a source of difficult to track down bugs.
+
+    There are several ways of marking that the resource state has
+    changed:
+
+    * Explicitly call `new_resource.updated_by_last_action`. This is the
+      approach used historically with older versions of Chef.
+    * Surround the action in a `converge_by` block. This is done when
+      [implementing Why-Run support](http://dougireton.com/blog/2013/01/07/creating-an-lwrp-part-2/)
+      and will also ensure notifications are sent. This approach is available
+      from Chef 10.14.0.
+    * Add `use_inline_resources` to the top of the provider file. This means
+      that the resources you define in your action are run in their own
+      [self-contained Chef run](http://docs.chef.io/lwrp_common_inline_compile.html)
+      and your provider will send notifications if any of the nested resources
+      in your actions are updated. This approach is available from Chef 11 and
+      may become the default behaviour in a future version.
+  examples:
+  - title: Provider that does not send notifications
+    text: |
+      This example matches the FC017 rule because it does not mark that its
+      state has changed and will therefore not send notifications.
+    code: |
+      # Don't do this
+      action :create do
+        # create action implementation
+      end
+  - title: Modified version
+    text: |
+      Any of the three approaches shown below will ensure that
+      notifications are sent correctly.
+    code: |
+      # Approach 1: Using updated_by_last_action
+      action :create do
+        # create action implementation
+
+        # My state has changed so I'd better notify observers
+        new_resource.updated_by_last_action(true)
+      end
+
+      # Approach 2: Using converge_by
+      action :create do
+        converge_by("Creating my_resource #{new_resource.name}") do
+          # create action implementation
+        end
+      end
+
+      # Approach 3: Using use_inline_resources
+      use_inline_resources
+      action :create do
+        # create action implementation
+      end
+  remediation_points: 750000
+FC018:
+  code: FC018
+  name: LWRP uses deprecated notification syntax
+  tags:
+  - style
+  - lwrp
+  - deprecated
+  applies_to: ">= 0.9.10"
+  examples:
+  - title: Provider uses deprecated syntax
+    text: |
+      This example matches the FC018 rule because it uses the old syntax for
+      indicating it has been updated.
+    code: |
+      # Don't do this
+      action :create do
+        # create action implementation
+
+        # My state has changed so I'd better notify observers, but I'm using
+        # a deprecated syntax
+        new_resource.updated = true
+      end
+
+      # Also don't do this
+      action :create do
+        # create action implementation
+
+        # My state has changed so I'd better notify observers, but I'm using
+        # a deprecated syntax
+        @updated = true
+      end
+  - title: Modified version
+    text: |
+      This example uses the newer syntax and will not raise the warning.
+    code: |
+      action :create do
+        # create action implementation
+
+        # My state has changed so I'd better notify observers
+        new_resource.updated_by_last_action(true)
+      end
+  remediation_points: 550000
+FC019:
+  code: FC019
+  name: Access node attributes in a consistent manner
+  tags:
+  - style
+  - attributes
+  summary: |
+    Node attributes can be accessed in multiple ways in Chef. This warning is
+    shown when a cookbook is not consistent in the approach it uses to access
+    attributes. It is not displayed for variations between cookbooks.
+  examples:
+  - title: Recipe mixes symbols and strings for accessing node attributes
+    code: |
+      # Don't do this
+      node[:apache][:dir] = '/etc/apache2'
+
+      directory node['apache']['dir'] do
+        owner 'apache'
+        group 'apache'
+        action :create
+      end
+  - title: Modified version
+    code: |
+      node['apache']['dir'] = '/etc/apache2'
+
+      directory node['apache']['dir'] do
+        owner 'apache'
+        group 'apache'
+        action :create
+      end
+  remediation_points: 550000
+FC021:
+  code: FC021
+  name: Resource condition in provider may not behave as expected
+  tags:
+  - correctness
+  - lwrp
+  applies_to: ">= 0.10.6"
+  summary: |
+    A change introduced in Chef 0.10.6 means that conditions may not work as
+    expected for resources redeclared with the same name. If your LWRP defines
+    a resource and that resource:
+
+    * Has an [associated guard](http://docs.chef.io/resource_common.html#guards)
+      which references a resource attribute. AND
+    * The resource has a fixed name.
+
+    Then you will likely find that only the first resource will be applied. See this ticket for more background:
+
+    * [http://tickets.chef.io/browse/CHEF-2812](http://tickets.chef.io/browse/CHEF-2812)
+  examples:
+  - title: Resource condition will be evaluated only once
+    text: |
+      Because the `feed_pet` resource will have the same name across all
+      instances of your LWRP, the condition will only be checked for the
+      first resource.
+    code: |
+      # Don't do this
+      action :feed do
+        execute "feed_pet" do
+          command "echo 'Feeding: #{new_resource.name}'; touch '/tmp/#{new_resource.name}'"
+          not_if { ::File.exists?("/tmp/#{new_resource.name}")}
+        end
+      end
+  - title: Modified version
+    text: |
+      By making the resource name change for each unique instance of our
+      LWRP instance we avoid this behaviour.
+    code: |
+      action :feed do
+        execute "feed_pet_#{new_resource.name}" do
+          command "echo 'Feeding: #{new_resource.name}'; touch '/tmp/#{new_resource.name}'"
+          not_if { ::File.exists?("/tmp/#{new_resource.name}")}
+        end
+      end
+  remediation_points: 750000
+FC022:
+  code: FC022
+  name: Resource condition within loop may not behave as expected
+  tags:
+  - correctness
+  applies_to: ">= 0.10.6"
+  summary: |
+    A change introduced in Chef 0.10.6 means that conditions may not work as
+    expected for resources declared within a loop. If your recipe defines a
+    resource and that resource:
+
+    * Has an [associated condition](http://docs.chef.io/resource_common.html#guards)
+      which references a block variable. AND
+    * The resource has a fixed name.
+
+    Then you will likely find that only the first resource will be applied. See this ticket for more background:
+
+    * [http://tickets.chef.io/browse/CHEF-2812](http://tickets.chef.io/browse/CHEF-2812)
+  examples:
+  - title: Resource condition will be evaluated only once
+    text: |
+      Because the feed_pet resource will have the same name for every
+      iteration of the loop, the condition will only be checked for the
+      first resource.
+    code: |
+      # Don't do this
+      %w{rover fido}.each do |pet_name|
+        execute "feed_pet" do
+          command "echo 'Feeding: #{pet_name}'; touch '/tmp/#{pet_name}'"
+          not_if { ::File.exists?("/tmp/#{pet_name}")}
+        end
+      end
+  - title: Modified version
+    text: |
+      By making the resource name change for each iteration of the loop we avoid this behaviour.
+    code: |
+      %w{rover fido}.each do |pet_name|
+        execute "feed_pet_#{pet_name}" do
+          command "echo 'Feeding: #{pet_name}'; touch '/tmp/#{pet_name}'"
+          not_if { ::File.exists?("/tmp/#{pet_name}")}
+        end
+      end
+  remediation_points: 750000
+FC023:
+  code: FC023
+  name: Prefer conditional attributes
+  tags:
+  - style
+  summary: |
+    This warning means you have surrounded a resource with an `if` or `unless`
+    rather than defining the condition directly on the resource itself. Note
+    that this warning is only raised for single resources as you could
+    reasonably enclose multiple resources in a condition like this for
+    brevity.
+
+    [Jay Feldblum](https://github.com/yfeldblum) has
+    [expressed criticism](http://supermarket.chef.io/chat/chef/2012-06-19#id-138584)
+    of this rule because the effect is that resources are defined
+    unnecessarily and ignored only at run-time. His view is that it is cleaner
+    to use standard Ruby conditionals to avoid defining them in the first place.
+  examples:
+  - title: Resource enclosed in a condition
+    text: |
+      This example matches the FC023 rule because it encloses a rule within
+      a condition, rather than using the built-in Chef `not_if` or `only_if`
+      conditional execution attributes.
+
+      * [http://docs.chef.io/resource_common.html#guards](http://docs.chef.io/resource_common.html#guards)
+    code: |
+      # Don't do this
+      if node['foo'] == 'bar'
+        service "apache" do
+          action :enable
+        end
+      end
+  - title: Modified version
+    text: |
+      You can avoid the warning above with more idiomatic Chef that
+      specifies the condition above as an attribute on the resource:
+    code: |
+      service "apache" do
+        action :enable
+        only_if { node['foo'] == 'bar' }
+      end
+  remediation_points: 350000
+FC024:
+  code: FC024
+  name: Consider adding platform equivalents
+  tags:
+  - portability
+  summary: |
+    This warning is shown when:
+
+    * you have a conditional statement in your cookbook based on the platform
+      of the node
+    * and at least two platforms are included as equivalent in your
+      conditional
+    * and the conditional does not include a platform known to belong to the
+      same family
+
+    If you are using
+    [Ohai 0.6.12](http://www.chef.io/blog/2012/03/22/ohai-0-6-12-released/)
+    or greater you should probably use `platform_family` instead. Otherwise
+    for the greatest portability consider adding the missing platforms to
+    your conditional.
+  examples:
+  - title: Case statement has a subset of platform flavours
+    text: |
+      This example matches the FC024 rule because it includes a `case`
+      statement that matches more than one flavour of a platform family
+      but omits other popular flavours from the same family.
+    code: |
+      # The RHEL platforms branch below omits popular distributions
+      # including Amazon Linux.
+      case node[:platform]
+        when "debian", "ubuntu"
+          package "foo" do
+            action :install
+          end
+        when "centos", "redhat"
+          package "bar" do
+            action :install
+          end
+      end
+  - title: Modified version
+    text: |
+      This warning is no longer raised when the other common equivalent
+      RHEL-based distributions have been added to the `when`.
+    code: |
+      case node[:platform]
+        when "debian", "ubuntu"
+          package "foo" do
+            action :install
+          end
+        when "centos", "redhat", "amazon", "scientific"
+          package "bar" do
+            action :install
+          end
+        end
+  remediation_points: 550000
+FC025:
+  code: FC025
+  name: Prefer chef_gem to compile-time gem install
+  tags:
+  - style
+  - deprecated
+  applies_to: ">= 0.10.10"
+  summary: |
+    This warning is shown if:
+    * you have a cookbook that installs a Rubygem for use from Chef
+    * the cookbook uses the
+      [compile-time gem install trick](http://www.chef.io/blog/2009/06/01/cool-chef-tricks-install-and-use-rubygems-in-a-chef-run/)
+      which is deprecated from Chef 0.10.10 and is replaced by the first class
+      `chef_gem` resource.
+  examples:
+  - title: Manual compile-time installation
+    text: |
+      This example matches the FC025 rule because it uses the older
+      approach for installing a gem so that it is available in the current
+      run.
+    code: |
+      r = gem_package "mysql" do
+        action :nothing
+      end
+
+      r.run_action(:install)
+      Gem.clear_paths
+  - title: Modified version
+    text: |
+      Use `chef_gem` to install the gem to avoid this warning.
+    code: |
+      chef_gem "mysql"
+  remediation_points: 550000
+FC026:
+  code: FC026
+  name: Conditional execution block attribute contains only string
+  tags:
+  - correctness
+  applies_to: ">= 0.7.4"
+  summary: |
+    This warning is shown if you have a conditional attribute declared on a
+    resource as a block that contains only a single string.
+  examples:
+  - title: Conditional attribute returns a string
+    text: |
+      This example matches the FC026 rule because it returns a string from
+      the block. This will always evalute to true, and often indicates that
+      you are trying to run a command rather than execute a Ruby block as
+      your condition.
+    code: |
+      # Don't do this
+      template "/etc/foo" do
+        mode "0644"
+        source "foo.erb"
+        not_if { "test -f /etc/foo" }
+      end
+  - title: Modified version
+    text: |
+      If the intention is to run the string as an operating system command
+      then remove the block surrounding the command.
+    code: |
+      template "/etc/foo" do
+        mode "0644"
+        source "foo.erb"
+        not_if "test -f /etc/foo"
+      end
+  remediation_points: 750000
+FC027:
+  code: FC027
+  name: Resource sets internal attribute
+  tags:
+  - correctness
+  summary: |
+    This warning is shown if you set an attribute on a Chef resource that is
+    technically accessible but should not be set in normal usage.
+    To avoid this warning allow Chef to set the value of the internal
+    attribute rather than setting it yourself.
+  examples:
+  - title: Service resource sets internal attribute
+    text: |
+      This example matches the FC027 rule because it sets the `running`
+      attribute on a service resource. This attribute should normally be
+      set by the provider itself and not in normal recipe usage.
+    code: |
+      # Don't do this
+      service "foo" do
+        running true
+      end
+  - title: Modified version
+    text: |
+      In this particular example you can achieve the same effect by using
+      the service `:start` action.
+    code: |
+      service "foo" do
+        action :start
+      end
+  remediation_points: 750000
+FC028:
+  code: FC028
+  name: 'Incorrect #platform? usage'
+  tags:
+  - correctness
+  summary: |
+    This warning is shown if you attempt to use the `platform?` Chef built-in
+    method as `node.platform?`. Because of the way Chef attributes work the
+    later approach will not error but will do the wrong thing which may
+    result in resources you had intended to apply only to a single platform
+    instead being applied to all platforms.
+  examples:
+  - title: Incorrect attempt to use platform? method
+    text: |
+      This example matches the FC028 rule because the `platform?` method
+      is incorrectly prefixed with `node`.
+    code: |
+      # Don't do this
+      file "/etc/foo" do
+        only_if { node.platform?("commodore64") }
+      end
+  - title: Modified version
+    text: |
+      Remove the leading `node.` from the use of `platform?` to resolve
+      this warning.
+    code: |
+      file "/etc/foo" do
+        only_if { platform?("commodore64") }
+      end
+  remediation_points: 750000
+FC029:
+  code: FC029
+  name: No leading cookbook name in recipe metadata
+  tags:
+  - correctness
+  - metadata
+  summary: |
+    This warning is shown if you declare a recipe in your cookbook metadata
+    without including the cookbook name as a prefix.
+  examples:
+  - title: Recipe declared without cookbook name prefix
+    text: |
+      This example matches the FC029 rule because the metadata declares a
+      recipe without prefixing it with the name of the current cookbook.
+    code: |
+      # Don't do this
+      name "example"
+      version "1.2.3"
+      recipe "default", "Installs Example"
+  - title: Modified version
+    text: |
+      This modified example would not match the FC029 rule:
+    code: |
+      name "example"
+      version "1.2.3"
+      recipe "example::default", "Installs Example"
+  remediation_points: 750000
+FC030:
+  code: FC030
+  name: Cookbook contains debugger breakpoints
+  tags:
+  - annoyances
+  summary: |
+    [Pry is a fantastic tool](http://pry.github.com/) for interactive
+    exploration of a running Ruby program. You can place breakpoints in your
+    cookbook code that will launch a Pry console. This warning is shown when
+    your cookbook code contains these breakpoints, as failing to remove these
+    will cause your Chef run to halt.
+
+    This rule currently only checks for use of `binding.pry` and not the Chef
+    built-in `breakpoint` resource which is never used outside of
+    [chef-shell](http://docs.chef.io/chef_shell.html).
+  examples:
+  - title: Recipe includes breakpoint
+    text: |
+      This example matches the FC030 rule because it includes a Pry
+      breakpoint declared with `binding.pry`.
+    code: |
+      # Don't do this
+      template "/etc/foo" do
+        source "foo.erb"
+      end
+      binding.pry
+  - title: Modified version
+    text: |
+      This modified example would not match the FC030 rule:
+    code: |
+      template "/etc/foo" do
+        source "foo.erb"
+      end
+  remediation_points: 550000
+FC031:
+  code: FC031
+  name: Cookbook without metadata file
+  tags:
+  - correctness
+  - metadata
+  summary: |
+    Chef cookbooks normally include a `metadata.rb` file which can be used
+    to express a
+    [wide range of metadata about a cookbook](http://docs.chef.io/essentials_cookbook_metadata.html).
+    This warning is shown when a directory appears to contain a cookbook, but
+    does not include the expected `metadata.rb` file at the top-level.
+  remediation_points: 750000
+FC032:
+  code: FC032
+  name: Invalid notification timing
+  tags:
+  - correctness
+  - notifications
+  summary: |
+    [Chef notifications](http://docs.chef.io/resource_common.html#notifications)
+    allow a resource to define that it should be actioned when another
+    resource changes state.
+
+    Notification timing can be controlled and set to `immediate`, or `delayed`
+    until the end of the Chef run. This warning is shown when the timing
+    specified is not recognised.
+  examples:
+  - title: Notification timing is invalid
+    text: |
+      This example matches the FC032 rule because it specifies an invalid
+      notification timing.
+    code: |
+      # Don't do this
+      template "/etc/foo" do
+        notifies :restart, "service[foo]", :imediately
+      end
+  - title: Modified version
+    text: |
+      This modified example would not match the FC032 rule because the
+      mispelt timing has been corrected.
+    code: |
+      template "/etc/foo" do
+        notifies :restart, "service[foo]", :immediately
+      end
+  remediation_points: 750000
+FC033:
+  code: FC033
+  name: Missing template
+  tags:
+  - correctness
+  summary: |
+    This warning is shown when the erb template associated with a
+    [template resource](http://docs.chef.io/resource_template.html)
+    cannot be found.
+  remediation_points: 750000
+FC034:
+  code: FC034
+  name: Unused template variables
+  tags:
+  - correctness
+  summary: |
+    This warning is shown when one or more variables passed into a template
+    by a [template resource](http://docs.chef.io/resource_template.html)
+    are not then used within the template.
+
+    This is often a sign that a template still contains hard-coded values that
+    you intended to parameterise.
+  examples:
+  - title: Unused template variables
+    text: |
+      This example matches the FC034 rule because it passes two variables
+      to the template, of which only the first is used.
+    code: |
+      template "/etc/foo/config.conf" do
+        source "config.conf.erb"
+        variables(
+          'config_var_a' => node['config']['config_var_a'],
+          'config_var_b' => node['config']['config_var_b']
+        )
+      end
+
+
+      # config.conf.erb
+      # var_a=<%= @config_var_a %>
+  - title: Modified version
+    text: |
+      This modified example would not match the FC034 rule becuse the
+      template has been updated to include both variables passed through.
+    code: |
+      template "/etc/foo/config.conf" do
+        source "config.conf.erb"
+        variables(
+          'config_var_a' => node['config']['config_var_a'],
+          'config_var_b' => node['config']['config_var_b']
+        )
+      end
+
+      # config.conf.erb
+      # var_a=<%= @config_var_a %>
+      # var_b=<%= @config_var_b %>
+  remediation_points: 750000
+FC037:
+  code: FC037
+  name: Invalid notification action
+  tags:
+  - correctness
+  summary: |
+    This warning is shown when a resource
+    [notifies](http://docs.chef.io/resource.html#Resources-Notifications)
+    another resource to take an action, but the action is invalid for the
+    target resource type.
+  examples:
+  - title: Invalid notification action
+    text: |
+      This example matches the FC037 rule because `:activate_turbo_boost` is
+      not a valid action for services.
+    code: |
+      # Don't do this
+      template "/etc/foo.conf" do
+        notifies :activate_turbo_boost, "service[foo]"
+      end
+  - title: Modified version
+    text: |
+      This modified example would not match the FC037 rule because the
+      action has been corrected.
+    code: |
+      template "/etc/foo.conf" do
+        notifies :restart, "service[foo]"
+      end
+  remediation_points: 750000
+FC038:
+  code: FC038
+  name: Invalid resource action
+  tags:
+  - correctness
+  summary: |
+    This warning is shown when a resource action is not valid for the type of
+    resource.
+  examples:
+  - title: Invalid resource action
+    text: |
+      This example matches the FC038 rule because `:none` is
+      not a valid action.
+    code: |
+      # Don't do this
+      service "foo" do
+        action :none
+      end
+  - title: Modified version
+    text: |
+      This modified example would not match the FC038 rule because the
+      action has been corrected.
+    code: |
+      service "foo" do
+        action :nothing
+      end
+  remediation_points: 750000
+FC039:
+  code: FC039
+  name: Node method cannot be accessed with key
+  tags:
+  - correctness
+  summary: |
+    Chef allows you to use varying syntax to refer to node attributes.
+    This warning is shown when you attempt to reference a method on
+    `Chef::Node` using the same string or symbol syntax reserved for node
+    attributes.
+  examples:
+  - title: Attempt to access node method as a key
+    text: |
+      This example matches the FC039 rule because `run_state` is
+      only accessible as a method and cannot be referenced as an attribute.
+    code: |
+      # Don't do this
+      node['run_state']['nginx_force_recompile'] = false
+  - title: Modified version
+    text: |
+      This modified example would not match the FC039 rule because the
+      `run_state` is referenced as a method.
+    code: |
+      node.run_state['nginx_force_recompile'] = false
+  remediation_points: 750000
+FC040:
+  code: FC040
+  name: Execute resource used to run git commands
+  tags:
+  - style
+  - recipe
+  - etsy
+  summary: |
+    This warning is shown if you declare an `execute` resource that uses git.
+    If the command you are attempting to execute is supported by the `git`
+    resource you should probably use that instead.
+  examples:
+  - title: Execute resource used to run git command
+    text: |
+      This example matches the FC040 rule because an `execute` resource is
+      used where you could instead use a `git` resource.
+    code: |
+      execute "git clone https://github.com/git/git.git" do
+        action :run
+      end
+  - title: Modified version
+    text: |
+      This modified example would not match the FC040 rule because the
+      `execute` resource has been replaced by a `git` resource.
+    code: |
+      git "/foo/bar" do
+        repository "git://github.com/git/git.git"
+        reference "master"
+        action :sync
+      end
+  remediation_points: 550000
+FC041:
+  code: FC041
+  name: Execute resource used to run curl or wget commands
+  tags:
+  - style
+  - recipe
+  - etsy
+  summary: |
+    This warning is shown if you use an execute resource to run the `curl` or
+    `wget` commands. If you are downloading a file consider using the
+    `remote_file` resource instead.
+  examples:
+  - title: Execute resource used to run wget command
+    text: |
+      This example matches the FC041 rule because an `execute` resource is
+      used where you could instead use a `remote_file` resource.
+    code: |
+      execute "cd /tmp && wget 'http://example.org/'" do
+        action :run
+      end
+  - title: Modified version
+    text: |
+      This modified example would not match the FC041 rule because the
+      `execute` resource has been replaced by a `remote_file` resource.
+    code: |
+      remote_file "/tmp/testfile" do
+        source "http://www.example.org/"
+      end
+  remediation_points: 550000
+FC042:
+  code: FC042
+  name: Prefer include_recipe to require_recipe
+  tags:
+  - deprecated
+  summary: |
+    This warning is shown when `require_recipe` is used. Because
+    `require_recipe` has been deprecated you should replace any references to
+    to `require_recipe` with `include_recipe`.
+  examples:
+  - title: Use of deprecated require_recipe statement
+    text: |
+      This example matches the FC042 rule because the deprecated
+      `require_recipe` statement is used.
+    code: |
+      # Don't do this
+      require_recipe "apache2::default"
+  - title: Modified version
+    text: |
+      This modified example would not match the FC042 rule because the
+      `require_recipe` statement has been replaced with `include_recipe`.
+    code: |
+      include_recipe "apache2::default"
+  remediation_points: 550000
+FC043:
+  code: FC043
+  name: Prefer new notification syntax
+  tags:
+  - style
+  - notifications
+  - deprecated
+  summary: |
+    This warning is shown when you use the old-style notification syntax. You
+    should prefer the new-style notification syntax which has the advantage
+    that you can notify resources that are defined later.
+  examples:
+  - title: Old notification syntax
+    text: |
+      This example matches the FC043 rule because it uses the older
+      notification syntax.
+    code: |
+      template "/etc/www/configures-apache.conf" do
+        notifies :restart, resources(:service => "apache")
+      end
+  - title: Modified version
+    text: |
+      This modified example would not match the FC043 rule because the
+      syntax of the notification has been updated to use the new format.
+    code: |
+      template "/etc/www/configures-apache.conf" do
+        notifies :restart, "service[apache]"
+      end
+  remediation_points: 550000
+FC044:
+  code: FC044
+  name: Avoid bare attribute keys
+  tags:
+  - style
+  summary: |
+    This warning is shown when, within a cookbook attributes file, you refer
+    to an attribute as you would a local variable rather than as an attribute
+    of the `node` object. It is valid to do the former, but you should prefer
+    the later more explicit approach to accessing attributes because it is
+    easier for users of your cookbooks to understand.
+  examples:
+  - title: Referring to an attribute within an attributes file
+    text: |
+      This example matches the FC044 rule because it refers to the
+      `hostname` attribute as a bare attribute.
+    code: |
+      default['myhostname'] = hostname
+  - title: Modified version
+    text: |
+      This modified example would not match the FC044 rule because the
+      reference to the `hostname` attribute has been qualified so that
+      the meaning is more apparent.
+    code: |
+      default['myhostname'] = node['hostname']
+  remediation_points: 350000
+FC046:
+  code: FC046
+  name: Attribute assignment uses assign unless nil
+  tags:
+  - attributes
+  - correctness
+  summary: |
+    It is a
+    [common convention in Ruby development](http://www.rubyinside.com/what-rubys-double-pipe-or-equals-really-does-5488.html)
+    to use `||=` to assign a value to variable if it is `false` or `nil`.
+    Frequently developers with earlier exposure to Ruby attempt to use the
+    same approach to assign a default value to node attributes within Chef.
+
+    This doesn't work correctly because Chef auto-vivifies attributes so a
+    missing attribute is never falsey.
+  examples:
+  - title: Using assign unless nil with node attributes
+    text: |
+      This example matches the FC046 rule because it uses assign unless nil
+      (`||=`) with node attributes.
+    code: |
+      # Don't do this
+      default['somevalue'] ||= []
+  - title: Modified version
+    text: |
+      This modified example would not match the FC046 rule because the
+      assign unless nil expression has been replaced with `default_unless`.
+    code: |
+      default_unless['somevalue'] = []
+  remediation_points: 550000
+FC047:
+  code: FC047
+  name: Attribute assignment does not specify precedence
+  tags:
+  - attributes
+  - correctness
+  summary: |
+    From Chef 11 it is no longer possible to set attributes without specifying
+    their precedence level. For more information refer to the list of
+    [Breaking Changes in Chef 11](http://docs.chef.io/breaking_changes_chef_11.html#implicit-writes-removed).
+  examples:
+  - title: Assign an attribute value without specifying precedence
+    text: |
+      This example matches the FC047 rule because it writes to the attribute
+      without specifying the precedence level to set.
+
+      This will work in Chef versions < 11 but you should prefer the new
+      syntax.
+    code: |
+      # Don't do this
+      node['foo'] = 'bar'
+  - title: Modified version
+    text: |
+      This modified example would not match the FC047 rule because the
+      attribute assignment has been updated to specify a precedence level
+      of `normal`.
+    code: |
+      node.normal['foo'] = 'bar'
+  remediation_points: 550000
+FC048:
+  code: FC048
+  name: Prefer Mixlib::ShellOut
+  tags:
+  - style
+  - processes
+  summary: |
+    Normally to execute an operating system command with Chef you would use
+    a built-in resource such as the `execute` resource.
+
+    You might also have a need to spawn processes from Ruby, either inline
+    or within a `ruby_block`. There are many different ways to do this in Ruby
+    - my favourite reference is
+    [Jesse Storimer's Working with Unix Processes](http://www.jstorimer.com/products/working-with-unix-processes).
+
+    Chef comes with a library called
+    [Mixlib::ShellOut](https://github.com/chef/mixlib-shellout) that
+    provides a more convenient interface and it is idiomatic to use it rather
+    than the backtick `` ` `` or `%x{}` syntaxes.
+  examples:
+  - title: Uses %x{} to shellout
+    text: |
+      This example matches the FC048 rule because it uses the `%x{}` sigil.
+    code: |
+      # Don't do this
+      result = %x{some_command}
+      raise 'Problem executing some_command' unless $?.success?
+  - title: Modified version
+    text: |
+      This modified example would not match the FC048 rule because it is
+      using the `Mixlib::ShellOut` library.
+    code: |
+      cmd = Mixlib::ShellOut.new('some_command')
+      cmd.run_command
+      cmd.error!
+  remediation_points: 750000
+FC049:
+  code: FC049
+  name: Role name does not match containing file name
+  tags:
+  - style
+  - roles
+  summary: |
+    This warning is shown if you declare a `name` in a
+    [role file](http://docs.chef.io/essentials_roles.html#ruby-dsl)
+    that does not match the containing file name. Using the same name for both
+    is more consistent.
+  remediation_points: 550000
+FC050:
+  code: FC050
+  name: Name includes invalid characters
+  tags:
+  - correctness
+  - environments
+  - roles
+  summary: |
+    This warning is shown if the name declared in a [role](http://docs.chef.io/essentials_roles.html#ruby-dsl)
+    or [environment](http://docs.chef.io/essentials_environments.html#ruby-dsl)
+    file contains characters that are not allowed.
+
+    "[Names should be] made up of letters (upper-and lower-case), numbers, underscores, and hyphens:
+    `[A-Z][a-z][0-9]` and `[_-]`. Spaces are not allowed."
+  examples:
+  - title: Name includes invalid characters
+    text: |
+      This example matches the FC050 rule because the name includes a space character.
+    code: |
+      # Don't do this
+      name "web server"
+      run_list "recipe[apache2]"
+  - title: Modified version
+    text: |
+      This modified example would not match the FC050 rule because the space
+      has been removed from the role name.
+    code: |
+      name "webserver"
+      run_list "recipe[apache2]"
+  remediation_points: 750000
+FC051:
+  code: FC051
+  name: Template partials loop indefinitely
+  tags:
+  - correctness
+  summary: |
+    This warning is shown if a template uses template partials in a way that
+    would cause an infinite loop. For example if two template partials both
+    include each other.
+  remediation_points: 750000
+FC052:
+  code: FC052
+  name: Metadata uses the unimplemented "suggests" keyword
+  tags:
+  - style
+  - metadata
+  remediation_points: 350000
+FC053:
+  code: FC053
+  name: Metadata uses the unimplemented "recommends" keyword
+  tags:
+  - style
+  - metadata
+  remediation_points: 350000
+FC055:
+  code: FC055
+  name: Ensure maintainer is set in metadata
+  tags:
+  - style
+  - metadata
+  remediation_points: 350000
+FC056:
+  code: FC056
+  name: Ensure maintainer_email is set in metadata
+  tags:
+  - style
+  - metadata
+  remediation_points: 350000
+FC057:
+  code: FC057
+  name: Library provider does not declare use_inline_resources
+  tags:
+  - style
+  - metadata
+  remediation_points: 550000
+FC058:
+  code: FC058
+  name: Library provider declares use_inline_resources and declares methods
+  tags:
+  - style
+  - metadata
+  remediation_points: 550000
+FC059:
+  code: FC059
+  name: LWRP provider does not declare use_inline_resources
+  tags:
+  - style
+  - metadata
+  remediation_points: 550000
+FC060:
+  code: FC060
+  name: LWRP provider declares use_inline_resources and declares methods
+  tags:
+  - style
+  - metadata
+  remediation_points: 550000
+FC061:
+  code: FC061
+  name: Valid cookbook versions are of the form x.y or x.y.z
+  tags:
+  - style
+  - metadata
+  remediation_points: 350000
+FC062:
+  code: FC062
+  name: Cookbook should have version metadata
+  tags:
+  - style
+  - metadata
+  remediation_points: 350000

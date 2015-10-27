@@ -62,14 +62,14 @@ describe FoodCritic::Linter do
     let(:rule_dsl_load_mock) { MiniTest::Mock.new }
 
     it "should add the default rule file" do
-      rule_dsl_load_mock.expect(:call, nil, [[default_rules_file], nil])
+      rule_dsl_load_mock.expect(:call, nil, [[default_rules_file], nil, nil])
       verify_loaded
     end
 
     it "should include rules found in gems if the :search_gems option is true" do
       gem_rules = ['/path/to/rules1.rb', '/path/to/rules2.rb']
       expected_rules = [default_rules_file, gem_rules].flatten
-      rule_dsl_load_mock.expect(:call, nil, [expected_rules, nil])
+      rule_dsl_load_mock.expect(:call, nil, [expected_rules, nil, nil])
 
       metaclass = class << linter; self; end
       metaclass.send(:define_method, :rule_files_in_gems) do
@@ -82,7 +82,7 @@ describe FoodCritic::Linter do
     it "should include files found in :include_rules option" do
       include_rules = ['/path/to/rules1.rb', '/path/to/rules2.rb']
       expected_rules = [default_rules_file, include_rules].flatten
-      rule_dsl_load_mock.expect(:call, nil, [expected_rules, nil])
+      rule_dsl_load_mock.expect(:call, nil, [expected_rules, nil, nil])
 
       verify_loaded :include_rules => include_rules
     end
