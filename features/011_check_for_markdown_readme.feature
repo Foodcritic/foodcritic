@@ -1,6 +1,6 @@
 Feature: Check for markdown readme
 
-  In order to ensure that my cookbook README renders nicely on the Opscode Community site
+  In order to ensure that my cookbook README renders nicely on Supermarket
   As a developer
   I want to identify if my cookbook does not have a markdown formatted README
 
