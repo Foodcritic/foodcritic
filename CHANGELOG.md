@@ -1,3 +1,9 @@
+## Unreleased
+
+- Renamed FC045 from 'Consider setting cookbook name in metadata' to 'Metadata does not contain cookbook name' as Chef 12 requires name metadata
+- Removed the annoyances tag from FC045 as it's not longer an annoyance, but instead a requirement
+- Added DSL metadata for Chef 12.5.1
+
 ## 5.0.0 (17 September, 2015)
 
 Features:
@@ -26,7 +32,7 @@ Bugfixes:
     ([related issue](https://github.com/acrmp/foodcritic/pull/313)).
   - pinned moustache gem to 0.99 for ruby 1.9.3 compatibility
     Thanks @jdmundrawala
-  - Added metadata for missing Chef 11 versions. 
+  - Added metadata for missing Chef 11 versions.
     Thanks @jdmundrawala
   - [FC044: Avoid bare attribute keys](http://acrmp.github.com/foodcritic/#FC044) would fire on parameterized attributes.
     Thanks @odcinek
