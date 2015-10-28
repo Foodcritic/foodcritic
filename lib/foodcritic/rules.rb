@@ -663,8 +663,8 @@ rule 'FC044', 'Avoid bare attribute keys' do
   end
 end
 
-rule 'FC045', 'Consider setting cookbook name in metadata' do
-  tags %w(annoyances metadata)
+rule 'FC045', 'Metadata does not contain cookbook name' do
+  tags %w(metadata)
   metadata do |ast, filename|
     unless ast.xpath('descendant::stmts_add/command/ident/@value="name"')
       [file_match(filename)]

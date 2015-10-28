@@ -55,7 +55,7 @@ module FoodCritic
       'FC042' => 'Prefer include_recipe to require_recipe',
       'FC043' => 'Prefer new notification syntax',
       'FC044' => 'Avoid bare attribute keys',
-      'FC045' => 'Consider setting cookbook name in metadata',
+      'FC045' => 'Metadata does not contain cookbook name',
       'FC046' => 'Attribute assignment uses assign unless nil',
       'FC047' => 'Attribute assignment does not specify precedence',
       'FC048' => 'Prefer Mixlib::ShellOut',
