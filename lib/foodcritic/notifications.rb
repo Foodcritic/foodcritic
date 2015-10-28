@@ -1,7 +1,7 @@
 module FoodCritic
   # This module contains the logic for the parsing of
   # [Chef Notifications]
-  # (http://docs.opscode.com/resource_common.html#notifications).
+  # (http://docs.chef.io/resource_common.html#notifications).
   module Notifications
     # Extracts notification details from the provided AST, returning an
     # array of notification hashes.
