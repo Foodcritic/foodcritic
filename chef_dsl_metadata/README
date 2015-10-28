@@ -3,7 +3,7 @@
 
 2. run 'appraisal' to generate the gemfiles for all the chef versions
 
-3. run 'appraisal rake generate_chef_metdata' to generate the json for all the chef versions
+3. run 'appraisal rake generate_chef_metadata' to generate the json for all the chef versions
 
 4. run 'appraisal chef_12.1.1 rake generate_chef_metadata' to generate json for one chef version
 
