@@ -664,7 +664,7 @@ rule 'FC044', 'Avoid bare attribute keys' do
 end
 
 rule 'FC045', 'Metadata does not contain cookbook name' do
-  tags %w(metadata)
+  tags %w(correctness metadata chef12)
   metadata do |ast, filename|
     unless ast.xpath('descendant::stmts_add/command/ident/@value="name"')
       [file_match(filename)]
@@ -686,7 +686,7 @@ rule 'FC046', 'Attribute assignment uses assign unless nil' do
 end
 
 rule 'FC047', 'Attribute assignment does not specify precedence' do
-  tags %w(attributes correctness)
+  tags %w(attributes correctness chef11)
   recipe do |ast|
     attribute_access(ast).map do |att|
       exclude_att_types = '[count(following-sibling::ident[
