@@ -10422,6 +10422,7 @@
       "source_line=",
       "state",
       "subscribes",
+      "success_codes",
       "supports",
       "taint",
       "tainted?",
