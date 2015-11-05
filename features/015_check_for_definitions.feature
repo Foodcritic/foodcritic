@@ -2,7 +2,7 @@ Feature: Check for use of definitions
 
   In order to benefit from the additional features supported by first-class resources
   As a developer
-  I want to identify when definitions are being used so they can be refactored to become LWRPs
+  I want to identify when definitions are being used so they can be refactored to become Custom Resources
 
   Scenario: Cookbook contains definition
     Given a cookbook that contains a definition
