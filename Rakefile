@@ -35,6 +35,6 @@ RuboCop::RakeTask.new(:rubocop) do |task|
 end
 
 desc 'Build the manpage'
-task :man do
+task(:man) do
   sh 'ronn -w --roff man/*.ronn'
 end
