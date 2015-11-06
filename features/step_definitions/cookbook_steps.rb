@@ -1307,6 +1307,16 @@ Given /^a cookbook with metadata that (specifies|does not specify) the cookbook 
   }
 end
 
+Given /^a cookbook with metadata that (includes|does not include) a maintainer keyword$/ do |includes|
+  write_metadata %Q{
+    #{"maintainer 'A Maintainer'" if includes == 'includes'}
+  }
+end
+
+Given 'a cookbook with metadata that includes a maintainer expression' do
+  write_metadata "maintainer an(expression)"
+end
+
 Given /^a cookbook with metadata that (includes|does not include) a recommends keyword$/ do |includes|
   write_metadata %Q{
     depends "bar"
@@ -2294,6 +2304,10 @@ Given(/^a cookbook with an? (.*) file with an interpolated name$/) do |file_type
   write_resource "site", content if file_type == "resource"
   write_definition "apache_site", content if file_type == "definition"
   write_library "lib", content if file_type == "library"
+end
+
+Then /^the metadata missing maintainer warning 055 should be (shown|not shown) against the metadata file$/ do |show_warning|
+  expect_warning('FC055', :file => 'metadata.rb', :expect_warning => show_warning == 'shown')
 end
 
 Then /^the metadata using suggests warning 052 should be (shown|not shown) against the metadata file$/ do |show_warning|
