@@ -1313,8 +1313,18 @@ Given /^a cookbook with metadata that (includes|does not include) a maintainer k
   }
 end
 
+Given /^a cookbook with metadata that (includes|does not include) a maintainer email$/ do |includes|
+  write_metadata %Q{
+   #{"maintainer_email 'maintainer@example.com'" if includes == 'includes'}
+  }
+end
+
 Given 'a cookbook with metadata that includes a maintainer expression' do
   write_metadata "maintainer an(expression)"
+end
+
+Given 'a cookbook with metadata that includes a maintainer email expression' do
+  write_metadata "maintainer_email an(expression)"
 end
 
 Given /^a cookbook with metadata that (includes|does not include) a recommends keyword$/ do |includes|
@@ -2308,6 +2318,10 @@ end
 
 Then /^the metadata missing maintainer warning 055 should be (shown|not shown) against the metadata file$/ do |show_warning|
   expect_warning('FC055', :file => 'metadata.rb', :expect_warning => show_warning == 'shown')
+end
+
+Then /^the metadata missing maintainer email warning 056 should be (shown|not shown) against the metadata file$/ do |show_warning|
+  expect_warning('FC056', :file => 'metadata.rb', :expect_warning => show_warning == 'shown')
 end
 
 Then /^the metadata using suggests warning 052 should be (shown|not shown) against the metadata file$/ do |show_warning|
