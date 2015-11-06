@@ -194,7 +194,7 @@ rule 'FC014', 'Consider extracting long ruby_block to library' do
   end
 end
 
-rule 'FC015', 'Consider converting definition to a LWRP' do
+rule 'FC015', 'Consider converting definition to a Custom Resource' do
   tags %w(style definitions lwrp)
   applies_to { |version| version >= gem_version('0.7.12') }
   cookbook do |dir|

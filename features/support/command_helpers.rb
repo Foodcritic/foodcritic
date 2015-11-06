@@ -28,7 +28,7 @@ module FoodCritic
       'FC012' => 'Use Markdown for README rather than RDoc',
       'FC013' => 'Use file_cache_path rather than hard-coding tmp paths',
       'FC014' => 'Consider extracting long ruby_block to library',
-      'FC015' => 'Consider converting definition to a LWRP',
+      'FC015' => 'Consider converting definition to a Custom Resource',
       'FC016' => 'LWRP does not declare a default action',
       'FC017' => 'LWRP does not notify when updated',
       'FC018' => 'LWRP uses deprecated notification syntax',

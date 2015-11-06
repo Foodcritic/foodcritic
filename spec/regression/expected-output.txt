@@ -192,10 +192,10 @@ FC007: Ensure recipe dependencies are reflected in cookbook metadata: ./chef-ser
 FC007: Ensure recipe dependencies are reflected in cookbook metadata: ./mysql/recipes/client.rb:42
 FC009: Resource attribute not recognised: ./chef-server/recipes/default.rb:46
 FC014: Consider extracting long ruby_block to library: ./lvm/providers/logical_volume.rb:18
-FC015: Consider converting definition to a LWRP: iptables/definitions/iptables_rule.rb:1
-FC015: Consider converting definition to a LWRP: memcached/definitions/memcached_instance.rb:1
-FC015: Consider converting definition to a LWRP: perl/definitions/cpan_module.rb:1
-FC015: Consider converting definition to a LWRP: unicorn/definitions/unicorn_config.rb:1
+FC015: Consider converting definition to a Custom Resource: iptables/definitions/iptables_rule.rb:1
+FC015: Consider converting definition to a Custom Resource: memcached/definitions/memcached_instance.rb:1
+FC015: Consider converting definition to a Custom Resource: perl/definitions/cpan_module.rb:1
+FC015: Consider converting definition to a Custom Resource: unicorn/definitions/unicorn_config.rb:1
 FC016: LWRP does not declare a default action: ./dynect/resources/rr.rb:1
 FC016: LWRP does not declare a default action: ./heartbeat/resources/ipaddr.rb:1
 FC016: LWRP does not declare a default action: ./transmission/resources/torrent_file.rb:1
