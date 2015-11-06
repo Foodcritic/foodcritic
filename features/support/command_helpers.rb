@@ -67,6 +67,10 @@ module FoodCritic
       # FC054 was yanked and is considered reserved, do not reuse it
       'FC055' => 'Ensure maintainer is set in metadata',
       'FC056' => 'Ensure maintainer_email is set in metadata',
+      'FC057' => 'Library provider does not declare use_inline_resources',
+      'FC058' => 'Library provider declares use_inline_resources and declares #action_<name> methods',
+      'FC059' => 'LWRP provider does not declare use_inline_resources',
+      'FC060' => 'LWRP provider declares use_inline_resources and declares #action_<name> methods',
       'FCTEST001' => 'Test Rule'
     }
 

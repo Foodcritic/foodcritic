@@ -2083,7 +2083,7 @@ Then /^the warning ([0-9]+ )?should (not )?be (?:displayed|shown)$/ do |warning,
   expect_warning code, {:expect_warning => should_not.nil?}
 end
 
-Then /^the (?:[a-zA-Z \-_]+) warning ([0-9]+) should (not )?be displayed(?: against the (attributes|libraries|definition|metadata|provider|resource|README.md|README.rdoc) file)?( below)?$/ do |code, no_display, file, warning_only|
+Then /^the (?:[a-zA-Z \-_]+) warning ([0-9]+) should (not )?be displayed(?: against the (attributes|libraries|definition|metadata|provider|resource|README.md|README.rdoc) file)?( below)?(?: on line ([0-9]+))?$/ do |code, no_display, file, warning_only, line|
   options = {}
   options[:expect_warning] = no_display != 'not '
   unless file.nil?
@@ -2095,6 +2095,7 @@ Then /^the (?:[a-zA-Z \-_]+) warning ([0-9]+) should (not )?be displayed(?: agai
   end
   options[:line] = 3 if code == '018' and options[:expect_warning]
   options[:line] = 2 if ['021', '022'].include?(code)
+  options[:line] = line unless line.nil?
   options[:warning_only] = ! warning_only.nil?
   expect_warning("FC#{code}", options)
 end
@@ -2330,4 +2331,83 @@ end
 
 Then /^the metadata using recommends warning 053 should be (shown|not shown) against the metadata file$/ do |show_warning|
   expect_warning('FC053', :file => "metadata.rb", :line => 2, :expect_warning => show_warning == 'shown')
+end
+
+Given /^a cookbook that contains a LWRP provider (with|without) use_inline_resources( and uses def action_create)?$/ do |with_use_inline_resources, uses_def|
+  write_resource("site", %q{
+    actions :create
+    attribute :name, :kind_of => String, :name_attribute => true
+  })
+  provider_file = ""
+  if with_use_inline_resources == 'with'
+    provider_file += %q{
+      use_inline_resources
+    }
+  end
+  if uses_def
+    provider_file += %q{
+      def action_create
+    }
+  else
+    provider_file += %q{
+      action :create do
+    }
+  end
+  provider_file += %q{
+       file "/tmp/foo.txt"
+    end
+  }
+  write_provider("site", provider_file)
+end
+
+Given /^a cookbook that contains a library provider (with|without) use_inline_resources( and uses def action_create)?$/ do |with_use_inline_resources, uses_def|
+  library_file = %q{
+    class MyResources
+      class Site < Chef::Resource::LWRPBase
+        provides :site
+        resource_name :site
+        actions :create
+        attribute :name, :kind_of => String, :name_attribute => true
+      end
+    end
+
+    class MyProviders
+      class Site < Chef::Provider::LWRPBase
+        provides :site
+  }
+  if with_use_inline_resources == 'with'
+    library_file += %q{
+        use_inline_resources
+    }
+  end
+  if uses_def
+    library_file += %q{
+          def action_create
+    }
+  else
+    library_file += %q{
+          action :create do
+    }
+  end
+  library_file += %q{
+          file "/tmp/foo.txt"
+        end
+      end
+    end
+  }
+  write_library('lib', library_file)
+end
+
+Given /^a cookbook that contains a library resource$/ do
+  library_file = %q{
+    class MyResources
+      class Site < Chef::Resource::LWRPBase
+        provides :site
+        resource_name :site
+        actions :create
+        attribute :name, :kind_of => String, :name_attribute => true
+      end
+    end
+  }
+  write_library('lib', library_file)
 end
