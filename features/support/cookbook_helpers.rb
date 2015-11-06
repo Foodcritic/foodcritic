@@ -74,7 +74,11 @@ module FoodCritic
       write_recipe(recipe)
       write_file('cookbooks/example/recipes/server.rb', '')
       write_readme('Hello World') # Don't trigger FC011
-      write_metadata('name "example"') # Don't trigger FC031
+      write_metadata(%q(
+        name 'example'
+        maintainer 'A Maintainer'
+        maintainer_email 'maintainer@example.com'
+      ).strip)
     end
 
     # Create a cookbook with a LRWP
