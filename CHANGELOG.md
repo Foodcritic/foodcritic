@@ -1,8 +1,18 @@
 ## Unreleased
 
+- Added FC055 to ensure that metadata.rb contains a maintainer
+- Added FC056 to ensure that metadata.rb contains a maintainer_email
+- Added FC057 to ensure that library providers include use_inline_resources
+- Added FC058 to ensure that library providers that include use_inline_resources and action_<name> methods
+- Added FC059 to ensure that LWRPs include use_inline_resources
+- Added FC060 to ensure that LWRPs don't use bad action methods
 - Renamed FC045 from 'Consider setting cookbook name in metadata' to 'Metadata does not contain cookbook name' as Chef 12 requires name metadata
-- Removed the annoyances tag from FC045 as it's not longer an annoyance, but instead a requirement
+- Renamed FC015 from 'Consider converting definition to a LWRP' to 'Consider converting definition to a Custom Resource' since 12.5+ Custom Resources are a prefered pattern over LWRPs now
+- Changed FC045's annoyances tag to a correctness tag as name in metadata is now a requirement not an annoyance
 - Added DSL metadata for Chef 12.5.1
+- Added new chef11 and chef12 tags for rules related to changes in those Chef releases
+- Fixes to the Rake tasks
+- Removed the Mustache pin to 0.99 in the Gemfile since we require Ruby 2.0 now
 
 ## 5.0.0 (17 September, 2015)
 
