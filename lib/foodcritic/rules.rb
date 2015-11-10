@@ -826,3 +826,21 @@ rule 'FC060', 'LWRP provider declares use_inline_resources and declares #action_
     end
   end
 end
+
+rule 'FC061', 'Valid cookbook versions are of the form x.y or x.y.z' do
+  tags %w{metadata correctness}
+  metadata do |ast, filename|
+    # matches a version method with a string literal with no interpolation
+    ver = ast.xpath(%Q(//command[ident/@value='version']//string_literal[not(.//string_embexpr)]//tstring_content/@value))
+    if !ver.empty? && ver.to_s !~ /\A\d+\.\d+(\.\d+)?\z/
+      [file_match(filename)]
+    end
+  end
+end
+
+rule 'FC062', 'Cookbook should have version metadata' do
+  tags %w{metadata}
+  metadata do |ast, filename|
+    [file_match(filename)] unless field(ast, 'version').any?
+  end
+end

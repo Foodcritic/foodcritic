@@ -78,6 +78,7 @@ module FoodCritic
         name 'example'
         maintainer 'A Maintainer'
         maintainer_email 'maintainer@example.com'
+        version '0.0.1'
       ).strip)
     end
 

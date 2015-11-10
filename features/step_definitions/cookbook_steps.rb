@@ -2411,3 +2411,47 @@ Given /^a cookbook that contains a library resource$/ do
   }
   write_library('lib', library_file)
 end
+
+Given 'a cookbook with metadata that includes the version keyword and a valid version string' do
+  write_metadata %Q{version '1.2.3'}
+end
+
+Given 'a cookbook with metadata that includes the version keyword and a valid version string with double quotes' do
+  write_metadata %Q{version '1.2.3'}
+end
+
+Given 'a cookbook with metadata that includes the version keyword and a valid x.y version string' do
+  write_metadata %Q{version '1.2'}
+end
+
+Given 'a cookbook with metadata that does not include a version keyword' do
+  write_metadata %Q{
+    name 'test'
+  }
+end
+
+Given 'a cookbook with metadata that includes the version keyword and an invalid version string' do
+  write_metadata %Q{version '1.a.3'}
+end
+
+Given 'a cookbook with metadata that includes the version keyword and an invalid single digit version string' do
+  write_metadata %Q{version '1'}
+end
+
+Given 'a cookbook with metadata that includes the version keyword and an invalid 4 digit version string' do
+  write_metadata %Q{version '1.2.3.4'}
+end
+
+Given 'a cookbook with a metadata version that uses string interpolation' do
+  write_metadata %q{
+    patch = 3
+    version "1.2.#{patch}"
+  }
+end
+
+Given 'a cookbook with a metadata version that is not a string literal' do
+  write_metadata %q{
+    v = "1.2.3"
+    version v
+  }
+end

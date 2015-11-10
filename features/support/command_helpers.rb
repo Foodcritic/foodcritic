@@ -71,6 +71,8 @@ module FoodCritic
       'FC058' => 'Library provider declares use_inline_resources and declares #action_<name> methods',
       'FC059' => 'LWRP provider does not declare use_inline_resources',
       'FC060' => 'LWRP provider declares use_inline_resources and declares #action_<name> methods',
+      'FC061' => 'Valid cookbook versions are of the form x.y or x.y.z',
+      'FC062' => 'Cookbook should have version metadata',
       'FCTEST001' => 'Test Rule'
     }
 
