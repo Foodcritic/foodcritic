@@ -1,935 +1,107 @@
-## Unreleased
+# Change Log
+
+## [Unreleased](https://github.com/acrmp/foodcritic/tree/HEAD)
+
+[Full Changelog](https://github.com/acrmp/foodcritic/compare/v5.0.0...HEAD)
+
+**Merged pull requests:**
+
+- New Rule 61 - valid cookbook version [\#405](https://github.com/acrmp/foodcritic/pull/405) ([lamont-granquist](https://github.com/lamont-granquist))
+- Suggest updating from definitions to custom resources [\#403](https://github.com/acrmp/foodcritic/pull/403) ([tas50](https://github.com/tas50))
+- add checks for correct use of use\_inline\_resources [\#402](https://github.com/acrmp/foodcritic/pull/402) ([lamont-granquist](https://github.com/lamont-granquist))
+- Add new tags for rules [\#401](https://github.com/acrmp/foodcritic/pull/401) ([tas50](https://github.com/tas50))
+- We require Ruby 2 now so unpin mustache [\#400](https://github.com/acrmp/foodcritic/pull/400) ([tas50](https://github.com/tas50))
+- Rename FC045 since Chef 12 requires name metadata [\#399](https://github.com/acrmp/foodcritic/pull/399) ([tas50](https://github.com/tas50))
+- Branding updates [\#398](https://github.com/acrmp/foodcritic/pull/398) ([tas50](https://github.com/tas50))
+- Add Chef 12.5.1 metadata [\#397](https://github.com/acrmp/foodcritic/pull/397) ([tas50](https://github.com/tas50))
+- FC 5.0 has been released.  Update changelog [\#396](https://github.com/acrmp/foodcritic/pull/396) ([tas50](https://github.com/tas50))
+- remove duplicate output [\#394](https://github.com/acrmp/foodcritic/pull/394) ([dwradcliffe](https://github.com/dwradcliffe))
+- Rake options override default options [\#382](https://github.com/acrmp/foodcritic/pull/382) ([pkang](https://github.com/pkang))
+- Fixed the rake man task [\#381](https://github.com/acrmp/foodcritic/pull/381) ([docwhat](https://github.com/docwhat))
+- Update foodcritic.gemspec [\#380](https://github.com/acrmp/foodcritic/pull/380) ([tas50](https://github.com/tas50))
+- Lcg/fc054 revert again [\#379](https://github.com/acrmp/foodcritic/pull/379) ([lamont-granquist](https://github.com/lamont-granquist))
+- catch the CHANGELOG up to v5.0.0 [\#378](https://github.com/acrmp/foodcritic/pull/378) ([lamont-granquist](https://github.com/lamont-granquist))
+- remove 1.9.3 support [\#377](https://github.com/acrmp/foodcritic/pull/377) ([lamont-granquist](https://github.com/lamont-granquist))
+- fix FC054 [\#376](https://github.com/acrmp/foodcritic/pull/376) ([lamont-granquist](https://github.com/lamont-granquist))
+- fixes for cookbooks.txt and expected-output.txt [\#375](https://github.com/acrmp/foodcritic/pull/375) ([lamont-granquist](https://github.com/lamont-granquist))
+- Revert "Merge pull request \#358 from acrmp/lcg/revert-FC054" [\#374](https://github.com/acrmp/foodcritic/pull/374) ([lamont-granquist](https://github.com/lamont-granquist))
+- Update CHANGELOG.md [\#368](https://github.com/acrmp/foodcritic/pull/368) ([tas50](https://github.com/tas50))
+- Updates to the regressions files [\#366](https://github.com/acrmp/foodcritic/pull/366) ([tas50](https://github.com/tas50))
+- support Chef::Node::Attribute methods [\#364](https://github.com/acrmp/foodcritic/pull/364) ([lamont-granquist](https://github.com/lamont-granquist))
+- update CHANGELOG.md for DSL updates [\#363](https://github.com/acrmp/foodcritic/pull/363) ([lamont-granquist](https://github.com/lamont-granquist))
+- FC009 chef metadata update [\#362](https://github.com/acrmp/foodcritic/pull/362) ([lamont-granquist](https://github.com/lamont-granquist))
+- Update regression testing [\#361](https://github.com/acrmp/foodcritic/pull/361) ([tas50](https://github.com/tas50))
+- Fix the other names [\#360](https://github.com/acrmp/foodcritic/pull/360) ([tas50](https://github.com/tas50))
+- Update travis badge, add gem version badge [\#359](https://github.com/acrmp/foodcritic/pull/359) ([tas50](https://github.com/tas50))
+- Revert "FC054, check for mismatched cookbook names" [\#358](https://github.com/acrmp/foodcritic/pull/358) ([lamont-granquist](https://github.com/lamont-granquist))
+- let chef gem follow latest 12.x version [\#357](https://github.com/acrmp/foodcritic/pull/357) ([lamont-granquist](https://github.com/lamont-granquist))
+- some travis.yml fixes [\#356](https://github.com/acrmp/foodcritic/pull/356) ([lamont-granquist](https://github.com/lamont-granquist))
+- Fix flagging directory symlinks [\#348](https://github.com/acrmp/foodcritic/pull/348) ([odcinek](https://github.com/odcinek))
+- Add output to built-in rake task [\#342](https://github.com/acrmp/foodcritic/pull/342) ([patcon](https://github.com/patcon))
+- merge default options before check instead of during intialization [\#321](https://github.com/acrmp/foodcritic/pull/321) ([ranjib](https://github.com/ranjib))
+- Update README.md [\#319](https://github.com/acrmp/foodcritic/pull/319) ([jjasghar](https://github.com/jjasghar))
+- Sanitize template input [\#317](https://github.com/acrmp/foodcritic/pull/317) ([odcinek](https://github.com/odcinek))
+- Default to recent chef version [\#315](https://github.com/acrmp/foodcritic/pull/315) ([odcinek](https://github.com/odcinek))
+- Make FC041 smarter about CURL usage [\#313](https://github.com/acrmp/foodcritic/pull/313) ([odcinek](https://github.com/odcinek))
+- Recognize force\_default and force\_override. [\#312](https://github.com/acrmp/foodcritic/pull/312) ([coderanger](https://github.com/coderanger))
+- Add chef 12.0.0 through 12.1.1 [\#311](https://github.com/acrmp/foodcritic/pull/311) ([odcinek](https://github.com/odcinek))
+- Fix FC002 for heredoc on ruby 2.2 [\#310](https://github.com/acrmp/foodcritic/pull/310) ([odcinek](https://github.com/odcinek))
+- add warnings for use of recommends/suggests [\#309](https://github.com/acrmp/foodcritic/pull/309) ([lamont-granquist](https://github.com/lamont-granquist))
+- Lcg/changelog updates [\#304](https://github.com/acrmp/foodcritic/pull/304) ([lamont-granquist](https://github.com/lamont-granquist))
+- Cloudkick no more [\#303](https://github.com/acrmp/foodcritic/pull/303) ([lamont-granquist](https://github.com/lamont-granquist))
+- Add metadata for missing chef 11 versions [\#294](https://github.com/acrmp/foodcritic/pull/294) ([jaym](https://github.com/jaym))
+- Upgrade nokogiri dependency to support traveling-ruby nokogiri 1.6.5 [\#291](https://github.com/acrmp/foodcritic/pull/291) ([drnic](https://github.com/drnic))
+- Another try to make the pages build. [\#288](https://github.com/acrmp/foodcritic/pull/288) ([jaymzh](https://github.com/jaymzh))
+- Move to kramdown for gh-pages. [\#287](https://github.com/acrmp/foodcritic/pull/287) ([jaymzh](https://github.com/jaymzh))
+- Features/list rules [\#285](https://github.com/acrmp/foodcritic/pull/285) ([clintoncwolfe](https://github.com/clintoncwolfe))
+- Handle flagging binary files properly [\#283](https://github.com/acrmp/foodcritic/pull/283) ([odcinek](https://github.com/odcinek))
+- FC054, Name should match cookbook dir name in metadata [\#282](https://github.com/acrmp/foodcritic/pull/282) ([odcinek](https://github.com/odcinek))
+- Handle system attribute of user resource correctly [\#281](https://github.com/acrmp/foodcritic/pull/281) ([odcinek](https://github.com/odcinek))
+- Make FC044 not false positive on parameterized attributes [\#280](https://github.com/acrmp/foodcritic/pull/280) ([odcinek](https://github.com/odcinek))
+- tests: make simplecov optional [\#276](https://github.com/acrmp/foodcritic/pull/276) ([ktdreyer](https://github.com/ktdreyer))
+- Reinstate FC001 [\#251](https://github.com/acrmp/foodcritic/pull/251) ([juliandunn](https://github.com/juliandunn))
+- Show progress with --progress [\#244](https://github.com/acrmp/foodcritic/pull/244) ([justincampbell](https://github.com/justincampbell))
+- Update faq.md [\#228](https://github.com/acrmp/foodcritic/pull/228) ([danleyden](https://github.com/danleyden))
+- FC047 triggers when override! and default! are used [\#226](https://github.com/acrmp/foodcritic/pull/226) ([v-a](https://github.com/v-a))
+- add chef 11.6.2 through 11.10.4 [\#220](https://github.com/acrmp/foodcritic/pull/220) ([lamont-granquist](https://github.com/lamont-granquist))
+- relax nokogiri gemspec pinning [\#217](https://github.com/acrmp/foodcritic/pull/217) ([lamont-granquist](https://github.com/lamont-granquist))
+- Fix issue 185 [\#213](https://github.com/acrmp/foodcritic/pull/213) ([zts](https://github.com/zts))
+- FC006: don't fail when mode specified as array ref [\#212](https://github.com/acrmp/foodcritic/pull/212) ([zts](https://github.com/zts))
+- Add Ruby 2.1.0 to .travis.yml [\#209](https://github.com/acrmp/foodcritic/pull/209) ([petergoldstein](https://github.com/petergoldstein))
+- gitignore: .bundle and tags [\#206](https://github.com/acrmp/foodcritic/pull/206) ([docwhat](https://github.com/docwhat))
+- Rake task can use context output [\#204](https://github.com/acrmp/foodcritic/pull/204) ([docwhat](https://github.com/docwhat))
+- Cache results of read\_ast call [\#200](https://github.com/acrmp/foodcritic/pull/200) ([dougbarth](https://github.com/dougbarth))
+- Relax yajl-ruby dependency [\#197](https://github.com/acrmp/foodcritic/pull/197) ([elgalu](https://github.com/elgalu))
+- Fix FC022 problem with definition [\#195](https://github.com/acrmp/foodcritic/pull/195) ([bpaquet](https://github.com/bpaquet))
+- Improve Rake task [\#190](https://github.com/acrmp/foodcritic/pull/190) ([mlafeldt](https://github.com/mlafeldt))
+- Adding workaround for libxml2-2.6.26 xpath dup issue [\#163](https://github.com/acrmp/foodcritic/pull/163) ([danleyden](https://github.com/danleyden))
+- Strip whitespace from depends [\#160](https://github.com/acrmp/foodcritic/pull/160) ([philk](https://github.com/philk))
+- Make it easier to differentiate failures from warnings [\#150](https://github.com/acrmp/foodcritic/pull/150) ([jamesdburgess](https://github.com/jamesdburgess))
+- Manpage [\#147](https://github.com/acrmp/foodcritic/pull/147) ([stefanor](https://github.com/stefanor))
+- Display context without rak [\#146](https://github.com/acrmp/foodcritic/pull/146) ([stefanor](https://github.com/stefanor))
+- Include docs and LICENSE in the gem [\#145](https://github.com/acrmp/foodcritic/pull/145) ([stefanor](https://github.com/stefanor))
+- Provide a search rubygems option to load custom rules from a gem. [\#143](https://github.com/acrmp/foodcritic/pull/143) ([rteabeault](https://github.com/rteabeault))
+- Check definitions files [\#142](https://github.com/acrmp/foodcritic/pull/142) ([bpaquet](https://github.com/bpaquet))
+- add feature: specify rule tags in any cookbook's .foodcritic file [\#141](https://github.com/acrmp/foodcritic/pull/141) ([sabat](https://github.com/sabat))
+- Fix deprecation warnings from Gherkin [\#122](https://github.com/acrmp/foodcritic/pull/122) ([tmatilai](https://github.com/tmatilai))
+- ignore rules via comment on the offending line [\#116](https://github.com/acrmp/foodcritic/pull/116) ([grosser](https://github.com/grosser))
+- parse :'symbol' notification actions [\#94](https://github.com/acrmp/foodcritic/pull/94) ([ohm](https://github.com/ohm))
+- Add spec/\*\*/\* and features/\*\*/\* to default rake task :exclude\_paths. [\#84](https://github.com/acrmp/foodcritic/pull/84) ([fnichol](https://github.com/fnichol))
+- Reduce unnecessary blank lines from console output if there's nothing to print [\#78](https://github.com/acrmp/foodcritic/pull/78) ([ketan](https://github.com/ketan))
+- FC042: Prefer include\_recipe [\#77](https://github.com/acrmp/foodcritic/pull/77) ([pwelch](https://github.com/pwelch))
+- Do not require an empty array if just using default options [\#71](https://github.com/acrmp/foodcritic/pull/71) ([kreynolds](https://github.com/kreynolds))
+- Avoid to show version with -v plus some argument is passed [\#47](https://github.com/acrmp/foodcritic/pull/47) ([juanje](https://github.com/juanje))
+- Add help message when invalid option is passed [\#46](https://github.com/acrmp/foodcritic/pull/46) ([juanje](https://github.com/juanje))
+- FC031: Cookbook without metadata file [\#43](https://github.com/acrmp/foodcritic/pull/43) ([juanje](https://github.com/juanje))
+- Initial getting-started docs for using tailor [\#42](https://github.com/acrmp/foodcritic/pull/42) ([turboladen](https://github.com/turboladen))
+- \[GH-26\] Final case of method access [\#39](https://github.com/acrmp/foodcritic/pull/39) ([miketheman](https://github.com/miketheman))
+- Added integration test for linting individual files [\#33](https://github.com/acrmp/foodcritic/pull/33) ([cgriego](https://github.com/cgriego))
+- Allow linting of individual files [\#32](https://github.com/acrmp/foodcritic/pull/32) ([cgriego](https://github.com/cgriego))
+- Better handling of Chef::Config solo variants, refs \#26 [\#28](https://github.com/acrmp/foodcritic/pull/28) ([miketheman](https://github.com/miketheman))
+- Updating the rule to treat 0xxx modes as valid [\#12](https://github.com/acrmp/foodcritic/pull/12) ([aia](https://github.com/aia))
+- Numeric value for mode should be 5 digits \(CHEF-174\) [\#9](https://github.com/acrmp/foodcritic/pull/9) ([aia](https://github.com/aia))
+- typo fix [\#2](https://github.com/acrmp/foodcritic/pull/2) ([smith](https://github.com/smith))
 
-- Added FC055 to ensure that metadata.rb contains a maintainer
-- Added FC056 to ensure that metadata.rb contains a maintainer_email
-- Added FC057 to ensure that library providers include use_inline_resources
-- Added FC058 to ensure that library providers that include use_inline_resources and action_<name> methods
-- Added FC059 to ensure that LWRPs include use_inline_resources
-- Added FC060 to ensure that LWRPs don't use bad action methods
-- Renamed FC045 from 'Consider setting cookbook name in metadata' to 'Metadata does not contain cookbook name' as Chef 12 requires name metadata
-- Renamed FC015 from 'Consider converting definition to a LWRP' to 'Consider converting definition to a Custom Resource' since 12.5+ Custom Resources are a prefered pattern over LWRPs now
-- Changed FC045's annoyances tag to a correctness tag as name in metadata is now a requirement not an annoyance
-- Added DSL metadata for Chef 12.5.1
-- Added new chef11 and chef12 tags for rules related to changes in those Chef releases
-- Fixes to the Rake tasks
-- Removed the Mustache pin to 0.99 in the Gemfile since we require Ruby 2.0 now
 
-## 5.0.0 (17 September, 2015)
 
-Features:
-
-  - DSL metadata updated for Chef 11.18.x and up to Chef 12.4.1.
-  ([related issue](https://github.com/acrmp/foodcritic/issues/362)).
-  - Set default `chef_version` to 12.4.1
-  ([related issue](https://github.com/acrmp/foodcritic/pull/364)).
-  - add warnings for use of recommends/suggests.
-  ([related issue](https://github.com/acrmp/foodcritic/pull/309)).
-  - Show progress with --progress
-  ([related issue](https://github.com/acrmp/foodcritic/pull/244)).
-  - Added -l option to list enabled rules and descriptions
-  ([related issue](https://github.com/acrmp/foodcritic/pull/285)).
-
-Bugfixes:
-
-  - Fixed `node.force_default` and `node.force_override` along with many other methods on Chef::Node::Attribute that
-  `Chef::Node#method_missing` was forwarding methods to.
-  ([related issue](https://github.com/acrmp/foodcritic/pull/364)).
-  - merge default options before check instead of during intialization (in Rake task)
-    ([related issue](https://github.com/acrmp/foodcritic/pull/321)).
-  - Fix UTF-8 errors in template checking
-    ([related issue](https://github.com/acrmp/foodcritic/pull/317)).
-  - Make FC041 smarter about CURL usage
-    ([related issue](https://github.com/acrmp/foodcritic/pull/313)).
-  - pinned moustache gem to 0.99 for ruby 1.9.3 compatibility
-    Thanks @jdmundrawala
-  - Added metadata for missing Chef 11 versions.
-    Thanks @jdmundrawala
-  - [FC044: Avoid bare attribute keys](http://acrmp.github.com/foodcritic/#FC044) would fire on parameterized attributes.
-    Thanks @odcinek
-  - [FC048: Prefer Mixlib::ShellOut](http://foodcritic.io/#FC048) would false positive on system attribute of user resource.
-    Thanks @odcinek
-  - Handle flagging binary files properly.
-    Thanks @odcinek
-  - [FC002: Avoid string interpolation where not required](http://acrmp.github.com/foodcritic/#FC002) would erroneously trigger on heredoc on ruby 2.2
-    Thanks @ryansouza and @odcinek
-
-Other:
-
-  - 1.9.3 is removed from the travis matrix and no longer supported
-    ([related issue](https://github.com/acrmp/foodcritic/pull/315)).
-  - 1.9.3 compat is removed from the gemspec (v4.0.0 will be the last version that will install on 1.9.3)
-    ([related issue](https://github.com/acrmp/foodcritic/pull/377)).
-  - removed cookbooks no longer present in the chef-cookbooks repo from regression tests
-
-## 4.0.0 (12th June, 2014)
-
-Features:
-
-  - AST parsing is cached with a LRU cache, significantly reducing execution time
-    ([related issue](https://github.com/acrmp/foodcritic/issues/200)).
-    Thanks @dougbarth.
-  - [FC001: Use strings in preference to symbols to access node attributes](http://foodcritic.io/#FC001)
-    rule re-instated
-    ([related issue](https://github.com/acrmp/foodcritic/issues/97)).
-    Thanks @sethvargo.
-  - Relaxed nokogiri and yajl-ruby dependencies for bundling with other gems
-    ([related issue](https://github.com/acrmp/foodcritic/issues/217))
-    ([related issue](https://github.com/acrmp/foodcritic/issues/197)).
-    Thanks @lamont-granquist, @elgalu.
-  - DSL metadata for Chef versions 11.6.2 through 11.10.4 added
-    ([related issue](https://github.com/acrmp/foodcritic/issues/220)).
-    Thanks @lamont-granquist.
-  - Improved rake task output on failure
-    ([related issue](https://github.com/acrmp/foodcritic/issues/190)).
-    Thanks @mlafeldt.
-  - Allow rake task description to be specified
-    ([related issue](https://github.com/acrmp/foodcritic/issues/190)).
-    Thanks @mlafeldt.
-  - Allow the rake task to use context output
-    ([related issue](https://github.com/acrmp/foodcritic/issues/204)).
-    Thanks @docwhat.
-  - Add support for excluding paths at the command line with `-X`
-    ([related issue](https://github.com/acrmp/foodcritic/issues/207)).
-    Thanks @juanje, @docwhat.
-
-Bugfixes:
-
-  - [FC003: Check whether you are running with chef server before using server-specific features](http://foodcritic.io/#FC003)
-    would warn incorrectly against ternary expressions
-    ([related issue](https://github.com/acrmp/foodcritic/issues/185)). Thanks @zts.
-  - [FC006: Mode should be quoted or fully specified when setting file permissions](http://foodcritic.io/#FC006)
-    would warn incorrectly if the mode was a reference to an array
-    ([related issue](https://github.com/acrmp/foodcritic/issues/211)). Thanks @zts.
-  - [FC022: Resource condition within loop may not behave as expected](http://foodcritic.io/#FC022)
-    could warn incorrectly if the resource guard contained a loop
-    ([related issue](https://github.com/acrmp/foodcritic/issues/69)). Thanks
-    @jaymzh.
-  - [FC022: Resource condition within loop may not behave as expected](http://foodcritic.io/#FC022)
-    could warn incorrectly against definitions
-    ([related issue](https://github.com/acrmp/foodcritic/issues/195)). Thanks
-    @bpaquet.
-  - [FC034: Unused template variables](http://foodcritic.io/#FC034)
-    could warn incorrectly when different templates may be used based on platform.
-  - [FC040: Execute resource used to run git commands](http://foodcritic.io/#FC040)
-    would fail to warn for subsequent resources
-    ([related issue](https://github.com/acrmp/foodcritic/issues/186)). Thanks
-    @nkammah.
-  - [FC047: Attribute assignment does not specify precedence](http://foodcritic.io/#FC047)
-    would warn incorrectly on force attributes
-    ([related issue](https://github.com/acrmp/foodcritic/issues/226)). Thanks
-    @v-a.
-
-Other:
-
-  - Ruby 1.9.2 support has been removed.
-  - The default DSL metadata version has been bumped to 11.10.4
-    ([related issue](https://github.com/acrmp/foodcritic/issues/210)).
-    Thanks @kmshultz.
-
-## 3.0.3 (13th October, 2013)
-
-Bugfixes:
-
-  - [FC051: Template partials loop indefinitely](http://foodcritic.io/#FC051)
-    would cause an error for partials included from a subdirectory or where the
-    partial did not exist
-    ([related issue](https://github.com/acrmp/foodcritic/issues/176)). Thanks
-    @claco, @michaelglass.
-
-## 3.0.2 (5th October, 2013)
-
-Bugfixes:
-
-  - [FC051: Template partials loop indefinitely](http://foodcritic.io/#FC051)
-    can cause foodcritic to exit with an error on encountering a file that
-    cannot be read as UTF-8. We now explicitly exclude `.DS_Store` and `*.swp`
-    as a workaround
-    ([related issue](https://github.com/acrmp/foodcritic/issues/172)). Thanks
-    @tmatilai, @claco.
-  - [FC022: Resource condition within loop may not behave as expected](http://foodcritic.io/#FC022)
-    would warn incorrectly against loops where the block accepts more than one
-    argument
-    ([related issue](https://github.com/acrmp/foodcritic/issues/69)). Thanks
-    @Ips1975, @jaymzh.
-
-## 3.0.1 (25th September, 2013)
-
-Other:
-
-  - Rake version constraint removed to make packaging easier for users who
-    deploy foodcritic alongside Omnibus Chef.
-
-## 3.0.0 (14th September, 2013)
-
-Features:
-
-  - [FC047: Attribute assignment does not specify precedence](http://foodcritic.io/#FC047)
-    rule added
-    ([related issue](https://github.com/acrmp/foodcritic/issues/81)). Thanks
-    @jtimberman, @miketheman.
-  - [FC048: Prefer Mixlib::ShellOut](http://foodcritic.io/#FC048)
-    rule added
-    ([related issue](https://github.com/acrmp/foodcritic/issues/111)). Thanks
-    @jaymzh.
-  - [FC049: Role name does not match containing file name](http://foodcritic.io/#FC049)
-    rule added
-    ([related issue](https://github.com/acrmp/foodcritic/issues/19)). Thanks
-    @jaymzh.
-  - [FC050: Name includes invalid characters](http://foodcritic.io/#FC050)
-    rule added.
-  - [FC051: Template partials loop indefinitely](http://foodcritic.io/#FC051)
-    rule added.
-  - Added support for checking Chef environment and role files
-    ([related issue](https://github.com/acrmp/foodcritic/issues/19)). Thanks
-    @jaymzh.
-  - Added metadata for Chef 11.6.0.
-  - API methods `#field`, `#field_value` and `#templates_included` added.
-  - The API now exposes access to whether individual warnings should be viewed
-    as failures
-    ([related issue](https://github.com/acrmp/foodcritic/issues/150)). Thanks
-    @jamesdburgess.
-
-Bugfixes:
-
-  - [FC007: Ensure recipe dependencies are reflected in cookbook metadata](http://foodcritic.io/#FC007)
-    would warn if specifying dependencies in a multi-line word list with leading whitespace
-    ([related issue](https://github.com/acrmp/foodcritic/issues/160)). Thanks to
-    @philk for identifying and fixing this issue.
-  - [FC007: Ensure recipe dependencies are reflected in cookbook metadata](http://foodcritic.io/#FC007)
-    would not warn if `include_recipe` used parentheses
-    ([related issue](https://github.com/acrmp/foodcritic/issues/155)). Thanks
-    @jamesdburgess.
-  - [FC017: LWRP does not notify when updated](http://foodcritic.io/#FC017)
-    would warn even if `converge_by` or `use_inline_resources` was used
-    ([related issue](https://github.com/acrmp/foodcritic/issues/90)). Thanks
-    @stevendanna, @nevir.
-  - [FC017: LWRP does not notify when updated](http://foodcritic.io/#FC017)
-    would not warn if any action within the provider notified. Updated to report
-    against actions individually
-    ([related issue](https://github.com/acrmp/foodcritic/issues/90)).
-  - [FC019: Access node attributes in a consistent manner](http://foodcritic.io/#FC019)
-    would warn incorrectly against `node.run_state`
-    ([related issue](https://github.com/acrmp/foodcritic/issues/66)). Thanks
-    @jtimberman.
-  - [FC033: Missing template](http://foodcritic.io/#FC033)
-    would warn if the template filename began with a dot
-    ([related issue](https://github.com/acrmp/foodcritic/issues/165)). Thanks
-    @eherot.
-  - [FC034: Unused template variables](http://foodcritic.io/#FC034)
-    would warn incorrectly if variables were used by partials
-    ([related issue](https://github.com/acrmp/foodcritic/issues/140)). Thanks to
-    @v-a for implementing initial support for partials.
-  - [FC034: Unused template variables](http://foodcritic.io/#FC034)
-    would not be shown against inferred templates.
-  - [FC038: Invalid resource action](http://foodcritic.io/#FC038)
-    would warn incorrectly for log resources that specified a `write` action
-    ([related issue](https://github.com/acrmp/foodcritic/issues/154)). Thanks
-    @sethvargo.
-  - The foodcritic gem was missing a dependency on rake which broke
-    thor-foodcritic
-    ([related issue](https://github.com/acrmp/foodcritic/issues/157)). Thanks
-    @douglaswth.
-  - Template warnings should now be shown against the correct line number.
-    Previously warnings were always shown against line 1
-    ([related issue](https://github.com/acrmp/foodcritic/issues/102)). Thanks
-    @juliandunn.
-  - The `#declared_dependencies` API method could return duplicates for old
-    versions of LibXML.
-    ([related issue](https://github.com/acrmp/foodcritic/issues/163)). Thanks
-    @danleyden.
-
-Other:
-
-  - This release introduces breaking changes to programmatic use of foodcritic.
-
-## 2.2.0 (10th July, 2013)
-
-Features:
-
-  - Additional rules may now be shipped as gems. Files matching the path
-    `foodcritic/rules/**/*.rb` will be loaded if the `--search-gems` option is
-    specified
-    ([related issue](https://github.com/acrmp/foodcritic/issues/143)). Thanks
-    to @rteabeault for implementing this feature.
-  - You can now control the rules applied to individual cookbooks by including
-    a `.foodcritic` file at the root of your cookbook with the tags you want
-    checked
-    ([related issue](https://github.com/acrmp/foodcritic/issues/141)). Thanks
-    to @sabat for implementing this feature.
-  - The [project license](https://github.com/acrmp/foodcritic/blob/master/LICENSE)
-    is now included in the built gem
-    ([related issue](https://github.com/acrmp/foodcritic/issues/145)).
-    Thanks @stefanor.
-  - Foodcritic no longer uses the `rak` gem to generate output with context
-    ([related issue](https://github.com/acrmp/foodcritic/issues/146)).
-    Thanks to @stefanor for re-implementing context output to remove this
-    dependency.
-  - A man page is now included with foodcritic in
-    [ronn-format](http://rtomayko.github.io/ronn/).
-    Thanks @stefanor.
-
-Bugfixes:
-
-  - Definitions are now included in the files that are linted
-    ([related issue](https://github.com/acrmp/foodcritic/issues/142)). Thanks
-    @bpaquet.
-  - [FC009: Resource attribute not recognised](http://acrmp.github.com/foodcritic/#FC009)
-    would warn against Windows-specific resource attributes
-    ([related issue](https://github.com/acrmp/foodcritic/issues/135)). Thanks
-    @stormtrooperguy.
-  - [FC011: Missing README in markdown format](http://acrmp.github.com/foodcritic/#FC011)
-    was not shown when outputting with context enabled
-    ([related issue](https://github.com/acrmp/foodcritic/issues/146)). Thanks
-    @stefanor.
-  - [FC014: Consider extracting long ruby_block to library](http://acrmp.github.com/foodcritic/#FC014)
-    previously used the number of AST nodes to determine block length. This
-    was a poor proxy for length and this rule has been updated to warn if the
-    number of lines > 15
-    ([related issue](https://github.com/acrmp/foodcritic/issues/130)). Thanks
-    @adamjk-dev.
-  - [FC014: Consider extracting long ruby_block to library](http://acrmp.github.com/foodcritic/#FC014)
-    would warn against other blocks incorrectly
-    ([related issue](https://github.com/acrmp/foodcritic/issues/130)). Thanks
-    @adamjk-dev.
-  - [FC014: Consider extracting long ruby_block to library](http://acrmp.github.com/foodcritic/#FC014)
-    would raise an error if the ruby_block did not contain a nested `block`
-    attribute
-    ([related issue](https://github.com/acrmp/foodcritic/issues/139)). Thanks
-    @stevendanna.
-  - [FC033: Missing template](http://acrmp.github.com/foodcritic/#FC033)
-    would warn when the template file did not have an erb extension
-    ([related issue](https://github.com/acrmp/foodcritic/issues/131)). Thanks
-    @nvwls.
-  - [FC034: Unused template variables](http://acrmp.github.com/foodcritic/#FC034)
-    would warn when the template file did not have an erb extension
-    ([related issue](https://github.com/acrmp/foodcritic/issues/131)). Thanks
-    @nvwls.
-
-## 2.1.0 (17th April, 2013)
-
-Features:
-
-  - DSL metadata will now reflect the version of Chef selected with
-    `--chef-version`. For example this means that
-    [FC009: Resource attribute not recognised](http://acrmp.github.com/foodcritic/#FC009)
-    will warn about attributes not present in the specified version of Chef.
-
-Bugfixes:
-
-  - [FC045: Consider setting cookbook name in metadata](http://acrmp.github.com/foodcritic/#FC045)
-    would warn incorrectly and other rules would fail to work when activesupport
-    had been loaded
-    ([related issue](https://github.com/acrmp/foodcritic/issues/118)). This
-    affected Berkshelf users. Thanks @scalp42 and @c-nolic.
-  - Upgrade the version of Gherkin dependency to avoid deprecation warnings
-    ([related issue](https://github.com/acrmp/foodcritic/pull/122)).
-    Thanks @tmatilai.
-
-Other:
-
-  - Known to run on MRI 2.0.0 - added to Travis CI matrix.
-
-## 2.0.1 (31st March, 2013)
-
-Bugfixes:
-
-  - Matches that should be ignored were not if the rule implementation used the
-    `cookbook` block
-    ([related issue](https://github.com/acrmp/foodcritic/issues/119)).
-  - [FC033: Missing Template](http://acrmp.github.com/foodcritic/#FC033)
-    would warn incorrectly when the template resource was nested within another
-    resource
-    ([related issue](https://github.com/acrmp/foodcritic/issues/96)).
-    Thanks @justinforce.
-  - The `#resource_attributes` API method now copes with nested resources.
-
-## 2.0.0 (24th March, 2013)
-
-Features
-
-  - Support added for ignoring individual matches. To ignore a match add a
-    comment to the affected line in your cookbook of the format `# ~FC006`
-    ([related issue](https://github.com/acrmp/foodcritic/issues/119)).
-    Big thanks to @grosser.
-  - Command line help now specifies the tag to use to fail the build on any
-    rule match
-    ([related issue](https://github.com/acrmp/foodcritic/issues/108)).
-    Thanks @grosser.
-  - FC046: Attribute assignment uses assign unless nil
-    rule added
-    ([related issue](https://github.com/acrmp/foodcritic/issues/52)).
-    Thanks @jaymzh.
-
-Bugfixes:
-
-  - [FC003: Check whether you are running with chef server before using server-specific features](http://acrmp.github.com/foodcritic/#FC003)
-    updated to recognise checks that use return
-    ([related issue](https://github.com/acrmp/foodcritic/issues/92)).
-    Thanks @sethvargo, @miketheman.
-  - [FC003: Check whether you are running with chef server before using server-specific features](http://acrmp.github.com/foodcritic/#FC003)
-    updated to recognise checks that test for Chef Solo with alternation
-    ([related issue](https://github.com/acrmp/foodcritic/issues/103)).
-    Thanks @promisedlandt.
-  - [FC017: LWRP does not notify when updated](http://acrmp.github.com/foodcritic/#FC017)
-    modified to no longer warn when a notification is made without parentheses
-    ([related issue](https://github.com/acrmp/foodcritic/issues/121)).
-    Thanks @justinforce.
-  - [FC019: Access node attributes in a consistent manner](http://acrmp.github.com/foodcritic/#FC019)
-    would previously only show warnings for the first matching file.
-  - [FC019: Access node attributes in a consistent manner](http://acrmp.github.com/foodcritic/#FC019)
-    updated to avoid showing a false positive where a search is passed an
-    argument based on a node attribute accessed with a string.
-  - [FC019: Access node attributes in a consistent manner](http://acrmp.github.com/foodcritic/#FC019)
-    updated to exclude specs, removing a source of false positives.
-  - [FC019: Access node attributes in a consistent manner](http://acrmp.github.com/foodcritic/#FC019)
-    fixed regression in var_ref handling.
-  - [FC019: Access node attributes in a consistent manner](http://acrmp.github.com/foodcritic/#FC019)
-    updated to not trigger on quoted symbols
-    ([related issue](https://github.com/acrmp/foodcritic/issues/88)).
-    Thanks @spheromak.
-  - [FC024: Consider adding platform equivalents](http://acrmp.github.com/foodcritic/#FC024)
-    updated to only warn about platform equivalents that are listed in the
-    cookbook metadata
-    ([related issue](https://github.com/acrmp/foodcritic/issues/59)).
-    Thanks @tknerr.
-  - [FC037: Invalid notification action](http://acrmp.github.com/foodcritic/#FC037)
-    would cause foodcritic to halt with an error when a notification action was
-    specified as an expression
-    ([related issue](https://github.com/acrmp/foodcritic/issues/104)).
-    Thanks @jaymzh.
-  - [FC040: Execute resource used to run git commands](http://acrmp.github.com/foodcritic/#FC040)
-    updated to not match if the git command cannot be expressed as a `git`
-    resource.
-    ([related issue](https://github.com/acrmp/foodcritic/pull/98)).
-    Thanks @trobrock for raising this issue and implementing the fix.
-  - [FC043: Prefer new notification syntax](http://acrmp.github.com/foodcritic/#FC043)
-    updated to apply only to Chef versions >= 0.9.10
-    ([related issue](https://github.com/acrmp/foodcritic/issues/114)).
-    Thanks @iainbeeston.
-  - [FC044: Avoid bare attribute keys](http://acrmp.github.com/foodcritic/#FC044)
-    changed to not raise false positives against block variables
-    ([related issue](https://github.com/acrmp/foodcritic/issues/105)).
-    Thanks @jaymzh.
-
-Other:
-
-  - The `--repl` command line flag has been removed. This feature little used
-    and was problematic for users attempting to use newer versions of pry or
-    guard
-    ([related issue](https://github.com/acrmp/foodcritic/issues/50)).
-    Thanks @jperry, @miketheman, @jtimberman.
-  - The `os_command?` api method has been removed.
-  - The deprecated `cookbook_path` and `valid_path?` methods have been removed.
-    This may cause breakage if you are using foodcritic programatically from
-    Ruby. Please update your code to use the `cookbook_paths` and `valid_paths?`
-    methods instead.
-  - Added regression test for expected output against opscode-cookbooks. Run
-    `bundle exec rake regressions` to perform this test.
-
-## 1.7.0 (27th December, 2012)
-
-Features
-
-  - [FC038: Invalid resource action](http://acrmp.github.com/foodcritic/#FC038)
-    rule added
-    ([related issue](https://github.com/acrmp/foodcritic/issues/61)).
-    Thanks @jaymzh.
-  - [FC039: Node method cannot be accessed with key](http://acrmp.github.com/foodcritic/#FC039)
-    rule added.
-  - [FC040: Execute resource used to run git commands](http://acrmp.github.com/foodcritic/#FC040)
-    rule stolen from Etsy rules (ETSY003)
-    ([related issue](https://github.com/acrmp/foodcritic/issues/72)).
-    Thanks @jonlives.
-  - [FC041: Execute resource used to run curl or wget commands](http://acrmp.github.com/foodcritic/#FC041)
-    rule stolen from Etsy rules (ETSY002)
-    ([related issue](https://github.com/acrmp/foodcritic/issues/73)).
-    Thanks @jonlives.
-  - [FC042: Prefer include_recipe](http://acrmp.github.com/foodcritic/#FC042)
-    rule added
-    ([related issue](https://github.com/acrmp/foodcritic/pull/77)).
-    Thanks @pwelch.
-  - [FC043: Prefer new notification syntax](http://acrmp.github.com/foodcritic/#FC043)
-    rule added
-    ([related issue](https://github.com/acrmp/foodcritic/issues/80)).
-    Thanks @jtimberman.
-  - [FC044: Avoid bare attribute keys](http://acrmp.github.com/foodcritic/#FC044)
-    rule added
-    ([related issue](https://github.com/acrmp/foodcritic/issues/75)).
-    Thanks @jtimberman.
-  - [FC045: Consider setting cookbook name in metadata](http://acrmp.github.com/foodcritic/#FC045)
-    rule added
-    ([related issue](https://github.com/acrmp/foodcritic/issues/64)).
-    Thanks @miketheman.
-  - Linter `#check` method no longer requires options to be explicitly passed if
-    you are using the defaults
-    ([related issue](https://github.com/acrmp/foodcritic/pull/71)).
-    Thanks @kreynolds.
-
-Bugfixes:
-
-  - Bump version of Nokogiri to
-    [fix installation failure on Ubuntu 12.10](https://github.com/sparklemotion/nokogiri/issues/680)
-    ([related issue](https://github.com/acrmp/foodcritic/issues/83)).
-    Thanks @dracoater.
-  - Support added for quoted symbols as notification actions
-    ([related issue](https://github.com/acrmp/foodcritic/pull/94)).
-    Thanks @ohm.
-  - Add `spec/**/*` and `features/**/*` to default rake task `:exclude_paths`
-    ([related issue](https://github.com/acrmp/foodcritic/pull/84)).
-    Thanks @fnichol.
-  - Remove unnecessary whitespace from rake task output
-    ([related issue](https://github.com/acrmp/foodcritic/pull/78)).
-    Thanks @ketan.
-  - Removed [FC001: Use strings in preference to symbols to access node attributes](http://acrmp.github.com/foodcritic/#FC001)
-    ([related issue](https://github.com/acrmp/foodcritic/issues/86)).
-    Thanks @jtimberman.
-  - [FC003: Check whether you are running with chef server before using server-specific features](http://acrmp.github.com/foodcritic/#FC003)
-    updated to also match `unless`
-    ([related issue](https://github.com/acrmp/foodcritic/issues/58)).
-    Thanks @cap10morgan.
-  - Decode numeric attributes.
-    This could cause [FC005: Avoid repetition of resource declarations](http://acrmp.github.com/foodcritic/#FC005)
-    to warn incorrectly
-    ([related issue](https://github.com/acrmp/foodcritic/issues/79)).
-    Thanks @masterkorp.
-  - Recognise attributes correctly within a block.
-    This could cause [FC005: Avoid repetition of resource declarations](http://acrmp.github.com/foodcritic/#FC005)
-    to warn incorrectly
-    ([related issue](https://github.com/acrmp/foodcritic/issues/76)).
-    Thanks @masterkorp.
-  - [FC009: Resource attribute not recognised](http://acrmp.github.com/foodcritic/#FC009)
-    would warn incorrectly on methods used within a resource block
-    ([related issue](https://github.com/acrmp/foodcritic/issues/85)).
-    Thanks @arangamani.
-  - [FC019: Access node attributes in a consistent manner](http://acrmp.github.com/foodcritic/#FC019)
-    would warn incorrectly when referencing node attributes from a user-created
-    hash.
-    ([related issue](https://github.com/acrmp/foodcritic/issues/54)).
-    Thanks @schubert.
-  - [FC033: Missing Template](http://acrmp.github.com/foodcritic/#FC033)
-    would warn incorrectly when using templates from another cookbook
-    ([related issue](https://github.com/acrmp/foodcritic/issues/74)).
-    Thanks @woohgit.
-
-## 1.6.1 (31st August, 2012)
-
-Bugfixes:
-
-  - [FC030: Cookbook contains debugger breakpoints](http://acrmp.github.com/foodcritic/#FC030)
-    could prevent other rules from processing depending on the tags passed.
-  - [FC037: Invalid notification action](http://acrmp.github.com/foodcritic/#FC037)
-    would incorrectly warn against `subscribes` notifications
-    ([related issue](https://github.com/acrmp/foodcritic/issues/65)).
-    Thanks @jtimberman.
-
-## 1.6.0 (28th August, 2012)
-
-Bugfixes:
-
-  - Removed FC035: Template uses node attribute directly. For a discussion of
-    the reasons for removal see the
-    [related issue](https://github.com/acrmp/foodcritic/issues/60).
-
-## 1.5.1 (21st August, 2012)
-
-Bugfixes:
-
-  - Remove pry-doc dependency to resolve pry version conflict.
-
-## 1.5.0 (21st August, 2012)
-
-Features:
-
-  - [FC033: Missing template](http://acrmp.github.com/foodcritic/#FC033) rule
-    added.
-  - [FC034: Unused template variables](http://acrmp.github.com/foodcritic/#FC034)
-    rule added
-    ([related issue](https://github.com/acrmp/foodcritic/issues/36)).
-  - [FC035: Template uses node attribute directly](http://acrmp.github.com/foodcritic/#FC035)
-    rule added. This is a style rule that may prove controversial.
-  - [FC037: Invalid notification action](http://acrmp.github.com/foodcritic/#FC037)
-    rule added.
-  - The `#read_ast` API method now supports Erb templates.
-  - API method `#resource_action?` added.
-  - DSL extended to include `library`, `metadata` and `template`.
-
-Bugfixes:
-
-  - [FC020: Conditional execution string attribute looks like Ruby](http://acrmp.github.com/foodcritic/#FC033)
-    rule has been removed as unreliable.
-  - The `#attribute_access` API method now correctly allows a type of `:any`.
-  - The `#notifications` API method now supports notifications enclosed in braces
-    ([related issue](https://github.com/etsy/foodcritic-rules/issues/3)).
-  - Ensure command-line help is shown when an invalid option is passed. Thanks
-    to @juanje for finding and fixing this issue.
-
-## 1.4.0 (15th June, 2012)
-
-Features:
-
-  - [FC027: Resource sets internal attribute](http://acrmp.github.com/foodcritic/#FC027)
-    rule added.
-    Thanks @macros.
-  - [FC028: Incorrect #platform? usage](http://acrmp.github.com/foodcritic/#FC028)
-    rule added.
-  - [FC029: No leading cookbook name in recipe metadata](http://acrmp.github.com/foodcritic/#FC029)
-    rule added.
-  - [FC030: Cookbook contains debugger breakpoints](http://acrmp.github.com/foodcritic/#FC030)
-    rule added
-    ([related issue](https://github.com/acrmp/foodcritic/issues/36)).
-    Thanks @bryanwb.
-  - [FC031: Cookbook without metadata file](http://acrmp.github.com/foodcritic/#FC031)
-    rule added
-    ([related issue](https://github.com/acrmp/foodcritic/issues/43)).
-    Thanks to @juanje for proposing and implementing this rule.
-  - [FC032: Invalid notification timing](http://acrmp.github.com/foodcritic/#FC032)
-    rule added.
-  - Added the [notifications](http://acrmp.github.com/foodcritic/#notifications)
-    API method to provide more convenient access to resource notifications
-    ([related issue](https://github.com/acrmp/foodcritic/issues/31)).
-
-Bugfixes:
-
-  - [FC003: Check whether you are running with chef server before using server-specific features](http://acrmp.github.com/foodcritic/#FC003)
-    would warn if solo was checked for with `Chef::Config.solo`
-    ([related issue](https://github.com/acrmp/foodcritic/issues/26)).
-    Thanks to @miketheman for identifying and fixing this issue.
-  - [FC007: Ensure recipe dependencies are reflected in cookbook metadata](http://acrmp.github.com/foodcritic/#FC007)
-    would incorrectly warn if the cookbook name specified for `include_recipe`
-    was dynamic
-    ([related issue](https://github.com/acrmp/foodcritic/issues/44)).
-    Thanks @markjreed.
-  - [FC019: Access node attributes in a consistent manner](http://acrmp.github.com/foodcritic/#FC019)
-    has been modified to no longer warn if the method called on node is called
-    explicitly with brackets
-    ([related issue](https://github.com/acrmp/foodcritic/issues/22)).
-    Thanks @jaymzh.
-  - The [resource_attributes](http://acrmp.github.com/foodcritic/#resource_attributes)
-    API method has been updated to return boolean values correctly.
-
-## 1.3.1 (9th June, 2012)
-
-Bugfixes:
-
-  - Changes made to support multiple cookbook paths in 1.3.0 broke
-    compatibility with earlier versions of the linting API. This release
-    restores compatibility with third party code that uses the linter
-    `#cookbook_path` or `#valid_path?` methods.
-  - The Nokogiri dependency constraint has been locked to 1.5.0 again as
-    Nokogiri 1.5.3 also appears to segfault in certain circumstances.
-
-## 1.3.0 (21st May, 2012)
-
-Features:
-
-  - [FC026: Conditional execution block attribute contains only string](http://acrmp.github.com/foodcritic/#FC026)
-    rule added
-    ([related issue](https://github.com/acrmp/foodcritic/issues/30)).
-    Thanks to @mkocher for proposing this rule.
-  - Foodcritic now accepts multiple cookbook paths as arguments and supports
-    linting of individual files only. Big thanks to @cgriego for these changes.
-    These lay the groundwork for his new
-    [guard-foodcritic](https://github.com/cgriego/guard-foodcritic) project.
-
-Bugfixes:
-
-  - [FC003: Check whether you are running with chef server before using server-specific features](http://acrmp.github.com/foodcritic/#FC003)
-    would still warn if solo was checked for as a string
-    ([related issue](https://github.com/acrmp/foodcritic/issues/26)).
-    Thanks to @miketheman for identifying and fixing this issue.
-  - [FC019: Access node attributes in a consistent manner](http://acrmp.github.com/foodcritic/#FC019)
-    would warn when the node object had been re-opened for extension
-    ([related issue](https://github.com/acrmp/foodcritic/issues/22)).
-    Thanks @jaymzh.
-  - [FC020: Conditional execution string attribute looks like Ruby](http://acrmp.github.com/foodcritic/#FC020)
-    updated to not warn against strings that appear to contain file paths or Windows `net use`
-    ([related issue](https://github.com/acrmp/foodcritic/issues/30)).
-    Thanks @eherot and @mconigliaro.
-  - [FC022: Resource condition within loop may not behave as expected](http://acrmp.github.com/foodcritic/#FC022)
-    would warn incorrectly if the resource name was set directly to the block
-    variable rather than being a string expression
-    ([related issue](https://github.com/acrmp/foodcritic/issues/29)).
-    Thanks @eherot.
-  - The [resource_attributes](http://acrmp.github.com/foodcritic/#resource_attributes)
-    API method has been updated to return the AST for resource notifications
-    ([related issue](https://github.com/acrmp/foodcritic/issues/31)).
-    Thanks @jonlives.
-
-Other:
-
-  - [Etsy have open-sourced their Foodcritic rules](https://github.com/etsy/foodcritic-rules).
-    You should definitely check these out.
-  - The effective Chef version for determining the rules to apply has been
-    bumped to 0.10.10.
-
-## 1.2.0 (21st April, 2012)
-
-Features:
-
-  - [FC025: Prefer chef_gem to compile-time gem install](http://acrmp.github.com/foodcritic/#FC025)
-    rule added.
-  - Rules can now declare which versions of Chef they `apply_to`. The new
-    command line argument `-c` (`--chef-version`) should be used to specify the
-    effective Chef version.
-
-Bugfixes:
-
-  - [FC001: Use strings in preference to symbols to access node attributes](http://acrmp.github.com/foodcritic/#FC001)
-    could show false positives when using Chef search.
-  - [FC001: Use strings in preference to symbols to access node attributes](http://acrmp.github.com/foodcritic/#FC001)
-    would overlook the use of symbols to access node attributes when passing
-    template variables.
-  - [FC002: Avoid string interpolation where not required](http://acrmp.github.com/foodcritic/#FC002)
-    fixed to no longer ignore the first keypair in a Hash
-    ([related issue](https://github.com/acrmp/foodcritic/issues/24)).
-    Thanks @Ips1975.
-  - [FC004: Use a service resource to start and stop services](http://acrmp.github.com/foodcritic/#FC004)
-    modified not to warn if the action is not supported by the `service`
-    resource.
-  - [FC005: Avoid repetition of resource declarations](http://acrmp.github.com/foodcritic/#FC005)
-    modified not to warn when resources are branched within conditionals or
-    provider actions.
-  - [FC007: Ensure recipe dependencies are reflected in cookbook metadata](http://acrmp.github.com/foodcritic/#FC007)
-    modified to ignore the use of `include_recipe` with embedded expressions.
-  - [FC023: Prefer conditional attributes](http://acrmp.github.com/foodcritic/#FC023)
-    modified not to warn if the conditional expression has an `else`.
-  - The `resource_attributes` API method has been updated to return block
-    attributes which were previously ignored
-    ([related issue](https://github.com/acrmp/foodcritic/issues/23)).
-    Thanks @jonlives.
-
-## 1.1.0 (25th March, 2012)
-
-Features:
-
-  - [FC024: Consider adding platform equivalents](http://acrmp.github.com/foodcritic/#FC024) rule added.
-  - When writing new rules it is no longer necessary to explicitly map
-    matching AST nodes to matches. You can now just return the AST nodes.
-
-Bugfixes:
-
-  - The `cookbook_name` method now reflects the cookbook name if specified in
-    metadata. This prevents a warning from being shown by
-    [FC007: Ensure recipe dependencies are reflected in cookbook metadata](http://acrmp.github.com/foodcritic/#FC007)
-    if the cookbook is in a differently named directory.
-  - The `declared_dependencies` method previously would intermix version strings
-    in the list of cookbook names.
-
-Other:
-
-  - Chef 0.10.10 will include a new DSL method for defining a `default_action`
-    for resources. Rule
-    [FC016: LWRP does not declare a default action](http://acrmp.github.com/foodcritic/#FC016)
-    has been updated to recognise the DSL change.
-  - Nokogiri dependency constraint changed to no longer lock to 1.5.0 as their
-    next release should include the fix for custom XPath functions.
-
-## 1.0.1 (15th March, 2012)
-
-Bugfixes:
-
-  - Nokogiri 1.5.1 and 1.5.2 cause a segfault so prevent their use until a fix
-    is released
-    ([related issue](https://github.com/acrmp/foodcritic/issues/18)).
-    Thanks @miah.
-
-## 1.0.0 (4th March, 2012)
-
-Features:
-
-  - New `-I` option added to specify the path to your own custom rules
-    ([related issue](https://github.com/acrmp/foodcritic/issues/8)).
-  - The
-    [Rule API](https://github.com/acrmp/foodcritic/blob/v1.0.0/lib/foodcritic/api.rb)
-    was previously not supported and subject to change without warning. From
-    this release it will now follow the
-    [same versioning policy](http://docs.rubygems.org/read/chapter/7) as the
-    command line interface.
-  - A version flag (--version or -V) has been added ([related issue](https://github.com/acrmp/foodcritic/issues/16)).
-
-Bugfixes:
-
-  - The evaluation of rule tags has been updated to be consistent with Cucumber.
-    The major version number of foodcritic has been bumped to indicate that this
-    is a breaking change. If you make use of tags (for example in a CI build)
-    you may need to update your syntax. See the
-    [related issue](https://github.com/acrmp/foodcritic/issues/11) for more
-    information. Thanks @jaymzh.
-  - [FC003: Check whether you are running with chef server before using
-    server-specific features](http://acrmp.github.com/foodcritic/#FC003) has
-    been updated to correctly identify the new version of chef-solo-search
-    ([related issue](https://github.com/acrmp/foodcritic/issues/17)).
-
-## 0.11.1 (29th February, 2012)
-
-Bugfixes:
-
-  - Foodcritic could fail to activate yajl-json in some circumstances, failing
-    with a runtime error. Whether this occurred was dependent on the version of
-    yajl-ruby activated by Chef, which would vary dependent on the other gems
-    installed on the system. See the
-    [related issue](https://github.com/acrmp/foodcritic/issues/14) for more
-    information. Thanks @jaymzh for identifying the issue and striving to get
-    Foodcritic playing well with Omnibus.
-
-## 0.11.0 (22nd February, 2012)
-
-Bugfixes:
-
-  - Major bugfix to [FC006: Mode should be quoted or fully specified when setting file permissions](http://acrmp.github.com/foodcritic/#FC006). In earlier versions a four-digit literal file mode that set the first octet would not have been picked up by this rule ([related issue](https://github.com/acrmp/foodcritic/pull/9)). Thanks @aia for finding and fixing this bug. Check your cookbooks against FC006 after upgrading to see if you are affected.
-
-## 0.10.0 (20th February, 2012)
-
-Features:
-
-  - Performance improvements.
-  - [FC023: Prefer conditional attributes](http://acrmp.github.com/foodcritic/#FC023) rule added. Stolen from @ampledata with thanks.
-  - New `-S` option added to allow an alternate search grammar to be specified.
-
-Other:
-
-  - Chef is no longer loaded at startup for performance reasons. Foodcritic now ships with Chef DSL metadata.
-
-## 0.9.0 (26th January, 2012)
-
-Features:
-
-  - New experimental `-C` option added to output context for rule matches.
-  - [FC021: Resource condition in provider may not behave as expected](http://acrmp.github.com/foodcritic/#FC021) rule
-    added.
-  - [FC022: Resource condition within loop may not behave as expected](http://acrmp.github.com/foodcritic/#FC022) rule
-    added.
-
-Bugfixes:
-
-  - [FC005: Avoid repetition of resource declarations](http://acrmp.github.com/foodcritic/#FC005) rule modified to only
-    warn when there are at least three *consecutive* resources of the same type that could be 'rolled up' into a loop.
-  - [FC016: LWRP does not declare a default action](http://acrmp.github.com/foodcritic/#FC016) rule restored. Thanks @stevendanna
-  - [FC019: Access node attributes in a consistent manner](http://acrmp.github.com/foodcritic/#FC019) rule modified to no
-    longer treat DSL mixin methods as auto-vivified attributes. Identification of least used access method should now be
-    accurate.
-
-Other:
-
-  - [FC020: Conditional execution string attribute looks like Ruby](http://acrmp.github.com/foodcritic/#FC020) rule now
-    grabs conditions from within single quotes.
-
-## 0.8.1 (20th January, 2012)
-
-Bugfixes:
-
-  - [FC019: Access node attributes in a consistent manner](http://acrmp.github.com/foodcritic/#FC019) modified
-    to avoid false positives on methods invoked on values in a Mash.
-
-## 0.8.0 (19th January, 2012)
-
-Features:
-
-  - [FC019: Access node attributes in a consistent manner](http://acrmp.github.com/foodcritic/#FC019) rule added.
-  - [FC020: Conditional execution string attribute looks like Ruby](http://acrmp.github.com/foodcritic/#FC020) rule added.
-
-Other:
-
-  - Rule 'FC016: LWRP does not declare a default action' was incorrectly checking the provider for a default action
-    rather than the resource. Removed this rule temporarily to avoid showing false positives. A user has patched this
-    and will be submitting a pull request shortly.
-
-## 0.7.0 (31st December, 2011)
-
-Features:
-
-  - New `-f` option added to allow you to specify which warnings should result in the build being failed. See the new
-    documentation on [using Foodcritic in Continuous Integration](http://acrmp.github.com/foodcritic/#ci) for more
-    information.
-  - New `-r` option added to drop you into the Pry REPL to interactively develop rules. See the updated documentation on
-    [Writing a new rule](http://acrmp.github.com/foodcritic/#writing-a-new-rule) for more information.
-
-Bugfixes:
-
-  - [FC003: Check whether you are running with chef server before using server-specific features](http://acrmp.github.com/foodcritic/#FC003) rule
-    modified to not warn if the [edelight chef-solo-search library](https://github.com/edelight/chef-solo-search) has been installed. Thanks @tobami.
-  - [FC007: Ensure recipe dependencies are reflected in cookbook metadata](http://acrmp.github.com/foodcritic/#FC007) rule
-    modified to flag undeclared dependencies against the offending file rather than metadata.rb.
-  - Removed the unused description field from the rule dsl.
-
-Other:
-
-  - Project features now run much faster, running in-process by default. You can set an environment variable
-    (`FC_FORK_PROCESS`) to specify that Cucumber runs should match the earlier behaviour and spawn a separate process
-    using Aruba.
-
-## 0.6.0 (18th December, 2011)
-
-Features:
-
-  - [FC001: Use strings in preference to symbols to access node attributes](http://acrmp.github.com/foodcritic/#FC001)
-    rule added.
-  - [FC004: Use a service resource to start and stop services](http://acrmp.github.com/foodcritic/#FC004) rule extended
-    to recognise upstart and invoke-rc.d.
-  - [FC011: Missing README in markdown format](http://acrmp.github.com/foodcritic/#FC011) rule added.
-  - [FC012: Use Markdown for README rather than RDoc](http://acrmp.github.com/foodcritic/#FC012) rule added.
-  - [FC013: Use file_cache_path rather than hard-coding tmp paths ](http://acrmp.github.com/foodcritic/#FC013) rule added.
-  - [FC014: Consider extracting long ruby_block to library](http://acrmp.github.com/foodcritic/#FC014) rule added.
-  - [FC015: Consider converting definition to a LWRP](http://acrmp.github.com/foodcritic/#FC015) rule added.
-  - [FC016: LWRP does not declare a default action](http://acrmp.github.com/foodcritic/#FC016) rule added.
-  - [FC017: LWRP does not notify when updated](http://acrmp.github.com/foodcritic/#FC017) rule added.
-  - [FC018: LWRP uses deprecated notification syntax](http://acrmp.github.com/foodcritic/#FC018) rule added.
-
-Bugfixes:
-
-  - Ensure warnings are line sorted numerically. Commit eb1762fd0fbf99fa513783d7838ceac0147c37bc
-  - [FC005: Avoid repetition of resource declarations](http://acrmp.github.com/foodcritic/#FC005) rule made less aggressive.
-
-## 0.5.2 (15th December, 2011)
-
-Bugfixes:
-
-  - Fix JSON version range for compatibility with Bundler / Chef 0.10.6. ([related issue](https://github.com/acrmp/foodcritic/issues/6)). Thanks @dysinger.
-
-## 0.5.1 (14th December, 2011)
-
-Features:
-
-  - Relaxed Ruby version constraint so we can run on 1.9.2 ([related issue](https://github.com/acrmp/foodcritic/issues/5)). Yay. Thanks @someara.
-
-## 0.5.0 (13th December, 2011)
-
-Features:
-
-  - Added the ability to choose rules to apply via tags ([related issue](https://github.com/acrmp/foodcritic/issues/4)).
-    This uses the same syntax as [Cucumber tag expressions](https://github.com/cucumber/cucumber/wiki/tags).
-  - [FC010: Invalid search syntax](http://acrmp.github.com/foodcritic/#FC010) rule added.
-
-## 0.4.0 (10th December, 2011)
-
-Features:
-
-  - [Spiffy new home page and documentation](http://acrmp.github.com/foodcritic/)
-  - [FC008: Generated cookbook metadata needs updating](http://acrmp.github.com/foodcritic/#FC008) rule added.
-  - [FC009: Resource attribute not recognised rule added](http://acrmp.github.com/foodcritic/#FC009).
-    This adds a dependency on the Chef gem.
-  - Performance improvement.
-
-Bugfixes:
-
-  - Fixed typo in FC004 feature description ([related issue](https://github.com/acrmp/foodcritic/issues/2)). Thanks @smith.
-  - Prevented statements within nested resource blocks from being interpreted as resource attributes.
-
-## 0.3.0 (4th December, 2011)
-
-Features:
-
-  - Significantly slower! But now you can write rules using [xpath or css selectors](http://nokogiri.org/).
-  - FC006: File mode rule added.
-  - FC007: Undeclared recipe dependencies rule added.
-
-## 0.2.0 (1st December, 2011)
-
-Bugfixes:
-
-  - Removed 'FC001: Use symbols in preference to strings to access node attributes' until a policy mechanism is
-  introduced ([related issue](https://github.com/acrmp/foodcritic/issues/1)). Thanks @jtimberman
-
-## 0.1.0 (30th November, 2011)
-
-Initial version.
+\* *This Change Log was automatically generated by [github_changelog_generator](https://github.com/skywinder/Github-Changelog-Generator)*
