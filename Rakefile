@@ -12,7 +12,6 @@ Bundler.setup
 Bundler::GemHelper.install_tasks
 
 GitHubChangelogGenerator::RakeTask.new :changelog do |config|
-  config.since_tag = "v5.0.0"
   config.exclude_labels = %w[duplicate question invalid wontfix changelog_skip]
   config.issues = false
 end
