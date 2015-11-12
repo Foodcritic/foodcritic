@@ -4,11 +4,18 @@ require 'rake/testtask'
 require 'cucumber'
 require 'cucumber/rake/task'
 require 'rubocop/rake_task'
+require "github_changelog_generator/task"
 
 task :default => [:man, :install, :test, :features]
 
 Bundler.setup
 Bundler::GemHelper.install_tasks
+
+GitHubChangelogGenerator::RakeTask.new :changelog do |config|
+  config.since_tag = 'v5.0.0'
+  config.exclude_labels = %w[duplicate question invalid wontfix changelog_skip]
+  config.issues = false
+end
 
 Rake::TestTask.new do |t|
   t.pattern = 'spec/foodcritic/*_spec.rb'

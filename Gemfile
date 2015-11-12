@@ -10,7 +10,8 @@ group :test do
 end
 
 group :development do
-  gem 'chef', '~> 12.1'
+  gem 'github_changelog_generator', '~> 1.9'
+  gem 'chef', '~> 12.5'
   gem 'ronn', '~> 0.7'
   gem 'rubocop', '~> 0.20', require: false
 end
