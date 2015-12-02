@@ -13,6 +13,7 @@
 - Added new chef11 and chef12 tags for rules related to changes in those Chef releases
 - Fixes to the Rake tasks
 - Removed the Mustache pin to 0.99 in the Gemfile since we require Ruby 2.0 now
+- Added Oracle as an equivalent platform for the RHEL platform family in FC024
 
 ## 5.0.0 (17 September, 2015)
 
