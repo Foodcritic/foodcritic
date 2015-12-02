@@ -11,25 +11,26 @@ Feature: Check for missing platforms
      Then the consider adding platform warning 024 <warning>
 
     Examples:
-      | type      | supports                    | flavours                                      | warning             |
-      | case      |                             | chalk,cheese                                  | should not be shown |
-      | case      |                             | debian,ubuntu                                 | should not be shown |
-      | case      |                             | amazon,centos,redhat,scientific               | should not be shown |
-      | case      |                             | centos,redhat,amazon,scientific               | should not be shown |
-      | case      |                             | centos,debian,fedora,redhat,amazon,scientific | should not be shown |
-      | case      |                             | redhat                                        | should not be shown |
-      | case      |                             | centos,redhat                                 | should be shown     |
-      | case      | centos,redhat               | centos,redhat                                 | should not be shown |
-      | case      |                             | centos,redhat,scientific                      | should be shown     |
-      | case      | centos,redhat,scientific    | centos,redhat,scientific                      | should not be shown |
-      | case      | centos,debian,scientific    | centos,scientific                             | should not be shown |
-      | case      | centos,redhat,scientific    | redhat,scientific                             | should be shown     |
-      | case      | debian,redhat,centos,fedora | redhat,centos,fedora                          | should not be shown |
-      | platform? |                             | centos,redhat,amazon,scientific               | should not be shown |
-      | platform? |                             | redhat                                        | should not be shown |
-      | platform? |                             | redhat,scientific                             | should be shown     |
-      | platform? | redhat,scientific           | redhat,scientific                             | should not be shown |
-      | platform? | centos,redhat,scientific    | centos,scientific                             | should be shown     |
+      | type      | supports                    | flavours                                              | warning             |
+      | case      |                             | chalk,cheese                                          | should not be shown |
+      | case      |                             | debian,ubuntu                                         | should not be shown |
+      | case      |                             | amazon,centos,redhat,scientific,oracle                | should not be shown |
+      | case      |                             | centos,redhat,amazon,scientific,oracle                | should not be shown |
+      | case      |                             | centos,debian,fedora,redhat,amazon,scientific,oracle  | should not be shown |
+      | case      |                             | redhat                                                | should not be shown |
+      | case      |                             | centos,redhat                                         | should be shown     |
+      | case      | centos,redhat               | centos,redhat                                         | should not be shown |
+      | case      |                             | centos,redhat,scientific                              | should be shown     |
+      | case      | centos,redhat,scientific    | centos,redhat,scientific                              | should not be shown |
+      | case      | centos,debian,scientific    | centos,scientific                                     | should not be shown |
+      | case      | centos,redhat,scientific    | redhat,scientific                                     | should be shown     |
+      | case      | debian,redhat,centos,fedora | redhat,centos,fedora                                  | should not be shown |
+      | platform? |                             | centos,redhat,amazon,scientific,oracle                | should not be shown |
+      | platform? |                             | redhat                                                | should not be shown |
+      | platform? |                             | redhat,scientific                                     | should be shown     |
+      | platform? | redhat,scientific           | redhat,scientific                                     | should not be shown |
+      | platform? | centos,redhat,scientific    | centos,scientific                                     | should be shown     |
+      | platform? | centos,redhat,oracle        | centos,redhat                                         | should be shown     |
 
   Scenario: Supported platforms specifies versions
     Given a cookbook recipe with a 'case' condition for flavours 'redhat,scientific'
