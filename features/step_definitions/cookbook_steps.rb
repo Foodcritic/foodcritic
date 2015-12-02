@@ -2455,3 +2455,9 @@ Given 'a cookbook with a metadata version that is not a string literal' do
     version v
   }
 end
+
+Given 'a cookbook with a metadata version that is a method call' do
+  write_metadata %q{
+    version magic_version_generator('and its args')
+  }
+end
