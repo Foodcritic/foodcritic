@@ -12,5 +12,5 @@ end
 group :development do
   gem 'chef', '~> 12.1'
   gem 'ronn', '~> 0.7'
-  gem 'rubocop', '~> 0.20', require: false
+  gem 'rubocop', '~> 0.35', require: false
 end
