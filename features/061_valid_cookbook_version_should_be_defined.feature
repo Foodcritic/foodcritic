@@ -39,12 +39,17 @@ Feature: Defined cookbook version should be valid
      When I check the cookbook
      Then the metadata defines valid version warning 061 should be displayed against the metadata file
 
-  Scenario: Metadata version that uses string interpolation' do
+  Scenario: Metadata version that uses string interpolation
     Given a cookbook with a metadata version that uses string interpolation
      When I check the cookbook
      Then the metadata defines valid version warning 061 should not be displayed against the metadata file
 
-  Scenario: Metadata version that is not a string literal' do
+  Scenario: Metadata version that is not a string literal
     Given a cookbook with a metadata version that is not a string literal
+     When I check the cookbook
+     Then the metadata defines valid version warning 061 should not be displayed against the metadata file
+
+  Scenario: Metadata version that is a method call
+    Given a cookbook with a metadata version that is a method call
      When I check the cookbook
      Then the metadata defines valid version warning 061 should not be displayed against the metadata file
