@@ -117,6 +117,18 @@ Given /^a cookbook recipe that spawns a sub-process with (.*)$/ do |command|
   write_recipe command
 end
 
+Given 'a provider that contains a ruby_block resource that spawns a sub-process with system' do
+  write_provider 'site', %q{
+    action :install do
+      ruby_block "ruby" do
+        block do
+          system "ls"
+        end
+      end
+    end
+  }
+end
+
 Given 'a cookbook recipe with a deploy resource that contains a template resource' do
   write_recipe %q{
     deploy '/foo/bar' do
@@ -2024,6 +2036,10 @@ end
 
 Then 'the prefer mixlib shellout warning 048 should not be displayed against the user resource' do
   expect_warning 'FC048', {:expect_warning => false, :line => 2}
+end
+
+Then 'the prefer mixlib shellout warning 048 should be displayed against the ruby_block resource' do
+  expect_warning('FC048', :file_type => :provider, :line => 4)
 end
 
 Then /^the role name does not match file name warning 049 should( not)? be shown( against the second name)?$/ do |not_shown, second|
