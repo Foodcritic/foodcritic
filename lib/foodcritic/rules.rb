@@ -788,6 +788,9 @@ end
 
 rule 'FC057', 'Library provider does not declare use_inline_resources' do
   tags %w(correctness)
+  applies_to do |version|
+    version >= gem_version('11.0.0')
+  end
   library do |ast, filename|
     ast.xpath('//const_path_ref/const[@value="LWRPBase"]/..//const[@value="Provider"]/../../..').select do |x|
       x.xpath('//*[self::vcall or self::var_ref]/ident[@value="use_inline_resources"]').empty?
@@ -797,6 +800,9 @@ end
 
 rule 'FC058', 'Library provider declares use_inline_resources and declares #action_<name> methods' do
   tags %w(correctness)
+  applies_to do |version|
+    version >= gem_version('11.0.0')
+  end
   library do |ast, filename|
     ast.xpath('//const_path_ref/const[@value="LWRPBase"]/..//const[@value="Provider"]/../../..').select do |x|
       x.xpath('//*[self::vcall or self::var_ref]/ident[@value="use_inline_resources"]') &&
@@ -807,6 +813,9 @@ end
 
 rule 'FC059', 'LWRP provider does not declare use_inline_resources' do
   tags %w(correctness)
+  applies_to do |version|
+    version >= gem_version('11.0.0')
+  end
   provider do |ast, filename|
     use_inline_resources = !ast.xpath('//*[self::vcall or self::var_ref]/ident
       [@value="use_inline_resources"]').empty?
@@ -818,6 +827,9 @@ end
 
 rule 'FC060', 'LWRP provider declares use_inline_resources and declares #action_<name> methods' do
   tags %w(correctness)
+  applies_to do |version|
+    version >= gem_version('11.0.0')
+  end
   provider do |ast, filename|
     use_inline_resources = !ast.xpath('//*[self::vcall or self::var_ref]/ident
       [@value="use_inline_resources"]').empty?
