@@ -6,6 +6,9 @@
 - Added FC058 to ensure that library providers that include use_inline_resources and action_<name> methods
 - Added FC059 to ensure that LWRPs include use_inline_resources
 - Added FC060 to ensure that LWRPs don't use bad action methods
+- Added FC061 to ensure that the cookbook version is valid
+- Added FC062 to ensure that metadata includes a version
+- Added FC063 to ensure that a cookbook doesn't depend on itself in the metadata
 - Renamed FC045 from 'Consider setting cookbook name in metadata' to 'Metadata does not contain cookbook name' as Chef 12 requires name metadata
 - Renamed FC015 from 'Consider converting definition to a LWRP' to 'Consider converting definition to a Custom Resource' since 12.5+ Custom Resources are a prefered pattern over LWRPs now
 - Changed FC045's annoyances tag to a correctness tag as name in metadata is now a requirement not an annoyance
@@ -14,6 +17,7 @@
 - Fixes to the Rake tasks
 - Removed the Mustache pin to 0.99 in the Gemfile since we require Ruby 2.0 now
 - Added Oracle as an equivalent platform for the RHEL platform family in FC024
+- Fixed FC048 incorrectly firing when a method name included "system"
 
 ## 5.0.0 (17 September, 2015)
 
