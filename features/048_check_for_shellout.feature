@@ -37,3 +37,8 @@ Feature: Check for spawning without Mixlib::ShellOut
     Given a cookbook recipe that contains a user resource that uses the 'system' string attribute
      When I check the cookbook
      Then the prefer mixlib shellout warning 048 should not be displayed against the user resource
+
+  Scenario: Ruby block
+    Given a provider that contains a ruby_block resource that spawns a sub-process with system
+     When I check the cookbook
+     Then the prefer mixlib shellout warning 048 should be displayed against the ruby_block resource
