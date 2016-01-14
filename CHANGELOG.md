@@ -1,4 +1,4 @@
-## 6.0.0 (7 January, 2016)
+## 6.0.0 (14 January, 2016)
 
 Features:
 
