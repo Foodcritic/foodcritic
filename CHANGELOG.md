@@ -11,7 +11,7 @@ Features:
 - Added FC061 to ensure that the cookbook version is valid
 - Added FC062 to ensure that metadata includes a version
 - Added FC063 to ensure that a cookbook doesn't depend on itself in the metadata
-- Added DSL metadata for Chef 12.5.1
+- Added DSL metadata for Chef 12.5.1 and 12.6.0
 - Added new chef11 and chef12 tags for rules related to changes in those Chef releases
 - Added Oracle as an equivalent platform for the RHEL platform family in FC024
 - Removed the Mustache pin to 0.99 in the Gemfile since we require Ruby 2.0+ now
