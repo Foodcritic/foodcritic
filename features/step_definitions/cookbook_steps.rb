@@ -2493,3 +2493,17 @@ Then(/^the metadata with self dependency warning 063 should be (shown|not shown)
     expect_warning('FC063', :file => "metadata.rb", :expect_warning => false)
   end
 end
+
+Given(/^a cookbook with metadata that (includes|does not include) a issues_url keyword$/) do |includes|
+  write_metadata %Q{
+    #{"issues_url 'http://github.com/foo/bar_cookbook/issues'" if includes == 'includes'}
+  }
+end
+
+Given(/^a cookbook with metadata that includes a issues_url expression$/) do
+  write_metadata "issues_url an(expression)"
+end
+
+Then(/^the metadata missing issues_url warning 064 should be (shown|not shown) against the metadata file$/) do |show_warning|
+  expect_warning('FC064', :file => 'metadata.rb', :expect_warning => show_warning == 'shown')
+end

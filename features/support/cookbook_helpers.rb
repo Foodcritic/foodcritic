@@ -79,6 +79,7 @@ module FoodCritic
         maintainer 'A Maintainer'
         maintainer_email 'maintainer@example.com'
         version '0.0.1'
+        issues_url 'http://github.com/foo/bar_cookbook/issues'
       ).strip)
     end
 
