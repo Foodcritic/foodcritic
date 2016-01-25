@@ -861,3 +861,10 @@ rule 'FC063', 'Cookbook incorrectly depends on itself' do
               descendant::tstring_content[@value='#{name}']))
   end
 end
+
+rule 'FC064', 'Ensure issues_url is set in metadata' do
+  tags %w(metadata supermarket)
+  metadata do |ast, filename|
+    [file_match(filename)] unless field(ast, 'issues_url').any?
+  end
+end
