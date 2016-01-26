@@ -2514,7 +2514,7 @@ Given(/^a cookbook with metadata that (includes|does not include) a source_url k
   }
 end
 
-Then(/^the metadata missing source_url warning (\d+) should be (shown|not shown) against the metadata file$/) do |show_warning|
+Then(/^the metadata missing source_url warning 065 should be (shown|not shown) against the metadata file$/) do |show_warning|
   expect_warning('FC065', :file => 'metadata.rb', :expect_warning => show_warning == 'shown')
 end
 
