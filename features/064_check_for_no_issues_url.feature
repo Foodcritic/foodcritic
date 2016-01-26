@@ -1,6 +1,6 @@
 Feature: Check for no issues_url
 
-  In order to be able to upload my cookbook
+  In order to be able to share my cookbook on the Supermarket
   As a developer
   I want to be notified when my cookbook metadata does not specify the issues_url
 
