@@ -75,6 +75,7 @@ module FoodCritic
       'FC062' => 'Cookbook should have version metadata',
       'FC063' => 'Cookbook incorrectly depends on itself',
       'FC064' => 'Ensure issues_url is set in metadata',
+      'FC065' => 'Ensure source_url is set in metadata',
       'FCTEST001' => 'Test Rule'
     }
 
