@@ -2507,3 +2507,17 @@ end
 Then(/^the metadata missing issues_url warning 064 should be (shown|not shown) against the metadata file$/) do |show_warning|
   expect_warning('FC064', :file => 'metadata.rb', :expect_warning => show_warning == 'shown')
 end
+
+Given(/^a cookbook with metadata that (includes|does not include) a source_url keyword$/) do |includes|
+  write_metadata %Q{
+    #{"source_url 'http://github.com/foo/bar_cookbook/'" if includes == 'includes'}
+  }
+end
+
+Then(/^the metadata missing source_url warning (\d+) should be (shown|not shown) against the metadata file$/) do |show_warning|
+  expect_warning('FC065', :file => 'metadata.rb', :expect_warning => show_warning == 'shown')
+end
+
+Given(/^a cookbook with metadata that includes a source_url expression$/) do
+  write_metadata "source_url an(expression)"
+end
