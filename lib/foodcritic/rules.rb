@@ -861,3 +861,23 @@ rule 'FC063', 'Cookbook incorrectly depends on itself' do
               descendant::tstring_content[@value='#{name}']))
   end
 end
+
+rule 'FC064', 'Ensure issues_url is set in metadata' do
+  tags %w(metadata supermarket)
+  applies_to do |version|
+    version >= gem_version('12.0.0')
+  end
+  metadata do |ast, filename|
+    [file_match(filename)] unless field(ast, 'issues_url').any?
+  end
+end
+
+rule 'FC065', 'Ensure source_url is set in metadata' do
+  tags %w(metadata supermarket)
+  applies_to do |version|
+    version >= gem_version('12.0.0')
+  end
+  metadata do |ast, filename|
+    [file_match(filename)] unless field(ast, 'source_url').any?
+  end
+end
