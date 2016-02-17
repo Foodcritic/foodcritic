@@ -801,8 +801,8 @@ rule 'FC058', 'Library provider declares use_inline_resources and declares #acti
   end
   library do |ast, filename|
     ast.xpath('//const_path_ref/const[@value="LWRPBase"]/..//const[@value="Provider"]/../../..').select do |x|
-      x.xpath('//*[self::vcall or self::var_ref]/ident[@value="use_inline_resources"]') &&
-        x.xpath(%Q(//def[ident[contains(@value, 'action_')]]))
+      x.xpath('//*[self::vcall or self::var_ref]/ident[@value="use_inline_resources"]').length > 0 &&
+        x.xpath(%Q(//def[ident[contains(@value, 'action_')]])).length > 0
     end
   end
 end

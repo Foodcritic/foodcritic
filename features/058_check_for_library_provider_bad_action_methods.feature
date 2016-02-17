@@ -12,14 +12,14 @@ Feature: Check for library providers that declare use_inline_resources and decla
   Scenario: Library provider without use_inline_resources and (okay) action_create
     Given a cookbook that contains a library provider without use_inline_resources and uses def action_create
      When I check the cookbook
-     Then the library provider without use_inline_resources and bad action_create warning 058 should not be displayed against the libraries file
+     Then the library provider without use_inline_resources and bad action_create warning 058 should not be displayed against the libraries file on any line
 
   Scenario: Library provider without use_inline_resources
     Given a cookbook that contains a library provider without use_inline_resources
      When I check the cookbook
-     Then the library provider without use_inline_resources and bad action_create warning 058 should not be displayed against the libraries file
+     Then the library provider without use_inline_resources and bad action_create warning 058 should not be displayed against the libraries file on any line
 
   Scenario: Library provider with use_inline_resources
     Given a cookbook that contains a library provider with use_inline_resources
      When I check the cookbook
-     Then the library provider without use_inline_resources and bad action_create warning 058 should not be displayed against the libraries file
+     Then the library provider without use_inline_resources and bad action_create warning 058 should not be displayed against the libraries file on any line
