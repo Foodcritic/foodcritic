@@ -2099,7 +2099,7 @@ Then /^the warning ([0-9]+ )?should (not )?be (?:displayed|shown)$/ do |warning,
   expect_warning code, {:expect_warning => should_not.nil?}
 end
 
-Then /^the (?:[a-zA-Z \-_]+) warning ([0-9]+) should (not )?be displayed(?: against the (attributes|libraries|definition|metadata|provider|resource|README.md|README.rdoc) file)?( below)?(?: on line ([0-9]+))?$/ do |code, no_display, file, warning_only, line|
+Then /^the (?:[a-zA-Z \-_]+) warning ([0-9]+) should (not )?be displayed(?: against the (attributes|libraries|definition|metadata|provider|resource|README.md|README.rdoc) file)?( below)?(?: on (?:(any line)|(?:line ([0-9]+))))?$/ do |code, no_display, file, warning_only, any_line, line|
   options = {}
   options[:expect_warning] = no_display != 'not '
   unless file.nil?
@@ -2111,7 +2111,13 @@ Then /^the (?:[a-zA-Z \-_]+) warning ([0-9]+) should (not )?be displayed(?: agai
   end
   options[:line] = 3 if code == '018' and options[:expect_warning]
   options[:line] = 2 if ['021', '022'].include?(code)
-  options[:line] = line unless line.nil?
+
+  if any_line
+    options[:line] = nil
+  else
+    options[:line] = line unless line.nil?
+  end
+
   options[:warning_only] = ! warning_only.nil?
   expect_warning("FC#{code}", options)
 end
