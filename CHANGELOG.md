@@ -1,3 +1,9 @@
+## 6.0.1 (22 February, 2016)
+
+Bugfixes:
+
+- Fixed false positives for FC058
+
 ## 6.0.0 (14 January, 2016)
 
 Features:
