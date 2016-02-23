@@ -47,6 +47,7 @@ describe FoodCritic::Api do
         :standard_cookbook_subdirs,
         :supported_platforms,
         :template_file,
+        :template_files,
         :template_paths,
         :templates_included,
         :valid_query?,
