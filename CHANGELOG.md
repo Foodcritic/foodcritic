@@ -1,3 +1,6 @@
+## Unreleased
+- Added chef12 tag to FC064 and FC065 since these check for functionality introduced in Chef 12
+
 ## 6.0.1 (22 February, 2016)
 
 Bugfixes:
