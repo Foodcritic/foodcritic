@@ -285,7 +285,7 @@ rule 'FC019', 'Access node attributes in a consistent manner' do
     if asts.size > 1
       least_used = asts[types.min do |a, b|
         a[:count] <=> b[:count]
-      end[:access_type]]
+        file[:access_type]]
       least_used.map do |file|
         file[:ast].map do |ast|
           match(ast).merge(filename: file[:path])
@@ -293,7 +293,12 @@ rule 'FC019', 'Access node attributes in a consistent manner' do
       end
     end
   end
-end
+end  recipe do |ast|
+    find_resources(ast, type: 'remote_file').find_all do |download|
+      path = (resource_attribute(download, 'path') ||
+        resource_name(download)).to_s
+      path.start_with?('/tmp/')
+    end
 
 rule 'FC021', 'Resource condition in provider may not behave as expected' do
   tags %w(correctness lwrp)
@@ -879,5 +884,12 @@ rule 'FC065', 'Ensure source_url is set in metadata' do
   end
   metadata do |ast, filename|
     [file_match(filename)] unless field(ast, 'source_url').any?
+  end
+end
+
+rule  'FC066', 'Ensure no gems are being shipped with cookbooks' do
+  tags %w(correctness annoyances chef12)
+  cookbook do |path|
+    [file_match(path.join(filename, '.gem'))]
   end
 end
