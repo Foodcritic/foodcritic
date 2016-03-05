@@ -285,7 +285,7 @@ rule 'FC019', 'Access node attributes in a consistent manner' do
     if asts.size > 1
       least_used = asts[types.min do |a, b|
         a[:count] <=> b[:count]
-        file[:access_type]]
+      end[:access_type]]
       least_used.map do |file|
         file[:ast].map do |ast|
           match(ast).merge(filename: file[:path])
@@ -293,12 +293,7 @@ rule 'FC019', 'Access node attributes in a consistent manner' do
       end
     end
   end
-end  recipe do |ast|
-    find_resources(ast, type: 'remote_file').find_all do |download|
-      path = (resource_attribute(download, 'path') ||
-        resource_name(download)).to_s
-      path.start_with?('/tmp/')
-    end
+end
 
 rule 'FC021', 'Resource condition in provider may not behave as expected' do
   tags %w(correctness lwrp)
