@@ -16,7 +16,7 @@ module FoodCritic
 
 
       def define
-        desc 'Lint Chef cookbooks' unless ::Rake.application.last_comment
+        desc 'Lint Chef cookbooks' unless ::Rake.application.last_description
         task(name) do
           puts "Starting Foodcritic linting..."
           result = FoodCritic::Linter.new.check(default_options.merge(options))
