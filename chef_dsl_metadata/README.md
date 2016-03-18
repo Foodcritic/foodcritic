@@ -1,8 +1,8 @@
 # Generating metadata for a specific chef version
 - run 'bundle install' to install appraisal
 - update Appraisals file with new chef version(s)
-- run 'appraisal chef_12.7.2 bundle install' to generate the Gemfile and Gemfile.lock
-- run 'appraisal chef_12.7.2 rake generate_chef_metadata' to generate json for that version of chef
+- run 'bundle exec appraisal install'. It will fail, but it will still generate the Gemfile
+- run 'bundle exec appraisal chef_12.8.1 rake generate_chef_metadata' to generate json for that version of chef
 
 # Generating metadata for all version of Chef
 - run 'bundle install' to install appraisal
