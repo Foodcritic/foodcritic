@@ -28,6 +28,14 @@ Cucumber::Rake::Task.new(:features) do |t|
   t.cucumber_opts += ['features']
 end
 
+desc 'Run Cucumber build features via Aruba'
+Cucumber::Rake::Task.new(:build_features) do |t|
+  t.cucumber_opts = ['-f', 'progress', '--strict']
+  ENV['FC_FORK_PROCESS'] = true.to_s
+  t.cucumber_opts += ['-t', '@build,@context']
+  t.cucumber_opts += ['features']
+end
+
 desc 'Run RuboCop'
 RuboCop::RakeTask.new(:rubocop) do |task|
   task.patterns = ['bin/*']
