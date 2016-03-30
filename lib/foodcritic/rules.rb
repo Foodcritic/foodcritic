@@ -482,9 +482,14 @@ end
 rule 'FC032', 'Invalid notification timing' do
   tags %w(correctness notifications)
   recipe do |ast|
+    valid_timings = if resource_attribute?('file', 'notifies_before') then
+      [:delayed, :immediate, :before]
+    else
+      [:delayed, :immediate]
+    end
     find_resources(ast).select do |resource|
       notifications(resource).any? do |notification|
-        ! [:delayed, :immediate].include? notification[:timing]
+        ! valid_timings.include? notification[:timing]
       end
     end
   end

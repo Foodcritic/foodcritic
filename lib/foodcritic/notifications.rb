@@ -50,7 +50,7 @@ module FoodCritic
             # The target resource action.
             action: notification_action(notify),
 
-            # The notification timing. Either `:immediate` or `:delayed`.
+            # The notification timing: `:before`, `:immediate` or `:delayed`.
             timing: notification_timing(notify)
           }
         )
