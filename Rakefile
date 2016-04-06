@@ -1,9 +1,6 @@
 require 'rubygems'
 require 'bundler'
 require 'rake/testtask'
-require 'cucumber'
-require 'cucumber/rake/task'
-require 'rubocop/rake_task'
 
 task :default => [:man, :install, :test, :features]
 
@@ -19,19 +16,30 @@ Rake::TestTask.new do |t|
   t.pattern = 'spec/regression/*_spec.rb'
 end
 
-Cucumber::Rake::Task.new(:features) do |t|
-  t.cucumber_opts = ['-f', 'progress', '--strict']
-  unless ENV.has_key?('FC_FORK_PROCESS') and ENV['FC_FORK_PROCESS'] == true.to_s
-    t.cucumber_opts += ['-t', '~@build']
-    t.cucumber_opts += ['-t', '~@context']
+begin
+  require 'cucumber'
+  require 'cucumber/rake/task'
+  Cucumber::Rake::Task.new(:features) do |t|
+    t.cucumber_opts = ['-f', 'progress', '--strict']
+    unless ENV.has_key?('FC_FORK_PROCESS') and ENV['FC_FORK_PROCESS'] == true.to_s
+      t.cucumber_opts += ['-t', '~@build']
+      t.cucumber_opts += ['-t', '~@context']
+    end
+    t.cucumber_opts += ['features']
   end
-  t.cucumber_opts += ['features']
+rescue LoadError
+  puts "cucumber is not available. gem install cucumber to get rake rubocop to work"
 end
 
-desc 'Run RuboCop'
-RuboCop::RakeTask.new(:rubocop) do |task|
-  task.patterns = ['bin/*']
-  task.patterns = ['lib/**/*.rb']
+begin
+  require 'rubocop/rake_task'
+  desc 'Run RuboCop'
+  RuboCop::RakeTask.new(:rubocop) do |task|
+    task.patterns = ['bin/*']
+    task.patterns = ['lib/**/*.rb']
+  end
+rescue LoadError
+  puts "rubocop is not available. gem install rubocop to get rake rubocop to work"
 end
 
 desc 'Build the manpage'
