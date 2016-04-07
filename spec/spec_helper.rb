@@ -7,7 +7,6 @@ rescue LoadError
   warn 'warning: simplecov gem not found; skipping coverage'
 end
 
-require 'minitest/autorun'
 require 'minitest/pride'
 require 'minitest/spec'
 
