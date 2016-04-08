@@ -1,5 +1,5 @@
 require 'pathname'
-require 'gherkin'
+require 'cucumber/core'
 require 'treetop'
 require 'ripper'
 require 'yajl'

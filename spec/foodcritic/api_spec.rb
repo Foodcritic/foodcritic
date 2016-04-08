@@ -138,7 +138,7 @@ describe FoodCritic::Api do
   end
 
   describe "#checks_for_chef_solo?" do
-    let(:ast) { ast = MiniTest::Mock.new }
+    let(:ast) { MiniTest::Mock.new }
     it "raises if the provided ast does not support XPath" do
       lambda{api.checks_for_chef_solo?(nil)}.must_raise(ArgumentError)
     end
@@ -459,7 +459,7 @@ describe FoodCritic::Api do
   end
 
   describe "#literal_searches" do
-    let(:ast) { ast = MiniTest::Mock.new }
+    let(:ast) { MiniTest::Mock.new }
     it "returns empty if the AST does not support XPath expressions" do
       api.literal_searches(nil).must_be_empty
     end
@@ -1642,7 +1642,7 @@ describe FoodCritic::Api do
   end
 
   describe "#searches" do
-    let(:ast) { ast = MiniTest::Mock.new }
+    let(:ast) { MiniTest::Mock.new }
     it "returns empty if the AST does not support XPath expressions" do
       api.searches('not-an-ast').must_be_empty
     end
