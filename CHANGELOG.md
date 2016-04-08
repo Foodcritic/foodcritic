@@ -1,11 +1,13 @@
-## Unreleased
-- Added chef12 tag to FC064 and FC065 since these check for functionality introduced in Chef 12
+## 6.1.1 (07 April, 2016)
+
+- Replace gherkin dev dependency with cucumber-core to avoid slow gherkin installs
 
 ## 6.1.0 (06 April, 2016)
 
 Features:
 - Added Chef 12.8.1 metadata
 - Ship the Rakefile, Gemfile, and gemspec files with the gem for simplified testing
+- Added chef12 tag to FC064 and FC065 since these check for functionality introduced in Chef 12
 
 Bugfixes:
 - Fix incorrect instructions for the generation of metadata files
