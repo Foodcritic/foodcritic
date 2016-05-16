@@ -1,10 +1,15 @@
-## 6.1.1 (07 April, 2016)
+# Foodcritic Changelog
 
-- Replace gherkin dev dependency with cucumber-core to avoid slow gherkin installs
+## 6.3.0 (16 May, 2016)
+- Added Chef 12.10.24 metadata
 
 ## 6.2.0 (26 April, 2016)
 - Added Chef 12.9.38 metadata
 - Made Chef 12.9.38 the default Chef release. Previously this was 12.4.1. This prevents Foodcritic from warning on new resource attributes that have been releases since 12.4.1
+
+## 6.1.1 (07 April, 2016)
+
+- Replace gherkin dev dependency with cucumber-core to avoid slow gherkin installs
 
 ## 6.1.0 (06 April, 2016)
 
