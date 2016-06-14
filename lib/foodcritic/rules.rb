@@ -263,10 +263,21 @@ end
 rule 'FC019', 'Access node attributes in a consistent manner' do
   tags %w(style attributes)
   cookbook do |cookbook_dir|
-    asts = {}; files = Dir["#{cookbook_dir}/*/*.rb"].reject do |file|
+    # Far from ideal to replicate exclusion logic here
+    exclude_paths = options[:exclude_paths].map do |p|
+      File.directory?(p) ?
+        Dir.glob(File.join(cookbook_dir, p, '**/**')) :
+        File.join(cookbook_dir, p)
+    end.flatten
+
+    asts = {}
+
+    files = Dir["#{cookbook_dir}/*/*.rb"].reject do |file|
       relative_path = Pathname.new(file).relative_path_from(
         Pathname.new(cookbook_dir))
-      relative_path.to_s.split(File::SEPARATOR).include?('spec')
+
+      relative_path.to_s.split(File::SEPARATOR).include?('spec') ||
+        exclude_paths.include?(file)
     end.map do |file|
       { path: file, ast: read_ast(file) }
     end

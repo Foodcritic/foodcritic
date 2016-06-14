@@ -1,0 +1,68 @@
+#!/usr/bin/env ruby
+
+require 'json'
+require 'yaml'
+require 'foodcritic'
+
+if File.exists?("/config.json")
+  engine_config = JSON.parse(File.read("/config.json"))
+else
+  engine_config = {}
+end
+
+if File.exists?("/rules.yml")
+  rule_docs = YAML.load_file("/rules.yml")
+else
+  exit 1
+end
+
+if engine_config["config"]
+  cookbook_paths = engine_config["config"]["cookbook_paths"]
+else
+  cookbook_paths = "./"
+end
+
+include_paths = []
+
+engine_config["include_paths"].each do |p|
+  if File.directory?(p)
+    include_paths << Dir.glob("#{p}**/*")
+  else
+    include_paths << "#{p}"
+  end
+end
+
+include_paths = include_paths.flatten.map{|p| p[0..1] == "./" ? p[2..-1] : p }
+all_paths = Dir.glob('**/*').map do |p|
+  p unless File.directory?(p)
+end.compact
+
+exclude_paths = [all_paths - include_paths].flatten
+
+linter = FoodCritic::Linter.new
+lints = linter.check({ cookbook_paths: cookbook_paths,
+                       exclude_paths: exclude_paths,
+                       progress: false,
+                       tags: ["~FC011", "~FC033"] }).warnings
+
+lints.each do |lint|
+  lint_hash = {
+    "type" => "issue",
+    "check_name" => "FoodCritic #{lint.rule.code}",
+    "description" => lint.rule.name,
+    "categories" => ["Style"],
+    "location" => {
+      "path" => lint.match[:filename].split("./")[1],
+      "lines" => {
+        "begin" => lint.match[:line],
+        "end" => lint.match[:line]
+      }
+    },
+    "content" => {
+      "body" => rule_docs[lint.rule.code]["summary"]
+    },
+    "remediation_points" => rule_docs[lint.rule.code]["remediation_points"]
+  }
+
+  STDOUT.print "#{lint_hash.to_json}\0"
+end

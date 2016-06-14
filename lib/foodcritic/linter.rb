@@ -162,7 +162,7 @@ module FoodCritic
       rule_files = [File.join(File.dirname(__FILE__), 'rules.rb')]
       rule_files << options[:include_rules]
       rule_files << rule_files_in_gems if options[:search_gems]
-      @rules = RuleDsl.load(rule_files.flatten.compact, chef_version)
+      @rules = RuleDsl.load(rule_files.flatten.compact, chef_version, @options)
     end
 
     private
@@ -247,12 +247,16 @@ module FoodCritic
     def files_to_process(paths)
       paths.reject { |type, _| type == :exclude }.map do |path_type, dirs|
         dirs.map do |dir|
-          exclusions = []
+          exclude_paths = []
 
           unless paths[:exclude].empty?
-            exclusions = Dir.glob(paths[:exclude].map do |p|
-              File.join(dir, p, '**/**')
-            end)
+            exclude_paths = paths[:exclude].map do |path|
+              if File.directory?(path)
+                Dir.glob(File.join(dir, path, '**/**'))
+              else
+                File.join(dir, path)
+              end
+            end.flatten
           end
 
           if File.directory?(dir)
@@ -264,9 +268,9 @@ module FoodCritic
                    end
 
             (Dir.glob(File.join(dir, glob)) +
-             Dir.glob(File.join(dir, "*/#{glob}")) - exclusions)
+             Dir.glob(File.join(dir, "*/#{glob}")) - exclude_paths)
           else
-            dir unless exclusions.include?(dir)
+            dir unless exclude_paths.include?(dir)
           end
         end.compact.flatten.map do |filename|
           { filename: filename, path_type: path_type }

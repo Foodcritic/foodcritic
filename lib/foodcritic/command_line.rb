@@ -26,7 +26,7 @@ module FoodCritic
         opts.on('-l', '--list',
                 'List all enabled rules and their descriptions.') do |t|
           @options[:list] = t
-        end                
+        end
         opts.on('-f', '--epic-fail TAGS',
                 "Fail the build based on tags. Use 'any' to fail "\
                 'on all warnings.') do |t|
@@ -77,7 +77,7 @@ module FoodCritic
         end
         opts.on('-X', '--exclude PATH',
                 'Exclude path(s) from being linted.') do |e|
-          options[:exclude_paths] << e
+          @options[:exclude_paths] << e
         end
       end
       # -v is not implemented but OptionParser gives the Foodcritic's version
