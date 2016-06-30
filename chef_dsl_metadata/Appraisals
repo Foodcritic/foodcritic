@@ -16,7 +16,8 @@ chef_versions = [
   '12.7.2',
   '12.8.1',
   '12.9.38',
-  '12.10.24'
+  '12.10.24',
+  '12.11.18'
 ]
 
 chef_versions.select{|v| ! windows? || has_windows_rights?(v)}.each do |version|
