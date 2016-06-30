@@ -196,7 +196,6 @@ end
 
 rule 'FC015', 'Consider converting definition to a Custom Resource' do
   tags %w(style definitions lwrp)
-  applies_to { |version| version >= gem_version('0.7.12') }
   cookbook do |dir|
     Dir[File.join(dir, 'definitions', '*.rb')].reject do |entry|
       ['.', '..'].include? entry
@@ -206,7 +205,6 @@ end
 
 rule 'FC016', 'LWRP does not declare a default action' do
   tags %w(correctness lwrp)
-  applies_to { |version| version >= gem_version('0.7.12') }
   resource do |ast, filename|
     unless ["//ident/@value='default_action'",
      "//def/bodystmt/descendant::assign/
@@ -218,9 +216,6 @@ end
 
 rule 'FC017', 'LWRP does not notify when updated' do
   tags %w(correctness lwrp)
-  applies_to do |version|
-    version >= gem_version('0.7.12')
-  end
   provider do |ast, filename|
 
     use_inline_resources = !ast.xpath('//*[self::vcall or self::var_ref]/ident
@@ -251,7 +246,6 @@ end
 
 rule 'FC018', 'LWRP uses deprecated notification syntax' do
   tags %w(style lwrp deprecated)
-  applies_to { |version| version >= gem_version('0.9.10') }
   provider do |ast|
     ast.xpath("//assign/var_field/ivar[@value='@updated']").map do |class_var|
       match(class_var)
@@ -297,7 +291,6 @@ end
 
 rule 'FC021', 'Resource condition in provider may not behave as expected' do
   tags %w(correctness lwrp)
-  applies_to { |version| version >= gem_version('0.10.6') }
   provider do |ast|
     find_resources(ast).map do |resource|
       condition = resource.xpath(%q{//method_add_block/
@@ -312,7 +305,6 @@ end
 
 rule 'FC022', 'Resource condition within loop may not behave as expected' do
   tags %w(correctness)
-  applies_to { |version| version >= gem_version('0.10.6') }
   recipe do |ast|
     ast.xpath("//call[ident/@value='each']/../do_block[count(ancestor::
               method_add_block/method_add_arg/fcall/ident[@value='only_if' or
@@ -391,7 +383,6 @@ end
 
 rule 'FC025', 'Prefer chef_gem to compile-time gem install' do
   tags %w(style deprecated)
-  applies_to { |version| version >= gem_version('0.10.10') }
   recipe do |ast|
     gem_install = ast.xpath("//stmts_add/assign[method_add_block[command/ident/
       @value='gem_package'][do_block/stmts_add/command[ident/@value='action']
@@ -410,7 +401,6 @@ end
 
 rule 'FC026', 'Conditional execution block attribute contains only string' do
   tags %w(correctness)
-  applies_to { |version| version >= gem_version('0.7.4') }
   recipe do |ast|
     find_resources(ast).map { |r| resource_attributes(r) }.map do |resource|
       [resource['not_if'], resource['only_if']]
@@ -637,7 +627,6 @@ end
 
 rule 'FC043', 'Prefer new notification syntax' do
   tags %w(style notifications deprecated)
-  applies_to { |version| version >= gem_version('0.9.10') }
   recipe do |ast|
     find_resources(ast).select do |resource|
       notifications(resource).any? { |notify| notify[:style] == :old }
