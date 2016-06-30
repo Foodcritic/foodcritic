@@ -469,7 +469,7 @@ module FoodCritic
     end
 
     def patched_node_method?(meth, cookbook_dir)
-      return false if cookbook_dir.nil? || !Dir.exists?(cookbook_dir)
+      return false if cookbook_dir.nil? || !Dir.exist?(cookbook_dir)
 
       # TODO: Modify this to work with multiple cookbook paths
       cbk_tree_path = Pathname.new(File.join(cookbook_dir, '..'))
@@ -478,7 +478,7 @@ module FoodCritic
       libs.any? do |lib|
         !read_ast(lib).xpath(%Q{//class[count(descendant::const[@value='Chef'])
           > 0][count(descendant::const[@value='Node']) > 0]/descendant::def/
-          ident[@value='#{meth.to_s}']}).empty?
+          ident[@value='#{meth}']}).empty?
       end
     end
 
