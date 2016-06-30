@@ -1,6 +1,5 @@
 require 'optparse'
 require 'ripper'
-require 'rubygems'
 require 'set'
 
 module FoodCritic
