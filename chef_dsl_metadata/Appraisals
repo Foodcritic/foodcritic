@@ -1,5 +1,3 @@
-require './windows'
-
 chef_versions = [
   '11.10.0', '11.10.2', '11.10.4',
   '11.12.0', '11.12.2', '11.12.4', '11.12.8',
@@ -20,13 +18,11 @@ chef_versions = [
   '12.11.18'
 ]
 
-chef_versions.select{|v| ! windows? || has_windows_rights?(v)}.each do |version|
-  appraise "chef_#{version}" do
-    gem 'chef', version
-    if windows?
-      gem 'ffi'
-      gem 'ruby-wmi'
-      gem 'win32-service'
-    end
+appraise "chef_#{version}" do
+  gem 'chef', version
+  if !! RUBY_PLATFORM =~ /mswin|mingw|windows/
+    gem 'ffi'
+    gem 'ruby-wmi'
+    gem 'win32-service'
   end
 end
