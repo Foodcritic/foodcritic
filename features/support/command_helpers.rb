@@ -299,7 +299,7 @@ module FoodCritic
           elsif show_context
             ContextOutput.new.output(review)
           else
-            "#{review.to_s}\n"
+            "#{review}\n"
           end
       end
     end

@@ -239,7 +239,7 @@ Given 'a cookbook provider that declares execute resources varying only in the c
 end
 
 Given /^a cookbook recipe that attempts to perform a search with (.*)$/ do |search_type|
-  recipe_with_search(search_type.include?('subexpression') ? :with_subexpression : search_type.gsub(' ', '_').to_sym)
+  recipe_with_search(search_type.include?('subexpression') ? :with_subexpression : search_type.tr(' ', '_').to_sym)
 end
 
 Given /^a cookbook recipe that declares a resource called ([^ ]+) with the condition (.*)(in|outside) a loop$/ do |name,condition,is_loop|
@@ -1834,7 +1834,7 @@ end
 When /^I check the cookbook specifying ([^ ]+) as the Chef version$/ do |version|
   options = ['-c', version, 'cookbooks/example']
   cd '.' do
-    options = ['-I', 'rules/test.rb'] + options if Dir.exists?('rules')
+    options = ['-I', 'rules/test.rb'] + options if Dir.exist?('rules')
   end
   run_lint(options)
 end
@@ -1968,7 +1968,7 @@ end
 
 When /^I run it on the command line with the (?:unimplemented |)([^ ]+) option( with an argument)?$/ do |option, with_argument|
   options = []
-  if option.match(/\-\w$/)
+  if option =~ /\-\w$/
     options << option
   else
     options << "--#{option}"
@@ -2139,7 +2139,7 @@ Then /the build status should be (successful|failed)$/ do |build_outcome|
 end
 
 Then /^the build will (succeed|fail) with (?:no )?warnings(.*)$/ do |build_outcome, warnings|
-  assert_build_result(build_outcome == 'succeed', warnings.gsub(' ', '').split(','))
+  assert_build_result(build_outcome == 'succeed', warnings.delete(' ').split(','))
 end
 
 Then 'the check for server warning 003 should not be displayed against the condition' do
