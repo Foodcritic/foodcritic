@@ -24,5 +24,4 @@ Gem::Specification.new do |s|
   s.files += Dir['Rakefile'] + Dir['Gemfile'] + Dir["*.gemspec"]
   s.files += Dir['spec/**/*'] + Dir['features/**/*']
   s.files += Dir['*.md'] + Dir['LICENSE'] + Dir['man/*']
-  s.required_ruby_version = '>= 2.0.0'
 end
