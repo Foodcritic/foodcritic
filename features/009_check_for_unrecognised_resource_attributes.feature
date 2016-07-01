@@ -55,23 +55,12 @@ Feature: Check for unrecognised resource attributes
      When I check the cookbook
      Then the unrecognised attribute warning 009 should not be displayed
 
-  Scenario Outline: Install package with yum specifying architecture
-    Given a recipe that installs a package with yum specifying the architecture
+  Scenario Outline: Create raid array with mdadm specifying layout
+    Given a recipe that creates a raid array with mdadm specifying layout
      When I check the cookbook specifying <version> as the Chef version
      Then the unrecognised attribute warning 009 should be <shown>
   Examples:
-    | version | shown |
-    | 0.8.14  | true  |
-    | 0.9.6   | true  |
-    | 0.9.8   | false |
-
-  Scenario Outline: Retry a resource on failure
-    Given a recipe that installs a gem with 5 retries
-     When I check the cookbook specifying <version> as the Chef version
-     Then the unrecognised attribute warning 009 should be <shown>
-  Examples:
-    | version | shown |
-    | 0.8.16  | true  |
-    | 0.9.0   | true  |
-    | 0.10.2  | true  |
-    | 0.10.4  | false |
+    | version  | shown |
+    | 11.0.0   | true  |
+    | 12.5.1   | true  |
+    | 12.11.18 | false |

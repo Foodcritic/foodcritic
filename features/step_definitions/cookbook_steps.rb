@@ -1731,19 +1731,21 @@ Given 'a recipe that installs a gem with 5 retries' do
   }
 end
 
-Given 'a recipe that installs a package with yum specifying the architecture' do
+Given 'a recipe that creates a raid array with mdadm specifying layout' do
   write_recipe %q{
-    yum_package "foo" do
-      arch "x86_64"
-      action :install
+    mdadm '/dev/md0' do
+      devices [ '/dev/sda', '/dev/sdb', '/dev/sdc', '/dev/sdd' ]
+      level 5
+      layout 'left-asymmetric'
+      action [ :create, :assemble ]
     end
   }
 end
 
-Given 'a recipe that reconfigures a package' do
+Given 'a recipe that tries to mask a systemd service' do
   write_recipe %q{
-    apt_package "foo" do
-      action :reconfig
+    service 'foo' do
+       action :mask
     end
   }
 end
@@ -2297,6 +2299,10 @@ end
 
 Then /^the unrecognised attribute warning 009 should be (true|false)$/ do |shown|
   shown == 'true' ? expect_warning('FC009') : expect_no_warning('FC009')
+end
+
+Then /^the invalid resource action warning 038 should be (true|false)$/ do |shown|
+  shown == 'true' ? expect_warning('FC038') : expect_no_warning('FC038')
 end
 
 Then 'the unrecognised attribute warning 009 should be displayed against the correct resource' do
