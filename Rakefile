@@ -1,5 +1,7 @@
+require "foodcritic/version"
 require 'bundler'
 require 'rake/testtask'
+require_relative "tasks/changelog"
 
 task :default => [:man, :install, :test, :features]
 

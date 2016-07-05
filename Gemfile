@@ -14,3 +14,7 @@ group :development do
   gem 'ronn', '~> 0.7'
   gem 'rubocop', '~> 0.20', require: false
 end
+
+group :changelog do
+  gem 'github_changelog_generator'
+end
