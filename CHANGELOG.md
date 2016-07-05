@@ -1,6 +1,6 @@
 # FoodCritic Changelog:
 
-## [7.0.0](https://github.com/acrmp/foodcritic/tree/7.0.0) (2016-07-02)
+## [7.0.0](https://github.com/acrmp/foodcritic/tree/7.0.0) (2016-07-05)
 
 [Full Changelog](https://github.com/acrmp/foodcritic/compare/v6.3.0...7.0.0)
 
