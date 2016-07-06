@@ -1,4 +1,4 @@
-require 'set'
+require "set"
 
 module FoodCritic
   # Default output showing a summary view.
@@ -62,10 +62,10 @@ module FoodCritic
 
             # Display any relevant lines
             if warn_lines.include? file.lineno
-              print '%4i|' % file.lineno
+              print "%4i|" % file.lineno
               print_line.call line.chomp
             elsif not context_warns.empty?
-              print '%4i|' % file.lineno
+              print "%4i|" % file.lineno
               puts line.chomp
             end
           end
@@ -106,8 +106,8 @@ module FoodCritic
         return
       end
 
-      colors = %w(black red green yellow blue magenta cyan white)
-      attrs = %w(reset bold dim underscore blink reverse hidden)
+      colors = %w{black red green yellow blue magenta cyan white}
+      attrs = %w{reset bold dim underscore blink reverse hidden}
       escape = "\033[%sm"
       fmt = []
       fmt << 30 + colors.index(fg.to_s) if fg

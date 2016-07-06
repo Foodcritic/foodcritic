@@ -1,5 +1,5 @@
-require 'rake'
-require 'rake/tasklib'
+require "rake"
+require "rake/tasklib"
 
 module FoodCritic
   module Rake
@@ -14,9 +14,8 @@ module FoodCritic
         define
       end
 
-
       def define
-        desc 'Lint Chef cookbooks' unless ::Rake.application.last_description
+        desc "Lint Chef cookbooks" unless ::Rake.application.last_description
         task(name) do
           puts "Starting Foodcritic linting..."
           result = FoodCritic::Linter.new.check(default_options.merge(options))
@@ -28,13 +27,14 @@ module FoodCritic
       end
 
       private
+
       def default_options
         {
-          fail_tags: ['correctness'], # differs to default cmd-line behaviour
+          fail_tags: ["correctness"], # differs to default cmd-line behaviour
           cookbook_paths: files,
-          exclude_paths: ['test/**/*', 'spec/**/*', 'features/**/*'],
+          exclude_paths: ["test/**/*", "spec/**/*", "features/**/*"],
           context: false,
-          chef_version: FoodCritic::Linter::DEFAULT_CHEF_VERSION
+          chef_version: FoodCritic::Linter::DEFAULT_CHEF_VERSION,
         }
       end
     end

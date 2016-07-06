@@ -1,16 +1,16 @@
 begin
-  require 'simplecov'
+  require "simplecov"
   SimpleCov.start do
-    add_filter '/features/'
+    add_filter "/features/"
   end
 rescue LoadError
-  warn 'warning: simplecov gem not found; skipping coverage'
+  warn "warning: simplecov gem not found; skipping coverage"
 end
 
-require 'aruba/cucumber'
-require 'foodcritic'
+require "aruba/cucumber"
+require "foodcritic"
 
-require 'minitest/spec'
+require "minitest/spec"
 
 MiniTest::Spec.new(nil)
 

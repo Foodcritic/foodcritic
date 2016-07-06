@@ -1,4 +1,4 @@
-require_relative '../spec_helper'
+require_relative "../spec_helper"
 
 describe FoodCritic::Api do
 
@@ -10,7 +10,7 @@ describe FoodCritic::Api do
 
   describe :exposed_api do
     let(:ignorable_methods) do
-      api.class.ancestors.map{|a| a.public_methods}.flatten.sort.uniq
+      api.class.ancestors.map { |a| a.public_methods }.flatten.sort.uniq
     end
     it "exposes the expected api to rule authors" do
       (api.public_methods.sort - ignorable_methods).must_equal([
@@ -49,7 +49,7 @@ describe FoodCritic::Api do
         :template_file,
         :template_paths,
         :templates_included,
-        :valid_query?
+        :valid_query?,
       ])
     end
   end
@@ -82,7 +82,7 @@ describe FoodCritic::Api do
     it "returns vivified attributes access" do
       call = MiniTest::Mock.new
       call.expect :xpath, [], [/args_add_block/]
-      call.expect :xpath, ["node", "bar"], [/ident/]
+      call.expect :xpath, %w{node bar}, [/ident/]
       call.expect :xpath, ["foo"], [/@value/]
       ast.expect :xpath, [call], [String, FoodCritic::Api::AttFilter]
       api.attribute_access(ast, :type => :vivified).must_equal([call])
@@ -100,35 +100,35 @@ describe FoodCritic::Api do
       end
       it "allows run_state to be ignored" do
         ast = parse_ast("node.run_state['bar'] = 'baz'")
-        api.attribute_access(ast, :ignore => ['run_state']).must_be_empty
+        api.attribute_access(ast, :ignore => ["run_state"]).must_be_empty
       end
       it "allows run_state to be ignored (symbols access)" do
         ast = parse_ast("node.run_state[:bar] = 'baz'")
-        api.attribute_access(ast, :ignore => ['run_state']).must_be_empty
+        api.attribute_access(ast, :ignore => ["run_state"]).must_be_empty
       end
       it "allows any attribute to be ignored" do
         ast = parse_ast("node['bar'] = 'baz'")
-        api.attribute_access(ast, :ignore => ['bar']).must_be_empty
+        api.attribute_access(ast, :ignore => ["bar"]).must_be_empty
       end
       it "allows any attribute to be ignored (symbols access)" do
         ast = parse_ast("node[:bar] = 'baz'")
-        api.attribute_access(ast, :ignore => ['bar']).must_be_empty
+        api.attribute_access(ast, :ignore => ["bar"]).must_be_empty
       end
       it "allows any attribute to be ignored (dot access)" do
         ast = parse_ast("node.bar = 'baz'")
-        api.attribute_access(ast, :ignore => ['bar']).must_be_empty
+        api.attribute_access(ast, :ignore => ["bar"]).must_be_empty
       end
       it "includes the children of attributes" do
         ast = parse_ast("node['foo']['bar'] = 'baz'")
-        api.attribute_access(ast).map{|a| a['value']}.must_equal(%w{foo bar})
+        api.attribute_access(ast).map { |a| a["value"] }.must_equal(%w{foo bar})
       end
       it "does not include children of removed attributes" do
         ast = parse_ast("node['foo']['bar'] = 'baz'")
-        api.attribute_access(ast, :ignore => ['foo']).must_be_empty
+        api.attribute_access(ast, :ignore => ["foo"]).must_be_empty
       end
       it "coerces ignore values to enumerate them" do
         ast = parse_ast("node.run_state['bar'] = 'baz'")
-        api.attribute_access(ast, :ignore => 'run_state').must_be_empty
+        api.attribute_access(ast, :ignore => "run_state").must_be_empty
       end
       it "can ignore multiple attributes" do
         ast = parse_ast(%q{
@@ -143,7 +143,7 @@ describe FoodCritic::Api do
   describe "#checks_for_chef_solo?" do
     let(:ast) { MiniTest::Mock.new }
     it "raises if the provided ast does not support XPath" do
-      lambda{api.checks_for_chef_solo?(nil)}.must_raise(ArgumentError)
+      lambda { api.checks_for_chef_solo?(nil) }.must_raise(ArgumentError)
     end
     it "returns false if there is no reference to chef solo" do
       ast.expect :xpath, [], [String]
@@ -151,11 +151,11 @@ describe FoodCritic::Api do
       refute api.checks_for_chef_solo?(ast)
     end
     it "returns true if there is one reference to chef solo" do
-      ast.expect :xpath, ['aref'], [String]
+      ast.expect :xpath, ["aref"], [String]
       assert api.checks_for_chef_solo?(ast)
     end
     it "returns true if there are multiple references to chef solo" do
-      ast.expect :xpath, ['aref', 'aref'], [String]
+      ast.expect :xpath, %w{aref aref}, [String]
       assert api.checks_for_chef_solo?(ast)
     end
   end
@@ -165,7 +165,7 @@ describe FoodCritic::Api do
       refute api.chef_solo_search_supported?(nil)
     end
     it "returns false if the recipe path does not exist" do
-      refute api.chef_solo_search_supported?('/tmp/non-existent-path')
+      refute api.chef_solo_search_supported?("/tmp/non-existent-path")
     end
   end
 
@@ -173,32 +173,32 @@ describe FoodCritic::Api do
     def mock_cookbook_metadata(f)
       dir = File.dirname(f)
       unless File.directory?(dir)
-          FileUtils.mkdir_p(dir)
+        FileUtils.mkdir_p(dir)
       end
-      File.open(f, 'w') { |file| file.write('name "YOUR_COOKBOOK_NAME"') }
+      File.open(f, "w") { |file| file.write('name "YOUR_COOKBOOK_NAME"') }
     end
 
-    metadata_path='/tmp/fc/mock/cb/metadata.rb'
+    metadata_path = "/tmp/fc/mock/cb/metadata.rb"
     it "raises if passed a nil" do
-      lambda{api.cookbook_name(nil)}.must_raise ArgumentError
+      lambda { api.cookbook_name(nil) }.must_raise ArgumentError
     end
     it "raises if passed an empty string" do
-      lambda{api.cookbook_name('')}.must_raise ArgumentError
+      lambda { api.cookbook_name("") }.must_raise ArgumentError
     end
     it "returns the cookbook name when passed a recipe" do
-      recipe_path = 'cookbooks/apache2/recipes/default.rb'
-      api.cookbook_name(recipe_path).must_equal 'apache2'
+      recipe_path = "cookbooks/apache2/recipes/default.rb"
+      api.cookbook_name(recipe_path).must_equal "apache2"
     end
     it "returns the cookbook name when passed the cookbook metadata" do
-      api.cookbook_name('cookbooks/apache2/metadata.rb').must_equal 'apache2'
+      api.cookbook_name("cookbooks/apache2/metadata.rb").must_equal "apache2"
     end
     it "returns the cookbook name when passed a template" do
-      erb_path = 'cookbooks/apache2/templates/default/a2ensite.erb'
-      api.cookbook_name(erb_path).must_equal 'apache2'
+      erb_path = "cookbooks/apache2/templates/default/a2ensite.erb"
+      api.cookbook_name(erb_path).must_equal "apache2"
     end
     it "returns the cookbook name when passed the cookbook metadata with a name field" do
       mock_cookbook_metadata(metadata_path)
-      api.cookbook_name(metadata_path).must_equal 'YOUR_COOKBOOK_NAME'
+      api.cookbook_name(metadata_path).must_equal "YOUR_COOKBOOK_NAME"
     end
   end
 
@@ -206,32 +206,32 @@ describe FoodCritic::Api do
     def mock_cookbook_metadata(f)
       dir = File.dirname(f)
       unless File.directory?(dir)
-          FileUtils.mkdir_p(dir)
+        FileUtils.mkdir_p(dir)
       end
-      File.open(f, 'w') { |file| file.write('maintainer "YOUR_COMPANY_NAME"') }
+      File.open(f, "w") { |file| file.write('maintainer "YOUR_COMPANY_NAME"') }
     end
 
-    metadata_path='/tmp/fc/mock/cb/metadata.rb'
+    metadata_path = "/tmp/fc/mock/cb/metadata.rb"
     it "raises if passed a nil" do
-      lambda{api.cookbook_maintainer(nil)}.must_raise ArgumentError
+      lambda { api.cookbook_maintainer(nil) }.must_raise ArgumentError
     end
     it "raises if passed an empty string" do
-      lambda{api.cookbook_maintainer('')}.must_raise ArgumentError
+      lambda { api.cookbook_maintainer("") }.must_raise ArgumentError
     end
     it "raises if the path does not exist" do
-      lambda{api.cookbook_maintainer('/tmp/non-existent-path')}.must_raise RuntimeError
+      lambda { api.cookbook_maintainer("/tmp/non-existent-path") }.must_raise RuntimeError
     end
     it "returns the cookbook maintainer when passed the cookbook metadata" do
       mock_cookbook_metadata(metadata_path)
-      api.cookbook_maintainer(metadata_path).must_equal 'YOUR_COMPANY_NAME'
+      api.cookbook_maintainer(metadata_path).must_equal "YOUR_COMPANY_NAME"
     end
     it "returns the cookbook maintainer when passed a recipe" do
       mock_cookbook_metadata(metadata_path)
-      api.cookbook_maintainer('/tmp/fc/mock/cb/recipes/default.rb').must_equal 'YOUR_COMPANY_NAME'
+      api.cookbook_maintainer("/tmp/fc/mock/cb/recipes/default.rb").must_equal "YOUR_COMPANY_NAME"
     end
     it "returns the cookbook maintainer when passed a template" do
       mock_cookbook_metadata(metadata_path)
-      api.cookbook_maintainer('/tmp/fc/mock/cb/templates/default/mock.erb').must_equal 'YOUR_COMPANY_NAME'
+      api.cookbook_maintainer("/tmp/fc/mock/cb/templates/default/mock.erb").must_equal "YOUR_COMPANY_NAME"
     end
   end
 
@@ -239,38 +239,38 @@ describe FoodCritic::Api do
     def mock_cookbook_metadata(f)
       dir = File.dirname(f)
       unless File.directory?(dir)
-          FileUtils.mkdir_p(dir)
+        FileUtils.mkdir_p(dir)
       end
-      File.open(f, 'w') { |file| file.write('maintainer_email "YOUR_EMAIL"') }
+      File.open(f, "w") { |file| file.write('maintainer_email "YOUR_EMAIL"') }
     end
 
-    metadata_path='/tmp/fc/mock/cb/metadata.rb'
+    metadata_path = "/tmp/fc/mock/cb/metadata.rb"
     it "raises if passed a nil" do
-      lambda{api.cookbook_maintainer_email(nil)}.must_raise ArgumentError
+      lambda { api.cookbook_maintainer_email(nil) }.must_raise ArgumentError
     end
     it "raises if passed an empty string" do
-      lambda{api.cookbook_maintainer_email('')}.must_raise ArgumentError
+      lambda { api.cookbook_maintainer_email("") }.must_raise ArgumentError
     end
     it "raises if the path does not exist" do
-      lambda{api.cookbook_maintainer_email('/tmp/non-existent-path')}.must_raise RuntimeError
+      lambda { api.cookbook_maintainer_email("/tmp/non-existent-path") }.must_raise RuntimeError
     end
     it "returns the cookbook maintainer_email when passed the cookbook metadata" do
       mock_cookbook_metadata(metadata_path)
-      api.cookbook_maintainer_email(metadata_path).must_equal 'YOUR_EMAIL'
+      api.cookbook_maintainer_email(metadata_path).must_equal "YOUR_EMAIL"
     end
     it "returns the cookbook maintainer_email when passed a recipe" do
       mock_cookbook_metadata(metadata_path)
-      api.cookbook_maintainer_email('/tmp/fc/mock/cb/recipes/default.rb').must_equal 'YOUR_EMAIL'
+      api.cookbook_maintainer_email("/tmp/fc/mock/cb/recipes/default.rb").must_equal "YOUR_EMAIL"
     end
     it "returns the cookbook maintainer_email when passed a template" do
       mock_cookbook_metadata(metadata_path)
-      api.cookbook_maintainer_email('/tmp/fc/mock/cb/templates/default/mock.erb').must_equal 'YOUR_EMAIL'
+      api.cookbook_maintainer_email("/tmp/fc/mock/cb/templates/default/mock.erb").must_equal "YOUR_EMAIL"
     end
   end
 
   describe "#declared_dependencies" do
     it "raises if the ast does not support XPath" do
-      lambda{api.declared_dependencies(nil)}.must_raise ArgumentError
+      lambda { api.declared_dependencies(nil) }.must_raise ArgumentError
     end
     it "returns an empty if there are no declared dependencies" do
       ast = MiniTest::Mock.new
@@ -310,24 +310,24 @@ describe FoodCritic::Api do
               </args_add_block>
             </command>
       })
-      api.declared_dependencies(ast).must_equal ['mysql']
+      api.declared_dependencies(ast).must_equal ["mysql"]
     end
   end
 
   describe "#field" do
     describe :simple_ast do
-      let(:ast){ parse_ast('name "webserver"') }
+      let(:ast) { parse_ast('name "webserver"') }
       it "raises if the field name is nil" do
-        lambda{api.field(ast, nil)}.must_raise ArgumentError
+        lambda { api.field(ast, nil) }.must_raise ArgumentError
       end
       it "raises if the field name is empty" do
-        lambda{api.field(ast, '')}.must_raise ArgumentError
+        lambda { api.field(ast, "") }.must_raise ArgumentError
       end
       it "returns empty if the field is not present" do
         api.field(ast, :common_name).must_be_empty
       end
       it "accepts a string for the field name" do
-        api.field(ast, 'name').wont_be_empty
+        api.field(ast, "name").wont_be_empty
       end
       it "accepts a symbol for the field name" do
         api.field(ast, :name).wont_be_empty
@@ -356,21 +356,21 @@ describe FoodCritic::Api do
 
   describe "#field_value" do
     describe :simple_ast do
-      let(:ast){ parse_ast('name "webserver"') }
+      let(:ast) { parse_ast('name "webserver"') }
       it "raises if the field name is nil" do
-        lambda{api.field_value(ast, nil)}.must_raise ArgumentError
+        lambda { api.field_value(ast, nil) }.must_raise ArgumentError
       end
       it "raises if the field name is empty" do
-        lambda{api.field_value(ast, '')}.must_raise ArgumentError
+        lambda { api.field_value(ast, "") }.must_raise ArgumentError
       end
       it "is falsy if the field is not present" do
         refute api.field_value(ast, :common_name)
       end
       it "accepts a string for the field name" do
-        api.field_value(ast, 'name').must_equal 'webserver'
+        api.field_value(ast, "name").must_equal "webserver"
       end
       it "accepts a symbol for the field name" do
-        api.field_value(ast, :name).must_equal 'webserver'
+        api.field_value(ast, :name).must_equal "webserver"
       end
     end
     it "is falsy when the value is an embedded string expression" do
@@ -390,7 +390,7 @@ describe FoodCritic::Api do
         name "webserver"
         name "database"
       }.strip)
-      api.field_value(ast, :name).must_equal 'database'
+      api.field_value(ast, :name).must_equal "database"
     end
   end
 
@@ -402,7 +402,7 @@ describe FoodCritic::Api do
       api.file_match("foo/bar/foo.rb")[:filename].must_equal "foo/bar/foo.rb"
     end
     it "raises an error if the provided filename is nil" do
-      lambda{api.file_match(nil)}.must_raise(ArgumentError)
+      lambda { api.file_match(nil) }.must_raise(ArgumentError)
     end
     it "sets the line and column to the beginning of the file" do
       match = api.file_match("bar.rb")
@@ -417,49 +417,49 @@ describe FoodCritic::Api do
       api.find_resources(nil).must_be_empty
     end
     it "restricts by resource type when provided" do
-      ast.expect :xpath, ['method_add_block'],
+      ast.expect :xpath, ["method_add_block"],
         ["//method_add_block[command/ident[@value='file']]" +
-         "[command/ident/@value != 'action']"]
-      api.find_resources(ast, :type => 'file')
+          "[command/ident/@value != 'action']"]
+      api.find_resources(ast, :type => "file")
       ast.verify
     end
     it "does not restrict by resource type when not provided" do
-      ast.expect :xpath, ['method_add_block'],
+      ast.expect :xpath, ["method_add_block"],
                          ["//method_add_block[command/ident]" +
-                          "[command/ident/@value != 'action']"]
+                           "[command/ident/@value != 'action']"]
       api.find_resources(ast)
       ast.verify
     end
     it "allows resource type to be specified as :any" do
-      ast.expect :xpath, ['method_add_block'],
+      ast.expect :xpath, ["method_add_block"],
                          ["//method_add_block[command/ident]" +
-                          "[command/ident/@value != 'action']"]
+                           "[command/ident/@value != 'action']"]
       api.find_resources(ast, :type => :any)
       ast.verify
     end
     it "returns any matches" do
-      ast.expect :xpath, ['method_add_block'], [String]
-      api.find_resources(ast).must_equal ['method_add_block']
+      ast.expect :xpath, ["method_add_block"], [String]
+      api.find_resources(ast).must_equal ["method_add_block"]
     end
   end
 
   describe "#included_recipes" do
     it "raises if the ast does not support XPath" do
-      lambda{api.included_recipes(nil)}.must_raise ArgumentError
+      lambda { api.included_recipes(nil) }.must_raise ArgumentError
     end
     it "returns an empty hash if there are no included recipes" do
       ast = MiniTest::Mock.new.expect :xpath, [], [String]
       api.included_recipes(ast).keys.must_be_empty
     end
     it "returns a hash keyed by recipe name" do
-      ast = MiniTest::Mock.new.expect :xpath, [{'value' => 'foo::bar'}],
+      ast = MiniTest::Mock.new.expect :xpath, [{ "value" => "foo::bar" }],
         [String]
-      api.included_recipes(ast).keys.must_equal ['foo::bar']
+      api.included_recipes(ast).keys.must_equal ["foo::bar"]
     end
     it "returns a hash where the values are the matching nodes" do
-      ast = MiniTest::Mock.new.expect :xpath, [{'value' => 'foo::bar'}],
+      ast = MiniTest::Mock.new.expect :xpath, [{ "value" => "foo::bar" }],
         [String]
-      api.included_recipes(ast).values.must_equal [[{'value' => 'foo::bar'}]]
+      api.included_recipes(ast).values.must_equal [[{ "value" => "foo::bar" }]]
     end
     it "correctly keys an included recipe specified as a string literal" do
       api.included_recipes(parse_ast(%q{
@@ -476,7 +476,7 @@ describe FoodCritic::Api do
         api.included_recipes(ast).keys.must_equal ["foo::"]
       end
       it "returns the literal string part of the AST" do
-        api.included_recipes(ast)['foo::'].first.must_respond_to(:xpath)
+        api.included_recipes(ast)["foo::"].first.must_respond_to(:xpath)
       end
       it "returns empty if asked to exclude statements with embedded expressions" do
         api.included_recipes(ast, :with_partial_names => false).must_be_empty
@@ -495,7 +495,7 @@ describe FoodCritic::Api do
         api.included_recipes(ast).keys.must_equal ["::bar"]
       end
       it "returns the literal string part of the AST" do
-        api.included_recipes(ast)['::bar'].first.must_respond_to(:xpath)
+        api.included_recipes(ast)["::bar"].first.must_respond_to(:xpath)
       end
       it "returns empty if asked to exclude statements with embedded expressions" do
         api.included_recipes(ast, :with_partial_names => false).must_be_empty
@@ -511,7 +511,7 @@ describe FoodCritic::Api do
         api.included_recipes(ast).keys.must_equal ["_foo::bar"]
       end
       it "returns the literal string part of the AST" do
-        api.included_recipes(ast)['_foo::bar'].first.must_respond_to(:xpath)
+        api.included_recipes(ast)["_foo::bar"].first.must_respond_to(:xpath)
       end
       it "returns empty if asked to exclude statements with embedded expressions" do
         api.included_recipes(ast, :with_partial_names => false).must_be_empty
@@ -550,29 +550,29 @@ describe FoodCritic::Api do
       api.literal_searches(ast).must_be_empty
     end
     it "returns the AST elements for each literal search" do
-      ast.expect :xpath, ['tstring_content'], [String]
-      api.literal_searches(ast).must_equal ['tstring_content']
+      ast.expect :xpath, ["tstring_content"], [String]
+      api.literal_searches(ast).must_equal ["tstring_content"]
     end
   end
 
   describe "#match" do
     it "raises if the provided node is nil" do
-      lambda{api.match(nil)}.must_raise(ArgumentError)
+      lambda { api.match(nil) }.must_raise(ArgumentError)
     end
     it "raises if the provided node does not support XPath" do
-      lambda{api.match(Object.new)}.must_raise(ArgumentError)
+      lambda { api.match(Object.new) }.must_raise(ArgumentError)
     end
     it "returns nil if there is no nested position node" do
       node = MiniTest::Mock.new
-      node.expect :xpath, [], ['descendant::pos']
+      node.expect :xpath, [], ["descendant::pos"]
       api.match(node).must_be_nil
     end
     it "uses the position of the first position node if there are multiple" do
       node = MiniTest::Mock.new
       node.expect(:xpath,
-        [{'name' => 'pos', 'line' => '1', 'column' => '10'},
-         {'name' => 'pos', 'line' => '3', 'column' => '16'}],
-           ['descendant::pos'])
+        [{ "name" => "pos", "line" => "1", "column" => "10" },
+         { "name" => "pos", "line" => "3", "column" => "16" }],
+           ["descendant::pos"])
       match = api.match(node)
       match[:line].must_equal(1)
       match[:column].must_equal(10)
@@ -580,17 +580,17 @@ describe FoodCritic::Api do
     describe :matched_node_name do
       let(:node) do
         node = MiniTest::Mock.new
-        node.expect :xpath, [{'name' => 'pos', 'line' => '1',
-                              'column' => '10'}], ['descendant::pos']
+        node.expect :xpath, [{ "name" => "pos", "line" => "1",
+                               "column" => "10" }], ["descendant::pos"]
         node
       end
       it "includes the name of the node in the match" do
-        node.expect :name, 'command'
-        api.match(node).must_equal({:matched => 'command', :line => 1,
-                                    :column => 10})
+        node.expect :name, "command"
+        api.match(node).must_equal({ :matched => "command", :line => 1,
+                                     :column => 10 })
       end
       it "sets the matched name to empty if the element does not have a name" do
-        api.match(node).must_equal({:matched => '', :line => 1, :column => 10})
+        api.match(node).must_equal({ :matched => "", :line => 1, :column => 10 })
       end
     end
   end
@@ -809,9 +809,9 @@ describe FoodCritic::Api do
           :type => :notifies,
           :action => :restart,
           :resource_type => :service,
-          :resource_name => 'nscd',
+          :resource_name => "nscd",
           :timing => :delayed,
-          :style => :old
+          :style => :old,
         }]
       )
     end
@@ -828,9 +828,9 @@ describe FoodCritic::Api do
           :type => :notifies,
           :action => :'soft-restart',
           :resource_type => :service,
-          :resource_name => 'nscd',
+          :resource_name => "nscd",
           :timing => :delayed,
-          :style => :old
+          :style => :old,
         }]
       )
     end
@@ -847,9 +847,9 @@ describe FoodCritic::Api do
           :type => :notifies,
           :action => :restart,
           :resource_type => :service,
-          :resource_name => 'nscd',
+          :resource_name => "nscd",
           :timing => :delayed,
-          :style => :old
+          :style => :old,
         }]
       )
     end
@@ -866,9 +866,9 @@ describe FoodCritic::Api do
           :type => :subscribes,
           :action => :restart,
           :resource_type => :service,
-          :resource_name => 'nscd',
+          :resource_name => "nscd",
           :timing => :delayed,
-          :style => :old
+          :style => :old,
         }]
       )
     end
@@ -885,9 +885,9 @@ describe FoodCritic::Api do
           :type => :subscribes,
           :action => :restart,
           :resource_type => :service,
-          :resource_name => 'nscd',
+          :resource_name => "nscd",
           :timing => :delayed,
-          :style => :old
+          :style => :old,
         }]
       )
     end
@@ -904,9 +904,9 @@ describe FoodCritic::Api do
           :type => :notifies,
           :action => :restart,
           :resource_type => :service,
-          :resource_name => 'nscd',
+          :resource_name => "nscd",
           :timing => :delayed,
-          :style => :new
+          :style => :new,
         }]
       )
     end
@@ -923,9 +923,9 @@ describe FoodCritic::Api do
           :type => :notifies,
           :action => :'soft-restart',
           :resource_type => :service,
-          :resource_name => 'nscd',
+          :resource_name => "nscd",
           :timing => :delayed,
-          :style => :new
+          :style => :new,
         }]
       )
     end
@@ -942,9 +942,9 @@ describe FoodCritic::Api do
           :type => :notifies,
           :action => :restart,
           :resource_type => :service,
-          :resource_name => 'nscd',
+          :resource_name => "nscd",
           :timing => :delayed,
-          :style => :new
+          :style => :new,
         }]
       )
     end
@@ -961,9 +961,9 @@ describe FoodCritic::Api do
           :type => :subscribes,
           :action => :restart,
           :resource_type => :service,
-          :resource_name => 'nscd',
+          :resource_name => "nscd",
           :timing => :delayed,
-          :style => :new
+          :style => :new,
         }]
       )
     end
@@ -980,9 +980,9 @@ describe FoodCritic::Api do
           :type => :subscribes,
           :action => :restart,
           :resource_type => :service,
-          :resource_name => 'nscd',
+          :resource_name => "nscd",
           :timing => :delayed,
-          :style => :new
+          :style => :new,
         }]
       )
     end
@@ -1001,18 +1001,18 @@ describe FoodCritic::Api do
             :type => :notifies,
             :action => :restart,
             :resource_type => :service,
-            :resource_name => 'nscd',
+            :resource_name => "nscd",
             :timing => :delayed,
-            :style => :old
+            :style => :old,
           },
           {
             :type => :subscribes,
             :action => :create,
             :resource_type => :template,
-            :resource_name => '/etc/nscd.conf',
+            :resource_name => "/etc/nscd.conf",
             :timing => :delayed,
-            :style => :old
-          }
+            :style => :old,
+          },
         ])
       end
       it "new-style notifications" do
@@ -1029,18 +1029,18 @@ describe FoodCritic::Api do
             :type => :notifies,
             :action => :restart,
             :resource_type => :service,
-            :resource_name => 'nscd',
+            :resource_name => "nscd",
             :timing => :delayed,
-            :style => :new
+            :style => :new,
           },
           {
             :type => :subscribes,
             :action => :create,
             :resource_type => :template,
-            :resource_name => '/etc/nscd.conf',
+            :resource_name => "/etc/nscd.conf",
             :timing => :delayed,
-            :style => :new
-          }
+            :style => :new,
+          },
         ])
       end
     end
@@ -1057,9 +1057,9 @@ describe FoodCritic::Api do
           :type => :notifies,
           :action => :restart,
           :resource_type => :service,
-          :resource_name => 'nscd',
+          :resource_name => "nscd",
           :timing => :immediate,
-          :style => :old
+          :style => :old,
         }]
       )
     end
@@ -1076,9 +1076,9 @@ describe FoodCritic::Api do
           :type => :subscribes,
           :action => :restart,
           :resource_type => :service,
-          :resource_name => 'nscd',
+          :resource_name => "nscd",
           :timing => :immediate,
-          :style => :old
+          :style => :old,
         }]
       )
     end
@@ -1095,9 +1095,9 @@ describe FoodCritic::Api do
           :type => :notifies,
           :action => :restart,
           :resource_type => :service,
-          :resource_name => 'nscd',
+          :resource_name => "nscd",
           :timing => :immediate,
-          :style => :new
+          :style => :new,
         }]
       )
     end
@@ -1114,9 +1114,9 @@ describe FoodCritic::Api do
           :type => :subscribes,
           :action => :restart,
           :resource_type => :service,
-          :resource_name => 'nscd',
+          :resource_name => "nscd",
           :timing => :immediate,
-          :style => :new
+          :style => :new,
         }]
       )
     end
@@ -1133,9 +1133,9 @@ describe FoodCritic::Api do
             notifies :restart, resources(:service => "nscd")
           end
         }), :type => :template).first).must_equal([
-          {:type => :notifies, :action => :restart, :resource_type => :service,
-           :resource_name => 'nscd', :timing => :delayed,
-           :style => :old}
+          { :type => :notifies, :action => :restart, :resource_type => :service,
+            :resource_name => "nscd", :timing => :delayed,
+            :style => :old },
         ])
       end
       it "old-style subscriptions" do
@@ -1150,9 +1150,9 @@ describe FoodCritic::Api do
             subscribes :restart, resources(:service => "nscd")
           end
         }), :type => :template).first).must_equal([
-          {:type => :subscribes, :action => :restart, :resource_type => :service,
-           :resource_name => 'nscd', :timing => :delayed,
-           :style => :old}
+          { :type => :subscribes, :action => :restart, :resource_type => :service,
+            :resource_name => "nscd", :timing => :delayed,
+            :style => :old },
         ])
       end
       it "new-style notifications" do
@@ -1167,9 +1167,9 @@ describe FoodCritic::Api do
             notifies :restart, "service[nscd]"
           end
         }), :type => :template).first).must_equal([
-          {:type => :notifies, :action => :restart, :resource_type => :service,
-           :resource_name => 'nscd', :timing => :delayed,
-           :style => :new}
+          { :type => :notifies, :action => :restart, :resource_type => :service,
+            :resource_name => "nscd", :timing => :delayed,
+            :style => :new },
         ])
       end
       it "new-style subscriptions" do
@@ -1184,9 +1184,9 @@ describe FoodCritic::Api do
             subscribes :restart, "service[nscd]"
           end
         }), :type => :template).first).must_equal([
-          {:type => :subscribes, :action => :restart, :resource_type => :service,
-           :resource_name => 'nscd', :timing => :delayed,
-           :style => :new}
+          { :type => :subscribes, :action => :restart, :resource_type => :service,
+            :resource_name => "nscd", :timing => :delayed,
+            :style => :new },
         ])
       end
     end
@@ -1202,12 +1202,12 @@ describe FoodCritic::Api do
           end
         })).must_equal(
           [
-            {:type => :notifies, :action => :stop, :resource_type => :service,
-             :resource_name => 'nscd', :timing => :delayed,
-             :style => :old},
-            {:type => :notifies, :action => :start, :resource_type => :service,
-             :resource_name => 'nscd', :timing => :delayed,
-             :style => :old}
+            { :type => :notifies, :action => :stop, :resource_type => :service,
+              :resource_name => "nscd", :timing => :delayed,
+              :style => :old },
+            { :type => :notifies, :action => :start, :resource_type => :service,
+              :resource_name => "nscd", :timing => :delayed,
+              :style => :old },
           ]
         )
       end
@@ -1222,12 +1222,12 @@ describe FoodCritic::Api do
           end
         })).must_equal(
           [
-            {:type => :subscribes, :action => :stop, :resource_type => :service,
-             :resource_name => 'nscd', :timing => :delayed,
-             :style => :old},
-            {:type => :subscribes, :action => :start, :resource_type => :service,
-             :resource_name => 'nscd', :timing => :delayed,
-             :style => :old}
+            { :type => :subscribes, :action => :stop, :resource_type => :service,
+              :resource_name => "nscd", :timing => :delayed,
+              :style => :old },
+            { :type => :subscribes, :action => :start, :resource_type => :service,
+              :resource_name => "nscd", :timing => :delayed,
+              :style => :old },
           ]
         )
       end
@@ -1242,12 +1242,12 @@ describe FoodCritic::Api do
           end
         })).must_equal(
           [
-            {:type => :notifies, :action => :stop, :resource_type => :service,
-             :resource_name => 'nscd', :timing => :delayed,
-             :style => :new},
-            {:type => :notifies, :action => :start, :resource_type => :service,
-             :resource_name => 'nscd', :timing => :delayed,
-             :style => :new}
+            { :type => :notifies, :action => :stop, :resource_type => :service,
+              :resource_name => "nscd", :timing => :delayed,
+              :style => :new },
+            { :type => :notifies, :action => :start, :resource_type => :service,
+              :resource_name => "nscd", :timing => :delayed,
+              :style => :new },
           ]
         )
       end
@@ -1262,12 +1262,12 @@ describe FoodCritic::Api do
           end
         })).must_equal(
           [
-            {:type => :subscribes, :action => :stop, :resource_type => :service,
-             :resource_name => 'nscd', :timing => :delayed,
-             :style => :new},
-            {:type => :subscribes, :action => :start, :resource_type => :service,
-             :resource_name => 'nscd', :timing => :delayed,
-             :style => :new}
+            { :type => :subscribes, :action => :stop, :resource_type => :service,
+              :resource_name => "nscd", :timing => :delayed,
+              :style => :new },
+            { :type => :subscribes, :action => :start, :resource_type => :service,
+              :resource_name => "nscd", :timing => :delayed,
+              :style => :new },
           ]
         )
       end
@@ -1280,9 +1280,9 @@ describe FoodCritic::Api do
             notifies :run, resources(:execute => "foo")
           end
         })).must_equal(
-          [{:type => :notifies, :action => :run, :resource_type => :execute,
-           :resource_name => 'foo', :timing => :delayed,
-           :style => :old}]
+          [{ :type => :notifies, :action => :run, :resource_type => :execute,
+             :resource_name => "foo", :timing => :delayed,
+             :style => :old }]
         )
       end
       it "old-style subscriptions" do
@@ -1292,9 +1292,9 @@ describe FoodCritic::Api do
             subscribes :run, resources(:execute => "foo")
           end
         })).must_equal(
-          [{:type => :subscribes, :action => :run, :resource_type => :execute,
-           :resource_name => 'foo', :timing => :delayed,
-           :style => :old}]
+          [{ :type => :subscribes, :action => :run, :resource_type => :execute,
+             :resource_name => "foo", :timing => :delayed,
+             :style => :old }]
         )
       end
       it "old-style notifications" do
@@ -1304,9 +1304,9 @@ describe FoodCritic::Api do
             notifies :run, "execute[foo]"
           end
         })).must_equal(
-          [{:type => :notifies, :action => :run, :resource_type => :execute,
-           :resource_name => 'foo', :timing => :delayed,
-           :style => :new}]
+          [{ :type => :notifies, :action => :run, :resource_type => :execute,
+             :resource_name => "foo", :timing => :delayed,
+             :style => :new }]
         )
       end
       it "old-style subscriptions" do
@@ -1316,9 +1316,9 @@ describe FoodCritic::Api do
             subscribes :run, "execute[foo]"
           end
         })).must_equal(
-          [{:type => :subscribes, :action => :run, :resource_type => :execute,
-           :resource_name => 'foo', :timing => :delayed,
-           :style => :new}]
+          [{ :type => :subscribes, :action => :run, :resource_type => :execute,
+             :resource_name => "foo", :timing => :delayed,
+             :style => :new }]
         )
       end
     end
@@ -1486,25 +1486,25 @@ describe FoodCritic::Api do
     end
     describe "mark style of notification" do
       it "specifies that the notification was in the old style" do
-          assert api.notifications(parse_ast(%q{
-            template "/etc/foo.conf" do
-              notifies :restart, resources(:service => 'foo')
-            end
-          })).first[:style].must_equal :old
+        assert api.notifications(parse_ast(%q{
+          template "/etc/foo.conf" do
+            notifies :restart, resources(:service => 'foo')
+          end
+        })).first[:style].must_equal :old
       end
       it "specifies that the notification was in the new style" do
-          assert api.notifications(parse_ast(%q{
-            template "/etc/foo.conf" do
-              notifies :restart, "service[foo]"
-            end
-          })).first[:style].must_equal :new
+        assert api.notifications(parse_ast(%q{
+          template "/etc/foo.conf" do
+            notifies :restart, "service[foo]"
+          end
+        })).first[:style].must_equal :new
       end
     end
   end
 
   describe "#read_ast" do
     it "raises if the file cannot be read" do
-      lambda {api.read_ast(nil)}.must_raise(TypeError)
+      lambda { api.read_ast(nil) }.must_raise(TypeError)
     end
   end
 
@@ -1517,10 +1517,10 @@ describe FoodCritic::Api do
       end.new
     end
     it "raises if the resource does not support XPath" do
-      lambda{api.resource_attribute(nil, "mode")}.must_raise ArgumentError
+      lambda { api.resource_attribute(nil, "mode") }.must_raise ArgumentError
     end
     it "raises if the attribute name is empty" do
-      lambda{api.resource_attribute(resource, "")}.must_raise ArgumentError
+      lambda { api.resource_attribute(resource, "") }.must_raise ArgumentError
     end
   end
 
@@ -1529,7 +1529,7 @@ describe FoodCritic::Api do
       api.resource_attributes(api.find_resources(parse_ast(str)).first)
     end
     it "raises if the resource does not support XPath" do
-      lambda{api.resource_attributes(nil)}.must_raise ArgumentError
+      lambda { api.resource_attributes(nil) }.must_raise ArgumentError
     end
     it "returns a string value for a literal string" do
       atts = str_to_atts(%q{
@@ -1537,8 +1537,8 @@ describe FoodCritic::Api do
           owner "root"
         end
       })
-      atts['owner'].wont_be_nil
-      atts['owner'].must_equal 'root'
+      atts["owner"].wont_be_nil
+      atts["owner"].must_equal "root"
     end
     it "returns a truthy value for a literal true" do
       atts = str_to_atts(%q{
@@ -1546,8 +1546,8 @@ describe FoodCritic::Api do
           recursive true
         end
       })
-      atts['recursive'].wont_be_nil
-      atts['recursive'].must_equal true
+      atts["recursive"].wont_be_nil
+      atts["recursive"].must_equal true
     end
     it "returns a truthy value for a literal false" do
       atts = str_to_atts(%q{
@@ -1555,8 +1555,8 @@ describe FoodCritic::Api do
           recursive false
         end
       })
-      atts['recursive'].wont_be_nil
-      atts['recursive'].must_equal false
+      atts["recursive"].wont_be_nil
+      atts["recursive"].must_equal false
     end
     it "decodes numeric attributes correctly" do
       atts = str_to_atts(%q{
@@ -1565,8 +1565,8 @@ describe FoodCritic::Api do
           mode 0755
         end
       })
-      atts['mode'].wont_be_nil
-      atts['mode'].must_equal "0755"
+      atts["mode"].wont_be_nil
+      atts["mode"].must_equal "0755"
     end
     describe "block attributes" do
       it "includes attributes with brace block values in the result" do
@@ -1577,9 +1577,9 @@ describe FoodCritic::Api do
             only_if { File.exists?("/etc/bar") }
           end
         })
-        atts['only_if'].wont_be_nil
-        atts['only_if'].must_respond_to :xpath
-        atts['only_if'].name.must_equal 'brace_block'
+        atts["only_if"].wont_be_nil
+        atts["only_if"].must_respond_to :xpath
+        atts["only_if"].name.must_equal "brace_block"
       end
       it "includes attributes with do block values in the result" do
         atts = str_to_atts(%q{
@@ -1592,9 +1592,9 @@ describe FoodCritic::Api do
             end
           end
         })
-        atts['only_if'].wont_be_nil
-        atts['only_if'].must_respond_to :xpath
-        atts['only_if'].name.must_equal 'do_block'
+        atts["only_if"].wont_be_nil
+        atts["only_if"].must_respond_to :xpath
+        atts["only_if"].name.must_equal "do_block"
       end
       it "supports multiple block attributes" do
         atts = str_to_atts(%q{
@@ -1605,12 +1605,12 @@ describe FoodCritic::Api do
             not_if { true }
           end
         })
-        atts['only_if'].wont_be_nil
-        atts['only_if'].must_respond_to :xpath
-        atts['only_if'].name.must_equal 'brace_block'
-        atts['not_if'].wont_be_nil
-        atts['not_if'].must_respond_to :xpath
-        atts['not_if'].name.must_equal 'brace_block'
+        atts["only_if"].wont_be_nil
+        atts["only_if"].must_respond_to :xpath
+        atts["only_if"].name.must_equal "brace_block"
+        atts["not_if"].wont_be_nil
+        atts["not_if"].must_respond_to :xpath
+        atts["not_if"].name.must_equal "brace_block"
       end
       it "doesn't include method calls in ruby blocks" do
         atts = str_to_atts(%q{
@@ -1624,16 +1624,16 @@ describe FoodCritic::Api do
             not_if { false }
           end
         })
-        atts.keys.wont_include 'foo'
-        atts['block'].wont_be_nil
-        atts['block'].must_respond_to :xpath
-        atts['block'].name.must_equal 'do_block'
-        atts['only_if'].wont_be_nil
-        atts['only_if'].must_respond_to :xpath
-        atts['only_if'].name.must_equal 'brace_block'
-        atts['not_if'].wont_be_nil
-        atts['not_if'].must_respond_to :xpath
-        atts['not_if'].name.must_equal 'brace_block'
+        atts.keys.wont_include "foo"
+        atts["block"].wont_be_nil
+        atts["block"].must_respond_to :xpath
+        atts["block"].name.must_equal "do_block"
+        atts["only_if"].wont_be_nil
+        atts["only_if"].must_respond_to :xpath
+        atts["only_if"].name.must_equal "brace_block"
+        atts["not_if"].wont_be_nil
+        atts["not_if"].must_respond_to :xpath
+        atts["not_if"].name.must_equal "brace_block"
       end
       it "includes notifications in the result" do
         atts = str_to_atts(%q{
@@ -1641,9 +1641,9 @@ describe FoodCritic::Api do
             notifies :restart, "service[apache]"
           end
         })
-        atts['notifies'].wont_be_nil
-        atts['notifies'].must_respond_to :xpath
-        atts['notifies'].name.must_equal 'args_add_block'
+        atts["notifies"].wont_be_nil
+        atts["notifies"].must_respond_to :xpath
+        atts["notifies"].name.must_equal "args_add_block"
       end
       it "includes old-style notifications in the result" do
         atts = str_to_atts(%q{
@@ -1651,16 +1651,16 @@ describe FoodCritic::Api do
             notifies :restart, resources(:service => "apache")
           end
         })
-        atts['notifies'].wont_be_nil
-        atts['notifies'].must_respond_to :xpath
-        atts['notifies'].name.must_equal 'args_add_block'
+        atts["notifies"].wont_be_nil
+        atts["notifies"].must_respond_to :xpath
+        atts["notifies"].name.must_equal "args_add_block"
       end
     end
   end
 
   describe "#resource_attributes_by_type" do
     it "raises if the ast does not support XPath" do
-      lambda{api.resource_attributes_by_type(nil)}.must_raise ArgumentError
+      lambda { api.resource_attributes_by_type(nil) }.must_raise ArgumentError
     end
     it "returns an empty hash if there are no resources" do
       ast = MiniTest::Mock.new.expect :xpath, [], [String]
@@ -1670,18 +1670,18 @@ describe FoodCritic::Api do
 
   describe "#resource_name" do
     it "raises if the resource does not support XPath" do
-      lambda {api.resource_name('foo')}.must_raise ArgumentError
+      lambda { api.resource_name("foo") }.must_raise ArgumentError
     end
     it "returns the resource name for a resource" do
       ast = MiniTest::Mock.new
-      ast.expect :xpath, 'bob', [String]
-      api.resource_name(ast).must_equal 'bob'
+      ast.expect :xpath, "bob", [String]
+      api.resource_name(ast).must_equal "bob"
     end
   end
 
   describe "#resources_by_type" do
     it "raises if the ast does not support XPath" do
-      lambda{api.resources_by_type(nil)}.must_raise ArgumentError
+      lambda { api.resources_by_type(nil) }.must_raise ArgumentError
     end
     it "returns an empty hash if there are no resources" do
       ast = MiniTest::Mock.new.expect :xpath, [], [String]
@@ -1691,17 +1691,17 @@ describe FoodCritic::Api do
 
   describe "#resource_type" do
     it "raises if the resource does not support XPath" do
-      lambda {api.resource_type(nil)}.must_raise ArgumentError
+      lambda { api.resource_type(nil) }.must_raise ArgumentError
     end
     it "raises if the resource type cannot be determined" do
       ast = MiniTest::Mock.new
-      ast.expect :xpath, '', [String]
-      lambda {api.resource_type(ast)}.must_raise ArgumentError
+      ast.expect :xpath, "", [String]
+      lambda { api.resource_type(ast) }.must_raise ArgumentError
     end
     it "returns the resource type for a resource" do
       ast = MiniTest::Mock.new
-      ast.expect :xpath, 'directory', [String]
-      api.resource_type(ast).must_equal 'directory'
+      ast.expect :xpath, "directory", [String]
+      api.resource_type(ast).must_equal "directory"
     end
   end
 
@@ -1710,7 +1710,7 @@ describe FoodCritic::Api do
       refute api.ruby_code?(nil)
     end
     it "says an empty string is not ruby code" do
-      refute api.ruby_code?('')
+      refute api.ruby_code?("")
     end
     it "coerces arguments to a string" do
       assert api.ruby_code?(%w{foo bar})
@@ -1726,21 +1726,21 @@ describe FoodCritic::Api do
   describe "#searches" do
     let(:ast) { MiniTest::Mock.new }
     it "returns empty if the AST does not support XPath expressions" do
-      api.searches('not-an-ast').must_be_empty
+      api.searches("not-an-ast").must_be_empty
     end
     it "returns empty if the AST has no elements" do
       ast.expect :xpath, [], [String]
       api.searches(ast).must_be_empty
     end
     it "returns the AST elements for each use of search" do
-      ast.expect :xpath, ['ident'], [String]
-      api.searches(ast).must_equal ['ident']
+      ast.expect :xpath, ["ident"], [String]
+      api.searches(ast).must_equal ["ident"]
     end
   end
 
   describe "#standard_cookbook_subdirs" do
     it "is enumerable" do
-      api.standard_cookbook_subdirs.each{|s| s}
+      api.standard_cookbook_subdirs.each { |s| s }
     end
     it "is sorted in alphabetical order" do
       api.standard_cookbook_subdirs.must_equal(
@@ -1749,14 +1749,14 @@ describe FoodCritic::Api do
     it "includes the directories generated by knife create cookbook" do
       %w{attributes definitions files libraries providers recipes resources
          templates}.each do |dir|
-         api.standard_cookbook_subdirs.must_include dir
+        api.standard_cookbook_subdirs.must_include dir
       end
     end
     it "does not include the spec directory" do
-      api.standard_cookbook_subdirs.wont_include 'spec'
+      api.standard_cookbook_subdirs.wont_include "spec"
     end
     it "does not include a subdirectory of a subdirectory" do
-      api.standard_cookbook_subdirs.wont_include 'default'
+      api.standard_cookbook_subdirs.wont_include "default"
     end
   end
 
@@ -1769,7 +1769,7 @@ describe FoodCritic::Api do
     end
     describe :ignored_support_declarations do
       it "should ignore supports without any arguments" do
-        supports('supports').must_be_empty
+        supports("supports").must_be_empty
       end
       it "should ignore supports where an embedded string expression is used" do
         supports('supports "red#{hat}"').must_be_empty
@@ -1779,46 +1779,46 @@ describe FoodCritic::Api do
       supports(%q{
         supports "redhat"
         supports "scientific"
-      }).must_equal([{:platform => 'redhat', :versions => []},
-	             {:platform => 'scientific', :versions => []}])
+      }).must_equal([{ :platform => "redhat", :versions => [] },
+               { :platform => "scientific", :versions => [] }])
     end
     it "sorts the platform names in alphabetical order" do
       supports(%q{
         supports "scientific"
         supports "redhat"
-      }).must_equal([{:platform => 'redhat', :versions => []},
-	             {:platform => 'scientific', :versions => []}])
+      }).must_equal([{ :platform => "redhat", :versions => [] },
+               { :platform => "scientific", :versions => [] }])
     end
     it "handles support declarations that include version constraints" do
       supports(%q{
         supports "redhat", '>= 6'
-      }).must_equal([{:platform => 'redhat', :versions => ['>= 6']}])
+      }).must_equal([{ :platform => "redhat", :versions => [">= 6"] }])
     end
     it "handles support declarations that include obsoleted version constraints" do
       supports(%q{
         supports 'redhat', '> 5.0', '< 7.0'
         supports 'scientific', '> 5.0', '< 6.0'
-      }).must_equal([{:platform => 'redhat', :versions => ['> 5.0', '< 7.0']},
-                     {:platform => 'scientific', :versions => ['> 5.0', '< 6.0']}])
+      }).must_equal([{ :platform => "redhat", :versions => ["> 5.0", "< 7.0"] },
+                     { :platform => "scientific", :versions => ["> 5.0", "< 6.0"] }])
     end
     it "normalises platform symbol references to strings" do
       supports(%q{
         supports :ubuntu
-      }).must_equal([{:platform => 'ubuntu', :versions => []}])
+      }).must_equal([{ :platform => "ubuntu", :versions => [] }])
     end
     it "handles support declarations as symbols that include version constraints" do
       supports(%q{
         supports :redhat, '>= 6'
-      }).must_equal([{:platform => 'redhat', :versions => ['>= 6']}])
+      }).must_equal([{ :platform => "redhat", :versions => [">= 6"] }])
     end
     it "understands support declarations that use word lists" do
       supports(%q{
         %w{redhat centos fedora}.each do |os|
 	  supports os
 	end
-      }).must_equal([{:platform => 'centos', :versions => []},
-                     {:platform => 'fedora', :versions => []},
-	             {:platform => 'redhat', :versions => []}])
+      }).must_equal([{ :platform => "centos", :versions => [] },
+                     { :platform => "fedora", :versions => [] },
+               { :platform => "redhat", :versions => [] }])
     end
   end
 
@@ -1826,21 +1826,21 @@ describe FoodCritic::Api do
 
     def all_templates
       [
-        'templates/default/main.erb',
-        'templates/default/included_1.erb',
-        'templates/default/included_2.erb'
+        "templates/default/main.erb",
+        "templates/default/included_1.erb",
+        "templates/default/included_2.erb",
       ]
     end
 
     def template_ast(content)
       parse_ast(FoodCritic::Template::ExpressionExtractor.new.extract(
-        content).map{|e| e[:code]}.join(';'))
+        content).map { |e| e[:code] }.join(";"))
     end
 
     it "returns the path of the containing template when there are no partials" do
-      ast = parse_ast('<%= foo.erb %>')
+      ast = parse_ast("<%= foo.erb %>")
       api.stub :read_ast, ast do
-        api.templates_included(['foo.erb'], 'foo.erb').must_equal ['foo.erb']
+        api.templates_included(["foo.erb"], "foo.erb").must_equal ["foo.erb"]
       end
     end
 
@@ -1848,7 +1848,7 @@ describe FoodCritic::Api do
       api.instance_variable_set(:@asts, {
         :main =>  template_ast('<%= render "included_1.erb" %>
                                 <%= render "included_2.erb" %>'),
-        :ok => template_ast('<%= @foo %>')
+        :ok => template_ast("<%= @foo %>"),
       })
       def api.read_ast(path)
         case path
@@ -1857,18 +1857,18 @@ describe FoodCritic::Api do
         end
       end
       api.templates_included(all_templates,
-        'templates/default/main.erb').must_equal(
-          ['templates/default/main.erb',
-           'templates/default/included_1.erb',
-           'templates/default/included_2.erb']
+        "templates/default/main.erb").must_equal(
+          ["templates/default/main.erb",
+           "templates/default/included_1.erb",
+           "templates/default/included_2.erb"]
       )
     end
 
     it "doesn't mistake render options for partial template names" do
       api.instance_variable_set(:@asts, {
-        :main =>  template_ast('<%= render "included_1.erb",
+        :main => template_ast('<%= render "included_1.erb",
                                :variables => {:foo => "included_2.erb"} %>'),
-        :ok => template_ast('<%= @foo %>')
+        :ok => template_ast("<%= @foo %>"),
       })
       def api.read_ast(path)
         case path
@@ -1877,17 +1877,17 @@ describe FoodCritic::Api do
         end
       end
       api.templates_included(all_templates,
-        'templates/default/main.erb').must_equal(
-          ['templates/default/main.erb', 'templates/default/included_1.erb']
+        "templates/default/main.erb").must_equal(
+          ["templates/default/main.erb", "templates/default/included_1.erb"]
       )
     end
 
     it "raises if included partials have cycles" do
       api.instance_variable_set(:@asts, {
-        :main =>  template_ast('<%= render "included_1.erb" %>
+        :main => template_ast('<%= render "included_1.erb" %>
                                 <%= render "included_2.erb" %>'),
         :loop => template_ast('<%= render "main.erb" %>'),
-        :ok => template_ast('<%= foo %>')
+        :ok => template_ast("<%= foo %>"),
       })
       def api.read_ast(path)
         case path
@@ -1897,9 +1897,9 @@ describe FoodCritic::Api do
         end
       end
       err = lambda do
-        api.templates_included(all_templates, 'templates/default/main.erb')
+        api.templates_included(all_templates, "templates/default/main.erb")
       end.must_raise(FoodCritic::Api::RecursedTooFarError)
-      err.message.must_equal 'templates/default/main.erb'
+      err.message.must_equal "templates/default/main.erb"
     end
   end
 

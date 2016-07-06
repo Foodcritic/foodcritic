@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-require_relative '../lib/foodcritic'
+require_relative "../lib/foodcritic"
 module FoodCritic
   cmd_line = CommandLine.new(ARGV)
   review, status = Linter.run(cmd_line)

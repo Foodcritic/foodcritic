@@ -1,10 +1,10 @@
-require_relative '../spec_helper'
+require_relative "../spec_helper"
 
 describe FoodCritic::Template::ExpressionExtractor do
-  let(:extractor){ FoodCritic::Template::ExpressionExtractor.new }
+  let(:extractor) { FoodCritic::Template::ExpressionExtractor.new }
   describe "#expressions" do
     it "returns empty if the template is empty" do
-      extractor.extract('').must_be_empty
+      extractor.extract("").must_be_empty
     end
     it "returns empty if the template contains no erb at all" do
       extractor.extract(%q{
@@ -16,8 +16,8 @@ describe FoodCritic::Template::ExpressionExtractor do
         <% if true %>
           Hello World!
         <% end %>
-      }).must_equal([{:type => :statement, :code => 'if true', :line => 2},
-                     {:type => :statement, :code => 'end', :line => 4}])
+      }).must_equal([{ :type => :statement, :code => "if true", :line => 2 },
+                     { :type => :statement, :code => "end", :line => 4 }])
     end
     it "does not evaluate erb statements" do
       extractor.extract(%q{
@@ -27,7 +27,7 @@ describe FoodCritic::Template::ExpressionExtractor do
     it "extracts an expression from within the template" do
       extractor.extract(%q{
         <%= foo %>
-      }).must_equal([{:type => :expression, :code => 'foo', :line => 2}])
+      }).must_equal([{ :type => :expression, :code => "foo", :line => 2 }])
     end
     it "does not evaluate erb expressions" do
       extractor.extract(%q{
@@ -41,8 +41,8 @@ describe FoodCritic::Template::ExpressionExtractor do
                    URIEncoding="UTF-8"
                    redirectPort="<%= node["tomcat"]["ssl_port"] %>" />
       }).must_equal([
-        {:type => :expression, :code => 'node["tomcat"]["port"]', :line => 2},
-        {:type => :expression, :code => 'node["tomcat"]["ssl_port"]', :line => 5}
+        { :type => :expression, :code => 'node["tomcat"]["port"]', :line => 2 },
+        { :type => :expression, :code => 'node["tomcat"]["ssl_port"]', :line => 5 },
       ])
     end
     it "excludes comment-only expressions" do

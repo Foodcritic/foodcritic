@@ -1,4 +1,4 @@
-require 'cucumber/core/gherkin/tag_expression'
+require "cucumber/core/gherkin/tag_expression"
 
 module FoodCritic
   # A warning of a possible issue
@@ -33,7 +33,7 @@ module FoodCritic
     end
 
     def to_s
-      @rules.sort { |a,b| a.code <=> b.code }.
+      @rules.sort { |a, b| a.code <=> b.code }.
         map { |r| r.to_s }.join("\n")
     end
 
@@ -69,7 +69,7 @@ module FoodCritic
          w.match[:line].to_i]
       end.sort do |x, y|
         x.first == y.first ? x[1] <=> y[1] : x.first <=> y.first
-      end.map { |w|"#{w.first}:#{w[1]}" }.uniq.join("\n")
+      end.map { |w| "#{w.first}:#{w[1]}" }.uniq.join("\n")
     end
   end
 
@@ -90,7 +90,7 @@ module FoodCritic
     # The tags associated with this rule. Rule is always tagged with the tag
     # `any` and the rule code.
     def tags
-      ['any'] + @tags
+      ["any"] + @tags
     end
 
     # Checks the rule tags to see if they match a Gherkin (Cucumber) expression

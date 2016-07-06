@@ -1,9 +1,9 @@
-require_relative '../regression_helpers'
+require_relative "../regression_helpers"
 
-describe 'regression test' do
+describe "regression test" do
 
   let(:expected_lint_output) do
-    File.read('spec/regression/expected-output.txt')
+    File.read("spec/regression/expected-output.txt")
   end
 
   let(:actual_lint_output) do

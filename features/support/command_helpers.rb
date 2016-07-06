@@ -14,74 +14,74 @@ module FoodCritic
 
     # The warning codes and messages displayed to the end user.
     WARNINGS = {
-      'FC001' => 'Use strings in preference to symbols to access node attributes',
-      'FC002' => 'Avoid string interpolation where not required',
-      'FC003' => 'Check whether you are running with chef server before using server-specific features',
-      'FC004' => 'Use a service resource to start and stop services',
-      'FC005' => 'Avoid repetition of resource declarations',
-      'FC006' => 'Mode should be quoted or fully specified when setting file permissions',
-      'FC007' => 'Ensure recipe dependencies are reflected in cookbook metadata',
-      'FC008' => 'Generated cookbook metadata needs updating',
-      'FC009' => 'Resource attribute not recognised',
-      'FC010' => 'Invalid search syntax',
-      'FC011' => 'Missing README in markdown format',
-      'FC012' => 'Use Markdown for README rather than RDoc',
-      'FC013' => 'Use file_cache_path rather than hard-coding tmp paths',
-      'FC014' => 'Consider extracting long ruby_block to library',
-      'FC015' => 'Consider converting definition to a Custom Resource',
-      'FC016' => 'LWRP does not declare a default action',
-      'FC017' => 'LWRP does not notify when updated',
-      'FC018' => 'LWRP uses deprecated notification syntax',
-      'FC019' => 'Access node attributes in a consistent manner',
-      'FC021' => 'Resource condition in provider may not behave as expected',
-      'FC022' => 'Resource condition within loop may not behave as expected',
-      'FC023' => 'Prefer conditional attributes',
-      'FC024' => 'Consider adding platform equivalents',
-      'FC025' => 'Prefer chef_gem to compile-time gem install',
-      'FC026' => 'Conditional execution block attribute contains only string',
-      'FC027' => 'Resource sets internal attribute',
-      'FC028' => 'Incorrect #platform? usage',
-      'FC029' => 'No leading cookbook name in recipe metadata',
-      'FC030' => 'Cookbook contains debugger breakpoints',
-      'FC031' => 'Cookbook without metadata file',
-      'FC032' => 'Invalid notification timing',
-      'FC033' => 'Missing template',
-      'FC034' => 'Unused template variables',
-      'FC037' => 'Invalid notification action',
-      'FC038' => 'Invalid resource action',
-      'FC039' => 'Node method cannot be accessed with key',
-      'FC040' => 'Execute resource used to run git commands',
-      'FC041' => 'Execute resource used to run curl or wget commands',
-      'FC042' => 'Prefer include_recipe to require_recipe',
-      'FC043' => 'Prefer new notification syntax',
-      'FC044' => 'Avoid bare attribute keys',
-      'FC045' => 'Metadata does not contain cookbook name',
-      'FC046' => 'Attribute assignment uses assign unless nil',
-      'FC047' => 'Attribute assignment does not specify precedence',
-      'FC048' => 'Prefer Mixlib::ShellOut',
-      'FC049' => 'Role name does not match containing file name',
-      'FC050' => 'Name includes invalid characters',
-      'FC051' => 'Template partials loop indefinitely',
-      'FC052' => 'Metadata uses the unimplemented "suggests" keyword',
-      'FC053' => 'Metadata uses the unimplemented "recommends" keyword',
+      "FC001" => "Use strings in preference to symbols to access node attributes",
+      "FC002" => "Avoid string interpolation where not required",
+      "FC003" => "Check whether you are running with chef server before using server-specific features",
+      "FC004" => "Use a service resource to start and stop services",
+      "FC005" => "Avoid repetition of resource declarations",
+      "FC006" => "Mode should be quoted or fully specified when setting file permissions",
+      "FC007" => "Ensure recipe dependencies are reflected in cookbook metadata",
+      "FC008" => "Generated cookbook metadata needs updating",
+      "FC009" => "Resource attribute not recognised",
+      "FC010" => "Invalid search syntax",
+      "FC011" => "Missing README in markdown format",
+      "FC012" => "Use Markdown for README rather than RDoc",
+      "FC013" => "Use file_cache_path rather than hard-coding tmp paths",
+      "FC014" => "Consider extracting long ruby_block to library",
+      "FC015" => "Consider converting definition to a Custom Resource",
+      "FC016" => "LWRP does not declare a default action",
+      "FC017" => "LWRP does not notify when updated",
+      "FC018" => "LWRP uses deprecated notification syntax",
+      "FC019" => "Access node attributes in a consistent manner",
+      "FC021" => "Resource condition in provider may not behave as expected",
+      "FC022" => "Resource condition within loop may not behave as expected",
+      "FC023" => "Prefer conditional attributes",
+      "FC024" => "Consider adding platform equivalents",
+      "FC025" => "Prefer chef_gem to compile-time gem install",
+      "FC026" => "Conditional execution block attribute contains only string",
+      "FC027" => "Resource sets internal attribute",
+      "FC028" => 'Incorrect #platform? usage',
+      "FC029" => "No leading cookbook name in recipe metadata",
+      "FC030" => "Cookbook contains debugger breakpoints",
+      "FC031" => "Cookbook without metadata file",
+      "FC032" => "Invalid notification timing",
+      "FC033" => "Missing template",
+      "FC034" => "Unused template variables",
+      "FC037" => "Invalid notification action",
+      "FC038" => "Invalid resource action",
+      "FC039" => "Node method cannot be accessed with key",
+      "FC040" => "Execute resource used to run git commands",
+      "FC041" => "Execute resource used to run curl or wget commands",
+      "FC042" => "Prefer include_recipe to require_recipe",
+      "FC043" => "Prefer new notification syntax",
+      "FC044" => "Avoid bare attribute keys",
+      "FC045" => "Metadata does not contain cookbook name",
+      "FC046" => "Attribute assignment uses assign unless nil",
+      "FC047" => "Attribute assignment does not specify precedence",
+      "FC048" => "Prefer Mixlib::ShellOut",
+      "FC049" => "Role name does not match containing file name",
+      "FC050" => "Name includes invalid characters",
+      "FC051" => "Template partials loop indefinitely",
+      "FC052" => 'Metadata uses the unimplemented "suggests" keyword',
+      "FC053" => 'Metadata uses the unimplemented "recommends" keyword',
       # FC054 was yanked and is considered reserved, do not reuse it
-      'FC055' => 'Ensure maintainer is set in metadata',
-      'FC056' => 'Ensure maintainer_email is set in metadata',
-      'FC057' => 'Library provider does not declare use_inline_resources',
-      'FC058' => 'Library provider declares use_inline_resources and declares #action_<name> methods',
-      'FC059' => 'LWRP provider does not declare use_inline_resources',
-      'FC060' => 'LWRP provider declares use_inline_resources and declares #action_<name> methods',
-      'FC061' => 'Valid cookbook versions are of the form x.y or x.y.z',
-      'FC062' => 'Cookbook should have version metadata',
-      'FC063' => 'Cookbook incorrectly depends on itself',
-      'FC064' => 'Ensure issues_url is set in metadata',
-      'FC065' => 'Ensure source_url is set in metadata',
-      'FCTEST001' => 'Test Rule'
+      "FC055" => "Ensure maintainer is set in metadata",
+      "FC056" => "Ensure maintainer_email is set in metadata",
+      "FC057" => "Library provider does not declare use_inline_resources",
+      "FC058" => 'Library provider declares use_inline_resources and declares #action_<name> methods',
+      "FC059" => "LWRP provider does not declare use_inline_resources",
+      "FC060" => 'LWRP provider declares use_inline_resources and declares #action_<name> methods',
+      "FC061" => "Valid cookbook versions are of the form x.y or x.y.z",
+      "FC062" => "Cookbook should have version metadata",
+      "FC063" => "Cookbook incorrectly depends on itself",
+      "FC064" => "Ensure issues_url is set in metadata",
+      "FC065" => "Ensure source_url is set in metadata",
+      "FCTEST001" => "Test Rule",
     }
 
     # If the cucumber features should run foodcritic in the same process or spawn a separate process.
     def self.running_in_process?
-      ! (ENV.has_key?('FC_FORK_PROCESS') and ENV['FC_FORK_PROCESS'] == true.to_s)
+      ! (ENV.has_key?("FC_FORK_PROCESS") && ENV["FC_FORK_PROCESS"] == true.to_s)
     end
 
     # Capture an error expected when calling a command.
@@ -117,16 +117,16 @@ module FoodCritic
     # @option options [String] :file The path to the file the warning should be raised against
     # @option options [Symbol] :file_type Alternative to specifying file name. One of: :attributes, :definition,
     #   :metadata, :provider, :resource
-    def expect_warning(code, options={})
+    def expect_warning(code, options = {})
       if options.has_key?(:file_type)
-        options[:file] = {:attributes => 'attributes/default.rb', :definition => 'definitions/apache_site.rb',
-                          :metadata => 'metadata.rb', :provider => 'providers/site.rb',
-                          :resource => 'resources/site.rb', :libraries => 'libraries/lib.rb'}[options[:file_type]]
+        options[:file] = { :attributes => "attributes/default.rb", :definition => "definitions/apache_site.rb",
+                           :metadata => "metadata.rb", :provider => "providers/site.rb",
+                           :resource => "resources/site.rb", :libraries => "libraries/lib.rb" }[options[:file_type]]
       end
-      options = {:line => 1, :expect_warning => true, :file => 'recipes/default.rb'}.merge!(options)
-      unless options[:file].include?('roles') ||
-        options[:file].include?('environments')
-          options[:file] = "cookbooks/example/#{options[:file]}"
+      options = { :line => 1, :expect_warning => true, :file => "recipes/default.rb" }.merge!(options)
+      unless options[:file].include?("roles") ||
+          options[:file].include?("environments")
+        options[:file] = "cookbooks/example/#{options[:file]}"
       end
       if options[:warning_only]
         warning = "#{code}: #{WARNINGS[code]}"
@@ -139,7 +139,7 @@ module FoodCritic
     # Expect a warning not to be included in the command output.
     #
     # @see CommandHelpers#expect_warning
-    def expect_no_warning(code, options={:expect_warning => false})
+    def expect_no_warning(code, options = { :expect_warning => false })
       expect_warning(code, options)
     end
 
@@ -155,28 +155,28 @@ module FoodCritic
 
     def has_test_warnings?(output)
       output.split("\n").grep(/FC[0-9]+:/).map do |warn|
-        File.basename(File.dirname(warn.split(':').take(3).last.strip))
-      end.include?('test')
+        File.basename(File.dirname(warn.split(":").take(3).last.strip))
+      end.include?("test")
     end
 
     def man_page_options
-      man_path = Pathname.new(__FILE__) + '../../../man/foodcritic.1.ronn'
+      man_path = Pathname.new(__FILE__) + "../../../man/foodcritic.1.ronn"
       option_lines = File.read(man_path).split('## ').find do |s|
-        s.start_with?('OPTIONS')
-      end.split("\n").select{|o| o.start_with?(' *')}
+        s.start_with?("OPTIONS")
+      end.split("\n").select { |o| o.start_with?(" *") }
       option_lines.map do |o|
-        o.sub('`[`no-`]`', '').split('`').select{|f| f.include?('-')}
+        o.sub("`[`no-`]`", "").split("`").select { |f| f.include?("-") }
       end.map do |option|
-        {:short => option.first.sub(/^-/, ''),
-         :long => option.last.sub(/^--/, '')}
-      end.sort_by{|o| o[:short]}
+        { :short => option.first.sub(/^-/, ""),
+          :long => option.last.sub(/^--/, "") }
+      end.sort_by { |o| o[:short] }
     end
 
     # Assert that the usage message is displayed.
     #
     # @param [Boolean] is_exit_zero The exit code to check for.
     def usage_displayed(is_exit_zero)
-      expect_output 'foodcritic [cookbook_paths]'
+      expect_output "foodcritic [cookbook_paths]"
 
       usage_options.each do |option|
         expect_usage_option(option[:short], option[:long], option[:description])
@@ -191,50 +191,50 @@ module FoodCritic
 
     def usage_options
       [
-        {:short => 'c', :long => 'chef-version VERSION',
-         :description => 'Only check against rules valid for this version of Chef.'},
+        { :short => "c", :long => "chef-version VERSION",
+          :description => "Only check against rules valid for this version of Chef." },
 
-        {:short => 'f', :long => 'epic-fail TAGS',
-         :description => "Fail the build based on tags. Use 'any' to fail on all warnings."},
+        { :short => "f", :long => "epic-fail TAGS",
+          :description => "Fail the build based on tags. Use 'any' to fail on all warnings." },
 
-        {:short => 'l', :long => 'list',
-         :description => 'List all enabled rules and their descriptions.'},
+        { :short => "l", :long => "list",
+          :description => "List all enabled rules and their descriptions." },
 
-        {:short => 't', :long => 'tags TAGS',
-         :description => 'Check against (or exclude ~) rules with the specified tags.'},
+        { :short => "t", :long => "tags TAGS",
+          :description => "Check against (or exclude ~) rules with the specified tags." },
 
-        {:short => 'B', :long => 'cookbook-path PATH',
-         :description => 'Cookbook path(s) to check.'},
+        { :short => "B", :long => "cookbook-path PATH",
+          :description => "Cookbook path(s) to check." },
 
-        {:short => 'C', :long => '[no-]context',
-         :description => 'Show lines matched against rather than the default summary.'},
+        { :short => "C", :long => "[no-]context",
+          :description => "Show lines matched against rather than the default summary." },
 
-        {:short => 'E', :long => 'environment-path PATH',
-         :description => 'Environment path(s) to check.'},
+        { :short => "E", :long => "environment-path PATH",
+          :description => "Environment path(s) to check." },
 
-        {:short => 'I', :long => 'include PATH',
-         :description => 'Additional rule file path(s) to load.'},
+        { :short => "I", :long => "include PATH",
+          :description => "Additional rule file path(s) to load." },
 
-        {:short => 'R', :long => 'role-path PATH',
-         :description => 'Role path(s) to check.'},
+        { :short => "R", :long => "role-path PATH",
+          :description => "Role path(s) to check." },
 
-        {:short => 'S', :long => 'search-grammar PATH',
-         :description => 'Specify grammar to use when validating search syntax.'},
+        { :short => "S", :long => "search-grammar PATH",
+          :description => "Specify grammar to use when validating search syntax." },
 
-        {:short => 'V', :long => 'version',
-         :description => 'Display the foodcritic version.'},
+        { :short => "V", :long => "version",
+          :description => "Display the foodcritic version." },
 
-        {:short => 'X', :long => 'exclude PATH',
-         :description => 'Exclude path(s) from being linted.'}
+        { :short => "X", :long => "exclude PATH",
+          :description => "Exclude path(s) from being linted." },
 
       ]
     end
 
     def usage_options_for_diff
       usage_options.map do |o|
-        {:short => o[:short],
-         :long => o[:long].split(' ').first.sub(/^\[no-\]/, '')}
-      end.sort_by{|o| o[:short]}
+        { :short => o[:short],
+          :long => o[:long].split(" ").first.sub(/^\[no-\]/, "") }
+      end.sort_by { |o| o[:short] }
     end
 
   end
@@ -290,12 +290,12 @@ module FoodCritic
     #
     # @param [Array] cmd_args The command line arguments.
     def run_lint(cmd_args)
-      cd '.' do
-        show_context = cmd_args.include?('-C')
+      cd "." do
+        show_context = cmd_args.include?("-C")
         review, @status = FoodCritic::Linter.run(CommandLine.new(cmd_args))
         @review =
           if review.nil? || (review.respond_to?(:warnings) && review.warnings.empty?)
-            ''
+            ""
           elsif show_context
             ContextOutput.new.output(review)
           else
@@ -338,21 +338,21 @@ module FoodCritic
     # @return [Array] Task name and description
     def build_tasks
       all_output.split("\n").map do |task|
-        next unless task.start_with? 'rake'
-        task.split("#").map{|t| t.strip.sub(/^rake /, '')}
+        next unless task.start_with? "rake"
+        task.split("#").map { |t| t.strip.sub(/^rake /, "") }
       end.compact
     end
 
     # List the defined Rake tasks
     def list_available_build_tasks
-      cd 'cookbooks/example'
+      cd "cookbooks/example"
       unset_bundler_env_vars
-      run_simple 'bundle exec rake -T'
+      run_simple "bundle exec rake -T"
     end
 
     # Run a build for a Rakefile that uses the lint rake task
     def run_build
-      cd 'cookbooks/example'
+      cd "cookbooks/example"
       run_simple "bundle exec rake", false
     end
 
@@ -360,10 +360,10 @@ module FoodCritic
     # performance hit and because gems may contain deeply-nested code which
     # will blow the stack on parsing.
     def vendor_gems
-      cd 'cookbooks/example'
+      cd "cookbooks/example"
       unset_bundler_env_vars
-      run_simple 'bundle install --path vendor/bundle'
-      cd '../..'
+      run_simple "bundle install --path vendor/bundle"
+      cd "../.."
     end
 
   end

@@ -15,7 +15,7 @@ module FoodCritic
       end
 
       def add_expr(src, code, indicator)
-        if indicator == '='
+        if indicator == "="
           @expressions << { type: :expression, code: code.strip }
         end
       end

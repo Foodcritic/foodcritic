@@ -51,7 +51,7 @@ module FoodCritic
             action: notification_action(notify),
 
             # The notification timing: `:before`, `:immediate` or `:delayed`.
-            timing: notification_timing(notify)
+            timing: notification_timing(notify),
           }
         )
       end.compact
@@ -80,11 +80,11 @@ module FoodCritic
       # Normally the `resource_name` will be a simple string. However in the
       # case where it has an embedded sub-expression then we will return the
       # AST to the caller to handle.
-      if notify.xpath('descendant::string_embexpr').empty?
+      if notify.xpath("descendant::string_embexpr").empty?
         return nil if resource_name.empty?
       else
         resource_name =
-          notify.xpath('args_add_block/args_add/string_literal')
+          notify.xpath("args_add_block/args_add/string_literal")
       end
       { resource_name: resource_name, resource_type: resource_type }
     end
@@ -93,7 +93,7 @@ module FoodCritic
     # notification.
     def old_style_notification(notify)
       resources = resource_hash_references(notify)
-      resource_type = resources.xpath('symbol[1]/ident/@value').to_s.to_sym
+      resource_type = resources.xpath("symbol[1]/ident/@value").to_s.to_sym
       resource_name = resources.xpath('string_add[1][count(../
         descendant::string_add) = 1]/tstring_content/@value').to_s
       resource_name = resources if resource_name.empty?
@@ -136,7 +136,7 @@ module FoodCritic
     end
 
     def notification_type(notify)
-      notify.xpath('ident/@value[1] | fcall/ident/@value[1]').to_s.to_sym
+      notify.xpath("ident/@value[1] | fcall/ident/@value[1]").to_s.to_sym
     end
 
     def resource_hash_references(ast)

@@ -1,4 +1,4 @@
-require 'pathname'
+require "pathname"
 
 module FoodCritic
   # The DSL methods exposed for defining rules. A minimal example rule:
@@ -58,7 +58,6 @@ module FoodCritic
     # The most frequently used block within a rule. A slight misnomer because
     # `recipe` rule blocks are also evaluated against providers.
     rule_block :recipe
-
 
     rule_block :cookbook
     rule_block :metadata

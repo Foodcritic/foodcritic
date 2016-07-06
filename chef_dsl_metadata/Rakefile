@@ -1,20 +1,20 @@
-require 'appraisal'
-require 'fileutils'
-require 'yajl'
+require "appraisal"
+require "fileutils"
+require "yajl"
 
 task :generate_chef_metadata do
   require_chef
-  chef_dsl_metadata = {:dsl_methods => chef_dsl_methods,
-                       :node_methods => chef_node_methods,
-                       :actions => chef_resource_actions,
-                       :attributes => chef_resource_attributes}
+  chef_dsl_metadata = { :dsl_methods => chef_dsl_methods,
+                        :node_methods => chef_node_methods,
+                        :actions => chef_resource_actions,
+                        :attributes => chef_resource_attributes }
   json = Yajl::Encoder.encode(chef_dsl_metadata, :pretty => true)
-  File.open("chef_#{Chef::VERSION}.json", 'w'){|f| f.write(json)}
+  File.open("chef_#{Chef::VERSION}.json", "w") { |f| f.write(json) }
 end
 
 def require_chef
-  require 'chef'
-  require 'chef/mixin/convert_to_class_name'
+  require "chef"
+  require "chef/mixin/convert_to_class_name"
   include Chef::Mixin::ConvertToClassName
 end
 
@@ -32,14 +32,14 @@ def chef_node_methods
 end
 
 def chef_resource_actions
-  chef_resources do |resource_klazz,resource|
+  chef_resources do |resource_klazz, resource|
     next if [
-        'Chef::Resource::WindowsScript',
-        'Chef::Resource::WindowsPackage',
+        "Chef::Resource::WindowsScript",
+        "Chef::Resource::WindowsPackage",
       ].include?(resource.to_s)
 
-    instance = resource.new('dsl', nil)
-    actions = Array(instance.action).map{|a| a.to_sym}
+    instance = resource.new("dsl", nil)
+    actions = Array(instance.action).map { |a| a.to_sym }
     if instance.respond_to?(:allowed_actions)
       actions += instance.allowed_actions
     end
@@ -48,13 +48,13 @@ def chef_resource_actions
 end
 
 def chef_resource_attributes
-  chef_resources do |resource_klazz,resource|
+  chef_resources do |resource_klazz, resource|
     resource_name = convert_to_snake_case(resource_klazz.to_s)
     attributes = resource.public_instance_methods(true)
 
-    if (!windows?) and has_windows_rights?(::Chef::VERSION) and
-      resource.ancestors.include?(Chef::Mixin::Securable)
-        attributes = add_windows_securable_attributes(resource_name, attributes)
+    if (!windows?) && has_windows_rights?(::Chef::VERSION) &&
+        resource.ancestors.include?(Chef::Mixin::Securable)
+      attributes = add_windows_securable_attributes(resource_name, attributes)
     end
 
     [resource_name, attributes.sort]
@@ -65,12 +65,12 @@ private
 
 def add_windows_securable_attributes(resource_name, attributes)
   atts = [:rights, :deny_rights, :inherits] + attributes
-  atts << :files_rights if resource_name == 'remote_directory'
+  atts << :files_rights if resource_name == "remote_directory"
   atts
 end
 
 def chef_dsl_module
-  if Chef.const_defined?('DSL')
+  if Chef.const_defined?("DSL")
     Chef::DSL::Recipe
   else
     Chef::Mixin::RecipeDefinitionDSLCore
@@ -80,9 +80,9 @@ end
 def chef_resources
   resources = Chef::Resource.constants.sort.map do |resource_klazz|
     resource = Chef::Resource.const_get(resource_klazz)
-    if resource.respond_to?(:public_instance_methods) and
-       resource.ancestors.include?(Chef::Resource) and
-       resource.name != 'Chef::Resource::LWRPBase'
+    if resource.respond_to?(:public_instance_methods) &&
+        resource.ancestors.include?(Chef::Resource) &&
+        resource.name != "Chef::Resource::LWRPBase"
       yield resource_klazz, resource
     end
   end

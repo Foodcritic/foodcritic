@@ -1,4 +1,4 @@
-require_relative '../spec_helper'
+require_relative "../spec_helper"
 
 describe FoodCritic::CommandLine do
   it "is instantiable" do
@@ -15,7 +15,7 @@ describe FoodCritic::CommandLine do
     end
 
     it "returns multiple items for multiple specified directories" do
-      FoodCritic::CommandLine.new(["example", "another_example"]).cookbook_paths.must_equal ["example", "another_example"]
+      FoodCritic::CommandLine.new(%w{example another_example}).cookbook_paths.must_equal %w{example another_example}
     end
 
     it "ignores known arguments" do
@@ -28,11 +28,11 @@ describe FoodCritic::CommandLine do
       FoodCritic::CommandLine.new([]).role_paths.must_be_empty
     end
     it "returns the provided role path" do
-      FoodCritic::CommandLine.new(['-R', 'roles']).role_paths.must_equal(%w{roles})
+      FoodCritic::CommandLine.new(["-R", "roles"]).role_paths.must_equal(%w{roles})
     end
     it "returns the provided role paths when there are multiple" do
-      FoodCritic::CommandLine.new(['-R', 'roles1',
-        '-R', 'roles2']).role_paths.must_equal(%w{roles1 roles2})
+      FoodCritic::CommandLine.new(["-R", "roles1",
+        "-R", "roles2"]).role_paths.must_equal(%w{roles1 roles2})
     end
   end
 
@@ -58,7 +58,7 @@ describe FoodCritic::CommandLine do
     end
 
     it "returns false if any on the specified paths do not exist" do
-      refute FoodCritic::CommandLine.new(["lib", "lib2"]).valid_paths?
+      refute FoodCritic::CommandLine.new(%w{lib lib2}).valid_paths?
     end
   end
 
@@ -68,7 +68,7 @@ describe FoodCritic::CommandLine do
     end
 
     it "returns true if --list is specified" do
-      assert FoodCritic::CommandLine.new(['--list']).list_rules?
+      assert FoodCritic::CommandLine.new(["--list"]).list_rules?
     end
   end
 end

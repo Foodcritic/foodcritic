@@ -1,4 +1,4 @@
-Given 'a cookbook attributes file that declares and refers to a local variable' do
+Given "a cookbook attributes file that declares and refers to a local variable" do
   write_attributes %q{
     master = search(:nodes, 'foo:master')
     default[:foo][:master] = master
@@ -11,21 +11,21 @@ Given /^a cookbook attributes file that refers to an attribute with (.*)$/ do |r
   }
 end
 
-Given 'a cookbook attributes file that sets an attribute to be the result of a library call' do
+Given "a cookbook attributes file that sets an attribute to be the result of a library call" do
   write_attributes %q{
     ::Chef::Node.send(:include, Opscode::OpenSSL::Password)
     default[:admin_password] = secure_password
   }
 end
 
-Given 'a cookbook attributes file with a brace block that takes arguments' do
+Given "a cookbook attributes file with a brace block that takes arguments" do
   write_attributes %q{
     foo = {'foo' => 'bar'}
     foo.each{|k, v| default['waka'][k] = v}
   }
 end
 
-Given 'a cookbook attributes file with a do block that takes arguments' do
+Given "a cookbook attributes file with a do block that takes arguments" do
   write_attributes %q{
     foo = {'foo' => 'bar'}
     foo.each do |k, v|
@@ -34,14 +34,14 @@ Given 'a cookbook attributes file with a do block that takes arguments' do
   }
 end
 
-Given 'a cookbook attributes file that sets an attribute to have line break' do
+Given "a cookbook attributes file that sets an attribute to have line break" do
   write_attributes %q{
     default['foo']['bar']['baz'][
      'bing']['blonk'] = 'stupendous'
   }
 end
 
-Given 'a cookbook attributes file that sets an attribute to have line break and arguments' do
+Given "a cookbook attributes file that sets an attribute to have line break and arguments" do
   write_attributes %q{
     %w{ foo bar }.each do |baz|
       default['foo']["bing_#{baz}"][
@@ -51,7 +51,7 @@ Given 'a cookbook attributes file that sets an attribute to have line break and 
 end
 
 Given /^a cookbook (attributes|recipe) file with assignment (.*)$/ do |type, assignment|
-  if type == 'attributes'
+  if type == "attributes"
     write_attributes assignment
   else
     write_recipe assignment
@@ -117,8 +117,8 @@ Given /^a cookbook recipe that spawns a sub-process with (.*)$/ do |command|
   write_recipe command
 end
 
-Given 'a provider that contains a ruby_block resource that spawns a sub-process with system' do
-  write_provider 'site', %q{
+Given "a provider that contains a ruby_block resource that spawns a sub-process with system" do
+  write_provider "site", %q{
     action :install do
       ruby_block "ruby" do
         block do
@@ -129,7 +129,7 @@ Given 'a provider that contains a ruby_block resource that spawns a sub-process 
   }
 end
 
-Given 'a cookbook recipe with a deploy resource that contains a template resource' do
+Given "a cookbook recipe with a deploy resource that contains a template resource" do
   write_recipe %q{
     deploy '/foo/bar' do
       before_restart do
@@ -147,7 +147,7 @@ Given 'a cookbook recipe with a deploy resource that contains a template resourc
   }
 end
 
-Given 'a cookbook recipe with a resource that notifies where the action is an expression' do
+Given "a cookbook recipe with a resource that notifies where the action is an expression" do
   write_recipe %q{
     notify_action = node['platform_family'] == "mac_os_x" ? :restart : :reload
 
@@ -184,7 +184,7 @@ Given /^a cookbook recipe that refers to (node.*)$/ do |reference|
   }
 end
 
-Given 'a cookbook recipe that refers to an attribute with a bare keyword' do
+Given "a cookbook recipe that refers to an attribute with a bare keyword" do
   write_recipe %q{
     node['myhostname'] = hostname
   }
@@ -198,8 +198,8 @@ Given /^a cookbook recipe that wraps a platform\-specific resource in a (.*) con
   }
 end
 
-Given 'a cookbook provider that declares execute resources varying only in the command in separate actions' do
-  write_provider 'site', %q{
+Given "a cookbook provider that declares execute resources varying only in the command in separate actions" do
+  write_provider "site", %q{
     action :start do
       execute "foo" do
         action :run
@@ -221,8 +221,8 @@ Given 'a cookbook provider that declares execute resources varying only in the c
   }.strip
 end
 
-Given 'a cookbook provider that declares execute resources varying only in the command in the same action' do
-  write_provider 'site', %q{
+Given "a cookbook provider that declares execute resources varying only in the command in the same action" do
+  write_provider "site", %q{
     action :start do
       execute "foo" do
         action :run
@@ -239,10 +239,10 @@ Given 'a cookbook provider that declares execute resources varying only in the c
 end
 
 Given /^a cookbook recipe that attempts to perform a search with (.*)$/ do |search_type|
-  recipe_with_search(search_type.include?('subexpression') ? :with_subexpression : search_type.tr(' ', '_').to_sym)
+  recipe_with_search(search_type.include?("subexpression") ? :with_subexpression : search_type.tr(" ", "_").to_sym)
 end
 
-Given /^a cookbook recipe that declares a resource called ([^ ]+) with the condition (.*)(in|outside) a loop$/ do |name,condition,is_loop|
+Given /^a cookbook recipe that declares a resource called ([^ ]+) with the condition (.*)(in|outside) a loop$/ do |name, condition, is_loop|
   write_recipe %Q{
     #{'%w{rover fido}.each do |pet_name|' if is_loop == 'in'}
       execute #{name} do
@@ -256,7 +256,7 @@ end
 Given /^a cookbook recipe that declares (a resource|multiple resources) nested in a ([a-z_]+) condition with (.*)$/ do |arity, wrapping_condition, condition_attribute|
   blk = "{ File.exists?('/etc/passwd') }"
   str = "'test -f /etc/passwd'"
-  conds = wrapping_condition.split('_')
+  conds = wrapping_condition.split("_")
   write_recipe %Q{
     #{conds.first} node['foo'] == 'bar'
       service "apache" do
@@ -295,7 +295,7 @@ Given /^a cookbook recipe (?:that declares a resource with no conditions at all|
   }
 end
 
-Given 'a cookbook recipe that declares multiple directories with different file modes' do
+Given "a cookbook recipe that declares multiple directories with different file modes" do
   write_recipe %q{
     directory "#{node["nagios"]["dir"]}/dist" do
       owner "nagios"
@@ -317,7 +317,7 @@ Given 'a cookbook recipe that declares multiple directories with different file 
   }
 end
 
-Given 'a cookbook recipe that declares multiple package resources mixed with other resources' do
+Given "a cookbook recipe that declares multiple package resources mixed with other resources" do
   write_recipe %q{
     package "erlang-base" do
       action :install
@@ -344,29 +344,29 @@ Given 'a cookbook recipe that declares multiple package resources mixed with oth
 end
 
 Given /^a cookbook recipe that declares multiple (varying|non-varying) template resources within a block$/ do |vary|
-   do_vary = vary == 'varying'
-   write_recipe %Q{
-     node['apps'].each do |app|
-       template "/etc/#\{app\}.conf" do
-         owner "root"
-         group "root"
-         #{'mode "0600"' if do_vary}
-       end
-       template "/etc/init.d/#\{app\}" do
-         owner "root"
-         group "root"
-         #{'mode "0700"' if do_vary}
-       end
-       template "/home/#\{app\}/foo" do
-         owner "root"
-         group "root"
-         #{'mode "0600"' if do_vary}
-       end
-     end
-   }
+  do_vary = vary == "varying"
+  write_recipe %Q{
+    node['apps'].each do |app|
+      template "/etc/#\{app\}.conf" do
+        owner "root"
+        group "root"
+        #{'mode "0600"' if do_vary}
+      end
+      template "/etc/init.d/#\{app\}" do
+        owner "root"
+        group "root"
+        #{'mode "0700"' if do_vary}
+      end
+      template "/home/#\{app\}/foo" do
+        owner "root"
+        group "root"
+        #{'mode "0600"' if do_vary}
+      end
+    end
+  }
 end
 
-Given 'a cookbook recipe that declares multiple resources varying only in the package name' do
+Given "a cookbook recipe that declares multiple resources varying only in the package name" do
   write_recipe %q{
     package "erlang-base" do
       action :install
@@ -383,7 +383,7 @@ Given 'a cookbook recipe that declares multiple resources varying only in the pa
   }
 end
 
-Given 'a cookbook recipe that declares multiple resources with more variation' do
+Given "a cookbook recipe that declares multiple resources with more variation" do
   write_recipe %q{
     package "erlang-base" do
       action :install
@@ -401,7 +401,7 @@ Given 'a cookbook recipe that declares multiple resources with more variation' d
   }
 end
 
-Given 'a cookbook recipe that declares non contiguous package resources mixed with other resources' do
+Given "a cookbook recipe that declares non contiguous package resources mixed with other resources" do
   write_recipe %q{
     package "erlang-base" do
       action :install
@@ -424,7 +424,7 @@ Given 'a cookbook recipe that declares non contiguous package resources mixed wi
   }
 end
 
-Given 'a cookbook recipe that declares two or fewer resources varying only in the package name' do
+Given "a cookbook recipe that declares two or fewer resources varying only in the package name" do
   write_recipe %q{
     package "erlang-base" do
       action :install
@@ -441,7 +441,7 @@ Given 'a cookbook recipe that has a confusingly named local variable "default"' 
   }
 end
 
-Given 'a cookbook recipe that has a wrapping condition containing a resource with no condition attribute and a Ruby statement' do
+Given "a cookbook recipe that has a wrapping condition containing a resource with no condition attribute and a Ruby statement" do
   write_recipe %q{
     if node['foo'] == 'bar'
       Chef::Log.info "Enabling apache to start at boot"
@@ -452,7 +452,7 @@ Given 'a cookbook recipe that has a wrapping condition containing a resource wit
   }
 end
 
-Given 'a cookbook recipe that has a wrapping condition containing a resource with no condition attribute within a loop' do
+Given "a cookbook recipe that has a wrapping condition containing a resource with no condition attribute within a loop" do
   write_recipe %q{
     unless node['bar'].include? 'something'
       bars.each do |bar|
@@ -465,7 +465,7 @@ Given 'a cookbook recipe that has a wrapping condition containing a resource wit
 end
 
 Given /^a cookbook recipe that includes a local recipe(.*)$/ do |diff_name|
-  cookbook = diff_name.empty? ? 'example' : 'foo'
+  cookbook = diff_name.empty? ? "example" : "foo"
   write_recipe %Q{
     include_recipe '#{cookbook}::server'
   }
@@ -484,17 +484,18 @@ Given /^a cookbook recipe that includes a recipe name from an( embedded)? expres
       include_recipe node['foo']['bar']
     }
   end
+
   write_metadata %q{
     depends "foo"
   }
 end
 
-Given /^a cookbook recipe that includes a(n un| )?declared recipe dependency(?: {0,1})(unscoped)?( with parentheses)?$/ do |undeclared,unscoped, parens|
+Given /^a cookbook recipe that includes a(n un| )?declared recipe dependency(?: {0,1})(unscoped)?( with parentheses)?$/ do |undeclared, unscoped, parens|
   recipe_with_dependency(:is_declared => undeclared.strip.empty?,
                          :is_scoped => unscoped.nil?, :parentheses => parens)
 end
 
-Given 'a cookbook recipe that includes both declared and undeclared recipe dependencies' do
+Given "a cookbook recipe that includes both declared and undeclared recipe dependencies" do
   write_recipe %q{
     include_recipe "foo::default"
     include_recipe "bar::default"
@@ -513,20 +514,20 @@ Given /^a cookbook recipe that includes several declared recipe dependencies - (
 end
 
 Given /a cookbook recipe that (install|upgrade)s (a gem|multiple gems)(.*)$/ do |action, arity, approach|
-  if arity == 'a gem'
+  if arity == "a gem"
     if approach.empty?
       recipe_installs_gem(:simple, action.to_sym)
     else
       recipe_installs_gem(:compile_time, action.to_sym)
     end
-  elsif approach.include? 'array'
+  elsif approach.include? "array"
     recipe_installs_gem(:compile_time_from_array, action.to_sym)
   else
     recipe_installs_gem(:compile_time_from_word_list, action.to_sym)
   end
 end
 
-Given 'a cookbook recipe that refers to a hidden template' do
+Given "a cookbook recipe that refers to a hidden template" do
   write_recipe %q{
     template '/etc/.s3cfg' do
       source '.s3cfg.erb'
@@ -538,7 +539,7 @@ Given 'a cookbook recipe that refers to a hidden template' do
 end
 
 Given /^a cookbook recipe that refers to a (missing |local )?template( in a subdirectory)?$/ do |missing_or_local, sub_dir|
-  sub_dir = sub_dir ? 'sub_dir/' : ''
+  sub_dir = sub_dir ? "sub_dir/" : ""
   write_recipe %Q{
     template "/tmp/config.conf" do
       #{'local true' if missing_or_local == 'local '}
@@ -555,16 +556,16 @@ Given /^a cookbook recipe that refers to a (missing |local )?template( in a subd
   end
 end
 
-Given 'a cookbook recipe that refers to a template without an erb extension' do
+Given "a cookbook recipe that refers to a template without an erb extension" do
   write_recipe %q{
     template '/etc/resolv.conf' do
       source 'resolv.conf'
     end
   }
-  write_file 'cookbooks/example/templates/default/resolv.conf', ''
+  write_file "cookbooks/example/templates/default/resolv.conf", ""
 end
 
-Given 'a cookbook recipe that defines a template where name is a complex expression' do
+Given "a cookbook recipe that defines a template where name is a complex expression" do
   write_recipe %q{
     template ::File.join(new_resource.foo.bar, "str", new_resource.baz) do
       variables({
@@ -572,12 +573,12 @@ Given 'a cookbook recipe that defines a template where name is a complex express
       })
     end
   }
-  write_file 'cookbooks/example/templates/default/barstrbaz.conf.erb', %q{
+  write_file "cookbooks/example/templates/default/barstrbaz.conf.erb", %q{
     <%= @config_var %>
   }
 end
 
-Given 'a cookbook recipe that defines a template where both the name and source are complex expressions' do
+Given "a cookbook recipe that defines a template where both the name and source are complex expressions" do
   write_recipe %q{
     template ::File.join(new_resource.foo.bar, "str", new_resource.baz) do
       source new_resource.foo.template
@@ -586,13 +587,12 @@ Given 'a cookbook recipe that defines a template where both the name and source 
       })
     end
   }
-  write_file 'cookbooks/example/templates/default/barstrbaz.conf.erb', %q{
+  write_file "cookbooks/example/templates/default/barstrbaz.conf.erb", %q{
     <%= @config_var %>
   }
 end
 
-
-Given 'a cookbook recipe that defines a template where name and source are both simple expressions' do
+Given "a cookbook recipe that defines a template where name and source are both simple expressions" do
   write_recipe %q{
     template "/tmp/config-#{foo}.conf" do
       source "config-#{foo}.erb"
@@ -601,7 +601,7 @@ Given 'a cookbook recipe that defines a template where name and source are both 
       })
     end
   }
-  write_file 'cookbooks/example/templates/default/config-foo.conf.erb', %q{
+  write_file "cookbooks/example/templates/default/config-foo.conf.erb", %q{
     <%= @config_var %>
   }
 end
@@ -611,7 +611,7 @@ Given /^a cookbook recipe that (refers to|infers) a template with an expression$
     default['foo']['name'] = 'foo'
   }
   write_recipe case type
-    when 'infers'
+    when "infers"
       %q{
         template "/tmp/config-#{node['foo']['name']}.conf" do
           variables({
@@ -629,12 +629,12 @@ Given /^a cookbook recipe that (refers to|infers) a template with an expression$
         end
       }
   end
-  write_file 'cookbooks/example/templates/default/config-foo.conf.erb', %q{
+  write_file "cookbooks/example/templates/default/config-foo.conf.erb", %q{
     <%= @config_var %>
   }
 end
 
-Given 'a cookbook recipe that uses a template from another cookbook' do
+Given "a cookbook recipe that uses a template from another cookbook" do
   write_recipe %q{
     template "foo" do
       cookbook "othercookbook"
@@ -652,18 +652,18 @@ Given /^a cookbook recipe that uses a(?:n)? (missing )?inferred template$/ do |m
     end
   }
   unless missing
-    write_file 'cookbooks/example/templates/default/config.conf.erb', %q{
+    write_file "cookbooks/example/templates/default/config.conf.erb", %q{
       <%= @config_var %>
     }
   end
 end
 
 Given /^a cookbook recipe that uses execute to (sleep and then )?([^ ]+) a service via (.*)$/ do |sleep, action, method|
-  method = 'service' if method == 'the service command'
-  recipe_controls_service(method.include?('full path') ? :service_full_path : method.gsub(/[^a-z_]/, '_').to_sym, sleep, action)
+  method = "service" if method == "the service command"
+  recipe_controls_service(method.include?("full path") ? :service_full_path : method.gsub(/[^a-z_]/, "_").to_sym, sleep, action)
 end
 
-Given 'a cookbook recipe that uses execute to list a directory' do
+Given "a cookbook recipe that uses execute to list a directory" do
   write_recipe %Q{
     execute "nothing-to-see-here" do
       command "ls"
@@ -672,7 +672,7 @@ Given 'a cookbook recipe that uses execute to list a directory' do
   }
 end
 
-Given 'a cookbook recipe that uses execute with a name attribute to start a service' do
+Given "a cookbook recipe that uses execute with a name attribute to start a service" do
   write_recipe %Q{
     execute "/etc/init.d/foo start" do
       cwd "/tmp"
@@ -700,12 +700,12 @@ end
 Given /^a cookbook recipe with a ([^ ]+) resource with actions (.*)$/ do |resource, actions|
   write_recipe %Q{
     #{resource} "foo" do
-      action [#{actions.split(', ').map{|a| ":#{a}"}.join(", ")}]
+      action [#{actions.split(', ').map { |a| ":#{a}" }.join(", ")}]
     end
   }
 end
 
-Given 'a cookbook recipe with a case condition unrelated to platform' do
+Given "a cookbook recipe with a case condition unrelated to platform" do
   write_recipe %Q{
     case day_of_week
       when "Monday", "Tuesday"
@@ -720,7 +720,7 @@ Given 'a cookbook recipe with a case condition unrelated to platform' do
   }.strip
 end
 
-Given /^a cookbook recipe with a resource that ([^ ]+)(?: )?([^ ]+)?$/ do |type,notification_timing|
+Given /^a cookbook recipe with a resource that ([^ ]+)(?: )?([^ ]+)?$/ do |type, notification_timing|
   write_recipe %Q{
     template "/etc/foo.conf" do
       #{type} :restart, "service[foo]"#{", :#{notification_timing}" if notification_timing}
@@ -730,8 +730,8 @@ end
 
 Given /^a cookbook recipe with a resource that (notifies|subscribes) a ([^ ]+) to ([^ ]+)$/ do |type, resource, action|
   notification = case type
-    when 'notifies' then %Q{notifies :#{action}, "#{resource}[foo]"}
-    when 'subscribes' then %Q{subscribes :#{action}, resources(:#{resource} => "foo")}
+    when "notifies" then %Q{notifies :#{action}, "#{resource}[foo]"}
+    when "subscribes" then %Q{subscribes :#{action}, resources(:#{resource} => "foo")}
   end
   write_recipe %Q{
     template "/etc/apache.conf" do
@@ -740,7 +740,7 @@ Given /^a cookbook recipe with a resource that (notifies|subscribes) a ([^ ]+) t
   }
 end
 
-Given 'a cookbook recipe with a resource that uses the old notification syntax' do
+Given "a cookbook recipe with a resource that uses the old notification syntax" do
   write_recipe %q{
     template "/etc/www/configures-apache.conf" do
       notifies :restart, resources(:service => "apache")
@@ -748,9 +748,9 @@ Given 'a cookbook recipe with a resource that uses the old notification syntax' 
   }
 end
 
-Given /^a cookbook recipe with a '([^']+)' condition for flavours (.*)$/ do |type,flavours|
+Given /^a cookbook recipe with a '([^']+)' condition for flavours (.*)$/ do |type, flavours|
   platforms = %Q{"#{flavours.split(',').join('","')}"}
-  if type == 'case'
+  if type == "case"
     @expected_line = 6
     write_recipe %Q{
       case node[:platform]
@@ -764,7 +764,7 @@ Given /^a cookbook recipe with a '([^']+)' condition for flavours (.*)$/ do |typ
         end
       end
     }.strip
-  elsif type == 'platform?'
+  elsif type == "platform?"
     @expected_line = 1
     write_recipe %Q{
       if platform?(#{platforms})
@@ -774,11 +774,11 @@ Given /^a cookbook recipe with a '([^']+)' condition for flavours (.*)$/ do |typ
       end
     }.strip
   else
-    fail "Unrecognised type: #{type}"
+    raise "Unrecognised type: #{type}"
   end
 end
 
-Given 'a cookbook recipe with a service resource that does not specify an action' do
+Given "a cookbook recipe with a service resource that does not specify an action" do
   write_recipe %q{
     service "foo" do
       start_command "/sbin/service foo start"
@@ -786,7 +786,7 @@ Given 'a cookbook recipe with a service resource that does not specify an action
   }.strip
 end
 
-Given 'a cookbook recipe with a service resource with an action specified via a variable' do
+Given "a cookbook recipe with a service resource with an action specified via a variable" do
   write_recipe %q{
     service "foo" do
       action action
@@ -794,7 +794,7 @@ Given 'a cookbook recipe with a service resource with an action specified via a 
   }.strip
 end
 
-Given 'a cookbook recipe with multiple execute resources where the last uses git' do
+Given "a cookbook recipe with multiple execute resources where the last uses git" do
   write_recipe %q{
     execute "one" do
       command "ls -al"
@@ -808,7 +808,7 @@ Given 'a cookbook recipe with multiple execute resources where the last uses git
   }.strip
 end
 
-Given 'a cookbook template that uses all variables passed' do
+Given "a cookbook template that uses all variables passed" do
   write_recipe %q{
     template "/tmp/config.conf" do
       source "config.conf.erb"
@@ -817,7 +817,7 @@ Given 'a cookbook template that uses all variables passed' do
       )
     end
   }
-  write_file 'cookbooks/example/templates/default/config.conf.erb', %q{
+  write_file "cookbooks/example/templates/default/config.conf.erb", %q{
     <%= @config_var %>
   }
 end
@@ -835,7 +835,7 @@ Given /^a cookbook that passes variables (.*) to a template with extension (.*)$
     template "/tmp/config.conf" do
       source "config#{ext}"
       variables(
-        :#{vars.split(',').map{|v| "#{v} => node[:#{v}]"}.join(",\n:")}
+        :#{vars.split(',').map { |v| "#{v} => node[:#{v}]" }.join(",\n:")}
       )
     end
   }
@@ -845,7 +845,7 @@ Given /^a cookbook that passes variables (.*) to an inferred template$/ do |vars
   write_recipe %Q{
     template "/tmp/config.conf" do
       variables(
-        :#{vars.split(',').map{|v| "#{v} => node[:#{v}]"}.join(",\n:")}
+        :#{vars.split(',').map { |v| "#{v} => node[:#{v}]" }.join(",\n:")}
       )
     end
   }
@@ -855,7 +855,7 @@ Given /^a cookbook that contains a (short|long) ruby block$/ do |length|
   recipe_with_ruby_block(length.to_sym)
 end
 
-Given 'a cookbook that contains a definition' do
+Given "a cookbook that contains a definition" do
   write_definition("apache_site", %q{
     define :apache_site, :enable => true do
       log "I am a definition"
@@ -867,14 +867,14 @@ Given 'a cookbook that contains a definition' do
 end
 
 Given /^a cookbook that contains a LWRP (?:with a single notification|that uses the current notification syntax)$/ do
-  cookbook_with_lwrp({:notifies => :does_notify})
+  cookbook_with_lwrp({ :notifies => :does_notify })
 end
 
-Given 'a cookbook that contains a LWRP with a single notification without parentheses' do
-  cookbook_with_lwrp({:notifies => :does_notify_without_parens})
+Given "a cookbook that contains a LWRP with a single notification without parentheses" do
+  cookbook_with_lwrp({ :notifies => :does_notify_without_parens })
 end
 
-Given /^a cookbook that contains a LWRP that declares a resource called ([^ ]+) with the condition (.*)$/ do |name,condition|
+Given /^a cookbook that contains a LWRP that declares a resource called ([^ ]+) with the condition (.*)$/ do |name, condition|
   write_resource("site", %q{
     actions :create
     attribute :name, :name_attribute => true
@@ -906,14 +906,14 @@ Given /^a cookbook that contains a LWRP that uses converge_by - (brace|do) block
     actions :create
     attribute :name, :kind_of => String, :name_attribute => true
   })
-  if block_type == 'brace'
+  if block_type == "brace"
     write_provider("site", %q{
       action :create do
         converge_by("Creating site #{new_resource.name}"){ Site.new(new_resource.name).create }
       end
     })
   else
-    if with_parens == 'with'
+    if with_parens == "with"
       write_provider("site", %q{
         action :create do
           converge_by("Creating site #{new_resource.name}") do
@@ -934,14 +934,14 @@ Given /^a cookbook that contains a LWRP that uses converge_by - (brace|do) block
 end
 
 Given /^a cookbook that contains a LWRP that uses the deprecated notification syntax(.*)$/ do |qualifier|
-  cookbook_with_lwrp({:notifies => qualifier.include?('class variable') ? :class_variable : :deprecated_syntax})
+  cookbook_with_lwrp({ :notifies => qualifier.include?("class variable") ? :class_variable : :deprecated_syntax })
 end
 
-Given 'a cookbook that contains a LWRP that uses use_inline_resources' do
-  cookbook_with_lwrp({:use_inline_resources => true})
+Given "a cookbook that contains a LWRP that uses use_inline_resources" do
+  cookbook_with_lwrp({ :use_inline_resources => true })
 end
 
-Given 'a cookbook that contains a LWRP with multiple notifications' do
+Given "a cookbook that contains a LWRP with multiple notifications" do
   write_resource("site", %q{
     actions :create, :delete
     attribute :name, :kind_of => String, :name_attribute => true
@@ -958,19 +958,19 @@ Given 'a cookbook that contains a LWRP with multiple notifications' do
   })
 end
 
-Given /^a cookbook that contains a LWRP with (no|a) default action( defined via a constructor)?$/ do |has_default_action,no_dsl|
-  default_action = if has_default_action == 'no'
-    :no_default_action
-  elsif no_dsl.nil?
-    :dsl_default_action
-  else
-    :ruby_default_action
+Given /^a cookbook that contains a LWRP with (no|a) default action( defined via a constructor)?$/ do |has_default_action, no_dsl|
+  default_action = if has_default_action == "no"
+                     :no_default_action
+                   elsif no_dsl.nil?
+                     :dsl_default_action
+                   else
+                     :ruby_default_action
   end
-  cookbook_with_lwrp({:default_action => default_action,
-                      :notifies => :does_notify})
+  cookbook_with_lwrp({ :default_action => default_action,
+                       :notifies => :does_notify })
 end
 
-Given 'a cookbook that contains no ruby blocks' do
+Given "a cookbook that contains no ruby blocks" do
   write_recipe %q{
     package "tar" do
       action :install
@@ -983,47 +983,47 @@ Given /^a cookbook that declares ([a-z]+) attributes via symbols$/ do |attribute
 end
 
 Given /^a cookbook that does not contain a definition and has (no|a) definitions directory$/ do |has_dir|
-  create_directory 'cookbooks/example/definitions/' unless has_dir == 'no'
+  create_directory "cookbooks/example/definitions/" unless has_dir == "no"
   write_recipe %q{
     log "A defining characteristic of this cookbook is that it has no definitions"
   }
 end
 
-Given 'a cookbook that does not have a README at all' do
+Given "a cookbook that does not have a README at all" do
   write_recipe %q{
     log "Use the source luke"
   }
 end
 
-Given 'a cookbook that does not have defined metadata' do
+Given "a cookbook that does not have defined metadata" do
   write_recipe %q{
     include_recipe "foo::default"
   }
 end
 
 Given /^a cookbook that downloads a file to (.*)$/ do |path|
-  recipe_downloads_file({'/tmp' => :tmp_dir, '/tmp with an expression' => :tmp_dir_expr,
-    'the Chef file cache' => :chef_file_cache_dir,
-    'a users home directory' => :home_dir}[path])
+  recipe_downloads_file({ "/tmp" => :tmp_dir, "/tmp with an expression" => :tmp_dir_expr,
+                          "the Chef file cache" => :chef_file_cache_dir,
+                          "a users home directory" => :home_dir }[path])
 end
 
 Given /^a cookbook that has ([^ ]+) problems$/ do |problems|
   cookbook_that_matches_rules(
-    problems.split(',').map do |problem|
+    problems.split(",").map do |problem|
       case problem
-        when 'no ' then next
-        when 'style' then 'FC002'
-        when 'correctness' then 'FC006'
+        when "no " then next
+        when "style" then "FC002"
+        when "correctness" then "FC006"
       end
     end
   )
 end
 
-Given 'a cookbook that has a README in markdown format' do
+Given "a cookbook that has a README in markdown format" do
   write_recipe %q{
     log "Hello"
   }
-  write_file 'cookbooks/example/README.md', %q{
+  write_file "cookbooks/example/README.md", %q{
     Description
     ===========
 
@@ -1031,30 +1031,30 @@ Given 'a cookbook that has a README in markdown format' do
   }
 end
 
-Given 'a cookbook that has a README in RDoc format' do
+Given "a cookbook that has a README in RDoc format" do
   write_recipe %q{
     log "Hello"
   }
-  write_file 'cookbooks/example/README.rdoc', %q{
+  write_file "cookbooks/example/README.rdoc", %q{
     = DESCRIPTION:
 
     I used to be the preferred format but not any more (sniff).
   }
 end
 
-Given /^a cookbook that has maintainer metadata set to (.*) and ([^ ]+)$/ do |name,email|
+Given /^a cookbook that has maintainer metadata set to (.*) and ([^ ]+)$/ do |name, email|
   cookbook_with_maintainer(nil_if_unspecified(name), nil_if_unspecified(email))
 end
 
-Given 'a cookbook that has the default boilerplate metadata generated by knife' do
-  cookbook_with_maintainer('YOUR_COMPANY_NAME', 'YOUR_EMAIL')
+Given "a cookbook that has the default boilerplate metadata generated by knife" do
+  cookbook_with_maintainer("YOUR_COMPANY_NAME", "YOUR_EMAIL")
 end
 
 Given /^a cookbook that matches rules (.*)$/ do |rules|
-  cookbook_that_matches_rules(rules.split(','))
+  cookbook_that_matches_rules(rules.split(","))
 end
 
-Given 'a cookbook that matches that rule' do
+Given "a cookbook that matches that rule" do
   write_recipe %q{
     execute "bar" do
       action :run
@@ -1062,32 +1062,32 @@ Given 'a cookbook that matches that rule' do
   }
 end
 
-Given /^a cookbook with a ([^ ]+) that (includes|does not include) a breakpoint$/ do |component,includes|
+Given /^a cookbook with a ([^ ]+) that (includes|does not include) a breakpoint$/ do |component, includes|
   content = case component
-    when 'template' then includes == 'includes' ? "Hello <% require 'pry'; binding.pry %>" : 'Hello World'
-    else includes == 'includes' ? 'binding.pry' : '# No breakpoint'
+    when "template" then includes == "includes" ? "Hello <% require 'pry'; binding.pry %>" : "Hello World"
+    else includes == "includes" ? "binding.pry" : '# No breakpoint'
   end
-  write_recipe ''
+  write_recipe ""
   case component
-    when 'library' then write_library 'foo', content
-    when 'metadata' then write_metadata content
-    when 'provider' then write_provider 'foo', content
-    when 'recipe' then write_recipe content
-    when 'resource' then write_resource 'foo', content
-    when 'template' then write_file 'cookbooks/example/templates/default/foo.erb',
+    when "library" then write_library "foo", content
+    when "metadata" then write_metadata content
+    when "provider" then write_provider "foo", content
+    when "recipe" then write_recipe content
+    when "resource" then write_resource "foo", content
+    when "template" then write_file "cookbooks/example/templates/default/foo.erb",
       content
-    else fail "Unrecognised component: #{component}"
+    else raise "Unrecognised component: #{component}"
   end
 end
 
 Given /^a cookbook with a single recipe for which the first hash (key|value) is an interpolated string$/ do |key_or_value|
   write_recipe case key_or_value
-    when 'key' then %q{{"#{foo}" => 'bar', 'bar' => 'foo'}}
-    when 'value' then %q{{'foo' => "#{bar}", 'bar' => 'foo'}}
+    when "key" then %q{{"#{foo}" => 'bar', 'bar' => 'foo'}}
+    when "value" then %q{{'foo' => "#{bar}", 'bar' => 'foo'}}
   end
 end
 
-Given 'a cookbook with a single recipe that mixes node access types in an interpolated value' do
+Given "a cookbook with a single recipe that mixes node access types in an interpolated value" do
   write_recipe %q{
     execute "interpolated-example" do
       command "#{node['foo'][:bar]}'"
@@ -1095,18 +1095,18 @@ Given 'a cookbook with a single recipe that mixes node access types in an interp
   }
 end
 
-Given 'a cookbook with a single recipe that accesses multiple node attributes via symbols' do
+Given "a cookbook with a single recipe that accesses multiple node attributes via symbols" do
   write_recipe %q{
     node[:foo] = 'bar'
     node[:testing] = 'bar'
   }
 end
 
-Given 'a cookbook with a single recipe that accesses nested node attributes via symbols' do
+Given "a cookbook with a single recipe that accesses nested node attributes via symbols" do
   write_recipe %q{node[:foo][:foo2] = 'bar'}
 end
 
-Given 'a cookbook with a single recipe that reads node attributes via symbols and quoted_symbols' do
+Given "a cookbook with a single recipe that reads node attributes via symbols and quoted_symbols" do
   write_recipe %q{default[:foo][:'bar-baz']}
 end
 
@@ -1119,8 +1119,8 @@ Given /^a cookbook with a single recipe that triggers FC019 with comment (.*)$/ 
   }.strip
 end
 
-Given 'a cookbook with a single recipe that calls a patched node method' do
-  write_library 'search', %q{
+Given "a cookbook with a single recipe that calls a patched node method" do
+  write_library "search", %q{
     class Chef
       class Node
         def in_tier?(*tier)
@@ -1144,7 +1144,7 @@ Given /^a cookbook with a single recipe that explicitly calls a node method( wit
   }
 end
 
-Given 'a cookbook with a single recipe that passes node attributes accessed via symbols to a template' do
+Given "a cookbook with a single recipe that passes node attributes accessed via symbols to a template" do
   write_recipe %q{
     template "/etc/foo" do
       source "foo.erb"
@@ -1156,7 +1156,7 @@ Given 'a cookbook with a single recipe that passes node attributes accessed via 
   }.strip
 end
 
-Given 'a cookbook with a single recipe that uses a hash value to access a node attribute' do
+Given "a cookbook with a single recipe that uses a hash value to access a node attribute" do
   write_recipe %q{
     some_hash = {
       :key => "value"
@@ -1167,41 +1167,41 @@ Given 'a cookbook with a single recipe that uses a hash value to access a node a
   }.strip
 end
 
-Given /a(nother)? cookbook with a single recipe that (reads|updates|ignores)(nested)? node attributes via ([a-z,]*)(?:(?: and calls node\.)?([a-z_?]+)?| with (.*)?)(?: only)?$/ do |more_than_one,op,nested,types,method,expr|
-  cookbook_name = more_than_one.nil? ? 'example' : 'another_example'
+Given /a(nother)? cookbook with a single recipe that (reads|updates|ignores)(nested)? node attributes via ([a-z,]*)(?:(?: and calls node\.)?([a-z_?]+)?| with (.*)?)(?: only)?$/ do |more_than_one, op, nested, types, method, expr|
+  cookbook_name = more_than_one.nil? ? "example" : "another_example"
 
-  access = nested.nil? ? {:strings => "['foo']", :symbols => '[:foo]', :vivified => '.foo'} :
-           {:strings => "['bar']['baz']", :symbols => '[:fee][:fi][:fo][:fum]', :vivified => '.bar.baz'}
+  access = nested.nil? ? { :strings => "['foo']", :symbols => "[:foo]", :vivified => ".foo" } :
+           { :strings => "['bar']['baz']", :symbols => "[:fee][:fi][:fo][:fum]", :vivified => ".bar.baz" }
 
   recipe_content =
-      (if types == 'none'
-        "log 'hello world'"
-      elsif op == 'reads'
-        types.split(',').map{|type| "log node#{access[type.to_sym]}"}.join("\n")
-      else
-        types.split(',').map{|type| "node#{access[type.to_sym]} = 'foo'"}.join("\n")
+      (if types == "none"
+         "log 'hello world'"
+       elsif op == "reads"
+         types.split(",").map { |type| "log node#{access[type.to_sym]}" }.join("\n")
+       else
+         types.split(",").map { |type| "node#{access[type.to_sym]} = 'foo'" }.join("\n")
       end)
 
   recipe_content += "\n#{expr}"
 
   unless method.nil?
-    recipe_content += {:platform? => "node.platform?('redhat')",
-      :run_list => "log 'hello' if node.run_list.roles.include?(node[:foo][:bar])",
-      :run_state => "node.run_state[:reboot_requested] = true",
-      :set => "node.set['foo']['bar']['baz'] = 'secret'"}[method.to_sym]
+    recipe_content += { :platform? => "node.platform?('redhat')",
+                        :run_list => "log 'hello' if node.run_list.roles.include?(node[:foo][:bar])",
+                        :run_state => "node.run_state[:reboot_requested] = true",
+                        :set => "node.set['foo']['bar']['baz'] = 'secret'" }[method.to_sym]
   end
 
   write_recipe(recipe_content, cookbook_name)
 
 end
 
-Given 'a cookbook with a single recipe that searches based on a node attribute accessed via strings' do
+Given "a cookbook with a single recipe that searches based on a node attribute accessed via strings" do
   write_recipe %q{
     remote = search(:node, "name:#{node['drbd']['remote_host']}")[0]
   }.strip
 end
 
-Given 'a cookbook with a single recipe which accesses node attributes with symbols on lines 2 and 10' do
+Given "a cookbook with a single recipe which accesses node attributes with symbols on lines 2 and 10" do
   write_recipe %q{
     # Here we access the node attributes via a symbol
     foo = node[:foo]
@@ -1216,20 +1216,20 @@ Given 'a cookbook with a single recipe which accesses node attributes with symbo
   }
 end
 
-Given 'a cookbook with a single recipe that assigns node attributes accessed via symbols to a local variable' do
+Given "a cookbook with a single recipe that assigns node attributes accessed via symbols to a local variable" do
   write_recipe %q{baz = node[:foo]}
 end
 
 Given /^a cookbook with a single recipe that creates a directory resource with (.*)$/ do |path_type|
-  recipe_with_dir_path({'an interpolated name' => :interpolated_symbol,
-                        'an interpolated name from a string' => :interpolated_string,
-                        'a string literal' => :string_literal,
-                        'a compound expression' => :compound_symbols,
-                        'an interpolated variable and a literal' => :interpolated_symbol_and_literal,
-                        'a literal and interpolated variable' => :literal_and_interpolated_symbol}[path_type])
+  recipe_with_dir_path({ "an interpolated name" => :interpolated_symbol,
+                         "an interpolated name from a string" => :interpolated_string,
+                         "a string literal" => :string_literal,
+                         "a compound expression" => :compound_symbols,
+                         "an interpolated variable and a literal" => :interpolated_symbol_and_literal,
+                         "a literal and interpolated variable" => :literal_and_interpolated_symbol }[path_type])
 end
 
-Given 'a cookbook with a single recipe that logs an interpolated string heredoc' do
+Given "a cookbook with a single recipe that logs an interpolated string heredoc" do
   write_recipe %q(
     Chef::Log.warn <<-LOG
       Warning stuff has gone wrong: #{stuff}
@@ -1237,7 +1237,7 @@ Given 'a cookbook with a single recipe that logs an interpolated string heredoc'
   )
 end
 
-Given 'a cookbook with a single recipe that searches but checks first (alternation) to see if this is server' do
+Given "a cookbook with a single recipe that searches but checks first (alternation) to see if this is server" do
   write_recipe %q{
     if Chef::Config[:solo] || we_dont_want_to_use_search
       # set up stuff from attributes
@@ -1258,7 +1258,7 @@ Given /^a cookbook with a single recipe that searches but checks first( \(string
   }
 end
 
-Given 'a cookbook with a single recipe that searches but checks first (ternary) to see if this is server' do
+Given "a cookbook with a single recipe that searches but checks first (ternary) to see if this is server" do
   write_recipe %Q{
     required_node = Chef::Config[:solo] ? node : search(:node, query).first
   }
@@ -1285,7 +1285,7 @@ Given /^a cookbook with a single recipe that searches but checks first \(method\
 end
 
 Given /^a cookbook with a single recipe that searches but returns first \((oneline|multiline)\) if search is not supported$/ do |format|
-  if format == 'oneline'
+  if format == "oneline"
     write_recipe %q{
       return Chef::Log.warn("This recipe uses search. Chef Solo does not support search.") if Chef::Config[:solo]
       nodes = search(:node, "hostname:[* TO *] AND chef_environment:#{node.chef_environment}")
@@ -1300,11 +1300,11 @@ Given /^a cookbook with a single recipe that searches but returns first \((oneli
   end
 end
 
-Given 'a cookbook with a single recipe that searches without checking if this is server' do
+Given "a cookbook with a single recipe that searches without checking if this is server" do
   write_recipe %q{nodes = search(:node, "hostname:[* TO *] AND chef_environment:#{node.chef_environment}")}
 end
 
-Given 'a cookbook with five recipes' do
+Given "a cookbook with five recipes" do
 
 end
 
@@ -1331,11 +1331,11 @@ Given /^a cookbook with metadata that (includes|does not include) a maintainer e
   }
 end
 
-Given 'a cookbook with metadata that includes a maintainer expression' do
+Given "a cookbook with metadata that includes a maintainer expression" do
   write_metadata "maintainer an(expression)"
 end
 
-Given 'a cookbook with metadata that includes a maintainer email expression' do
+Given "a cookbook with metadata that includes a maintainer email expression" do
   write_metadata "maintainer_email an(expression)"
 end
 
@@ -1357,23 +1357,23 @@ Given /^a directory that contains a role file ([^ ]+) in (json|ruby) that define
   role(:role_name => %Q{"#{role_name}"}, :file_name => file_name, :format => format.to_sym)
 end
 
-Given 'a directory that contains a ruby role that declares the role name more than once' do
-  role(:role_name => ['"webserver"', '"apache"'], :file_name => 'webserver.rb')
+Given "a directory that contains a ruby role that declares the role name more than once" do
+  role(:role_name => ['"webserver"', '"apache"'], :file_name => "webserver.rb")
 end
 
-Given 'a directory that contains a ruby role with an expression as its name' do
-  role(:role_name => '"#{foo}#{bar}"', :file_name => 'webserver.rb')
+Given "a directory that contains a ruby role with an expression as its name" do
+  role(:role_name => '"#{foo}#{bar}"', :file_name => "webserver.rb")
 end
 
 Given /^a directory that contains an environment file (.*) in ruby that defines environment name (.*)$/ do |file_name, env_name|
-  environment(:environment_name => %Q{"#{env_name}"}, :file_name => 'production.rb')
+  environment(:environment_name => %Q{"#{env_name}"}, :file_name => "production.rb")
 end
 
-Given /^a ([a-z_]+) resource declared with the mode ([^\s]+)(?: with comment (.*)?)?$/ do |resource,mode,comment|
+Given /^a ([a-z_]+) resource declared with the mode ([^\s]+)(?: with comment (.*)?)?$/ do |resource, mode, comment|
   recipe_resource_with_mode(resource, mode, comment)
 end
 
-Given 'a file resource declared without a mode' do
+Given "a file resource declared without a mode" do
   write_recipe %q{
     file "/tmp/something" do
       action :delete
@@ -1387,8 +1387,8 @@ end
 
 Given(/^a LWRP with an action :create that notifies with (converge_by|updated_by_last_action) and another :delete that does not notify$/) do |notify_type|
   cookbook_with_lwrp_actions([
-    {:name => :create, :notify_type => notify_type.to_sym},
-    {:name => :delete, :notify_type => :none}
+    { :name => :create, :notify_type => notify_type.to_sym },
+    { :name => :delete, :notify_type => :none },
   ])
 end
 
@@ -1396,25 +1396,25 @@ Given /^(?:a roles|an environments) directory$/ do
 
 end
 
-Given /^a Rakefile that defines (no lint task|a lint task with no block|a lint task with an empty block|a lint task with a block setting options to)(.*)?$/ do |task,options|
+Given /^a Rakefile that defines (no lint task|a lint task with no block|a lint task with an empty block|a lint task with a block setting options to)(.*)?$/ do |task, options|
   rakefile(
     case task
       when /no block/ then :no_block
       when /empty block/ then :empty_block
       when /a block/ then :block
     end,
-  options.strip.empty? ? {} : {:options => options.strip})
+  options.strip.empty? ? {} : { :options => options.strip })
 end
 
 Given /^a Rakefile that defines a lint task specifying files to lint as (.*)$/ do |files|
   rakefile(:block, :files => files)
 end
 
-Given 'a Rakefile that defines a lint task specifying a different name' do
-  rakefile(:block, :name => 'lint')
+Given "a Rakefile that defines a lint task specifying a different name" do
+  rakefile(:block, :name => "lint")
 end
 
-Given 'a recipe that contains a ruby block without a block attribute' do
+Given "a recipe that contains a ruby block without a block attribute" do
   write_recipe %q{
     ruby_block "missing block" do
       puts "Missing a block attribute"
@@ -1422,15 +1422,15 @@ Given 'a recipe that contains a ruby block without a block attribute' do
   }
 end
 
-Given 'a recipe that contains both long and short ruby blocks' do
+Given "a recipe that contains both long and short ruby blocks" do
   recipe_with_ruby_block(:both)
 end
 
-Given /^a recipe that declares a ([^ ]+) resource with these attributes: (.*)$/ do |type,attributes|
-  recipe_with_resource(type, attributes.split(','))
+Given /^a recipe that declares a ([^ ]+) resource with these attributes: (.*)$/ do |type, attributes|
+  recipe_with_resource(type, attributes.split(","))
 end
 
-Given 'a recipe that declares a resource with an attribute value set to the result of a method call' do
+Given "a recipe that declares a resource with an attribute value set to the result of a method call" do
   write_recipe %q{
     cron "run a command at a random minute" do
       user "root"
@@ -1440,13 +1440,13 @@ Given 'a recipe that declares a resource with an attribute value set to the resu
   }
 end
 
-Given 'a recipe that declares a resource with only a name attribute' do
+Given "a recipe that declares a resource with only a name attribute" do
   write_recipe %q{
     package 'foo'
   }
 end
 
-Given 'a recipe that declares a resource with recognised attributes and a conditional execution ruby block' do
+Given "a recipe that declares a resource with recognised attributes and a conditional execution ruby block" do
   write_recipe %q{
     file "/tmp/something" do
       owner "root"
@@ -1461,7 +1461,7 @@ Given 'a recipe that declares a resource with recognised attributes and a condit
   }
 end
 
-Given 'a recipe that declares a resource with recognised attributes and a nested block' do
+Given "a recipe that declares a resource with recognised attributes and a nested block" do
   write_recipe %q{
     deploy_revision "foo" do
       revision "HEAD"
@@ -1478,7 +1478,7 @@ Given 'a recipe that declares a resource with recognised attributes and a nested
   }
 end
 
-Given 'a recipe that declares a resource with standard attributes' do
+Given "a recipe that declares a resource with standard attributes" do
   write_recipe %q{
     file "/tmp/something" do
       owner "root"
@@ -1489,7 +1489,7 @@ Given 'a recipe that declares a resource with standard attributes' do
   }
 end
 
-Given 'a recipe that declares a user-defined resource' do
+Given "a recipe that declares a user-defined resource" do
   write_recipe %q{
     apple "golden-delicious" do
       colour "yellow"
@@ -1498,7 +1498,7 @@ Given 'a recipe that declares a user-defined resource' do
   }
 end
 
-Given 'a recipe that declares multiple resources of the same type of which one has a bad attribute' do
+Given "a recipe that declares multiple resources of the same type of which one has a bad attribute" do
   write_recipe %q{
     file "/tmp/something" do
       owner "root"
@@ -1518,7 +1518,7 @@ Given 'a recipe that declares multiple resources of the same type of which one h
   }
 end
 
-Given 'a resource declared with a guard within a loop with multiple block arguments' do
+Given "a resource declared with a guard within a loop with multiple block arguments" do
   write_recipe %q{
     {
     'foo' => 'bar',
@@ -1532,7 +1532,7 @@ Given 'a resource declared with a guard within a loop with multiple block argume
   }
 end
 
-Given 'a resource that declares a guard containing a block' do
+Given "a resource that declares a guard containing a block" do
   write_recipe %q{
     template '/etc/foo' do
       not_if do
@@ -1551,8 +1551,7 @@ Given 'a resource that declares a guard containing a block' do
   }
 end
 
-
-Given 'a resource declared within a definition' do
+Given "a resource declared within a definition" do
   write_recipe %q{
     define :toto, {
     } do
@@ -1572,7 +1571,7 @@ Given /^a rule that (declares|does not declare) a version constraint(?: of ([^ ]
   else
     from_version = case constraint
       when /not/ then nil
-      else '0.10.6'
+      else "0.10.6"
     end
     rule_with_version_constraint(from_version, nil)
   end
@@ -1587,13 +1586,13 @@ Given /^a template that includes a partial( that includes the original template 
       })
     end
   }
-  write_file 'cookbooks/example/templates/default/a.erb', '<%= render "b.erb" %>'
+  write_file "cookbooks/example/templates/default/a.erb", '<%= render "b.erb" %>'
   content = if loops
-    '<%= render "a.erb" %>'
-  else
-    '<%= @config_var %>'
+              '<%= render "a.erb" %>'
+            else
+              "<%= @config_var %>"
   end
-  write_file 'cookbooks/example/templates/default/b.erb', content
+  write_file "cookbooks/example/templates/default/b.erb", content
 end
 
 Given /^a template that includes a (missing )?partial with a relative subdirectory path$/ do |missing|
@@ -1605,19 +1604,19 @@ Given /^a template that includes a (missing )?partial with a relative subdirecto
       })
     end
   }
-  write_file 'cookbooks/example/templates/default/a.erb', '<%= render "partials/b.erb" %>'
+  write_file "cookbooks/example/templates/default/a.erb", '<%= render "partials/b.erb" %>'
   unless missing
-    write_file 'cookbooks/example/templates/default/partials/b.erb', 'Partial content'
+    write_file "cookbooks/example/templates/default/partials/b.erb", "Partial content"
   end
 end
 
-Given 'access to the man page documentation' do
+Given "access to the man page documentation" do
 
 end
 
 Given /^another cookbook that has (an older )?chef-solo-search installed$/ do |older|
   if older.nil?
-    write_library 'search', %q{
+    write_library "search", %q{
       class Chef
         module Mixin
           module Language
@@ -1629,7 +1628,7 @@ Given /^another cookbook that has (an older )?chef-solo-search installed$/ do |o
       end
     }
   else
-    write_library 'search', %q{
+    write_library "search", %q{
       class Chef
         class Recipe
           def search(bag_name, query=nil, sort=nil, start=0, rows=1000, &block)
@@ -1641,11 +1640,11 @@ Given /^another cookbook that has (an older )?chef-solo-search installed$/ do |o
   end
 end
 
-Given 'I have installed the lint tool' do
+Given "I have installed the lint tool" do
 
 end
 
-Given 'metadata' do
+Given "metadata" do
   write_metadata %q{
     name 'example'
   }.strip
@@ -1656,14 +1655,14 @@ Given /^(?:a cookbook that has|the cookbook has) a Gemfile that includes rake an
 end
 
 Given /^the current stable version of Chef (falls|does not fall) within it$/ do |falls_within|
-  rule_with_version_constraint("98.10", nil) unless falls_within.include?('falls')
+  rule_with_version_constraint("98.10", nil) unless falls_within.include?("falls")
 end
 
-Given 'the gems have been vendored' do
+Given "the gems have been vendored" do
   vendor_gems
 end
 
-Given 'the last role name declared does not match the containing filename' do
+Given "the last role name declared does not match the containing filename" do
 
 end
 
@@ -1673,38 +1672,38 @@ Given /^the inferred template contains the expression (.*)$/ do |expr|
   }
 end
 
-Given /^the template (.+)?contains the expression (.*)$/ do |ext,expr|
+Given /^the template (.+)?contains the expression (.*)$/ do |ext, expr|
   file = if ext
-    "templates/default/config#{ext.strip}"
-  else
-    'templates/default/config.conf.erb'
+           "templates/default/config#{ext.strip}"
+         else
+           "templates/default/config.conf.erb"
   end
   write_file "cookbooks/example/#{file}", %Q{
     <%= #{expr} %>
   }
 end
 
-Given /^the template (.+)?contains partial includes of type (.*) with the expression (.*)$/ do |ext,type,expr|
+Given /^the template (.+)?contains partial includes of type (.*) with the expression (.*)$/ do |ext, type, expr|
   file = if ext
-    "config#{ext.strip}"
-  else
-    'config.conf.erb'
+           "config#{ext.strip}"
+         else
+           "config.conf.erb"
   end
-  if type == 'nested' and expr.split(',').length > 1
-    expressions = expr.split(',')
-    includes = (1..expressions.length).map{|i| "included_template_#{i}.erb"}
+  if type == "nested" && expr.split(",").length > 1
+    expressions = expr.split(",")
+    includes = (1..expressions.length).map { |i| "included_template_#{i}.erb" }
     (Array(file) + includes).zip(includes).map do |parent, child|
       content = if child
-        "<%= render '#{child}' %>"
-      else
-        expressions.map{|e| "<%= #{e} %>"}.join("\n")
+                  "<%= render '#{child}' %>"
+                else
+                  expressions.map { |e| "<%= #{e} %>" }.join("\n")
       end
       [parent, content]
     end.each do |template_name, content|
       write_file "cookbooks/example/templates/default/#{template_name}", content
     end
   else
-    if type == 'no parentheses'
+    if type == "no parentheses"
       include_string = "<%= render 'included_template.erb' %>"
     else
       include_string = "<%= render('included_template.erb') %>"
@@ -1718,11 +1717,11 @@ Given /^the template (.+)?contains partial includes of type (.*) with the expres
   end
 end
 
-Given 'unit tests under a top-level test directory' do
+Given "unit tests under a top-level test directory" do
   minitest_spec_attributes
 end
 
-Given 'a recipe that installs a gem with 5 retries' do
+Given "a recipe that installs a gem with 5 retries" do
   write_recipe %q{
     gem_package "foo" do
       retries 5
@@ -1731,7 +1730,7 @@ Given 'a recipe that installs a gem with 5 retries' do
   }
 end
 
-Given 'a recipe that creates a raid array with mdadm specifying layout' do
+Given "a recipe that creates a raid array with mdadm specifying layout" do
   write_recipe %q{
     mdadm '/dev/md0' do
       devices [ '/dev/sda', '/dev/sdb', '/dev/sdc', '/dev/sdd' ]
@@ -1742,7 +1741,7 @@ Given 'a recipe that creates a raid array with mdadm specifying layout' do
   }
 end
 
-Given 'a recipe that tries to mask a systemd service' do
+Given "a recipe that tries to mask a systemd service" do
   write_recipe %q{
     service 'foo' do
        action :mask
@@ -1763,37 +1762,37 @@ Given /^a recipe that uses include_recipe$/ do
 end
 
 Given /^a ruby environment file that defines an environment with name (.*)$/ do |env_name|
-  environment(:environment_name => %Q{"#{env_name}"}, :file_name => 'production.rb')
+  environment(:environment_name => %Q{"#{env_name}"}, :file_name => "production.rb")
 end
 
 Given /^a ruby environment that triggers FC050 with comment (.*)$/ do |comment|
-  write_file 'environments/production.rb', %Q{
+  write_file "environments/production.rb", %Q{
     name "Production (eu-west-1)" #{comment}
     run_list "recipe[apache2]"
   }.strip
 end
 
 Given /^a ruby role file that defines a role with name (.*)$/ do |role_name|
-  role(:role_name => [%Q{"#{role_name}"}], :file_name => 'webserver.rb')
+  role(:role_name => [%Q{"#{role_name}"}], :file_name => "webserver.rb")
 end
 
 Given /^a ruby role that triggers FC049 with comment (.*)$/ do |comment|
-  write_file 'roles/webserver.rb', %Q{
+  write_file "roles/webserver.rb", %Q{
     name "apache" #{comment}
     run_list "recipe[apache2]"
   }.strip
 end
 
 Given /^a template directory that contains a binary file (.*) that is not valid UTF-8$/ do |filename|
-  template_dir = 'cookbooks/example/templates/default'
-  write_recipe ''
-  write_file "#{template_dir}/innocent_template.erb", '<%= hello %>'
-  File.open("#{expand_path('.')}/#{template_dir}/#{filename}", 'wb'){|f| f.putc(0x93)}
+  template_dir = "cookbooks/example/templates/default"
+  write_recipe ""
+  write_file "#{template_dir}/innocent_template.erb", "<%= hello %>"
+  File.open("#{expand_path('.')}/#{template_dir}/#{filename}", "wb") { |f| f.putc(0x93) }
 end
 
-Given 'each role directory has a role with a name that does not match the containing file name' do
-  role(:dir => 'roles1', :role_name => '"apache"', :file_name => 'webserver.rb')
-  role(:dir => 'roles2', :role_name => '"postgresql"', :file_name => 'database.rb')
+Given "each role directory has a role with a name that does not match the containing file name" do
+  role(:dir => "roles1", :role_name => '"apache"', :file_name => "webserver.rb")
+  role(:dir => "roles2", :role_name => '"postgresql"', :file_name => "database.rb")
 end
 
 Given /^it contains an environment file (.*\.rb) that defines the environment name (.*)$/ do |file_name, env_name|
@@ -1805,45 +1804,45 @@ Given /^it contains a role file ([a-z]+\.rb) that defines the role name (.*)$/ d
 end
 
 Given /^the cookbook metadata declares support for (.*)$/ do |supported_platforms|
-  write_metadata(supported_platforms.split(',').map do |platform|
+  write_metadata(supported_platforms.split(",").map do |platform|
     "supports '#{platform}'"
   end.join("\n"))
 end
 
-Given 'the cookbook metadata declares support with versions specified' do
+Given "the cookbook metadata declares support with versions specified" do
   write_metadata %q{
     supports 'redhat', '>= 6'
     supports 'scientific', '>= 6'
   }.strip
 end
 
-Given 'three of the recipes read node attributes via strings' do
-  (1..3).map{|i| "string_#{i}"}.each do |recipe|
+Given "three of the recipes read node attributes via strings" do
+  (1..3).map { |i| "string_#{i}" }.each do |recipe|
     write_file "cookbooks/example/recipes/#{recipe}.rb", "Chef::Log.warn node['foo']"
   end
 end
 
-Given 'two of the recipes read node attributes via symbols' do
-  (1..2).map{|i| "symbol_#{i}"}.each do |recipe|
+Given "two of the recipes read node attributes via symbols" do
+  (1..2).map { |i| "symbol_#{i}" }.each do |recipe|
     write_file "cookbooks/example/recipes/#{recipe}.rb", "Chef::Log.warn node[:foo]"
   end
 end
 
-Given 'two roles directories' do
+Given "two roles directories" do
 
 end
 
 When /^I check the cookbook specifying ([^ ]+) as the Chef version$/ do |version|
-  options = ['-c', version, 'cookbooks/example']
-  cd '.' do
-    options = ['-I', 'rules/test.rb'] + options if Dir.exist?('rules')
+  options = ["-c", version, "cookbooks/example"]
+  cd "." do
+    options = ["-I", "rules/test.rb"] + options if Dir.exist?("rules")
   end
   run_lint(options)
 end
 
 When /^I check the cookbook( tree)?(?: specifying tags(.*))?(, specifying that context should be shown)?$/ do |whole_tree, tags, context|
-  options = tags.nil? ? [] : tags.split(' ')
-  options += ['-C'] unless context.nil?
+  options = tags.nil? ? [] : tags.split(" ")
+  options += ["-C"] unless context.nil?
   run_lint(options + ["cookbooks/#{whole_tree.nil? ? 'example' : ''}"])
 end
 
@@ -1852,13 +1851,13 @@ Given /^the cookbook directory has a \.foodcritic file specifying tags (.*)$/ do
   run_lint(["cookbooks/example"])
 end
 
-When 'I check both cookbooks specified as arguments' do
+When "I check both cookbooks specified as arguments" do
   run_lint(["cookbooks/another_example", "cookbooks/example"])
 end
 
 When /^I check both cookbooks with the command-line (.*)$/ do |command_line|
-  cmds = command_line.split(' ').map do |c|
-    if c.end_with?('example')
+  cmds = command_line.split(" ").map do |c|
+    if c.end_with?("example")
       "cookbooks/#{c}"
     else
       c
@@ -1867,66 +1866,66 @@ When /^I check both cookbooks with the command-line (.*)$/ do |command_line|
   run_lint(cmds)
 end
 
-When 'I check both roles directories' do
-  run_lint ['-R', 'roles1', '-R', 'roles2']
+When "I check both roles directories" do
+  run_lint ["-R", "roles1", "-R", "roles2"]
 end
 
-When 'I check the cookbooks, role and environment together' do
+When "I check the cookbooks, role and environment together" do
   run_lint([
-    '-B', 'cookbooks/another_example', '-B', 'cookbooks/example',
-    '-E', 'environments',
-    '-R', 'roles'
+    "-B", "cookbooks/another_example", "-B", "cookbooks/example",
+    "-E", "environments",
+    "-R", "roles"
   ])
 end
 
-When 'I check the cookbook without specifying a Chef version' do
-  run_lint(['-I', 'rules/test.rb', 'cookbooks/example'])
+When "I check the cookbook without specifying a Chef version" do
+  run_lint(["-I", "rules/test.rb", "cookbooks/example"])
 end
 
-When 'I check the environment directory' do
-  run_lint ['-E', 'environments']
+When "I check the environment directory" do
+  run_lint ["-E", "environments"]
 end
 
-When 'I check the eu environment file only' do
-  run_lint ['-E', 'environments/production_eu.rb']
+When "I check the eu environment file only" do
+  run_lint ["-E", "environments/production_eu.rb"]
 end
 
 When /^I check the cookbook( without)? excluding the ([^ ]+) directory$/ do |no_exclude, dir|
-  options = no_exclude.nil? ? ['-X', dir] : []
-  run_lint(options + ['cookbooks/example'])
+  options = no_exclude.nil? ? ["-X", dir] : []
+  run_lint(options + ["cookbooks/example"])
 end
 
-When 'I check the recipe' do
+When "I check the recipe" do
   run_lint(["cookbooks/example/recipes/default.rb"])
 end
 
-When 'I compare the man page options against the usage options' do
+When "I compare the man page options against the usage options" do
 
 end
 
-When 'I check the role directory' do
-  run_lint ['-R', 'roles']
+When "I check the role directory" do
+  run_lint ["-R", "roles"]
 end
 
 When /^I check the role directory as a (default|cookbook|role) path$/ do |path_type|
   options = case path_type
-    when 'default' then ['roles']
-    when 'cookbook' then ['-B', 'roles']
-    when 'role' then ['-R', 'roles']
+    when "default" then ["roles"]
+    when "cookbook" then ["-B", "roles"]
+    when "role" then ["-R", "roles"]
   end
   run_lint(options)
 end
 
-When 'I check the webserver role only' do
-  run_lint ['-R', 'roles/webserver.rb']
+When "I check the webserver role only" do
+  run_lint ["-R", "roles/webserver.rb"]
 end
 
-When 'I list the available build tasks' do
+When "I list the available build tasks" do
   list_available_build_tasks
 end
 
 When /^I run it on the command line including a custom rule (file|directory) containing a rule that matches$/ do |path_type|
-  write_file 'rules/custom_rules.rb', %q{
+  write_file "rules/custom_rules.rb", %q{
       rule "BAR001", "Use symbols in preference to strings to access node attributes" do
         tags %w{style attributes}
         recipe do |ast|
@@ -1934,37 +1933,37 @@ When /^I run it on the command line including a custom rule (file|directory) con
         end
       end
   }
-  run_lint(['-I',
-            path_type == 'file' ? 'rules/custom_rules.rb' : 'rules',
-            'cookbooks/example'])
+  run_lint(["-I",
+            path_type == "file" ? "rules/custom_rules.rb" : "rules",
+            "cookbooks/example"])
 end
 
 When /^I run it on the command line including a file which does not contain Ruby code$/ do
-  write_file 'rules/invalid_rules.rb', 'echo "not ruby"'
+  write_file "rules/invalid_rules.rb", 'echo "not ruby"'
   capture_error do
-    run_lint(['-I', 'rules/invalid_rules.rb', 'cookbooks/example'])
+    run_lint(["-I", "rules/invalid_rules.rb", "cookbooks/example"])
   end
 end
 
 When /^I run it on the command line including a missing custom rule file$/ do
   capture_error do
-    run_lint(['-I', 'rules/missing_rules.rb', 'cookbooks/example'])
+    run_lint(["-I", "rules/missing_rules.rb", "cookbooks/example"])
   end
 end
 
-When 'I run it on the command line specifying a cookbook that does not exist' do
-  run_lint(['no-such-cookbook'])
+When "I run it on the command line specifying a cookbook that does not exist" do
+  run_lint(["no-such-cookbook"])
 end
 
 When /^I run it on the command line specifying a( role|n environment) directory that does not exist$/ do |type|
-  if type.include?('role')
-    run_lint(['-R', 'no-such-role-dir'])
+  if type.include?("role")
+    run_lint(["-R", "no-such-role-dir"])
   else
-    run_lint(['-E', 'no-such-environment-dir'])
+    run_lint(["-E", "no-such-environment-dir"])
   end
 end
 
-When 'I run it on the command line with no arguments' do
+When "I run it on the command line with no arguments" do
   run_lint([])
 end
 
@@ -1979,15 +1978,15 @@ When /^I run it on the command line with the (?:unimplemented |)([^ ]+) option( 
   run_lint(options)
 end
 
-When 'I run the build' do
+When "I run the build" do
   run_build
 end
 
-Then 'a warning for the custom rule should be displayed' do
-  expect_output('BAR001: Use symbols in preference to strings to access node attributes: cookbooks/example/recipes/default.rb:1')
+Then "a warning for the custom rule should be displayed" do
+  expect_output("BAR001: Use symbols in preference to strings to access node attributes: cookbooks/example/recipes/default.rb:1")
 end
 
-Then 'all options should be documented in the man page' do
+Then "all options should be documented in the man page" do
   man_page_options.must_equal usage_options_for_diff
 end
 
@@ -1995,81 +1994,81 @@ Then /^an? '([^']+)' error should be displayed$/ do |expected_error|
   last_error.must_include expected_error
 end
 
-Then 'the attribute consistency warning 019 should be shown for both of the recipes that use symbols' do
-  expect_warning 'FC019', :file => 'recipes/symbol_1.rb'
-  expect_warning 'FC019', :file => 'recipes/symbol_2.rb'
+Then "the attribute consistency warning 019 should be shown for both of the recipes that use symbols" do
+  expect_warning "FC019", :file => "recipes/symbol_1.rb"
+  expect_warning "FC019", :file => "recipes/symbol_2.rb"
 end
 
 Then /^the bare attribute keys warning 044 should not be displayed against the (brace|do) block$/ do |block_type|
-  line = block_type == 'brace' ? 2 : 3
-  expect_warning 'FC044', {:expect_warning => false, :line => line, :file_type => :attributes}
+  line = block_type == "brace" ? 2 : 3
+  expect_warning "FC044", { :expect_warning => false, :line => line, :file_type => :attributes }
 end
 
 Then /^the bare attribute keys warning 044 should not be displayed against the (?:local variable|library call)$/ do
-  expect_warning 'FC044', {:expect_warning => false, :line => 2, :file_type => :attributes}
+  expect_warning "FC044", { :expect_warning => false, :line => 2, :file_type => :attributes }
 end
 
 Then /^the bare attribute keys warning 044 should not be displayed against the new line$/ do
-  expect_warning 'FC044', {:expect_warning => false, :line => 3, :file_type => :attributes}
+  expect_warning "FC044", { :expect_warning => false, :line => 3, :file_type => :attributes }
 end
 
-Then 'the execute resource used to run git commands warning 040 should be displayed against the last resource' do
-  expect_warning 'FC040', {:line => 7}
+Then "the execute resource used to run git commands warning 040 should be displayed against the last resource" do
+  expect_warning "FC040", { :line => 7 }
 end
 
 Then /^the LWRP does not notify when updated warning 017 should( not)? be shown against the :([^ ]+) action$/ do |not_shown, action|
-  line = action == 'create' ? 1 : 8
-  expect_warning('FC017', :file_type => :provider, :expect_warning => ! not_shown, :line => line)
+  line = action == "create" ? 1 : 8
+  expect_warning("FC017", :file_type => :provider, :expect_warning => ! not_shown, :line => line)
 end
 
 Then /^the invalid (role|environment) name warning 050 should( not)? be shown$/ do |type, not_shown|
-  file = type == 'role' ? 'roles/webserver.rb' : 'environments/production.rb'
-  expect_warning 'FC050', {:expect_warning => ! not_shown, :file => file}
+  file = type == "role" ? "roles/webserver.rb" : "environments/production.rb"
+  expect_warning "FC050", { :expect_warning => ! not_shown, :file => file }
 end
 
 Then /^the invalid environment name warning 050 should( not)? be shown against the (eu|us) environment$/ do |not_shown, env|
-  expect_warning 'FC050', {:expect_warning => ! not_shown,
-    :file => "environments/production_#{env}.rb", :line => 1}
+  expect_warning "FC050", { :expect_warning => ! not_shown,
+                            :file => "environments/production_#{env}.rb", :line => 1 }
 end
 
-Then 'the prefer mixlib shellout warning 048 should not be displayed against the group resource' do
-  expect_warning 'FC048', {:expect_warning => false, :line => 2}
+Then "the prefer mixlib shellout warning 048 should not be displayed against the group resource" do
+  expect_warning "FC048", { :expect_warning => false, :line => 2 }
 end
 
-Then 'the prefer mixlib shellout warning 048 should not be displayed against the user resource' do
-  expect_warning 'FC048', {:expect_warning => false, :line => 2}
+Then "the prefer mixlib shellout warning 048 should not be displayed against the user resource" do
+  expect_warning "FC048", { :expect_warning => false, :line => 2 }
 end
 
-Then 'the prefer mixlib shellout warning 048 should be displayed against the ruby_block resource' do
-  expect_warning('FC048', :file_type => :provider, :line => 4)
+Then "the prefer mixlib shellout warning 048 should be displayed against the ruby_block resource" do
+  expect_warning("FC048", :file_type => :provider, :line => 4)
 end
 
 Then /^the role name does not match file name warning 049 should( not)? be shown( against the second name)?$/ do |not_shown, second|
-  expect_warning 'FC049', {:expect_warning => ! not_shown,
-                           :file => 'roles/webserver.rb', :line => second ? 2 : 1}
+  expect_warning "FC049", { :expect_warning => ! not_shown,
+                            :file => "roles/webserver.rb", :line => second ? 2 : 1 }
 end
 
-Then 'the role name does not match file name warning 049 should be shown against the files in both directories' do
-  expect_warning 'FC049', {:file => "roles1/webserver.rb", :line => 1}
-  expect_warning 'FC049', {:file => "roles2/database.rb", :line => 1}
+Then "the role name does not match file name warning 049 should be shown against the files in both directories" do
+  expect_warning "FC049", { :file => "roles1/webserver.rb", :line => 1 }
+  expect_warning "FC049", { :file => "roles2/database.rb", :line => 1 }
 end
 
 Then /^the role name does not match file name warning 049 should( not)? be shown against the (webserver|database) role$/ do |not_shown, role|
-  expect_warning 'FC049', {:expect_warning => ! not_shown,
-                           :file => "roles/#{role}.rb", :line => 1}
+  expect_warning "FC049", { :expect_warning => ! not_shown,
+                            :file => "roles/#{role}.rb", :line => 1 }
 end
 
-Then 'the long ruby block warning 014 should be displayed against the long block only' do
-  expect_warning 'FC014', {:expect_warning => false, :line => 1}
-  expect_warning 'FC014', {:expect_warning => true, :line => 11}
+Then "the long ruby block warning 014 should be displayed against the long block only" do
+  expect_warning "FC014", { :expect_warning => false, :line => 1 }
+  expect_warning "FC014", { :expect_warning => true, :line => 11 }
 end
 
 Then /^the lint task will be listed( under the different name)?$/ do |diff_name|
-  expected_name = diff_name ? 'lint' : 'foodcritic'
-  build_tasks.must_include([expected_name, 'Lint Chef cookbooks'])
+  expected_name = diff_name ? "lint" : "foodcritic"
+  build_tasks.must_include([expected_name, "Lint Chef cookbooks"])
 end
 
-Then 'no error should have occurred' do
+Then "no error should have occurred" do
   assert_no_error_occurred
 end
 
@@ -2081,38 +2080,38 @@ Then /^(no )?warnings will be displayed against the tests$/ do |no_display|
   end
 end
 
-Then 'the attribute consistency warning 019 should warn on lines 2 and 10 in that order' do
+Then "the attribute consistency warning 019 should warn on lines 2 and 10 in that order" do
   expected_warnings = [2, 10].map do |line|
     "FC019: Access node attributes in a consistent manner: cookbooks/example/recipes/default.rb:#{line}"
   end
   expect_output(expected_warnings.join("\n"))
 end
 
-Then 'the attribute consistency warning 019 should be displayed for the recipe' do
-  expect_warning('FC019', :line => 2)
+Then "the attribute consistency warning 019 should be displayed for the recipe" do
+  expect_warning("FC019", :line => 2)
 end
 
-Then 'the attribute consistency warning 019 should not be displayed for the attributes' do
-  expect_warning('FC019', :file_type => :attributes, :line => 1, :expect_warning => false)
+Then "the attribute consistency warning 019 should not be displayed for the attributes" do
+  expect_warning("FC019", :file_type => :attributes, :line => 1, :expect_warning => false)
 end
 
-Then /^the warning ([0-9]+ )?should (not )?be (?:displayed|shown)$/ do |warning,should_not|
-  code = warning.nil? ? 'FCTEST001' : "FC#{warning.strip}"
-  expect_warning code, {:expect_warning => should_not.nil?}
+Then /^the warning ([0-9]+ )?should (not )?be (?:displayed|shown)$/ do |warning, should_not|
+  code = warning.nil? ? "FCTEST001" : "FC#{warning.strip}"
+  expect_warning code, { :expect_warning => should_not.nil? }
 end
 
 Then /^the (?:[a-zA-Z \-_]+) warning ([0-9]+) should (not )?be displayed(?: against the (attributes|libraries|definition|metadata|provider|resource|README.md|README.rdoc) file)?( below)?(?: on (?:(any line)|(?:line ([0-9]+))))?$/ do |code, no_display, file, warning_only, any_line, line|
   options = {}
-  options[:expect_warning] = no_display != 'not '
+  options[:expect_warning] = no_display != "not "
   unless file.nil?
-    if file.include?('.')
+    if file.include?(".")
       options[:file] = file
     else
       options[:file_type] = file.to_sym
     end
   end
-  options[:line] = 3 if code == '018' and options[:expect_warning]
-  options[:line] = 2 if ['021', '022'].include?(code)
+  options[:line] = 3 if code == "018" && options[:expect_warning]
+  options[:line] = 2 if %w{021 022}.include?(code)
 
   if any_line
     options[:line] = nil
@@ -2125,44 +2124,44 @@ Then /^the (?:[a-zA-Z \-_]+) warning ([0-9]+) should (not )?be displayed(?: agai
 end
 
 Then /^the attribute consistency warning 019 should be (shown|not shown)$/ do |show_warning|
-  expect_warning('FC019', :line => nil, :expect_warning => show_warning == 'shown')
+  expect_warning("FC019", :line => nil, :expect_warning => show_warning == "shown")
 end
 
 Then /^the boilerplate metadata warning 008 should warn on lines (.*)$/ do |lines_to_warn|
-  if lines_to_warn.strip == ''
-    expect_no_warning('FC008')
+  if lines_to_warn.strip == ""
+    expect_no_warning("FC008")
   else
-    lines_to_warn.split(',').each{|line| expect_warning('FC008', :line => line, :file => 'metadata.rb')}
+    lines_to_warn.split(",").each { |line| expect_warning("FC008", :line => line, :file => "metadata.rb") }
   end
 end
 
 Then /the build status should be (successful|failed)$/ do |build_outcome|
-  build_outcome == 'successful' ? assert_no_error_occurred : assert_error_occurred
+  build_outcome == "successful" ? assert_no_error_occurred : assert_error_occurred
 end
 
 Then /^the build will (succeed|fail) with (?:no )?warnings(.*)$/ do |build_outcome, warnings|
-  assert_build_result(build_outcome == 'succeed', warnings.delete(' ').split(','))
+  assert_build_result(build_outcome == "succeed", warnings.delete(" ").split(","))
 end
 
-Then 'the check for server warning 003 should not be displayed against the condition' do
+Then "the check for server warning 003 should not be displayed against the condition" do
   expect_warning("FC003", :line => nil, :expect_warning => false)
 end
 
 Then /^the check for server warning 003 should not be displayed against the search after the (.*) conditional$/ do |format|
-  line = format == 'oneline' ? 2 : 4
+  line = format == "oneline" ? 2 : 4
   expect_warning("FC003", :line => line, :expect_warning => false)
 end
 
-Then 'the check for server warning 003 should not be displayed given we have checked' do
+Then "the check for server warning 003 should not be displayed given we have checked" do
   expect_warning("FC003", :line => 4, :expect_warning => false)
 end
 
 Then /^the consider adding platform warning 024 should( not)? be shown$/ do |should_not|
-  expect_warning('FC024', :line => should_not.nil? ? @expected_line : nil, :expect_warning => should_not.nil?)
+  expect_warning("FC024", :line => should_not.nil? ? @expected_line : nil, :expect_warning => should_not.nil?)
 end
 
 Then /^the conditional block contains only string warning 026 should be (shown|not shown)$/ do |show_warning|
-  expect_warning('FC026', :line => nil, :expect_warning => show_warning == 'shown')
+  expect_warning("FC026", :line => nil, :expect_warning => show_warning == "shown")
 end
 
 Then /^the current version should( not)? be displayed$/ do |no_display|
@@ -2176,27 +2175,27 @@ end
 
 Then /^the debugger breakpoint warning 030 should be (not )?shown against the (.*)$/ do |should_not, component|
   filename = case component
-    when 'library' then 'libraries/foo.rb'
-    when 'metadata' then 'metadata.rb'
-    when 'provider' then 'providers/foo.rb'
-    when 'recipe' then 'recipes/default.rb'
-    when 'resource' then 'resources/foo.rb'
-    when 'template' then 'templates/default/foo.erb'
+    when "library" then "libraries/foo.rb"
+    when "metadata" then "metadata.rb"
+    when "provider" then "providers/foo.rb"
+    when "recipe" then "recipes/default.rb"
+    when "resource" then "resources/foo.rb"
+    when "template" then "templates/default/foo.erb"
   end
-  expect_warning('FC030', :line => nil, :expect_warning => should_not.nil?, :file => filename)
+  expect_warning("FC030", :line => nil, :expect_warning => should_not.nil?, :file => filename)
 end
 
-Then 'the dodgy resource condition warning 022 should not be shown' do
-  expect_warning('FC022', {:line => nil, :expect_warning => false})
+Then "the dodgy resource condition warning 022 should not be shown" do
+  expect_warning("FC022", { :line => nil, :expect_warning => false })
 end
 
 Then /^the warning (\d+) should be (valid|invalid)$/ do |code, valid|
   code = "FC#{code}"
-  valid == 'valid' ? expect_no_warning(code) : expect_warning(code)
+  valid == "valid" ? expect_no_warning(code) : expect_warning(code)
 end
 
 Then /^the incorrect platform usage warning 028 should be (not )?shown$/ do |should_not|
-  expect_warning('FC028', :line => nil, :expect_warning => should_not.nil?)
+  expect_warning("FC028", :line => nil, :expect_warning => should_not.nil?)
 end
 
 Then /^the line number and line of code that triggered the warning(s)? should be displayed$/ do |multiple|
@@ -2208,66 +2207,66 @@ Then /^the line number and line of code that triggered the warning(s)? should be
   end
 end
 
-Then 'the missing template warning 033 should not be displayed against the template' do
-  expect_warning('FC033', :line => 3, :expect_warning => false)
+Then "the missing template warning 033 should not be displayed against the template" do
+  expect_warning("FC033", :line => 3, :expect_warning => false)
 end
 
 Then /^the no leading cookbook name warning 029 should be (not )?shown$/ do |should_not|
-  expect_warning('FC029', :line => 1, :expect_warning => should_not.nil?, :file => 'metadata.rb')
+  expect_warning("FC029", :line => 1, :expect_warning => should_not.nil?, :file => "metadata.rb")
 end
 
-Then 'the node access warning 001 should be displayed for each match' do
-  expect_warning('FC001', :line => 1)
-  expect_warning('FC001', :line => 2)
+Then "the node access warning 001 should be displayed for each match" do
+  expect_warning("FC001", :line => 1)
+  expect_warning("FC001", :line => 2)
 end
 
-Then 'the node access warning 001 should be displayed against the variables' do
-  expect_warning('FC001', :line => 4)
-  expect_warning('FC001', :line => 5)
+Then "the node access warning 001 should be displayed against the variables" do
+  expect_warning("FC001", :line => 4)
+  expect_warning("FC001", :line => 5)
 end
 
-Then 'the node access warning 001 should be displayed twice for the same line' do
-  expect_warning('FC001', :line => 1, :num_occurrences => 2)
+Then "the node access warning 001 should be displayed twice for the same line" do
+  expect_warning("FC001", :line => 1, :num_occurrences => 2)
 end
 
-Then 'the node access warning 001 should warn on lines 2 and 10 in that order' do
+Then "the node access warning 001 should warn on lines 2 and 10 in that order" do
   expected_warnings = [2, 10].map do |line|
     "FC001: Use strings in preference to symbols to access node attributes: cookbooks/example/recipes/default.rb:#{line}"
   end
   expect_output(expected_warnings.join("\n"))
 end
 
-Then 'the node access warning 001 should be displayed for the recipe' do
-  expect_warning('FC001')
+Then "the node access warning 001 should be displayed for the recipe" do
+  expect_warning("FC001")
 end
 
-Then 'the node access warning 001 should not be displayed for the attributes' do
+Then "the node access warning 001 should not be displayed for the attributes" do
   expect_warning("FC001", :file_type => :attributes, :line => 1, :expect_warning => false)
 end
 
-Then 'the prefer chef_gem to manual install warning 025 should be shown' do
-  expect_warning('FC025', :line => nil)
+Then "the prefer chef_gem to manual install warning 025 should be shown" do
+  expect_warning("FC025", :line => nil)
 end
 
-Then 'the recipe filename should be displayed' do
+Then "the recipe filename should be displayed" do
   expect_output "cookbooks/example/recipes/default.rb"
 end
 
 Then /^the resource sets internal attribute warning 027 should be (not )?shown$/ do |should_not|
-  expect_warning('FC027', :line => nil, :expect_warning => should_not.nil?)
+  expect_warning("FC027", :line => nil, :expect_warning => should_not.nil?)
 end
 
 Then /^the service resource warning 005 should( not)? be visible$/ do |dont_show|
-  expect_warning('FC005', :line => dont_show ? 2 : 7, :expect_warning => ! dont_show)
+  expect_warning("FC005", :line => dont_show ? 2 : 7, :expect_warning => ! dont_show)
 end
 
 Then /^the service resource warning 005 should( not)? be displayed against the first resource in the block$/ do |dont_show|
-  expect_warning('FC005', :line => 2, :expect_warning => ! dont_show)
+  expect_warning("FC005", :line => 2, :expect_warning => ! dont_show)
 end
 
 Then /^the service resource warning 005 should( not)? be shown$/ do |dont_show|
-  expect_warning('FC005', :line => 2, :file_type => :provider,
-                 :expect_warning => ! dont_show)
+  expect_warning("FC005", :line => 2, :file_type => :provider,
+                          :expect_warning => ! dont_show)
 end
 
 Then /^the simple usage text should be displayed along with a (non-)?zero exit code$/ do |non_zero|
@@ -2275,57 +2274,57 @@ Then /^the simple usage text should be displayed along with a (non-)?zero exit c
 end
 
 Then /^the template partials loop indefinitely warning 051 should (not )?be displayed against the templates$/ do |not_shown|
-  expect_warning('FC051', :file => 'templates/default/a.erb', :line => 1,
-                 :expect_warning => ! not_shown)
-  expect_warning('FC051', :file => 'templates/default/b.erb', :line => 1,
-                 :expect_warning => ! not_shown)
+  expect_warning("FC051", :file => "templates/default/a.erb", :line => 1,
+                          :expect_warning => ! not_shown)
+  expect_warning("FC051", :file => "templates/default/b.erb", :line => 1,
+                          :expect_warning => ! not_shown)
 end
 
-Then 'the undeclared dependency warning 007 should be displayed only for the undeclared dependencies' do
-  expect_warning("FC007", :file => 'recipes/default.rb', :line => 1, :expect_warning => false)
-  expect_warning("FC007", :file => 'recipes/default.rb', :line => 2, :expect_warning => false)
-  expect_warning("FC007", :file => 'recipes/default.rb', :line => 6, :expect_warning => true)
+Then "the undeclared dependency warning 007 should be displayed only for the undeclared dependencies" do
+  expect_warning("FC007", :file => "recipes/default.rb", :line => 1, :expect_warning => false)
+  expect_warning("FC007", :file => "recipes/default.rb", :line => 2, :expect_warning => false)
+  expect_warning("FC007", :file => "recipes/default.rb", :line => 6, :expect_warning => true)
 end
 
 Then /^the unused template variables warning 034 should (not )?be displayed against the (?:inferred )?template(.*)?$/ do |not_shown, ext|
   file = if ext.empty?
-    'templates/default/config.conf.erb'
-  else
-    "templates/default/config#{ext.strip}"
+           "templates/default/config.conf.erb"
+         else
+           "templates/default/config#{ext.strip}"
   end
-  expect_warning('FC034', :file => file, :line => 1,
-		 :expect_warning => ! not_shown)
+  expect_warning("FC034", :file => file, :line => 1,
+                          :expect_warning => ! not_shown)
 end
 
 Then /^the unrecognised attribute warning 009 should be (true|false)$/ do |shown|
-  shown == 'true' ? expect_warning('FC009') : expect_no_warning('FC009')
+  shown == "true" ? expect_warning("FC009") : expect_no_warning("FC009")
 end
 
 Then /^the invalid resource action warning 038 should be (true|false)$/ do |shown|
-  shown == 'true' ? expect_warning('FC038') : expect_no_warning('FC038')
+  shown == "true" ? expect_warning("FC038") : expect_no_warning("FC038")
 end
 
-Then 'the unrecognised attribute warning 009 should be displayed against the correct resource' do
-  expect_warning('FC009', :line => 7)
+Then "the unrecognised attribute warning 009 should be displayed against the correct resource" do
+  expect_warning("FC009", :line => 7)
 end
 
-Then 'the usage text should include an option for specifying tags that will fail the build' do
-  expect_usage_option('f', 'epic-fail TAGS',
+Then "the usage text should include an option for specifying tags that will fail the build" do
+  expect_usage_option("f", "epic-fail TAGS",
     "Fail the build based on tags. Use 'any' to fail on all warnings.")
 end
 
 Then /^the warnings shown should be (.*)$/ do |warnings|
-  warnings.split(',').each {|warning| expect_warning(warning, :line => nil)}
+  warnings.split(",").each { |warning| expect_warning(warning, :line => nil) }
 end
 
 When /^I check the cookbook specifying a search grammar that (does not exist|is not in treetop format|is a valid treetop grammar)$/ do |search_grammar|
   case search_grammar
-    when 'is not in treetop format'
-      write_file('search.treetop', 'I am not a valid treetop grammar')
-    when 'is a valid treetop grammar'
-      write_file('search.treetop', IO.read(FoodCritic::Chef::Search.new.chef_search_grammars.first))
+    when "is not in treetop format"
+      write_file("search.treetop", "I am not a valid treetop grammar")
+    when "is a valid treetop grammar"
+      write_file("search.treetop", IO.read(FoodCritic::Chef::Search.new.chef_search_grammars.first))
   end
-  run_lint(['--search-grammar', 'search.treetop', 'cookbooks/example'])
+  run_lint(["--search-grammar", "search.treetop", "cookbooks/example"])
 end
 
 Then /^the check should abort with an error$/ do
@@ -2346,19 +2345,19 @@ Given(/^a cookbook with an? (.*) file with an interpolated name$/) do |file_type
 end
 
 Then /^the metadata missing maintainer warning 055 should be (shown|not shown) against the metadata file$/ do |show_warning|
-  expect_warning('FC055', :file => 'metadata.rb', :expect_warning => show_warning == 'shown')
+  expect_warning("FC055", :file => "metadata.rb", :expect_warning => show_warning == "shown")
 end
 
 Then /^the metadata missing maintainer email warning 056 should be (shown|not shown) against the metadata file$/ do |show_warning|
-  expect_warning('FC056', :file => 'metadata.rb', :expect_warning => show_warning == 'shown')
+  expect_warning("FC056", :file => "metadata.rb", :expect_warning => show_warning == "shown")
 end
 
 Then /^the metadata using suggests warning 052 should be (shown|not shown) against the metadata file$/ do |show_warning|
-  expect_warning('FC052', :file => "metadata.rb", :line => 2, :expect_warning => show_warning == 'shown')
+  expect_warning("FC052", :file => "metadata.rb", :line => 2, :expect_warning => show_warning == "shown")
 end
 
 Then /^the metadata using recommends warning 053 should be (shown|not shown) against the metadata file$/ do |show_warning|
-  expect_warning('FC053', :file => "metadata.rb", :line => 2, :expect_warning => show_warning == 'shown')
+  expect_warning("FC053", :file => "metadata.rb", :line => 2, :expect_warning => show_warning == "shown")
 end
 
 Given /^a cookbook that contains a LWRP provider (with|without) use_inline_resources( and uses def action_create)?$/ do |with_use_inline_resources, uses_def|
@@ -2367,7 +2366,7 @@ Given /^a cookbook that contains a LWRP provider (with|without) use_inline_resou
     attribute :name, :kind_of => String, :name_attribute => true
   })
   provider_file = ""
-  if with_use_inline_resources == 'with'
+  if with_use_inline_resources == "with"
     provider_file += %q{
       use_inline_resources
     }
@@ -2403,7 +2402,7 @@ Given /^a cookbook that contains a library provider (with|without) use_inline_re
       class Site < Chef::Provider::LWRPBase
         provides :site
   }
-  if with_use_inline_resources == 'with'
+  if with_use_inline_resources == "with"
     library_file += %q{
         use_inline_resources
     }
@@ -2423,7 +2422,7 @@ Given /^a cookbook that contains a library provider (with|without) use_inline_re
       end
     end
   }
-  write_library('lib', library_file)
+  write_library("lib", library_file)
 end
 
 Given /^a cookbook that contains a library resource$/ do
@@ -2437,54 +2436,54 @@ Given /^a cookbook that contains a library resource$/ do
       end
     end
   }
-  write_library('lib', library_file)
+  write_library("lib", library_file)
 end
 
-Given 'a cookbook with metadata that includes the version keyword and a valid version string' do
-  write_metadata %Q{version '1.2.3'}
+Given "a cookbook with metadata that includes the version keyword and a valid version string" do
+  write_metadata %q{version '1.2.3'}
 end
 
-Given 'a cookbook with metadata that includes the version keyword and a valid version string with double quotes' do
-  write_metadata %Q{version '1.2.3'}
+Given "a cookbook with metadata that includes the version keyword and a valid version string with double quotes" do
+  write_metadata %q{version '1.2.3'}
 end
 
-Given 'a cookbook with metadata that includes the version keyword and a valid x.y version string' do
-  write_metadata %Q{version '1.2'}
+Given "a cookbook with metadata that includes the version keyword and a valid x.y version string" do
+  write_metadata %q{version '1.2'}
 end
 
-Given 'a cookbook with metadata that does not include a version keyword' do
+Given "a cookbook with metadata that does not include a version keyword" do
   write_metadata %Q{
     name 'test'
   }
 end
 
-Given 'a cookbook with metadata that includes the version keyword and an invalid version string' do
-  write_metadata %Q{version '1.a.3'}
+Given "a cookbook with metadata that includes the version keyword and an invalid version string" do
+  write_metadata %q{version '1.a.3'}
 end
 
-Given 'a cookbook with metadata that includes the version keyword and an invalid single digit version string' do
-  write_metadata %Q{version '1'}
+Given "a cookbook with metadata that includes the version keyword and an invalid single digit version string" do
+  write_metadata %q{version '1'}
 end
 
-Given 'a cookbook with metadata that includes the version keyword and an invalid 4 digit version string' do
-  write_metadata %Q{version '1.2.3.4'}
+Given "a cookbook with metadata that includes the version keyword and an invalid 4 digit version string" do
+  write_metadata %q{version '1.2.3.4'}
 end
 
-Given 'a cookbook with a metadata version that uses string interpolation' do
+Given "a cookbook with a metadata version that uses string interpolation" do
   write_metadata %q{
     patch = 3
     version "1.2.#{patch}"
   }
 end
 
-Given 'a cookbook with a metadata version that is not a string literal' do
+Given "a cookbook with a metadata version that is not a string literal" do
   write_metadata %q{
     v = "1.2.3"
     version v
   }
 end
 
-Given 'a cookbook with a metadata version that is a method call' do
+Given "a cookbook with a metadata version that is a method call" do
   write_metadata %q{
     version magic_version_generator('and its args')
   }
@@ -2499,10 +2498,10 @@ Given(/^a cookbook with metadata that (includes|does not include) a self depende
 end
 
 Then(/^the metadata with self dependency warning 063 should be (shown|not shown) against the metadata file$/) do |show_warning|
-  if show_warning == 'shown'
-    expect_warning('FC063', :file => "metadata.rb", :line => 3, :expect_warning => true)
+  if show_warning == "shown"
+    expect_warning("FC063", :file => "metadata.rb", :line => 3, :expect_warning => true)
   else
-    expect_warning('FC063', :file => "metadata.rb", :expect_warning => false)
+    expect_warning("FC063", :file => "metadata.rb", :expect_warning => false)
   end
 end
 
@@ -2517,7 +2516,7 @@ Given(/^a cookbook with metadata that includes a issues_url expression$/) do
 end
 
 Then(/^the metadata missing issues_url warning 064 should be (shown|not shown) against the metadata file$/) do |show_warning|
-  expect_warning('FC064', :file => 'metadata.rb', :expect_warning => show_warning == 'shown')
+  expect_warning("FC064", :file => "metadata.rb", :expect_warning => show_warning == "shown")
 end
 
 Given(/^a cookbook with metadata that (includes|does not include) a source_url keyword$/) do |includes|
@@ -2527,7 +2526,7 @@ Given(/^a cookbook with metadata that (includes|does not include) a source_url k
 end
 
 Then(/^the metadata missing source_url warning 065 should be (shown|not shown) against the metadata file$/) do |show_warning|
-  expect_warning('FC065', :file => 'metadata.rb', :expect_warning => show_warning == 'shown')
+  expect_warning("FC065", :file => "metadata.rb", :expect_warning => show_warning == "shown")
 end
 
 Given(/^a cookbook with metadata that includes a source_url expression$/) do

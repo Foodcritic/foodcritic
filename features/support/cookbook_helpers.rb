@@ -12,7 +12,7 @@ module FoodCritic
 
     # Create a Gemfile for a cookbook
     def buildable_gemfile
-      write_file 'cookbooks/example/Gemfile', %q{
+      write_file "cookbooks/example/Gemfile", %q{
         source 'https://rubygems.org/'
         gem 'rake'
         gem 'foodcritic', :path => '../../../..'
@@ -45,24 +45,24 @@ module FoodCritic
     #
     # @param [Array] codes The codes to match. Only FC002, FC003 and FC004 are supported.
     def cookbook_that_matches_rules(codes)
-      recipe = ''
+      recipe = ""
       codes.each do |code|
-        if code == 'FC002'
+        if code == "FC002"
           recipe += %q{
             directory "#{node['base_dir']}" do
               action :create
             end
           }
-        elsif code == 'FC003'
+        elsif code == "FC003"
           recipe += %Q{nodes = search(:node, "hostname:[* TO *]")\n}
-        elsif code == 'FC004'
+        elsif code == "FC004"
           recipe += %q{
             execute "stop-jetty" do
               command "/etc/init.d/jetty6 stop"
               action :run
             end
           }
-        elsif code == 'FC006'
+        elsif code == "FC006"
           recipe += %q{
             directory "/var/lib/foo" do
               mode 644
@@ -72,16 +72,16 @@ module FoodCritic
         end
       end
       write_recipe(recipe)
-      write_file('cookbooks/example/recipes/server.rb', '')
-      write_readme('Hello World') # Don't trigger FC011
-      write_metadata(%q(
+      write_file("cookbooks/example/recipes/server.rb", "")
+      write_readme("Hello World") # Don't trigger FC011
+      write_metadata(%q{
         name 'example'
         maintainer 'A Maintainer'
         maintainer_email 'maintainer@example.com'
         version '0.0.1'
         issues_url 'http://github.com/foo/bar_cookbook/issues'
         source_url 'http://github.com/foo/bar_cookbook'
-      ).strip)
+      }.strip)
     end
 
     # Create a cookbook with a LRWP
@@ -91,8 +91,8 @@ module FoodCritic
     # @option lwrp [Symbol] :notifies One of :does_not_notify, :does_notify, :does_notify_without_parens, :deprecated_syntax, :class_variable
     # @option lwrp [Symbol] :use_inline_resources Defaults to false
     def cookbook_with_lwrp(lwrp)
-      lwrp = {:default_action => false, :notifies => :does_not_notify,
-              :use_inline_resources => false}.merge!(lwrp)
+      lwrp = { :default_action => false, :notifies => :does_not_notify,
+               :use_inline_resources => false }.merge!(lwrp)
       ruby_default_action = %q{
         def initialize(*args)
           super
@@ -105,10 +105,10 @@ module FoodCritic
         #{ruby_default_action if lwrp[:default_action] == :ruby_default_action}
         #{'default_action :create' if lwrp[:default_action] == :dsl_default_action}
       })
-      notifications = {:does_notify => 'new_resource.updated_by_last_action(true)',
-                       :does_notify_without_parens => 'new_resource.updated_by_last_action true',
-                       :deprecated_syntax => 'new_resource.updated = true',
-                       :class_variable => '@updated = true'}
+      notifications = { :does_notify => "new_resource.updated_by_last_action(true)",
+                        :does_notify_without_parens => "new_resource.updated_by_last_action true",
+                        :deprecated_syntax => "new_resource.updated = true",
+                        :class_variable => "@updated = true" }
       write_provider("site", %Q{
         #{'use_inline_resources' if lwrp[:use_inline_resources]}
         action :create do
@@ -120,10 +120,10 @@ module FoodCritic
 
     def cookbook_with_lwrp_actions(actions)
       write_resource("site", %Q{
-        actions #{actions.map{|a| a[:name].inspect}.join(', ')}
+        actions #{actions.map { |a| a[:name].inspect }.join(', ')}
         attribute :name, :kind_of => String, :name_attribute => true
       })
-      write_provider("site", actions.map{|a| provider_action(a)}.join("\n"))
+      write_provider("site", actions.map { |a| provider_action(a) }.join("\n"))
     end
 
     # Create an cookbook with the maintainer specified in the metadata
@@ -143,10 +143,10 @@ module FoodCritic
       }
 
       fields = {}
-      fields['maintainer'] = name unless name.nil?
-      fields['maintainer_email'] = email unless email.nil?
+      fields["maintainer"] = name unless name.nil?
+      fields["maintainer_email"] = email unless email.nil?
       write_metadata %Q{
-        #{fields.map{|field,value| %Q{#{field}\t"#{value}"}}.join("\n")}
+        #{fields.map { |field, value| %Q{#{field}\t"#{value}"} }.join("\n")}
         license          "All rights reserved"
         description      "Installs/Configures example"
         long_description IO.read(File.join(File.dirname(__FILE__), 'README.rdoc'))
@@ -160,10 +160,10 @@ module FoodCritic
     # @option options [String] :dir The relative directory to write to
     # @option options [String] :environment_name The name of the environment declared in the file
     # @option options [String] :file_name The containing file relative to the environments directory
-    def environment(options={})
-      options = {:dir => 'environments'}.merge(options)
+    def environment(options = {})
+      options = { :dir => "environments" }.merge(options)
       write_file "#{options[:dir]}/#{options[:file_name]}", %Q{
-        #{Array(options[:environment_name]).map{|r| "name #{r}"}.join("\n")}
+        #{Array(options[:environment_name]).map { |r| "name #{r}" }.join("\n")}
         cookbook "apache2"
       }.strip
     end
@@ -171,7 +171,7 @@ module FoodCritic
     # Create a placeholder minitest spec that would be linted due to its path
     # unless an exclusion is specified.
     def minitest_spec_attributes
-      write_file 'cookbooks/example/test/attributes/default_spec.rb', %q{
+      write_file "cookbooks/example/test/attributes/default_spec.rb", %q{
         describe 'Example::Attributes::Default' do
         end
       }
@@ -209,9 +209,9 @@ module FoodCritic
     # @option options [String] :files Files to process
     # @option options [String] :options The options to set on the rake task
     def rakefile(task, options)
-      rakefile_content = 'task :default => []'
+      rakefile_content = "task :default => []"
       task_def = case task
-        when :no_block then 'FoodCritic::Rake::LintTask.new'
+        when :no_block then "FoodCritic::Rake::LintTask.new"
         else %Q{
           FoodCritic::Rake::LintTask.new do |t|
             #{"t.name = '#{options[:name]}'" if options[:name]}
@@ -227,17 +227,17 @@ module FoodCritic
           #{task_def}
         }
       end
-      write_file 'cookbooks/example/Rakefile', rakefile_content
+      write_file "cookbooks/example/Rakefile", rakefile_content
     end
 
     # Create a recipe that downloads a file
     #
     # @param [Symbol] path_type The type of path, one of: :tmp_dir, :chef_file_cache_dir, :home_dir
     def recipe_downloads_file(path_type)
-      download_path = {:tmp_dir => '/tmp/large-file.tar.gz',
-        :tmp_dir_expr => '/tmp/#{file}',
-        :home_dir => '/home/ernie/large-file.tar.gz',
-        :chef_file_cache_dir => '#{Chef::Config[:file_cache_path]}/large-file.tar.gz'}[path_type]
+      download_path = { :tmp_dir => "/tmp/large-file.tar.gz",
+                        :tmp_dir_expr => '/tmp/#{file}',
+                        :home_dir => "/home/ernie/large-file.tar.gz",
+                        :chef_file_cache_dir => '#{Chef::Config[:file_cache_path]}/large-file.tar.gz' }[path_type]
       write_recipe %Q{
         remote_file "#{download_path}" do
           source "http://www.example.org/large-file.tar.gz"
@@ -286,7 +286,7 @@ module FoodCritic
             end
           }.strip
         else
-          fail "Unrecognised type: #{type}"
+          raise "Unrecognised type: #{type}"
       end
     end
 
@@ -295,8 +295,8 @@ module FoodCritic
     # @param [String] type The type of resource (file, template)
     # @param [String] mode The file mode as a string
     # @param [String] comment Comment that may specify to exclude a match
-    def recipe_resource_with_mode(type, mode, comment='')
-      source_att = type == 'template' ? 'source "foo.erb"' : ''
+    def recipe_resource_with_mode(type, mode, comment = "")
+      source_att = type == "template" ? 'source "foo.erb"' : ""
       write_recipe %Q{
         #{type} "/tmp/something" do #{comment}
           #{source_att}
@@ -314,8 +314,8 @@ module FoodCritic
     # @param [Boolean] do_sleep Whether to prefix the service cmd with a bash sleep
     # @param [Symbol] action The action to take (start, stop, reload, restart)
     def recipe_controls_service(method = :service, do_sleep = false, action = :start)
-      cmds = {:init_d => "/etc/init.d/foo #{action}", :invoke_rc_d => "invoke-rc.d foo #{action}", :upstart => "#{action} foo",
-              :service => "service foo #{action}", :service_full_path => "/sbin/service foo #{action}"}
+      cmds = { :init_d => "/etc/init.d/foo #{action}", :invoke_rc_d => "invoke-rc.d foo #{action}", :upstart => "#{action} foo",
+               :service => "service foo #{action}", :service_full_path => "/sbin/service foo #{action}" }
       write_recipe %Q{
         execute "#{action}-foo-service" do
           command "#{do_sleep ? 'sleep 5; ' : ''}#{cmds[method]}"
@@ -331,13 +331,13 @@ module FoodCritic
     # @option dep [Boolean] :is_scoped True if the include_recipe references a specific recipe or the cookbook
     # @option dep [Boolean] :parentheses True if the include_recipe is called with parentheses
     def recipe_with_dependency(dep)
-      dep = {:is_scoped => true, :is_declared => true,
-             :parentheses => false}.merge!(dep)
+      dep = { :is_scoped => true, :is_declared => true,
+              :parentheses => false }.merge!(dep)
       recipe = "foo#{dep[:is_scoped] ? '::default' : ''}"
       write_recipe(if dep[:parentheses]
-        "include_recipe('#{recipe}')"
-      else
-        "include_recipe '#{recipe}'"
+                     "include_recipe('#{recipe}')"
+                   else
+                     "include_recipe '#{recipe}'"
       end)
       write_metadata %Q{
         version "1.9.0"
@@ -350,9 +350,9 @@ module FoodCritic
     # @param [Symbol] path_expr_type The type of path expression, one of: :compound_symbols, :interpolated_string,
     #   :interpolated_symbol, :interpolated_symbol_and_literal, :literal_and_interpolated_symbol, :string_literal.
     def recipe_with_dir_path(path_expr_type)
-      path = {:compound_symbols => '#{node[:base_dir]}#{node[:sub_dir]}', :interpolated_string => %q{#{node['base_dir']}},
-              :interpolated_symbol => '#{node[:base_dir]}', :interpolated_symbol_and_literal => '#{node[:base_dir]}/sub_dir',
-              :literal_and_interpolated_symbol => 'base_dir/#{node[:sub_dir]}', :string_literal => '/var/lib/foo' }[path_expr_type]
+      path = { :compound_symbols => '#{node[:base_dir]}#{node[:sub_dir]}', :interpolated_string => %q{#{node['base_dir']}},
+               :interpolated_symbol => '#{node[:base_dir]}', :interpolated_symbol_and_literal => '#{node[:base_dir]}/sub_dir',
+               :literal_and_interpolated_symbol => 'base_dir/#{node[:sub_dir]}', :string_literal => "/var/lib/foo" }[path_expr_type]
       write_recipe %Q{
         directory "#{path}" do
           owner "root"
@@ -379,7 +379,7 @@ module FoodCritic
     #
     # @param [Symbol] length A :short or :long block, or :both
     def recipe_with_ruby_block(length)
-      recipe = ''
+      recipe = ""
       if length == :short || length == :both
         recipe << %q{
           ruby_block "subexpressions" do
@@ -429,8 +429,8 @@ module FoodCritic
     #
     # @param [Symbol] type The type of search. One of: :invalid_syntax, :valid_syntax, :with_subexpression.
     def recipe_with_search(type)
-      search = {:invalid_syntax => 'run_list:recipe[foo::bar]', :valid_syntax => 'run_list:recipe\[foo\:\:bar\]',
-                :with_subexpression => %q{roles:#{node['foo']['role']}}}[type]
+      search = { :invalid_syntax => "run_list:recipe[foo::bar]", :valid_syntax => 'run_list:recipe\[foo\:\:bar\]',
+                 :with_subexpression => %q{roles:#{node['foo']['role']}} }[type]
       write_recipe %Q{
         search(:node, "#{search}") do |matching_node|
           puts matching_node.to_s
@@ -444,24 +444,24 @@ module FoodCritic
     # @option options [String] :role_name The name of the role declared in the role file
     # @option options [String] :file_name The containing file relative to the roles directory
     # @option options [Symbol] :format Either :ruby or :json. Default is :ruby
-    def role(options={})
-      options = {:format => :ruby, :dir => 'roles'}.merge(options)
+    def role(options = {})
+      options = { :format => :ruby, :dir => "roles" }.merge(options)
       content = if options[:format] == :json
-        %Q{
-          {
-            "chef_type": "role",
-            "json_class": "Chef::Role",
-            #{Array(options[:role_name]).map{|r| "name: #{r},"}.join("\n")}
-            "run_list": [
-              "recipe[apache2]",
-            ]
-          }
-        }
-      else
-        %Q{
-          #{Array(options[:role_name]).map{|r| "name #{r}"}.join("\n")}
-          run_list "recipe[apache2]"
-        }
+                  %Q{
+                    {
+                      "chef_type": "role",
+                      "json_class": "Chef::Role",
+                      #{Array(options[:role_name]).map { |r| "name: #{r}," }.join("\n")}
+                      "run_list": [
+                        "recipe[apache2]",
+                      ]
+                    }
+                  }
+                else
+                  %Q{
+                    #{Array(options[:role_name]).map { |r| "name #{r}" }.join("\n")}
+                    run_list "recipe[apache2]"
+                  }
       end
       write_file "#{options[:dir]}/#{options[:file_name]}", content.strip
     end
@@ -472,23 +472,23 @@ module FoodCritic
     # @param [String] to_version The to version
     def rule_with_version_constraint(from_version, to_version)
       constraint = if from_version && to_version
-        %Q{
-          applies_to do |version|
-            version >= gem_version("#{from_version}") && version <= gem_version("#{to_version}")
-          end
-        }
-      elsif from_version
-        %Q{
-          applies_to do |version|
-            version >= gem_version("#{from_version}")
-          end
-        }
-      elsif to_version
-        %Q{
-          applies_to do |version|
-            version <= gem_version("#{to_version}")
-          end
-        }
+                     %Q{
+                       applies_to do |version|
+                         version >= gem_version("#{from_version}") && version <= gem_version("#{to_version}")
+                       end
+                     }
+                   elsif from_version
+                     %Q{
+                       applies_to do |version|
+                         version >= gem_version("#{from_version}")
+                       end
+                     }
+                   elsif to_version
+                     %Q{
+                       applies_to do |version|
+                         version <= gem_version("#{to_version}")
+                       end
+                     }
       end
       write_rule %Q{
         rule "FCTEST001", "Test Rule" do
@@ -505,14 +505,14 @@ module FoodCritic
     # @param [String] str The string
     # @return [String] The string or nil if 'unspecified'
     def nil_if_unspecified(str)
-      str == 'unspecified' ? nil : str
+      str == "unspecified" ? nil : str
     end
 
     # Create a README with the provided content.
     #
     # @param [String] content The recipe content.
     # @param [String] cookbook_name Optional name of the cookbook.
-    def write_readme(content, cookbook_name = 'example')
+    def write_readme(content, cookbook_name = "example")
       write_file "cookbooks/#{cookbook_name}/README.md", content.strip
     end
 
@@ -520,7 +520,7 @@ module FoodCritic
     #
     # @param [String] content The recipe content.
     # @param [String] cookbook_name Optional name of the cookbook.
-    def write_recipe(content, cookbook_name = 'example')
+    def write_recipe(content, cookbook_name = "example")
       write_file "cookbooks/#{cookbook_name}/recipes/default.rb", content.strip
     end
 
@@ -535,7 +535,7 @@ module FoodCritic
     #
     # @param [String] content The attributes content.
     def write_attributes(content)
-      write_file 'cookbooks/example/attributes/default.rb', content.strip
+      write_file "cookbooks/example/attributes/default.rb", content.strip
     end
 
     # Create a definition with the provided content.
@@ -558,7 +558,7 @@ module FoodCritic
     #
     # @param [String] content The metadata content.
     def write_metadata(content)
-      write_file 'cookbooks/example/metadata.rb', content.strip
+      write_file "cookbooks/example/metadata.rb", content.strip
     end
 
     # Create a resource with the provided content.

@@ -1,6 +1,6 @@
-require 'optparse'
-require 'ripper'
-require 'set'
+require "optparse"
+require "ripper"
+require "set"
 
 module FoodCritic
   # The main entry point for linting your Chef cookbooks.
@@ -9,7 +9,7 @@ module FoodCritic
 
     # The default version that will be used to determine relevant rules. This
     # can be over-ridden at the command line with the `--chef-version` option.
-    DEFAULT_CHEF_VERSION = '12.11.18'
+    DEFAULT_CHEF_VERSION = "12.11.18"
     attr_reader :chef_version
 
     # Perform a lint check. This method is intended for use by the command-line
@@ -51,7 +51,6 @@ module FoodCritic
       RuleList.new(@rules)
     end
 
-
     # Review the cookbooks at the provided path, identifying potential
     # improvements.
     #
@@ -88,7 +87,7 @@ module FoodCritic
                           cookbook_tags(p[:filename])
                         end
 
-        progress = '.'
+        progress = "."
 
         active_rules(relevant_tags).each do |rule|
           state = {
@@ -96,7 +95,7 @@ module FoodCritic
             file: p[:filename],
             ast: read_ast(p[:filename]),
             rule: rule,
-            last_dir: last_dir
+            last_dir: last_dir,
           }
 
           matches = if p[:path_type] == :cookbook
@@ -107,7 +106,7 @@ module FoodCritic
 
           matches = remove_ignored(matches, state[:rule], state[:file])
 
-          progress = 'x' if matches.any?
+          progress = "x" if matches.any?
 
           # Convert the matches into warnings
           matches.each do |match|
@@ -123,7 +122,7 @@ module FoodCritic
         last_dir = cookbook_dir(p[:filename])
       end
 
-      puts '' if options[:progress]
+      puts "" if options[:progress]
 
       Review.new(paths, warnings)
     end
@@ -137,7 +136,7 @@ module FoodCritic
       end
 
       per_cookbook_rules(state[:last_dir], state[:file]) do
-        if File.basename(state[:file]) == 'metadata.rb'
+        if File.basename(state[:file]) == "metadata.rb"
           cbk_matches += matches(
             state[:rule].metadata, state[:ast], state[:file])
         end
@@ -158,7 +157,7 @@ module FoodCritic
     end
 
     def load_rules!(options)
-      rule_files = [File.join(File.dirname(__FILE__), 'rules.rb')]
+      rule_files = [File.join(File.dirname(__FILE__), "rules.rb")]
       rule_files << options[:include_rules]
       rule_files << rule_files_in_gems if options[:search_gems]
       @rules = RuleDsl.load(rule_files.flatten.compact, chef_version)
@@ -168,7 +167,7 @@ module FoodCritic
 
     def rule_files_in_gems
       Gem::Specification.latest_specs(true).map do |spec|
-        spec.matches_for_glob('foodcritic/rules/**/*.rb')
+        spec.matches_for_glob("foodcritic/rules/**/*.rb")
       end.flatten
     end
 
@@ -176,14 +175,14 @@ module FoodCritic
       matches.reject do |m|
         matched_file = m[:filename] || file
         (line = m[:line]) && File.exist?(matched_file) &&
-           !File.directory?(matched_file) &&
-           ignore_line_match?(File.readlines(matched_file)[line - 1], rule)
+          !File.directory?(matched_file) &&
+          ignore_line_match?(File.readlines(matched_file)[line - 1], rule)
       end
     end
 
     def ignore_line_match?(line, rule)
       ignores = line.to_s[/\s+#\s*(.*)/, 1]
-      if ignores && ignores.include?('~')
+      if ignores && ignores.include?("~")
         !rule.matches_tags?(ignores.split(/[ ,]/))
       else
         false
@@ -220,21 +219,21 @@ module FoodCritic
     def cookbook_dir(file)
       Pathname.new(File.join(File.dirname(file),
                              case File.basename(file)
-                             when 'metadata.rb' then ''
-                             when /\.erb$/ then '../..'
-                             else '..'
+                             when "metadata.rb" then ""
+                             when /\.erb$/ then "../.."
+                             else ".."
                              end)).cleanpath
     end
 
     def dsl_method_for_file(file)
       dir_mapping = {
-        'attributes' => :attributes,
-        'libraries' => :library,
-        'providers' => :provider,
-        'resources' => :resource,
-        'templates' => :template
+        "attributes" => :attributes,
+        "libraries" => :library,
+        "providers" => :provider,
+        "resources" => :resource,
+        "templates" => :template,
       }
-      if file.end_with? '.erb'
+      if file.end_with? ".erb"
         dir_mapping[File.basename(File.dirname(File.dirname(file)))]
       else
         dir_mapping[File.basename(File.dirname(file))]
@@ -250,16 +249,16 @@ module FoodCritic
 
           unless paths[:exclude].empty?
             exclusions = Dir.glob(paths[:exclude].map do |p|
-              File.join(dir, p, '**/**')
+              File.join(dir, p, "**/**")
             end)
           end
 
           if File.directory?(dir)
             glob = if path_type == :cookbook
-                     '{metadata.rb,{attributes,definitions,libraries,'\
-                     'providers,recipes,resources}/*.rb,templates/*/*.erb}'
+                     "{metadata.rb,{attributes,definitions,libraries,"\
+                     "providers,recipes,resources}/*.rb,templates/*/*.erb}"
                    else
-                     '*.rb'
+                     "*.rb"
                    end
 
             (Dir.glob(File.join(dir, glob)) +
@@ -297,21 +296,21 @@ module FoodCritic
 
     def specified_paths!(options)
       paths = Hash[options.map do |key, value|
-        [key, Array(value)] if key.to_s.end_with?('paths')
+        [key, Array(value)] if key.to_s.end_with?("paths")
       end.compact]
 
       unless paths.find { |k, v| k != :exclude_paths && !v.empty? }
-        fail ArgumentError, 'A cookbook path or role path must be specified'
+        raise ArgumentError, "A cookbook path or role path must be specified"
       end
 
       Hash[paths.map do |key, value|
-        [key.to_s.sub(/_paths$/, '').to_sym, value]
+        [key.to_s.sub(/_paths$/, "").to_sym, value]
       end]
     end
 
     def setup_defaults(options)
       { tags: [], fail_tags: [], include_rules: [], exclude_paths: [],
-       cookbook_paths: [], role_paths: [] }.merge(options)
+        cookbook_paths: [], role_paths: [] }.merge(options)
     end
   end
 end

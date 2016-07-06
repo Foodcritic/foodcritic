@@ -1,5 +1,5 @@
-require 'nokogiri'
-require 'rufus-lru'
+require "nokogiri"
+require "rufus-lru"
 
 module FoodCritic
   # Helper methods that form part of the Rules DSL.
@@ -18,17 +18,17 @@ module FoodCritic
       return [] unless ast.respond_to?(:xpath)
 
       unless [:any, :string, :symbol, :vivified].include?(options[:type])
-        fail ArgumentError, 'Node type not recognised'
+        raise ArgumentError, "Node type not recognised"
       end
 
       case options[:type]
       when :any then
-          vivified_attribute_access(ast, options) +
-            standard_attribute_access(ast, options)
-      when :vivified then
-          vivified_attribute_access(ast, options)
-      else
+        vivified_attribute_access(ast, options) +
           standard_attribute_access(ast, options)
+      when :vivified then
+        vivified_attribute_access(ast, options)
+      else
+        standard_attribute_access(ast, options)
       end
     end
 
@@ -45,10 +45,10 @@ module FoodCritic
             or  count(descendant::tstring_content[@value='solo']) > 0
             )
           ]}).empty?) ||
-      ast.xpath('//if_mod[return][aref/descendant::ident/@value="solo"]/aref/
-        const_path_ref/descendant::const').map do |c|
-        c['value']
-      end == %w(Chef Config)
+        ast.xpath('//if_mod[return][aref/descendant::ident/@value="solo"]/aref/
+          const_path_ref/descendant::const').map do |c|
+          c["value"]
+        end == %w{Chef Config}
     end
 
     # Is the
@@ -61,9 +61,9 @@ module FoodCritic
       #
       # TODO: This will not work if the cookbook that contains the library
       # is not under the same `cookbook_path` as the cookbook being checked.
-      cbk_tree_path = Pathname.new(File.join(recipe_path, '../../..'))
+      cbk_tree_path = Pathname.new(File.join(recipe_path, "../../.."))
       search_libs = Dir[File.join(cbk_tree_path.realpath,
-                                  '*/libraries/search.rb')]
+                                  "*/libraries/search.rb")]
 
       # True if any of the candidate library files match the signature:
       #
@@ -77,12 +77,12 @@ module FoodCritic
 
     # Support function to retrieve a metadata field
     def metadata_field(file, field)
-      until (file.split(File::SEPARATOR) & standard_cookbook_subdirs).empty? do
+      until (file.split(File::SEPARATOR) & standard_cookbook_subdirs).empty?
         file = File.absolute_path(File.dirname(file.to_s))
       end
       file = File.dirname(file) unless File.extname(file).empty?
 
-      md_path = File.join(file, 'metadata.rb')
+      md_path = File.join(file, "metadata.rb")
       if File.exist?(md_path)
         value = read_ast(md_path).xpath("//stmts_add/
           command[ident/@value='#{field}']/
@@ -96,14 +96,14 @@ module FoodCritic
 
     # The name of the cookbook containing the specified file.
     def cookbook_name(file)
-      fail ArgumentError, 'File cannot be nil or empty' if file.to_s.empty?
+      raise ArgumentError, "File cannot be nil or empty" if file.to_s.empty?
 
       # Name is a special case as we want to fallback to the cookbook directory
       # name if metadata_field fails
       begin
-        metadata_field(file, 'name')
+        metadata_field(file, "name")
       rescue RuntimeError
-        until (file.split(File::SEPARATOR) & standard_cookbook_subdirs).empty? do
+        until (file.split(File::SEPARATOR) & standard_cookbook_subdirs).empty?
           file = File.absolute_path(File.dirname(file.to_s))
         end
         file = File.dirname(file) unless File.extname(file).empty?
@@ -113,16 +113,16 @@ module FoodCritic
 
     # The maintainer of the cookbook containing the specified file.
     def cookbook_maintainer(file)
-      fail ArgumentError, 'File cannot be nil or empty' if file.to_s.empty?
+      raise ArgumentError, "File cannot be nil or empty" if file.to_s.empty?
 
-      metadata_field(file, 'maintainer')
+      metadata_field(file, "maintainer")
     end
 
     # The maintainer email of the cookbook containing the specified file.
     def cookbook_maintainer_email(file)
-      fail ArgumentError, 'File cannot be nil or empty' if file.to_s.empty?
+      raise ArgumentError, "File cannot be nil or empty" if file.to_s.empty?
 
-      metadata_field(file, 'maintainer_email')
+      metadata_field(file, "maintainer_email")
     end
 
     # The dependencies declared in cookbook metadata.
@@ -142,13 +142,13 @@ module FoodCritic
       #     end
       deps = deps.to_a +
         word_list_values(ast, "//command[ident/@value='depends']")
-      deps.uniq.map { |dep| dep['value'].strip }
+      deps.uniq.map { |dep| dep["value"].strip }
     end
 
     # The key / value pair in an environment or role ruby file
     def field(ast, field_name)
       if field_name.nil? || field_name.to_s.empty?
-        fail ArgumentError, 'Field name cannot be nil or empty'
+        raise ArgumentError, "Field name cannot be nil or empty"
       end
       ast.xpath("//command[ident/@value='#{field_name}']")
     end
@@ -163,7 +163,7 @@ module FoodCritic
     # Create a match for a specified file. Use this if the presence of the file
     # triggers the warning rather than content.
     def file_match(file)
-      fail ArgumentError, 'Filename cannot be nil' if file.nil?
+      raise ArgumentError, "Filename cannot be nil" if file.nil?
       { filename: file, matched: file, line: 1, column: 1 }
     end
 
@@ -182,7 +182,7 @@ module FoodCritic
     def find_resources(ast, options = {})
       options = { type: :any }.merge!(options)
       return [] unless ast.respond_to?(:xpath)
-      scope_type = ''
+      scope_type = ""
       scope_type = "[@value='#{options[:type]}']" unless options[:type] == :any
 
       # TODO: Include nested resources (provider actions)
@@ -205,12 +205,12 @@ module FoodCritic
     def included_recipes(ast, options = { with_partial_names: true })
       raise_unless_xpath!(ast)
 
-      filter = ['[count(descendant::args_add) = 1]']
+      filter = ["[count(descendant::args_add) = 1]"]
 
       # If `:with_partial_names` is false then we won't include the string
       # literal portions of any string that has an embedded expression.
       unless options[:with_partial_names]
-        filter << '[count(descendant::string_embexpr) = 0]'
+        filter << "[count(descendant::string_embexpr) = 0]"
       end
 
       string_desc = '[descendant::args_add/string_literal]/
@@ -221,10 +221,10 @@ module FoodCritic
          following-sibling::arg_paren",
       ].map do |recipe_include|
         recipe_include + filter.join + string_desc
-      end.join(' | '))
+      end.join(" | "))
 
       # Hash keyed by recipe name with matched nodes.
-      included.inject(Hash.new([])) { |h, i| h[i['value']] += [i]; h }
+      included.inject(Hash.new([])) { |h, i| h[i["value"]] += [i]; h }
     end
 
     # Searches performed by the specified recipe that are literal strings.
@@ -238,10 +238,10 @@ module FoodCritic
     # Create a match from the specified node.
     def match(node)
       raise_unless_xpath!(node)
-      pos = node.xpath('descendant::pos').first
+      pos = node.xpath("descendant::pos").first
       return nil if pos.nil?
-      { matched: node.respond_to?(:name) ? node.name : '',
-       line: pos['line'].to_i, column: pos['column'].to_i }
+      { matched: node.respond_to?(:name) ? node.name : "",
+        line: pos["line"].to_i, column: pos["column"].to_i }
     end
 
     # Read the AST for the given Ruby source file
@@ -256,7 +256,7 @@ module FoodCritic
 
     # Retrieve a single-valued attribute from the specified resource.
     def resource_attribute(resource, name)
-      fail ArgumentError, 'Attribute name cannot be empty' if name.empty?
+      raise ArgumentError, "Attribute name cannot be empty" if name.empty?
       resource_attributes(resource)[name.to_s]
     end
 
@@ -286,18 +286,18 @@ module FoodCritic
       raise_unless_xpath!(resource)
       options = { return_expressions: false }.merge(options)
       if options[:return_expressions]
-        name = resource.xpath('command/args_add_block')
-        if name.xpath('descendant::string_add').size == 1 &&
-          name.xpath('descendant::string_literal').size == 1 &&
-          name.xpath(
-            'descendant::*[self::call or self::string_embexpr]').empty?
-          name.xpath('descendant::tstring_content/@value').to_s
+        name = resource.xpath("command/args_add_block")
+        if name.xpath("descendant::string_add").size == 1 &&
+            name.xpath("descendant::string_literal").size == 1 &&
+            name.xpath(
+              "descendant::*[self::call or self::string_embexpr]").empty?
+          name.xpath("descendant::tstring_content/@value").to_s
         else
           name
         end
       else
         # Preserve existing behaviour
-        resource.xpath('string(command//tstring_content/@value)')
+        resource.xpath("string(command//tstring_content/@value)")
       end
     end
 
@@ -314,9 +314,9 @@ module FoodCritic
     # Return the type, e.g. 'package' for a given resource
     def resource_type(resource)
       raise_unless_xpath!(resource)
-      type = resource.xpath('string(command/ident/@value)')
+      type = resource.xpath("string(command/ident/@value)")
       if type.empty?
-        fail ArgumentError, 'Provided AST node is not a resource'
+        raise ArgumentError, "Provided AST node is not a resource"
       end
       type
     end
@@ -339,8 +339,8 @@ module FoodCritic
 
     # The list of standard cookbook sub-directories.
     def standard_cookbook_subdirs
-      %w(attributes definitions files libraries providers recipes resources
-         templates)
+      %w{attributes definitions files libraries providers recipes resources
+         templates}
     end
 
     # Platforms declared as supported in cookbook metadata
@@ -355,14 +355,14 @@ module FoodCritic
       platforms.map do |platform|
         versions = platform.xpath('ancestor::args_add[position() > 1]/
 	  string_literal/descendant::tstring_content/@value').map { |v| v.to_s }
-        { platform: platform['value'], versions: versions }
+        { platform: platform["value"], versions: versions }
       end.sort { |a, b| a[:platform] <=> b[:platform] }
     end
 
     # Template filename
     def template_file(resource)
-      if resource['source']
-        resource['source']
+      if resource["source"]
+        resource["source"]
       elsif resource[:name]
         if resource[:name].respond_to?(:xpath)
           resource[:name]
@@ -373,7 +373,7 @@ module FoodCritic
     end
 
     def templates_included(all_templates, template_path, depth = 1)
-      fail RecursedTooFarError.new(template_path) if depth > 10
+      raise RecursedTooFarError.new(template_path) if depth > 10
       partials = read_ast(template_path).xpath('//*[self::command or
         child::fcall][descendant::ident/@value="render"]//args_add/
         string_literal//tstring_content/@value').map { |p| p.to_s }
@@ -390,11 +390,11 @@ module FoodCritic
 
     # Templates in the current cookbook
     def template_paths(recipe_path)
-      Dir.glob(Pathname.new(recipe_path).dirname.dirname + 'templates' +
-        '**/*', File::FNM_DOTMATCH).select do |path|
+      Dir.glob(Pathname.new(recipe_path).dirname.dirname + "templates" +
+        "**/*", File::FNM_DOTMATCH).select do |path|
         File.file?(path)
       end.reject do |path|
-        File.basename(path) == '.DS_Store' || File.extname(path) == '.swp'
+        File.basename(path) == ".DS_Store" || File.extname(path) == ".swp"
       end
     end
 
@@ -406,7 +406,7 @@ module FoodCritic
       atts = {}
       resource.xpath("do_block/descendant::method_add_block[
         count(ancestor::do_block) = 1][brace_block | do_block]").each do |batt|
-        att_name = batt.xpath('string(method_add_arg/fcall/ident/@value)')
+        att_name = batt.xpath("string(method_add_arg/fcall/ident/@value)")
         if att_name && !att_name.empty? && batt.children.length > 1
           atts[att_name] = batt.children[1]
         end
@@ -415,7 +415,7 @@ module FoodCritic
     end
 
     def block_depth(resource)
-      resource.path.split('/').group_by { |e|e }['method_add_block'].size
+      resource.path.split("/").group_by { |e| e }["method_add_block"].size
     end
 
     # Recurse the nested arrays provided by Ripper to create a tree we can more
@@ -437,7 +437,7 @@ module FoodCritic
                 xml_array_node(doc, xml_node, child)
               end
             else
-              xml_node['value'] = child.to_s unless child.nil?
+              xml_node["value"] = child.to_s unless child.nil?
             end
           end
         end
@@ -446,27 +446,27 @@ module FoodCritic
     end
 
     def extract_attribute_value(att, options = {})
-      if !att.xpath('args_add_block[count(descendant::args_add)>1]').empty?
-        att.xpath('args_add_block').first
+      if !att.xpath("args_add_block[count(descendant::args_add)>1]").empty?
+        att.xpath("args_add_block").first
       elsif !att.xpath('args_add_block/args_add/
         var_ref/kw[@value="true" or @value="false"]').empty?
         att.xpath('string(args_add_block/args_add/
-          var_ref/kw/@value)') == 'true'
-      elsif !att.xpath('descendant::assoc_new').empty?
-        att.xpath('descendant::assoc_new')
-      elsif !att.xpath('descendant::int').empty?
-        att.xpath('descendant::int/@value').to_s
-      elsif att.xpath('descendant::symbol').empty?
+          var_ref/kw/@value)') == "true"
+      elsif !att.xpath("descendant::assoc_new").empty?
+        att.xpath("descendant::assoc_new")
+      elsif !att.xpath("descendant::int").empty?
+        att.xpath("descendant::int/@value").to_s
+      elsif att.xpath("descendant::symbol").empty?
         if options[:return_expressions] &&
-           (att.xpath('descendant::string_add').size != 1 ||
-            att.xpath('descendant::*[self::call or
-              self::string_embexpr]').any?)
+            (att.xpath("descendant::string_add").size != 1 ||
+             att.xpath('descendant::*[self::call or
+               self::string_embexpr]').any?)
           att
         else
-          att.xpath('string(descendant::tstring_content/@value)')
+          att.xpath("string(descendant::tstring_content/@value)")
         end
       else
-        att.xpath('string(descendant::symbol/ident/@value)').to_sym
+        att.xpath("string(descendant::symbol/ident/@value)").to_sym
       end
     end
 
@@ -485,7 +485,7 @@ module FoodCritic
       atts = {}
       resource.xpath('do_block/descendant::*[self::command or
         self::method_add_arg][count(ancestor::do_block) >= 1]').each do |att|
-        blocks = att.xpath('ancestor::method_add_block/method_add_arg/fcall')
+        blocks = att.xpath("ancestor::method_add_block/method_add_arg/fcall")
         next if blocks.any? { |a| block_depth(a) > block_depth(resource) }
         att_name = att.xpath('string(ident/@value |
           fcall/ident[@value="variables"]/@value)')
@@ -500,8 +500,8 @@ module FoodCritic
       return false if cookbook_dir.nil? || !Dir.exist?(cookbook_dir)
 
       # TODO: Modify this to work with multiple cookbook paths
-      cbk_tree_path = Pathname.new(File.join(cookbook_dir, '..'))
-      libs = Dir[File.join(cbk_tree_path.realpath, '*/libraries/*.rb')]
+      cbk_tree_path = Pathname.new(File.join(cookbook_dir, ".."))
+      libs = Dir[File.join(cbk_tree_path.realpath, "*/libraries/*.rb")]
 
       libs.any? do |lib|
         !read_ast(lib).xpath(%Q{//class[count(descendant::const[@value='Chef'])
@@ -512,15 +512,15 @@ module FoodCritic
 
     def raise_unless_xpath!(ast)
       unless ast.respond_to?(:xpath)
-        fail ArgumentError, 'AST must support #xpath'
+        raise ArgumentError, 'AST must support #xpath'
       end
     end
 
     def uncached_read_ast(file)
-      source = if file.to_s.split(File::SEPARATOR).include?('templates')
+      source = if file.to_s.split(File::SEPARATOR).include?("templates")
                  template_expressions_only(file)
                else
-                 File.read(file).encode('utf-8', 'binary', :undef => :replace)
+                 File.read(file).encode("utf-8", "binary", :undef => :replace)
                end
       build_xml(Ripper::SexpBuilder.new(source).parse)
     end
@@ -530,7 +530,7 @@ module FoodCritic
       def is_att_type(value)
         return [] unless value.respond_to?(:select)
         value.select do |n|
-          %w(
+          %w{
             automatic_attrs
             default
             default!
@@ -545,7 +545,7 @@ module FoodCritic
             override_unless
             set
             set_unless
-          ).include?(n.to_s)
+          }.include?(n.to_s)
         end
       end
     end
@@ -557,20 +557,20 @@ module FoodCritic
         end.inject(:+)
       else
         type = if options[:type] == :string
-                 'tstring_content'
+                 "tstring_content"
                else
-                 '*[self::symbol or self::dyna_symbol]'
+                 "*[self::symbol or self::dyna_symbol]"
                end
-        expr = '//*[self::aref_field or self::aref][count(method_add_arg) = 0]'
+        expr = "//*[self::aref_field or self::aref][count(method_add_arg) = 0]"
         expr += '[count(is_att_type(descendant::var_ref/ident/@value)) =
           count(descendant::var_ref/ident/@value)]'
-        expr += '[is_att_type(descendant::ident'
-        expr += '[not(ancestor::aref/call)]' if options[:ignore_calls]
-        expr += '/@value)]'
+        expr += "[is_att_type(descendant::ident"
+        expr += "[not(ancestor::aref/call)]" if options[:ignore_calls]
+        expr += "/@value)]"
         expr += ignore_attributes_xpath(options[:ignore])
         expr += "/descendant::#{type}"
         if options[:type] == :string
-          expr += '[count(ancestor::dyna_symbol) = 0]'
+          expr += "[count(ancestor::dyna_symbol) = 0]"
         end
         ast.xpath(expr, AttFilter.new).sort
       end
@@ -578,11 +578,11 @@ module FoodCritic
 
     def template_expressions_only(file)
       exprs = Template::ExpressionExtractor.new.extract(
-        File.read(file).encode('utf-8', 'binary', :undef => :replace)
+        File.read(file).encode("utf-8", "binary", :undef => :replace)
       )
-      lines = Array.new(exprs.map { |e| e[:line] }.max || 0, '')
+      lines = Array.new(exprs.map { |e| e[:line] }.max || 0, "")
       exprs.each do |e|
-        lines[e[:line] - 1] += ';' unless lines[e[:line] - 1].empty?
+        lines[e[:line] - 1] += ";" unless lines[e[:line] - 1].empty?
         lines[e[:line] - 1] += e[:code]
       end
       lines.join("\n")
@@ -594,9 +594,9 @@ module FoodCritic
         #{ignore_attributes_xpath(options[:ignore])}
         [@value='.'][count(following-sibling::arg_paren) = 0]}, AttFilter.new)
       calls.select do |call|
-        call.xpath('aref/args_add_block').size == 0 &&
-          (call.xpath('descendant::ident').size > 1 &&
-            !node_method?(call.xpath('ident/@value').to_s.to_sym,
+        call.xpath("aref/args_add_block").size == 0 &&
+          (call.xpath("descendant::ident").size > 1 &&
+            !node_method?(call.xpath("ident/@value").to_s.to_sym,
                           options[:cookbook_dir]))
       end.sort
     end
@@ -606,9 +606,9 @@ module FoodCritic
       if var_ref.empty?
         []
       else
-        ast.xpath(%Q(descendant::block_var/params/
+        ast.xpath(%Q{descendant::block_var/params/
           ident#{var_ref.first['value']}/ancestor::method_add_block/call/
-          descendant::tstring_content))
+          descendant::tstring_content})
       end
     end
   end

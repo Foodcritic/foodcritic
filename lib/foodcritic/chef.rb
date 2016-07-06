@@ -23,7 +23,7 @@ module FoodCritic
 
     # Is this a valid Lucene query?
     def valid_query?(query)
-      fail ArgumentError, 'Query cannot be nil or empty' if query.to_s.empty?
+      raise ArgumentError, "Query cannot be nil or empty" if query.to_s.empty?
 
       # Attempt to create a search query parser
       search = FoodCritic::Chef::Search.new
@@ -51,7 +51,7 @@ module FoodCritic
                 else
                   Linter::DEFAULT_CHEF_VERSION
                 end
-      metadata_path = [version, version.sub(/\.[a-z].*/, ''),
+      metadata_path = [version, version.sub(/\.[a-z].*/, ""),
         Linter::DEFAULT_CHEF_VERSION].map do |version|
           metadata_path(version)
         end.find { |m| File.exist?(m) }
@@ -60,13 +60,13 @@ module FoodCritic
     end
 
     def metadata_path(chef_version)
-      File.join(File.dirname(__FILE__), '..', '..',
+      File.join(File.dirname(__FILE__), "..", "..",
                 "chef_dsl_metadata/chef_#{chef_version}.json")
     end
 
     def resource_check?(key, resource_type, field)
       if resource_type.to_s.empty? || field.to_s.empty?
-        fail ArgumentError, 'Arguments cannot be nil or empty.'
+        raise ArgumentError, "Arguments cannot be nil or empty."
       end
 
       load_metadata
@@ -85,23 +85,23 @@ module FoodCritic
       # lucene.treetop used to be provided by chef gem
       # We're keeping a local copy from chef 10.x
       def chef_search_grammars
-        [File.expand_path('../../..', __FILE__) + "/misc/lucene.treetop"]
+        [File.expand_path("../../..", __FILE__) + "/misc/lucene.treetop"]
       end
 
       # Create the search parser from the first loadable grammar.
       def create_parser(grammar_paths)
         @search_parser ||=
           grammar_paths.inject(nil) do |parser, lucene_grammar|
-          begin
-            break parser unless parser.nil?
-            # Don't instantiate custom nodes
-            Treetop.load_from_string(
-              IO.read(lucene_grammar).gsub(/<[^>]+>/, ''))
-            LuceneParser.new
-          rescue
-            # Silently swallow and try the next grammar
+            begin
+              break parser unless parser.nil?
+              # Don't instantiate custom nodes
+              Treetop.load_from_string(
+                IO.read(lucene_grammar).gsub(/<[^>]+>/, ""))
+              LuceneParser.new
+            rescue
+              # Silently swallow and try the next grammar
+            end
           end
-        end
       end
 
       # Has the search parser been loaded?

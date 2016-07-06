@@ -8,12 +8,12 @@ module FoodCritic
     end
 
     def xml_create_node(doc, c)
-      Nokogiri::XML::Node.new(c.first.to_s.gsub(/[^a-z_]/, ''), doc)
+      Nokogiri::XML::Node.new(c.first.to_s.gsub(/[^a-z_]/, ""), doc)
     end
 
     def xml_document(doc, xml_node)
       if doc.nil?
-        doc = Nokogiri::XML('<opt></opt>')
+        doc = Nokogiri::XML("<opt></opt>")
         xml_node = doc.root
       end
       [doc, xml_node]
@@ -29,9 +29,9 @@ module FoodCritic
     end
 
     def xml_position_node(doc, xml_node, child)
-      pos = Nokogiri::XML::Node.new('pos', doc)
-      pos['line'] = child.first.to_s
-      pos['column'] = child[1].to_s
+      pos = Nokogiri::XML::Node.new("pos", doc)
+      pos["line"] = child.first.to_s
+      pos["column"] = child[1].to_s
       xml_node.add_child(pos)
     end
   end

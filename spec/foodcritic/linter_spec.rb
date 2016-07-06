@@ -1,4 +1,4 @@
-require_relative '../spec_helper'
+require_relative "../spec_helper"
 
 describe FoodCritic::Linter do
   let(:linter) { FoodCritic::Linter.new }
@@ -18,25 +18,25 @@ describe FoodCritic::Linter do
   describe "#check" do
 
     it "requires a cookbook_path, role_path or environment_path to be specified" do
-      lambda{ linter.check({}) }.must_raise ArgumentError
+      lambda { linter.check({}) }.must_raise ArgumentError
     end
 
     [:cookbook, :role, :environment].each do |path_type|
       key = "#{path_type}_paths".to_sym
       it "requires a #{path_type}_path by itself not to be nil" do
-        lambda{ linter.check(key => nil) }.must_raise ArgumentError
+        lambda { linter.check(key => nil) }.must_raise ArgumentError
       end
       it "requires a #{path_type}_path by itself not to be empty" do
-        lambda{ linter.check(key => []) }.must_raise ArgumentError
+        lambda { linter.check(key => []) }.must_raise ArgumentError
       end
       it "accepts a scalar with a single #{path_type} path" do
-        linter.check(key => '.')
+        linter.check(key => ".")
       end
       it "accepts an array of #{path_type} paths" do
-        linter.check(key => ['.'])
+        linter.check(key => ["."])
       end
       it "returns a review when a #{path_type} path is provided" do
-        linter.check(key => ['.']).must_respond_to(:warnings)
+        linter.check(key => ["."]).must_respond_to(:warnings)
       end
     end
 
@@ -53,10 +53,9 @@ describe FoodCritic::Linter do
     end
   end
 
-
   describe "#load_files!" do
     let(:default_rules_file) do
-      File.expand_path(File.join(File.dirname(__FILE__), '../../lib/foodcritic/rules.rb'))
+      File.expand_path(File.join(File.dirname(__FILE__), "../../lib/foodcritic/rules.rb"))
     end
 
     let(:rule_dsl_load_mock) { MiniTest::Mock.new }
@@ -67,7 +66,7 @@ describe FoodCritic::Linter do
     end
 
     it "should include rules found in gems if the :search_gems option is true" do
-      gem_rules = ['/path/to/rules1.rb', '/path/to/rules2.rb']
+      gem_rules = ["/path/to/rules1.rb", "/path/to/rules2.rb"]
       expected_rules = [default_rules_file, gem_rules].flatten
       rule_dsl_load_mock.expect(:call, nil, [expected_rules, nil])
 
@@ -80,7 +79,7 @@ describe FoodCritic::Linter do
     end
 
     it "should include files found in :include_rules option" do
-      include_rules = ['/path/to/rules1.rb', '/path/to/rules2.rb']
+      include_rules = ["/path/to/rules1.rb", "/path/to/rules2.rb"]
       expected_rules = [default_rules_file, include_rules].flatten
       rule_dsl_load_mock.expect(:call, nil, [expected_rules, nil])
 
