@@ -1,0 +1,6 @@
+Lint/EndAlignment:
+  Exclude:
+    - features/support/cookbook_helpers.rb
+    - features/step_definitions/cookbook_steps.rb
+    - lib/foodcritic/rules.rb
+
