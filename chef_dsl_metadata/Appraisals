@@ -15,14 +15,16 @@ chef_versions = [
   '12.8.1',
   '12.9.38',
   '12.10.24',
-  '12.11.18'
+  '12.11.18',
+  '12.12.13'
 ]
-
-appraise "chef_#{version}" do
-  gem 'chef', version
-  if !! RUBY_PLATFORM =~ /mswin|mingw|windows/
-    gem 'ffi'
-    gem 'ruby-wmi'
-    gem 'win32-service'
+chef_versions.each do |version|
+  appraise "chef_#{version}" do
+    gem 'chef', version
+    if !! RUBY_PLATFORM =~ /mswin|mingw|windows/
+      gem 'ffi'
+      gem 'ruby-wmi'
+      gem 'win32-service'
+    end
   end
 end
