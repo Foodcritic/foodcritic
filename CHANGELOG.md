@@ -1,5 +1,14 @@
 # FoodCritic Changelog:
 
+## [7.0.1](https://github.com/acrmp/foodcritic/tree/7.0.1) (2016-07-06)
+
+[Full Changelog](https://github.com/acrmp/foodcritic/compare/v7.0.0...7.0.1)
+
+**Merged pull requests:**
+
+- Move the changelog task into the rakefile [#470](https://github.com/acrmp/foodcritic/pull/470) ([tas50](https://github.com/tas50))
+- Readme improvements [#468](https://github.com/acrmp/foodcritic/pull/468) ([tas50](https://github.com/tas50))
+
 ## [7.0.0](https://github.com/acrmp/foodcritic/tree/7.0.0) (2016-07-05)
 
 [Full Changelog](https://github.com/acrmp/foodcritic/compare/v6.3.0...7.0.0)
