@@ -51,11 +51,7 @@ def chef_resource_attributes
   chef_resources do |resource_klazz, resource|
     resource_name = convert_to_snake_case(resource_klazz.to_s)
     attributes = resource.public_instance_methods(true)
-
-    if (!windows?) && has_windows_rights?(::Chef::VERSION) &&
-        resource.ancestors.include?(Chef::Mixin::Securable)
-      attributes = add_windows_securable_attributes(resource_name, attributes)
-    end
+    attributes = add_windows_securable_attributes(resource_name, attributes)
 
     [resource_name, attributes.sort]
   end
