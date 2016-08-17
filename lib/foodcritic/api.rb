@@ -536,9 +536,12 @@ module FoodCritic
             default!
             default_unless
             force_default
+            force_default!
             force_override
+            force_override!
             node
             normal
+            normal!
             normal_unless
             override
             override!
