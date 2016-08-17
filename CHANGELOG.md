@@ -1,5 +1,15 @@
 # FoodCritic Changelog:
 
+## [7.1.0](https://github.com/acrmp/foodcritic/tree/7.1.0)
+
+[Full Changelog](https://github.com/acrmp/foodcritic/compare/v7.0.1...7.1.0)
+
+**Merged pull requests:**
+
+- Add Chef 12.13.37 metadata and make it the default [#479](https://github.com/acrmp/foodcritic/pull/479) ([tas50](https://github.com/tas50))
+- Add missing assignment attributes [#478](https://github.com/acrmp/foodcritic/pull/478) ([ofir-petrushka](https://github.com/ofir-petrushka))
+- Add 12.12.13 metadata and fix metadata generation [#472](https://github.com/acrmp/foodcritic/pull/472) ([tas50](https://github.com/tas50))
+
 ## [7.0.1](https://github.com/acrmp/foodcritic/tree/7.0.1) (2016-07-06)
 
 [Full Changelog](https://github.com/acrmp/foodcritic/compare/v7.0.0...7.0.1)
@@ -96,10 +106,15 @@ Features:
 - Added FC061 to ensure that the cookbook version is valid
 
 - Added FC062 to ensure that metadata includes a version
+
 - Added FC063 to ensure that a cookbook doesn't depend on itself in the metadata
+
 - Added DSL metadata for Chef 12.5.1 and 12.6.0
+
 - Added new chef11 and chef12 tags for rules related to changes in those Chef releases
+
 - Added Oracle as an equivalent platform for the RHEL platform family in FC024
+
 - Removed the Mustache pin to 0.99 in the Gemfile since we require Ruby 2.0+ now
 
 Bugfixes:
