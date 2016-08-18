@@ -95,10 +95,7 @@ Features:
 - Added FC055 to ensure that metadata.rb contains a maintainer
 - Added FC056 to ensure that metadata.rb contains a maintainer_email
 - Added FC057 to ensure that library providers include use_inline_resources
-- Added FC058 to ensure that library providers that include use_inline_resources and action_
-
-  <name> methods</name>
-
+- Added FC058 to ensure that library providers that include use_inline_resources and action_<name> methods</name>
 - Added FC059 to ensure that LWRPs include use_inline_resources
 
 - Added FC060 to ensure that LWRPs don't use bad action methods
