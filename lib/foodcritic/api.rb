@@ -87,10 +87,10 @@ module FoodCritic
         value = read_ast(md_path).xpath("//stmts_add/
           command[ident/@value='#{field}']/
           descendant::tstring_content/@value").to_s
-        raise RuntimeError, "Cant read #{field} from #{md_path}" if value.to_s.empty?
+        raise "Cant read #{field} from #{md_path}" if value.to_s.empty?
         return value
       else
-        raise RuntimeError, "Cant find #{md_path}"
+        raise "Cant find #{md_path}"
       end
     end
 
@@ -512,7 +512,7 @@ module FoodCritic
 
     def raise_unless_xpath!(ast)
       unless ast.respond_to?(:xpath)
-        raise ArgumentError, 'AST must support #xpath'
+        raise ArgumentError, "AST must support #xpath"
       end
     end
 

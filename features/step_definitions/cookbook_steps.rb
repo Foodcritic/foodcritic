@@ -1065,7 +1065,7 @@ end
 Given /^a cookbook with a ([^ ]+) that (includes|does not include) a breakpoint$/ do |component, includes|
   content = case component
     when "template" then includes == "includes" ? "Hello <% require 'pry'; binding.pry %>" : "Hello World"
-    else includes == "includes" ? "binding.pry" : '# No breakpoint'
+    else includes == "includes" ? "binding.pry" : "# No breakpoint"
   end
   write_recipe ""
   case component
@@ -1170,17 +1170,20 @@ end
 Given /a(nother)? cookbook with a single recipe that (reads|updates|ignores)(nested)? node attributes via ([a-z,]*)(?:(?: and calls node\.)?([a-z_?]+)?| with (.*)?)(?: only)?$/ do |more_than_one, op, nested, types, method, expr|
   cookbook_name = more_than_one.nil? ? "example" : "another_example"
 
-  access = nested.nil? ? { :strings => "['foo']", :symbols => "[:foo]", :vivified => ".foo" } :
-           { :strings => "['bar']['baz']", :symbols => "[:fee][:fi][:fo][:fum]", :vivified => ".bar.baz" }
+  access = if nested.nil?
+             { :strings => "['foo']", :symbols => "[:foo]", :vivified => ".foo" }
+           else
+             { :strings => "['bar']['baz']", :symbols => "[:fee][:fi][:fo][:fum]", :vivified => ".bar.baz" }
+           end
 
   recipe_content =
-      (if types == "none"
-         "log 'hello world'"
-       elsif op == "reads"
-         types.split(",").map { |type| "log node#{access[type.to_sym]}" }.join("\n")
-       else
-         types.split(",").map { |type| "node#{access[type.to_sym]} = 'foo'" }.join("\n")
-      end)
+    (if types == "none"
+       "log 'hello world'"
+     elsif op == "reads"
+       types.split(",").map { |type| "log node#{access[type.to_sym]}" }.join("\n")
+     else
+       types.split(",").map { |type| "node#{access[type.to_sym]} = 'foo'" }.join("\n")
+    end)
 
   recipe_content += "\n#{expr}"
 

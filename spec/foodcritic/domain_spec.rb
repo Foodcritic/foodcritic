@@ -45,7 +45,7 @@ end
 describe FoodCritic::Rule do
   let(:rule) { FoodCritic::Rule.new("FCTEST001", "Test rule") }
 
-  describe '#matches_tags?' do
+  describe "#matches_tags?" do
     it "matches the rule's code" do
       rule.matches_tags?(["FCTEST001"]).must_equal true
     end
@@ -55,7 +55,7 @@ describe FoodCritic::Rule do
     end
   end
 
-  describe '#tags' do
+  describe "#tags" do
     it "returns any + the rule's code" do
       rule.tags.must_equal %w{any FCTEST001}
     end

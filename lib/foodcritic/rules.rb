@@ -424,7 +424,7 @@ rule "FC027", "Resource sets internal attribute" do
   end
 end
 
-rule "FC028", 'Incorrect #platform? usage' do
+rule "FC028", "Incorrect #platform? usage" do
   tags %w{correctness}
   recipe do |ast|
     ast.xpath(%q{//*[self::call | self::command_call]
@@ -472,7 +472,7 @@ end
 rule "FC032", "Invalid notification timing" do
   tags %w{correctness notifications}
   recipe do |ast|
-    valid_timings = if resource_attribute?("file", "notifies_before") then
+    valid_timings = if resource_attribute?("file", "notifies_before")
                       [:delayed, :immediate, :before]
                     else
                       [:delayed, :immediate]
@@ -785,7 +785,7 @@ rule "FC057", "Library provider does not declare use_inline_resources" do
   end
 end
 
-rule "FC058", 'Library provider declares use_inline_resources and declares #action_<name> methods' do
+rule "FC058", "Library provider declares use_inline_resources and declares #action_<name> methods" do
   tags %w{correctness}
   library do |ast, filename|
     ast.xpath('//const_path_ref/const[@value="LWRPBase"]/..//const[@value="Provider"]/../../..').select do |x|
@@ -806,7 +806,7 @@ rule "FC059", "LWRP provider does not declare use_inline_resources" do
   end
 end
 
-rule "FC060", 'LWRP provider declares use_inline_resources and declares #action_<name> methods' do
+rule "FC060", "LWRP provider declares use_inline_resources and declares #action_<name> methods" do
   tags %w{correctness}
   provider do |ast, filename|
     use_inline_resources = !ast.xpath('//*[self::vcall or self::var_ref]/ident
