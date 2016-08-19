@@ -46,7 +46,7 @@ describe FoodCritic::Template::ExpressionExtractor do
       ])
     end
     it "excludes comment-only expressions" do
-      extractor.extract('<%# A comment %>').must_be_empty
+      extractor.extract("<%# A comment %>").must_be_empty
     end
   end
 

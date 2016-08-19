@@ -40,7 +40,7 @@ module FoodCritic
       "FC025" => "Prefer chef_gem to compile-time gem install",
       "FC026" => "Conditional execution block attribute contains only string",
       "FC027" => "Resource sets internal attribute",
-      "FC028" => 'Incorrect #platform? usage',
+      "FC028" => "Incorrect #platform? usage",
       "FC029" => "No leading cookbook name in recipe metadata",
       "FC030" => "Cookbook contains debugger breakpoints",
       "FC031" => "Cookbook without metadata file",
@@ -68,9 +68,9 @@ module FoodCritic
       "FC055" => "Ensure maintainer is set in metadata",
       "FC056" => "Ensure maintainer_email is set in metadata",
       "FC057" => "Library provider does not declare use_inline_resources",
-      "FC058" => 'Library provider declares use_inline_resources and declares #action_<name> methods',
+      "FC058" => "Library provider declares use_inline_resources and declares #action_<name> methods",
       "FC059" => "LWRP provider does not declare use_inline_resources",
-      "FC060" => 'LWRP provider declares use_inline_resources and declares #action_<name> methods',
+      "FC060" => "LWRP provider declares use_inline_resources and declares #action_<name> methods",
       "FC061" => "Valid cookbook versions are of the form x.y or x.y.z",
       "FC062" => "Cookbook should have version metadata",
       "FC063" => "Cookbook incorrectly depends on itself",
@@ -161,7 +161,7 @@ module FoodCritic
 
     def man_page_options
       man_path = Pathname.new(__FILE__) + "../../../man/foodcritic.1.ronn"
-      option_lines = File.read(man_path).split('## ').find do |s|
+      option_lines = File.read(man_path).split("## ").find do |s|
         s.start_with?("OPTIONS")
       end.split("\n").select { |o| o.start_with?(" *") }
       option_lines.map do |o|
