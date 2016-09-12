@@ -361,11 +361,11 @@ module FoodCritic
 
     # Returns template source filenames if specified or implied by resource name
     def template_files(resource)
-      if resource['source']
-        if resource['source'].respond_to?(:xpath) # source is an array
-          resource['source'].xpath('//array//tstring_content/@value').map {|x| x.to_s}
+      if resource["source"]
+        if resource["source"].respond_to?(:xpath) # source is an array
+          resource["source"].xpath("//array//tstring_content/@value").map { |x| x.to_s }
         else # source is a string
-          [resource['source']]
+          [resource["source"]]
         end
       elsif resource[:name]
         if resource[:name].respond_to?(:xpath)
