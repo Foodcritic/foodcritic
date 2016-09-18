@@ -502,6 +502,8 @@ rule "FC033", "Missing template" do
         relative_path = []
         Pathname.new(path).ascend do |template_path|
           relative_path << template_path.basename
+          break if gem_version(chef_version) >= gem_version("12.0.0") &&
+                   template_path.dirname.basename.to_s == "templates"
           break if template_path.dirname.dirname.basename.to_s == "templates"
         end
         File.join(relative_path.reverse) == resource[:file]
