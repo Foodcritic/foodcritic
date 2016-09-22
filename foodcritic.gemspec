@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.homepage = "http://foodcritic.io"
   s.license = "MIT"
   s.executables << "foodcritic"
-  s.required_ruby_version = ">= 2.1.0"
+  s.required_ruby_version = ">= 2.2.2"
   s.add_dependency("cucumber-core", ">= 1.3")
   s.add_dependency("nokogiri", ">= 1.5", "< 2.0")
   s.add_dependency("rake")
