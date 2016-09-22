@@ -1,7 +1,7 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    appraisal (1.0.3)
+    appraisal (2.1.0)
       bundler
       rake
       thor (>= 0.14.0)
@@ -118,16 +118,16 @@ GEM
     thor (0.19.1)
     uuidtools (2.1.5)
     wmi-lite (1.0.0)
-    yajl-ruby (1.1.0)
+    yajl-ruby (1.2.1)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
-  appraisal (~> 1.0.3)
+  appraisal (~> 2.1.0)
   chef (= 12.2.1)
   rake
-  yajl-ruby (~> 1.1.0)
+  yajl-ruby (~> 1.2.0)
 
 BUNDLED WITH
-   1.11.2
+   1.12.5
