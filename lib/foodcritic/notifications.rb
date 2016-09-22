@@ -94,6 +94,9 @@ module FoodCritic
     def old_style_notification(notify)
       resources = resource_hash_references(notify)
       resource_type = resources.xpath("symbol[1]/ident/@value").to_s.to_sym
+      if resource_type.empty?
+        resource_type = resources.xpath("label/@value").to_s.chop.to_sym
+      end
       resource_name = resources.xpath('string_add[1][count(../
         descendant::string_add) = 1]/tstring_content/@value').to_s
       resource_name = resources if resource_name.empty?
