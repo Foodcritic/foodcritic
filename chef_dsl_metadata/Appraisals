@@ -12,7 +12,8 @@ chef_versions = [
   '12.10.24',
   '12.11.18',
   '12.12.13',
-  '12.13.37'
+  '12.13.37',
+  '12.14.89'
 ]
 chef_versions.each do |version|
   appraise "chef_#{version}" do
