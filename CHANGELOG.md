@@ -1,5 +1,17 @@
 # FoodCritic Changelog:
 
+## [8.0.0](https://github.com/acrmp/foodcritic/tree/8.0.0) (2016-09-22)
+
+[Full Changelog](https://github.com/acrmp/foodcritic/compare/v8.0.0...7.1.0)
+
+**Merged pull requests:**
+
+- Require Ruby 2.2.2 or later [#487](https://github.com/acrmp/foodcritic/pull/487) ([tas50](https://github.com/tas50))
+- Add 12.14.89 metadata and make it the default [#486](https://github.com/acrmp/foodcritic/pull/486) ([tas50](https://github.com/tas50))
+- Fix new offenses introduced in chefstyle 0.4.0 [#482](https://github.com/acrmp/foodcritic/pull/482) ([lamont-granquist](https://github.com/lamont-granquist))
+- Remove Chef 11 metadata and rule support [#481](https://github.com/acrmp/foodcritic/pull/481) ([tas50](https://github.com/tas50))
+- Support old-style notifications with ruby 1.9 hash syntax [#385](https://github.com/acrmp/foodcritic/pull/385) ([akihiro17](https://github.com/akihiro17))
+
 ## [7.1.0](https://github.com/acrmp/foodcritic/tree/7.1.0)
 
 [Full Changelog](https://github.com/acrmp/foodcritic/compare/v7.0.1...7.1.0)
@@ -95,7 +107,10 @@ Features:
 - Added FC055 to ensure that metadata.rb contains a maintainer
 - Added FC056 to ensure that metadata.rb contains a maintainer_email
 - Added FC057 to ensure that library providers include use_inline_resources
-- Added FC058 to ensure that library providers that include use_inline_resources and action_<name> methods</name>
+- Added FC058 to ensure that library providers that include use_inline_resources and action_
+
+  <name> methods</name>
+
 - Added FC059 to ensure that LWRPs include use_inline_resources
 
 - Added FC060 to ensure that LWRPs don't use bad action methods
