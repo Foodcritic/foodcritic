@@ -76,7 +76,7 @@ module FoodCritic
           @options[:version] = true
         end
         opts.on("-X", "--exclude PATH",
-                "Exclude path(s) from being linted.") do |e|
+                "Exclude path(s) from being linted. PATH is relative to the cookbook, not an absolute PATH") do |e|
           options[:exclude_paths] << e
         end
       end
