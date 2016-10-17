@@ -128,7 +128,7 @@ module FoodCritic
     def get_config(cbs)
       require "app_conf"
       files_to_load = []
-      if ENV['HOME'] && File.file?(File.expand_path("~/.chef/foodcritic.yml"))
+      if ENV["HOME"] && File.file?(File.expand_path("~/.chef/foodcritic.yml"))
         files_to_load << File.expand_path("~/.chef/foodcritic.yml", ".")
       end
       [".", cbs].flatten.each do |mypth|
