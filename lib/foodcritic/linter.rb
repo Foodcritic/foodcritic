@@ -163,7 +163,7 @@ module FoodCritic
 
     def load_rules!(options)
       rl_files = []
-      rule_files = [File.join(File.dirname(__FILE__), 'rules.rb')]
+      rule_files = [File.join(File.dirname(__FILE__), "rules.rb")]
       rule_files << options[:include_rules]
       rule_files << rule_files_in_gems if options[:search_gems]
       rule_files.compact!
@@ -173,7 +173,7 @@ module FoodCritic
         rl_files << File.expand_path(rl) if File.file?(File.expand_path(rl))
         if File.directory?(File.expand_path(rl))
           Dir.foreach(File.expand_path(rl)) do |r|
-            rl_files << File.join(rl, r) if File.extname(r) == '.rb'
+            rl_files << File.join(rl, r) if File.extname(r) == ".rb"
           end
         end
       end

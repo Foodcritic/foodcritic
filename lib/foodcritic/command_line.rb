@@ -93,17 +93,17 @@ module FoodCritic
 
       get_config(cbs)
 
-      @options.merge!(fail_tags: @fc_config["fail_tags"].flatten.uniq) if @fc_config["fail_tags"]
-      @options.merge!(tags: @fc_config["tags"].flatten.uniq) if @fc_config["tags"]
-      @options.merge!(include_rules: @fc_config["include_rules"].flatten.uniq) if @fc_config["include_rules"]
-      @options.merge!(role_paths: @fc_config["role_paths"].flatten.uniq) if @fc_config["role_paths"]
-      @options.merge!(environment_paths: @fc_config["environment_paths"].flatten.uniq) if @fc_config["environment_paths"]
-      @options.merge!(exclude_paths: @fc_config["exclude_paths"].flatten.uniq) if @fc_config["exclude_paths"]
-      @options.merge!(cookbook_paths: @fc_config["cookbook_paths"].flatten.uniq) if @fc_config["cookbook_paths"]
-      @options.merge!(search_grammar: @fc_config["search_grammar"]) if @fc_config["search_grammar"]
-      @options.merge!(chef_version: @fc_config["chef_version"]) if @fc_config["chef_version"]
-      @options.merge!(context: @fc_config["context"]) if @fc_config["context"]
-      @options.merge!(search_gems: @fc_config["search_gems"]) if @fc_config["search_gems"]
+      @options[:fail_tags] = @fc_config["fail_tags"].flatten.uniq if @fc_config["fail_tags"]
+      @options[:tags] = @fc_config["tags"].flatten.uniq if @fc_config["tags"]
+      @options[:include_rules] = @fc_config["include_rules"].flatten.uniq if @fc_config["include_rules"]
+      @options[:role_paths] = @fc_config["role_paths"].flatten.uniq if @fc_config["role_paths"]
+      @options[:environment_paths] = @fc_config["environment_paths"].flatten.uniq if @fc_config["environment_paths"]
+      @options[:exclude_paths] = @fc_config["exclude_paths"].flatten.uniq if @fc_config["exclude_paths"]
+      @options[:cookbook_paths] = @fc_config["cookbook_paths"].flatten.uniq if @fc_config["cookbook_paths"]
+      @options[:search_grammar] = @fc_config["search_grammar"] if @fc_config["search_grammar"]
+      @options[:chef_version] = @fc_config["chef_version"] if @fc_config["chef_version"]
+      @options[:context] = @fc_config["context"] if @fc_config["context"]
+      @options[:search_gems] = @fc_config["search_gems"] if @fc_config["search_gems"]
 
       # -v is not implemented but OptionParser gives the Foodcritic's version
       # if that flag is passed
@@ -133,7 +133,7 @@ module FoodCritic
         tmp_path = File.expand_path(mypth, ".")
         until File.basename(tmp_path) == "/"
           files_to_load << "#{tmp_path}/.chef/foodcritic.yml" if File.file?("#{tmp_path}/.chef/foodcritic.yml")
-          tmp_path = File.expand_path("#{tmp_path}/..",".")
+          tmp_path = File.expand_path("#{tmp_path}/..", ".")
         end
       end
       if @original_args.include?("--config")
@@ -161,7 +161,7 @@ module FoodCritic
             v2 || v1
           elsif v1.class.name == "Array"
             v1 << v2 if v2
-          else 
+          else
             v1.each_line.to_a << v2 if v2
           end
         end
@@ -173,7 +173,7 @@ module FoodCritic
         elsif %w{search_gems context}.include?(k) && !@fc_config[k].class.name == "TrueClass" && !@fc_config[k].class.name == "FalseClass"
           @fc_config[k] = true if @fc_config[k]
         elsif %w{tags fail_tags include_rules role_paths environment_paths exclude_paths cookbook_paths}.include?(k)
-          @fc_config[k] =  Array(@fc_config[k])
+          @fc_config[k] = Array(@fc_config[k])
         end
       end
 
@@ -220,7 +220,7 @@ module FoodCritic
     # @return [Boolean] True if the paths exist.
     def valid_paths?
       paths = options[:cookbook_paths] + options[:role_paths] +
-              options[:environment_paths]
+        options[:environment_paths]
       paths.flatten!
       if paths.any?
         tst = true
