@@ -1,5 +1,14 @@
 # FoodCritic Changelog:
 
+## [8.1.0](https://github.com/acrmp/foodcritic/tree/8.1.0) (2016-10-20)
+
+[Full Changelog](https://github.com/acrmp/foodcritic/compare/v8.0.0...8.1.0)
+
+**Merged pull requests:**
+
+- Add Chef client 12.15.19 metadata [#493](https://github.com/acrmp/foodcritic/pull/493) ([tas50](https://github.com/tas50))
+- Clarify exclude path instructions in the CLI help [#489](https://github.com/acrmp/foodcritic/pull/489) ([unixorn](https://github.com/unixorn))
+
 ## [8.0.0](https://github.com/acrmp/foodcritic/tree/8.0.0) (2016-09-22)
 
 [Full Changelog](https://github.com/acrmp/foodcritic/compare/v8.0.0...7.1.0)
