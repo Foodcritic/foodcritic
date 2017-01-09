@@ -16,5 +16,6 @@ group :development do
 end
 
 group :changelog do
-  gem "github_changelog_generator"
+  # This fork has many fixes we want to use. Once this gets merged upstream we can use the gem again
+  gem "github_changelog_generator", git: "https://github.com/tduffield/github-changelog-generator", branch: "adjust-tag-section-mapping"
 end
