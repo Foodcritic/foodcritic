@@ -359,7 +359,26 @@ module FoodCritic
       end.sort { |a, b| a[:platform] <=> b[:platform] }
     end
 
-    # Template filename
+    # Returns template source filenames if specified or implied by resource name
+    def template_files(resource)
+      if resource["source"]
+        if resource["source"].respond_to?(:xpath) # source is an array
+          resource["source"].xpath("//array//tstring_content/@value").map { |x| x.to_s }
+        else # source is a string
+          [resource["source"]]
+        end
+      elsif resource[:name]
+        if resource[:name].respond_to?(:xpath)
+          [resource[:name]]
+        else
+          ["#{File.basename(resource[:name])}.erb"]
+        end
+      end
+    end
+
+    # return template source filename
+    # This is deprecated as it returns a string only which isn't compatible
+    # with arrays of souce files in Chef 12
     def template_file(resource)
       if resource["source"]
         resource["source"]
@@ -388,7 +407,7 @@ module FoodCritic
       end.flatten.uniq.compact
     end
 
-    # Templates in the current cookbook
+    # Templates source files in the current cookbook
     def template_paths(recipe_path)
       Dir.glob(Pathname.new(recipe_path).dirname.dirname + "templates" +
         "**/*", File::FNM_DOTMATCH).select do |path|

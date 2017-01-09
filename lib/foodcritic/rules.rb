@@ -498,14 +498,8 @@ rule "FC033", "Missing template" do
     end.reject do |resource|
       resource[:file].respond_to?(:xpath)
     end.select do |resource|
-      template_paths(filename).none? do |path|
-        relative_path = []
-        Pathname.new(path).ascend do |template_path|
-          relative_path << template_path.basename
-          break if template_path.dirname.dirname.basename.to_s == "templates"
-        end
-        File.join(relative_path.reverse) == resource[:file]
-      end
+      # return true if none of the basenames of the templates match the filename in the resource
+      ! template_paths(filename).any? { |path| File.basename(path) == resource[:file] }
     end.map { |resource| resource[:resource] }
   end
 end
