@@ -261,12 +261,10 @@ Given /^a cookbook recipe that declares (a resource|multiple resources) nested i
     #{conds.first} node['foo'] == 'bar'
       service "apache" do
         action :enable
-        #{
-          case condition_attribute
+        #{case condition_attribute
             when /(only_if|not_if) block/ then "#{$1} #{blk}"
             when /(only_if|not_if) string/ then "#{$1} #{str}"
-          end
-        }
+          end}
       end
       #{%q{service "httpd" do
         action :enable

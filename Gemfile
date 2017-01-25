@@ -11,8 +11,8 @@ end
 
 group :development do
   gem "chef", "~> 12.1"
-  gem "ronn", "~> 0.7"
   gem "chefstyle", "~> 0.4"
+  gem "ronn", "~> 0.7"
 end
 
 group :changelog do
