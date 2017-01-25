@@ -78,4 +78,3 @@ Feature: Check for unused template variables
     Given a template that includes a partial that includes the original template again
      When I check the cookbook
      Then the unused template variables warning 034 should not be displayed
-      And no error should have occurred

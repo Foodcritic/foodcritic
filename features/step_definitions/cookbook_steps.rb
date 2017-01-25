@@ -2325,7 +2325,7 @@ end
 
 Then "the usage text should include an option for specifying tags that will fail the build" do
   expect_usage_option("f", "epic-fail TAGS",
-    "Fail the build based on tags. Use 'any' to fail on all warnings.")
+    "Fail the build based on tags. Default of 'any' to fail on all warnings.")
 end
 
 Then /^the warnings shown should be (.*)$/ do |warnings|

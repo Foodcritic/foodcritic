@@ -52,4 +52,3 @@ Feature: Check for undeclared recipe dependencies
     Given a cookbook that does not have defined metadata
     When I check the cookbook
     Then the undeclared dependency warning 007 should not be displayed
-     And no error should have occurred

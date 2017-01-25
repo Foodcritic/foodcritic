@@ -13,7 +13,6 @@ Feature: Check for use of definitions
     Given a cookbook that does not contain a definition and has no definitions directory
     When I check the cookbook
     Then the definitions are deprecated warning 015 should not be displayed against the definition file
-     And no error should have occurred
 
   Scenario: Cookbook does not contain a definition - directory
     Given a cookbook that does not contain a definition and has a definitions directory

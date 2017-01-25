@@ -28,7 +28,6 @@ Feature: Check for unrecognised resource attributes
     Given a recipe that declares a user-defined resource
     When I check the cookbook
     Then the unrecognised attribute warning 009 should not be displayed
-     And no error should have occurred
 
   Scenario: Resource declared with only a name attribute
     Given a recipe that declares a resource with only a name attribute

@@ -61,7 +61,7 @@ module FoodCritic
           @options[:search_gems] = true
         end
         opts.on("-P", "--[no-]progress",
-                "Show progress of files being checked. default:  true") do |q|
+                "Show progress of files being checked. default: true") do |q|
           @options[:progress] = q
         end
         opts.on("-R", "--role-path PATH",

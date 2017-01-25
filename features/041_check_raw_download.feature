@@ -1,6 +1,6 @@
 Feature: Check for direct usage of curl or wget
 
-  In order to fetch remote artefacts idiomatically
+  In order to fetch remote artifacts idiomatically
   As a developer
   I want to use resources to download rather than using curl or wget
 
