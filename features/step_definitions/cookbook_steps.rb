@@ -556,6 +556,20 @@ Given /^a cookbook recipe that refers to a (missing |local )?template( in a subd
   end
 end
 
+Given /^a cookbook recipe that refers to a template in the root of the templates directory$/ do
+  write_recipe %q{
+    template "/tmp/config.conf" do
+      source "config.conf.erb"
+      variables({
+        :config_var => 'foo'
+      })
+    end
+  }
+  write_file "cookbooks/example/templates/config.conf.erb", %q{
+    <%= @config_var %>
+  }
+end
+
 Given "a cookbook recipe that refers to a template without an erb extension" do
   write_recipe %q{
     template '/etc/resolv.conf' do
