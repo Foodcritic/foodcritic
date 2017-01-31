@@ -865,3 +865,10 @@ rule "FC065", "Ensure source_url is set in metadata" do
     [file_match(filename)] unless field(ast, "source_url").any?
   end
 end
+
+rule  'FC066', 'Ensure no gems are being shipped with cookbooks' do
+  tags %w(correctness annoyances chef12)
+  cookbook do |path|
+    [file_match(path.join(filename, '.gem'))]
+  end
+end
