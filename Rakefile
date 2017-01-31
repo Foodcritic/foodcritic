@@ -2,7 +2,7 @@ require "foodcritic/version"
 require "bundler"
 require "rake/testtask"
 
-task :default => [:man, :install, :rubocop, :test, :features]
+task :default => [:man, :install, :test, :features, :rubocop]
 
 Bundler.setup
 Bundler::GemHelper.install_tasks
@@ -28,7 +28,7 @@ begin
     t.cucumber_opts += ["features"]
   end
 rescue LoadError
-  puts "cucumber is not available. gem install cucumber to get rake rubocop to work"
+  puts "cucumber is not available. gem install cucumber to get 'rake features' to work"
 end
 
 begin

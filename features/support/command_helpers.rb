@@ -195,7 +195,7 @@ module FoodCritic
           :description => "Only check against rules valid for this version of Chef." },
 
         { :short => "f", :long => "epic-fail TAGS",
-          :description => "Fail the build based on tags. Use 'any' to fail on all warnings." },
+          :description => "Fail the build based on tags. Default of 'any' to fail on all warnings." },
 
         { :short => "l", :long => "list",
           :description => "List all enabled rules and their descriptions." },
@@ -225,7 +225,7 @@ module FoodCritic
           :description => "Display the foodcritic version." },
 
         { :short => "X", :long => "exclude PATH",
-          :description => "Exclude path(s) from being linted." },
+          :description => "Exclude path(s) from being linted. PATH is relative to the cookbook, not an absolute PATH. Default test/**/*,spec/**/*,features/**/*" },
 
       ]
     end

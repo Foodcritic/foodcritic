@@ -27,4 +27,4 @@ Feature: Check for overly long ruby blocks
   Scenario: Missing block attribute
     Given a recipe that contains a ruby block without a block attribute
      When I check the cookbook
-     Then no error should have occurred
+     Then the long ruby block warning 014 should not be displayed

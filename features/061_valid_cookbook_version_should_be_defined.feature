@@ -2,7 +2,7 @@ Feature: Defined cookbook version should be valid
 
   In order to ensure that recipe metadata is stable
   As a developer
-  I want to identify metadata that does not define a valid verison for the cookbook
+  I want to identify metadata that does not define a valid version for the cookbook
 
   Scenario: Metadata with the version keyword and a valid version
     Given a cookbook with metadata that includes the version keyword and a valid version string
