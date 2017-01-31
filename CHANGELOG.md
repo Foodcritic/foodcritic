@@ -1,14 +1,35 @@
-# FoodCritic Changelog:
+# Foodcritic Changelog:
 
-## [8.2.0](https://github.com/acrmp/foodcritic/tree/8.2.0) (2017-01-09)
-[Full Changelog](https://github.com/acrmp/foodcritic/compare/v8.1.0...8.2.0)
+## [9.0.0](https://github.com/acrmp/foodcritic/tree/9.0.0) (2017-01-31)
+
+[Full Changelog](https://github.com/acrmp/foodcritic/compare/v8.2.0...9.0.0)
+
+**Breaking Changes**
+
+This major release of Foodcritic changes the default command line behavior in the following ways:
+
+- By default Foodcritic will now show its progress while running. This can be disabled with --no-progress
+- By default Foodcritic will fail the build (exit non-zero) if any FC warnings are thrown. This behavior can be disabled by using -f ~any to disable failing on any tags.
+- By default Foodcritic will now ignore files in the spec/ test/ and /features directories as these should not contain valid cookbooks. This resolves failures running against test cookbooks which generally don't pass all FC tags.
 
 **Implemented enhancements:**
 
-- Add 12.17.44 metadata \(and make it the default\) [\#505](https://github.com/acrmp/foodcritic/pull/505) ([tas50](https://github.com/tas50))
-- Add 12.16.42 metadata and make it the default [\#497](https://github.com/acrmp/foodcritic/pull/497) ([tas50](https://github.com/tas50))
+- Add 12.18.31 metadata and make it the default [#508](https://github.com/acrmp/foodcritic/pull/508) ([tas50](https://github.com/tas50))
+- Test on Ruby 2.4 and fix failing tests [#507](https://github.com/acrmp/foodcritic/pull/507) ([tas50](https://github.com/tas50))
+- Support Chef RFC 17 compliant templates [#485](https://github.com/acrmp/foodcritic/pull/485) ([hagihala](https://github.com/hagihala))
+- More sane default CLI values [#462](https://github.com/acrmp/foodcritic/pull/462) ([tas50](https://github.com/tas50))
+
+## [v8.2.0](https://github.com/acrmp/foodcritic/tree/v8.2.0) (2017-01-09)
+
+[Full Changelog](https://github.com/acrmp/foodcritic/compare/v8.1.0...v8.2.0)
+
+**Implemented enhancements:**
+
+- Add 12.17.44 metadata (and make it the default) [#505](https://github.com/acrmp/foodcritic/pull/505) ([tas50](https://github.com/tas50))
+- Add 12.16.42 metadata and make it the default [#497](https://github.com/acrmp/foodcritic/pull/497) ([tas50](https://github.com/tas50))
 
 ## [v8.1.0](https://github.com/acrmp/foodcritic/tree/v8.1.0) (2016-10-20)
+
 [Full Changelog](https://github.com/acrmp/foodcritic/compare/v8.0.0...v8.1.0)
 
 **Implemented enhancements:**

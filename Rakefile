@@ -46,7 +46,7 @@ begin
   require "github_changelog_generator/task"
 
   GitHubChangelogGenerator::RakeTask.new :changelog do |config|
-    config.header = "# FoodCritic Changelog:"
+    config.header = "# Foodcritic Changelog:"
     config.future_release = FoodCritic::VERSION
     config.add_issues_wo_labels = false
     config.enhancement_labels = "enhancement,Enhancement,Enhancements,New Feature,Feature".split(",")
