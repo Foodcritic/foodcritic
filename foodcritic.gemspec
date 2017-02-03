@@ -17,6 +17,7 @@ Gem::Specification.new do |s|
   s.add_dependency("treetop", "~> 1.4")
   s.add_dependency("yajl-ruby", "~> 1.1")
   s.add_dependency("erubis")
+  s.add_dependency("app_conf")
   s.add_dependency("rufus-lru", "~> 1.0")
   s.files = Dir["chef_dsl_metadata/*.json"] +
     Dir["lib/**/*.rb"] +

@@ -4,7 +4,10 @@ module FoodCritic
     # Create a new instance of CommandLine
     #
     # @param [Array] args The command line arguments
+    require "optparse"
+
     def initialize(args)
+      # Load config_files first, so command line will override
       @args = args
       @original_args = args.dup
       @options = {
@@ -17,6 +20,7 @@ module FoodCritic
         exclude_paths: ["test/**/*", "spec/**/*", "features/**/*"],
         progress: true,
       }
+
       @parser = OptionParser.new do |opts|
         opts.banner = "foodcritic [cookbook_paths]"
         opts.on("-t", "--tags TAGS",
@@ -80,7 +84,28 @@ module FoodCritic
                 "Exclude path(s) from being linted. PATH is relative to the cookbook, not an absolute PATH. Default test/**/*,spec/**/*,features/**/*") do |e|
           options[:exclude_paths] << e
         end
+        opts.on("--config PATH",
+                "Path to foodcritic.yml file to use") do |f|
+          @options[:config] = f
+        end
       end
+
+      cbs = @parser.permute(args)
+
+      get_config(cbs)
+
+      @options[:fail_tags] = @fc_config["fail_tags"].flatten.uniq if @fc_config["fail_tags"]
+      @options[:tags] = @fc_config["tags"].flatten.uniq if @fc_config["tags"]
+      @options[:include_rules] = @fc_config["include_rules"].flatten.uniq if @fc_config["include_rules"]
+      @options[:role_paths] = @fc_config["role_paths"].flatten.uniq if @fc_config["role_paths"]
+      @options[:environment_paths] = @fc_config["environment_paths"].flatten.uniq if @fc_config["environment_paths"]
+      @options[:exclude_paths] = @fc_config["exclude_paths"].flatten.uniq if @fc_config["exclude_paths"]
+      @options[:cookbook_paths] = @fc_config["cookbook_paths"].flatten.uniq if @fc_config["cookbook_paths"]
+      @options[:search_grammar] = @fc_config["search_grammar"] if @fc_config["search_grammar"]
+      @options[:chef_version] = @fc_config["chef_version"] if @fc_config["chef_version"]
+      @options[:context] = @fc_config["context"] if @fc_config["context"]
+      @options[:search_gems] = @fc_config["search_gems"] if @fc_config["search_gems"]
+
       # -v is not implemented but OptionParser gives the Foodcritic's version
       # if that flag is passed
       if args.include? "-v"
@@ -92,6 +117,70 @@ module FoodCritic
           e.recover args
         end
       end
+
+      [:cookbook_paths, :role_paths, :environment_paths, :include_rules, :exclude_paths].each do |pth|
+        @options[pth].map! { |c| File.expand_path(c, ".") } if @options[pth] && @options[pth] != [nil]
+        @options[pth].flatten!
+        @options[pth].uniq!
+      end
+    end
+
+    # Search for and load config files
+    def get_config(cbs)
+      require "app_conf"
+      files_to_load = []
+      if ENV["HOME"] && File.file?(File.expand_path("~/.chef/foodcritic.yml"))
+        files_to_load << File.expand_path("~/.chef/foodcritic.yml", ".")
+      end
+      [".", cbs].flatten.each do |mypth|
+        tmp_path = File.expand_path(mypth, ".")
+        until File.basename(tmp_path) == "/"
+          files_to_load << "#{tmp_path}/.chef/foodcritic.yml" if File.file?("#{tmp_path}/.chef/foodcritic.yml")
+          tmp_path = File.expand_path("#{tmp_path}/..", ".")
+        end
+      end
+      if @original_args.include?("--config")
+        ind = @original_args.index("--config") + 1
+        tmp_path = @original_args[ind]
+        files_to_load << tmp_path if File.file?(tmp_path) && File.basename(tmp_path) == "foodcritic.yml"
+        if File.directory?(tmp_path)
+          files_to_load << "#{tmp_path}/foodcritic.yml" if File.file?("#{tmp_path}/foodcritic.yml")
+          files_to_load << "#{tmp_path}/.chef/foodcritic.yml" if File.file?("#{tmp_path}/.chef/foodcritic.yml")
+        end
+      end
+
+      files_to_load.flatten!
+      files_to_load.uniq!
+
+      @fc_config = {}
+      tmp_config = AppConf.new
+      files_to_load.each do |load_path|
+        next unless File.exist?(load_path)
+        tmp_config.load(load_path)
+        @fc_config.merge!(tmp_config.to_hash) do |key, v1, v2|
+          if v1 == v2
+            v1
+          elsif %w{chef_version config search_grammar search_gems context}.include? key
+            v2 || v1
+          elsif v1.class.name == "Array"
+            v1 << v2 if v2
+          else
+            v1.each_line.to_a << v2 if v2
+          end
+        end
+      end
+
+      @fc_config.keys.each do |k|
+        if %w{chef_version config search_grammar}.include?(k) && !@fc_config[k].class.name == "String"
+          @fc_config[k] =  @fc_config[k].to_s
+        elsif %w{search_gems context}.include?(k) && !@fc_config[k].class.name == "TrueClass" && !@fc_config[k].class.name == "FalseClass"
+          @fc_config[k] = true if @fc_config[k]
+        elsif %w{tags fail_tags include_rules role_paths environment_paths exclude_paths cookbook_paths}.include?(k)
+          @fc_config[k] = Array(@fc_config[k])
+        end
+      end
+
+      @fc_config
     end
 
     # Show the command help to the end user?
@@ -135,7 +224,17 @@ module FoodCritic
     def valid_paths?
       paths = options[:cookbook_paths] + options[:role_paths] +
         options[:environment_paths]
-      paths.any? && paths.all? { |path| File.exist?(path) }
+      paths.flatten!
+      if paths.any?
+        tst = true
+        paths.each do |path|
+          if !path || path.nil? || !File.exist?(File.expand_path(path))
+            tst = false
+            puts "ERROR - Invalid path --#{path}--"
+          end
+        end
+        return tst
+      end
     end
 
     # Is the search grammar specified valid?
@@ -184,11 +283,11 @@ module FoodCritic
     # @return [Hash] The parsed command-line options.
     def options
       original_options.merge(
-        {
+
           cookbook_paths: cookbook_paths,
           role_paths: role_paths,
-          environment_paths: environment_paths,
-        }
+          environment_paths: environment_paths
+
       )
     end
 
