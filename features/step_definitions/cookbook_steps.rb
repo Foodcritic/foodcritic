@@ -2158,19 +2158,6 @@ Then /^the build will (succeed|fail) with (?:no )?warnings(.*)$/ do |build_outco
   assert_build_result(build_outcome == "succeed", warnings.delete(" ").split(","))
 end
 
-Then "the check for server warning 003 should not be displayed against the condition" do
-  expect_warning("FC003", :line => nil, :expect_warning => false)
-end
-
-Then /^the check for server warning 003 should not be displayed against the search after the (.*) conditional$/ do |format|
-  line = format == "oneline" ? 2 : 4
-  expect_warning("FC003", :line => line, :expect_warning => false)
-end
-
-Then "the check for server warning 003 should not be displayed given we have checked" do
-  expect_warning("FC003", :line => 4, :expect_warning => false)
-end
-
 Then /^the consider adding platform warning 024 should( not)? be shown$/ do |should_not|
   expect_warning("FC024", :line => should_not.nil? ? @expected_line : nil, :expect_warning => should_not.nil?)
 end

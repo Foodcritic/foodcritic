@@ -16,7 +16,7 @@ module FoodCritic
     WARNINGS = {
       "FC001" => "Use strings in preference to symbols to access node attributes",
       "FC002" => "Avoid string interpolation where not required",
-      "FC003" => "Check whether you are running with chef server before using server-specific features",
+      # FC003 was yanked and is considered reserved, do not reuse it
       "FC004" => "Use a service resource to start and stop services",
       "FC005" => "Avoid repetition of resource declarations",
       "FC006" => "Mode should be quoted or fully specified when setting file permissions",

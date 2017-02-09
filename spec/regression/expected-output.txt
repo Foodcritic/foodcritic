@@ -173,16 +173,6 @@ FC002: Avoid string interpolation where not required: ./windows/libraries/regist
 FC002: Avoid string interpolation where not required: ./windows/libraries/registry_helper.rb:173
 FC002: Avoid string interpolation where not required: ./windows/libraries/windows_privileged.rb:42
 FC002: Avoid string interpolation where not required: ./windows/libraries/windows_privileged.rb:56
-FC003: Check whether you are running with chef server before using server-specific features: ./database/recipes/ebs_backup.rb:33
-FC003: Check whether you are running with chef server before using server-specific features: ./database/recipes/ebs_volume.rb:49
-FC003: Check whether you are running with chef server before using server-specific features: ./database/recipes/master.rb:30
-FC003: Check whether you are running with chef server before using server-specific features: ./database/recipes/master.rb:57
-FC003: Check whether you are running with chef server before using server-specific features: ./drbd/recipes/pair.rb:31
-FC003: Check whether you are running with chef server before using server-specific features: ./heartbeat/providers/default.rb:22
-FC003: Check whether you are running with chef server before using server-specific features: ./partial_search/libraries/partial_search.rb:65
-FC003: Check whether you are running with chef server before using server-specific features: ./resolver/recipes/from_server_role.rb:21
-FC003: Check whether you are running with chef server before using server-specific features: ./ssh_known_hosts/recipes/default.rb:23
-FC003: Check whether you are running with chef server before using server-specific features: ./ufw/recipes/databag.rb:32
 FC007: Ensure recipe dependencies are reflected in cookbook metadata: ./boost/recipes/source.rb:1
 FC007: Ensure recipe dependencies are reflected in cookbook metadata: ./build-essential/recipes/default.rb:65
 FC007: Ensure recipe dependencies are reflected in cookbook metadata: ./chef-client/recipes/service.rb:197
