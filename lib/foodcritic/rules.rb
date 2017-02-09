@@ -850,3 +850,24 @@ rule "FC065", "Ensure source_url is set in metadata" do
     [file_match(filename)] unless field(ast, "source_url").any?
   end
 end
+
+rule "FC066", "Ensure chef_version is set in metadata" do
+  tags %w{metadata}
+  metadata do |ast, filename|
+    [file_match(filename)] unless field(ast, "chef_version").any?
+  end
+end
+
+rule "FC067", "Ensure at least one platform supported in metadata" do
+  tags %w{metadata}
+  metadata do |ast, filename|
+    [file_match(filename)] unless field(ast, "supports").any?
+  end
+end
+
+rule "FC068", "Ensure license is set in metadata" do
+  tags %w{metadata}
+  metadata do |ast, filename|
+    [file_match(filename)] unless field(ast, "license").any?
+  end
+end
