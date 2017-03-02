@@ -266,9 +266,11 @@ Given /^a cookbook recipe that declares (a resource|multiple resources) nested i
             when /(only_if|not_if) string/ then "#{$1} #{str}"
           end}
       end
-      #{%q{service "httpd" do
-        action :enable
-      end} if arity.include?('multiple')}
+      #{if arity.include?('multiple')
+          %q{service "httpd" do
+          action :enable
+      end}
+        end}
     #{"elsif true\nlog 'bar'" if conds.include? 'elsif'}
     #{"else\nlog 'foo'" if conds.include? 'else'}
     end
