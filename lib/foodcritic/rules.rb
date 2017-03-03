@@ -26,16 +26,7 @@ rule "FC002", "Avoid string interpolation where not required" do
   end
 end
 
-rule "FC003",
-     "Check whether you are running with chef server before using"\
-     " server-specific features" do
-  tags %w{portability solo}
-  recipe do |ast, filename|
-    unless checks_for_chef_solo?(ast) || chef_solo_search_supported?(filename)
-      searches(ast)
-    end
-  end
-end
+# FC003 was yanked and the number should not be reused
 
 rule "FC004", "Use a service resource to start and stop services" do
   tags %w{style services}

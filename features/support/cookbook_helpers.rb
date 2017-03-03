@@ -43,7 +43,7 @@ module FoodCritic
 
     # Create a cookbook that will match the specified rules.
     #
-    # @param [Array] codes The codes to match. Only FC002, FC003 and FC004 are supported.
+    # @param [Array] codes The codes to match. Only FC002, FC004 and FC005 and FC006 are supported.
     def cookbook_that_matches_rules(codes)
       recipe = ""
       codes.each do |code|
@@ -53,13 +53,23 @@ module FoodCritic
               action :create
             end
           }
-        elsif code == "FC003"
-          recipe += %Q{nodes = search(:node, "hostname:[* TO *]")\n}
         elsif code == "FC004"
           recipe += %q{
             execute "stop-jetty" do
               command "/etc/init.d/jetty6 stop"
               action :run
+            end
+          }
+        elsif code == "FC005"
+          recipe += %q{
+            package 'erlang-base' do
+              action :upgrade
+            end
+            package 'erlang-corba' do
+              action :upgrade
+            end
+            package 'erlang-another' do
+              action :upgrade
             end
           }
         elsif code == "FC006"
