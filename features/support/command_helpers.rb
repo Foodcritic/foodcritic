@@ -22,7 +22,7 @@ module FoodCritic
       "FC006" => "Mode should be quoted or fully specified when setting file permissions",
       "FC007" => "Ensure recipe dependencies are reflected in cookbook metadata",
       "FC008" => "Generated cookbook metadata needs updating",
-      "FC009" => "Resource attribute not recognised",
+      # FC009 was yanked and is considered reserved, do not reuse it
       "FC010" => "Invalid search syntax",
       "FC011" => "Missing README in markdown format",
       "FC012" => "Use Markdown for README rather than RDoc",

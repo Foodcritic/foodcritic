@@ -2300,16 +2300,8 @@ Then /^the unused template variables warning 034 should (not )?be displayed agai
                           :expect_warning => ! not_shown)
 end
 
-Then /^the unrecognised attribute warning 009 should be (true|false)$/ do |shown|
-  shown == "true" ? expect_warning("FC009") : expect_no_warning("FC009")
-end
-
 Then /^the invalid resource action warning 038 should be (true|false)$/ do |shown|
   shown == "true" ? expect_warning("FC038") : expect_no_warning("FC038")
-end
-
-Then "the unrecognised attribute warning 009 should be displayed against the correct resource" do
-  expect_warning("FC009", :line => 7)
 end
 
 Then "the usage text should include an option for specifying tags that will fail the build" do
