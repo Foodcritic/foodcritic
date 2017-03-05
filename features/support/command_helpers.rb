@@ -47,8 +47,8 @@ module FoodCritic
       "FC032" => "Invalid notification timing",
       "FC033" => "Missing template",
       "FC034" => "Unused template variables",
-      "FC037" => "Invalid notification action",
-      "FC038" => "Invalid resource action",
+      # FC037 was yanked and is considered reserved, do not reuse it
+      # FC038 was yanked and is considered reserved, do not reuse it
       "FC039" => "Node method cannot be accessed with key",
       "FC040" => "Execute resource used to run git commands",
       "FC041" => "Execute resource used to run curl or wget commands",

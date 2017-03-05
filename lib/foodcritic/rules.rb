@@ -519,38 +519,9 @@ rule "FC034", "Unused template variables" do
   end
 end
 
-rule "FC037", "Invalid notification action" do
-  tags %w{correctness}
-  recipe do |ast|
-    find_resources(ast).select do |resource|
-      notifications(resource).any? do |n|
-        type = case n[:type]
-               when :notifies then n[:resource_type]
-               when :subscribes then resource_type(resource).to_sym
-               end
-        n[:action].size > 0 && !resource_action?(type, n[:action])
-      end
-    end
-  end
-end
+# FC037 was yanked and the number should not be reused
 
-rule "FC038", "Invalid resource action" do
-  tags %w{correctness}
-  recipe do |ast|
-    find_resources(ast).select do |resource|
-      actions = resource_attributes(resource)["action"]
-      if actions.respond_to?(:xpath)
-        actions = actions.xpath('descendant::array/
-          descendant::symbol/ident/@value')
-      else
-        actions = Array(actions)
-      end
-      actions.reject { |a| a.to_s.empty? }.any? do |action|
-        !resource_action?(resource_type(resource), action)
-      end
-    end
-  end
-end
+# FC038 was yanked and the number should not be reused
 
 rule "FC039", "Node method cannot be accessed with key" do
   tags %w{correctness}

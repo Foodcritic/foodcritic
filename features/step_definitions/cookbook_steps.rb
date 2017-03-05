@@ -2300,10 +2300,6 @@ Then /^the unused template variables warning 034 should (not )?be displayed agai
                           :expect_warning => ! not_shown)
 end
 
-Then /^the invalid resource action warning 038 should be (true|false)$/ do |shown|
-  shown == "true" ? expect_warning("FC038") : expect_no_warning("FC038")
-end
-
 Then "the usage text should include an option for specifying tags that will fail the build" do
   expect_usage_option("f", "epic-fail TAGS",
     "Fail the build based on tags. Default of 'any' to fail on all warnings.")
