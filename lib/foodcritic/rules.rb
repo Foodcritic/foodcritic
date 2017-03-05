@@ -118,24 +118,8 @@ rule "FC008", "Generated cookbook metadata needs updating" do
   end
 end
 
-rule "FC009", "Resource attribute not recognised" do
-  tags %w{correctness}
-  recipe do |ast|
-    matches = []
-    resource_attributes_by_type(ast).each do |type, resources|
-      resources.each do |resource|
-        resource.keys.map(&:to_sym).reject do |att|
-          resource_attribute?(type.to_sym, att)
-        end.each do |invalid_att|
-          matches << find_resources(ast, type: type).find do |res|
-            resource_attributes(res).include?(invalid_att.to_s)
-          end
-        end
-      end
-    end
-    matches
-  end
-end
+# FC009 has been deprecated in favor of a Chefspec converge, which
+# results in fewer false positives and works without updating chef metadata
 
 rule "FC010", "Invalid search syntax" do
   tags %w{correctness search}
@@ -535,38 +519,9 @@ rule "FC034", "Unused template variables" do
   end
 end
 
-rule "FC037", "Invalid notification action" do
-  tags %w{correctness}
-  recipe do |ast|
-    find_resources(ast).select do |resource|
-      notifications(resource).any? do |n|
-        type = case n[:type]
-               when :notifies then n[:resource_type]
-               when :subscribes then resource_type(resource).to_sym
-               end
-        n[:action].size > 0 && !resource_action?(type, n[:action])
-      end
-    end
-  end
-end
+# FC037 was yanked and the number should not be reused
 
-rule "FC038", "Invalid resource action" do
-  tags %w{correctness}
-  recipe do |ast|
-    find_resources(ast).select do |resource|
-      actions = resource_attributes(resource)["action"]
-      if actions.respond_to?(:xpath)
-        actions = actions.xpath('descendant::array/
-          descendant::symbol/ident/@value')
-      else
-        actions = Array(actions)
-      end
-      actions.reject { |a| a.to_s.empty? }.any? do |action|
-        !resource_action?(resource_type(resource), action)
-      end
-    end
-  end
-end
+# FC038 was yanked and the number should not be reused
 
 rule "FC039", "Node method cannot be accessed with key" do
   tags %w{correctness}
@@ -839,9 +794,6 @@ end
 
 rule "FC064", "Ensure issues_url is set in metadata" do
   tags %w{metadata supermarket chef12}
-  applies_to do |version|
-    version >= gem_version("12.0.0")
-  end
   metadata do |ast, filename|
     [file_match(filename)] unless field(ast, "issues_url").any?
   end
@@ -849,9 +801,6 @@ end
 
 rule "FC065", "Ensure source_url is set in metadata" do
   tags %w{metadata supermarket chef12}
-  applies_to do |version|
-    version >= gem_version("12.0.0")
-  end
   metadata do |ast, filename|
     [file_match(filename)] unless field(ast, "source_url").any?
   end
