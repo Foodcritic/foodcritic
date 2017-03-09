@@ -60,5 +60,5 @@ Feature: Check for unrecognised resource attributes
      Then the unrecognised attribute warning 009 should be <shown>
   Examples:
     | version  | shown |
-    | 12.5.1   | true  |
+    | 12.6.0   | true  |
     | 12.11.18 | false |
