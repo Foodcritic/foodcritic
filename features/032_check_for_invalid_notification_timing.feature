@@ -11,14 +11,12 @@ Feature: Check for invalid notification timings
   Examples:
     | type       | notification_timing | version | display     |
     | notifies   |                     | 12.6.0  | should not  |
-    | notifies   | before              | 12.4.0  | should      |
     | notifies   | before              | 12.6.0  | should not  |
     | notifies   | immediately         | 12.6.0  | should not  |
     | notifies   | immediate           | 12.6.0  | should not  |
     | notifies   | delayed             | 12.6.0  | should not  |
     | notifies   | imediately          | 12.6.0  | should      |
     | subscribes |                     | 12.6.0  | should not  |
-    | subscribes | before              | 12.4.0  | should      |
     | subscribes | before              | 12.6.0  | should not  |
     | subscribes | immediately         | 12.6.0  | should not  |
     | subscribes | immediate           | 12.6.0  | should not  |
