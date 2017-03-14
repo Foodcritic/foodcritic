@@ -1,16 +1,17 @@
 # Foodcritic Changelog:
 
-## [9.0.0](https://github.com/acrmp/foodcritic/tree/9.0.0) (2017-01-31)
+## [10.0.0](https://github.com/acrmp/foodcritic/tree/v10.0.0) (2017-03-14)
 
-[Full Changelog](https://github.com/acrmp/foodcritic/compare/v8.2.0...9.0.0)
+[Full Changelog](https://github.com/acrmp/foodcritic/compare/v9.0.0...v10.0.0)
 
-**Breaking Changes**
+**Implemented enhancements:**
 
-This major release of Foodcritic changes the default command line behavior in the following ways:
+- Add 12.19 metadata as default and remove 12.0 - 12.5.1 [#516](https://github.com/acrmp/foodcritic/pull/516) ([tas50](https://github.com/tas50))
+- Remove FC003 from Foodcritic [#512](https://github.com/acrmp/foodcritic/pull/512) ([tas50](https://github.com/tas50))
 
-- By default Foodcritic will now show its progress while running. This can be disabled with --no-progress
-- By default Foodcritic will fail the build (exit non-zero) if any FC warnings are thrown. This behavior can be disabled by using -f ~any to disable failing on any tags.
-- By default Foodcritic will now ignore files in the spec/ test/ and /features directories as these should not contain valid cookbooks. This resolves failures running against test cookbooks which generally don't pass all FC tags.
+## [v9.0.0](https://github.com/acrmp/foodcritic/tree/v9.0.0) (2017-01-31)
+
+[Full Changelog](https://github.com/acrmp/foodcritic/compare/v8.2.0...v9.0.0)
 
 **Implemented enhancements:**
 
