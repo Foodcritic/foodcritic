@@ -2536,3 +2536,33 @@ end
 Given(/^a cookbook with metadata that includes a source_url expression$/) do
   write_metadata "source_url an(expression)"
 end
+
+Given(/^a cookbook with metadata that (includes|does not include) a chef_version keyword$/) do |includes|
+  write_metadata %Q{
+    #{"chef_version '> 12.6'" if includes == 'includes'}
+  }
+end
+
+Then(/^the metadata missing chef_version warning 066 should be (shown|not shown) against the metadata file$/) do |show_warning|
+  expect_warning("FC066", :file => "metadata.rb", :expect_warning => show_warning == "shown")
+end
+
+Given(/^a cookbook with metadata that (includes|does not include) a supports keyword$/) do |includes|
+  write_metadata %Q{
+    #{"supports 'debian'" if includes == 'includes'}
+  }
+end
+
+Then(/^the metadata missing supports warning 067 should be (shown|not shown) against the metadata file$/) do |show_warning|
+  expect_warning("FC067", :file => "metadata.rb", :expect_warning => show_warning == "shown")
+end
+
+Given(/^a cookbook with metadata that (includes|does not include) a license keyword$/) do |includes|
+  write_metadata %Q{
+    #{"license 'Apache 2.0'" if includes == 'includes'}
+  }
+end
+
+Then(/^the metadata missing license warning 068 should be (shown|not shown) against the metadata file$/) do |show_warning|
+  expect_warning("FC068", :file => "metadata.rb", :expect_warning => show_warning == "shown")
+end
