@@ -1,4 +1,4 @@
-rule "FC031", "Cookbook without metadata file" do
+rule "FC031", "Cookbook without metadata.rb file" do
   tags %w{correctness metadata}
   cookbook do |filename|
     if !File.exist?(File.join(filename, "metadata.rb"))

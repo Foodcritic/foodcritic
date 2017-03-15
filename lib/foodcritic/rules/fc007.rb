@@ -1,5 +1,4 @@
-rule "FC007", "Ensure recipe dependencies are reflected "\
-              "in cookbook metadata" do
+rule "FC007", "Ensure recipe dependencies are reflected in cookbook metadata" do
   tags %w{correctness metadata}
   recipe do |ast, filename|
     metadata_path = Pathname.new(

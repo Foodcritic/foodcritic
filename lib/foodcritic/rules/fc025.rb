@@ -1,5 +1,5 @@
 rule "FC025", "Prefer chef_gem to compile-time gem install" do
-  tags %w{style deprecated}
+  tags %w{correctness deprecated}
   recipe do |ast|
     gem_install = ast.xpath("//stmts_add/assign[method_add_block[command/ident/
       @value='gem_package'][do_block/stmts_add/command[ident/@value='action']

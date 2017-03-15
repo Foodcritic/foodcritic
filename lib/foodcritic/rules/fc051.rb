@@ -1,5 +1,5 @@
 rule "FC051", "Template partials loop indefinitely" do
-  tags %w{correctness}
+  tags %w{correctness templates}
   recipe do |_, filename|
     cbk_templates = template_paths(filename)
 

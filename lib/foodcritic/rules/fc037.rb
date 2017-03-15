@@ -1,5 +1,5 @@
 rule "FC037", "Invalid notification action" do
-  tags %w{correctness}
+  tags %w{correctness notifications}
   recipe do |ast|
     find_resources(ast).select do |resource|
       notifications(resource).any? do |n|

@@ -1,5 +1,4 @@
-rule "FC006",
-     "Mode should be quoted or fully specified when "\
+rule "FC006", "Mode should be quoted or fully specified when "\
      "setting file permissions" do
   tags %w{correctness files}
   recipe do |ast|
