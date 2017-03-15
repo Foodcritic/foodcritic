@@ -18,8 +18,8 @@ Feature: Continuous Integration Support
   Examples:
     | cookbook_matches  | tag_arguments       | warnings_shown    | build_status |
     | FC002,FC004       |                     | FC002,FC004       | failed       |
-    | FC002,FC004       | -t style            | FC002,FC004       | failed       |
-    | FC002,FC004       | -t style -f ~any    | FC002,FC004       | successful   |
+    | FC002,FC004       | -t style            | FC002             | failed       |
+    | FC002,FC004       | -t style -f ~any    | FC002             | successful   |
     | FC002,FC004       | -f FC005            | FC002,FC004       | successful   |
     | FC002,FC004       | -f FC004            | FC002,FC004       | failed       |
     | FC002,FC004       | --epic-fail FC002   | FC002,FC004       | failed       |
