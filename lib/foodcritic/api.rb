@@ -34,6 +34,7 @@ module FoodCritic
 
     # Does the specified recipe check for Chef Solo?
     def checks_for_chef_solo?(ast)
+      puts "the checks_for_chef_solo? helper is deprecated and will be removed from the next release of Foodcritic"
       raise_unless_xpath!(ast)
       # TODO: This expression is too loose, but also will fail to match other
       # types of conditionals.
@@ -55,6 +56,7 @@ module FoodCritic
     # [chef-solo-search library](https://github.com/edelight/chef-solo-search)
     # available?
     def chef_solo_search_supported?(recipe_path)
+      puts "the chef_solo_search_supported? helper is deprecated and will be removed from the next release of Foodcritic"
       return false if recipe_path.nil? || !File.exist?(recipe_path)
 
       # Look for the chef-solo-search library.
