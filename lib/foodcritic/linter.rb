@@ -157,7 +157,7 @@ module FoodCritic
     end
 
     def load_rules!(options)
-      rule_files = [File.join(File.dirname(__FILE__), "rules.rb")]
+      rule_files = Dir.glob(File.join(File.dirname(__FILE__), "rules", "*"))
       rule_files << options[:include_rules]
       rule_files << rule_files_in_gems if options[:search_gems]
       @rules = RuleDsl.load(rule_files.flatten.compact, chef_version)
