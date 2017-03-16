@@ -77,6 +77,20 @@ module FoodCritic
       end
     end
 
+    # The absolute path of a cookbook from the specified file.
+    def cookbook_base_path(file)
+      file = File.expand_path(file) # make sure we get an absolute path
+      file = File.dirname(file) unless File.directory?(file) # get the dir only
+
+      # get list of items in the dir and intersect with metadata array.
+      # until we get an interfact (we have a metadata) walk up the dir structure
+      until (Dir.entries(file) & %w(metadata.rb metadata.json)).any?
+        file = File.absolute_path(File.dirname(file.to_s))
+      end
+
+      file
+    end
+
     # Support function to retrieve a metadata field
     def metadata_field(file, field)
       until (file.split(File::SEPARATOR) & standard_cookbook_subdirs).empty?
