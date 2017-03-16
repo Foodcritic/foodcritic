@@ -33,6 +33,9 @@ module FoodCritic
     end
 
     # Does the specified recipe check for Chef Solo?
+    #
+    # @deprecated chef-solo functionality in Chef has been replaced with local-mode
+    #  so this helper is no longer necessary and will be removed in Foodcritic 11.0
     def checks_for_chef_solo?(ast)
       puts "the checks_for_chef_solo? helper is deprecated and will be removed from the next release of Foodcritic"
       raise_unless_xpath!(ast)
@@ -52,9 +55,11 @@ module FoodCritic
         end == %w{Chef Config}
     end
 
-    # Is the
-    # [chef-solo-search library](https://github.com/edelight/chef-solo-search)
-    # available?
+    # Is the chef-solo-search library available?
+    #
+    # @see https://github.com/edelight/chef-solo-search
+    # @deprecated chef-solo functionality in Chef has been replaced with local-mode
+    #  so this helper is no longer necessary and will be removed in Foodcritic 11.0
     def chef_solo_search_supported?(recipe_path)
       puts "the chef_solo_search_supported? helper is deprecated and will be removed from the next release of Foodcritic"
       return false if recipe_path.nil? || !File.exist?(recipe_path)
