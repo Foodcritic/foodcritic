@@ -43,7 +43,7 @@ module FoodCritic
       "FC028" => "Incorrect #platform? usage",
       "FC029" => "No leading cookbook name in recipe metadata",
       "FC030" => "Cookbook contains debugger breakpoints",
-      "FC031" => "Cookbook without metadata file",
+      "FC031" => "Cookbook without metadata.rb file",
       "FC032" => "Invalid notification timing",
       "FC033" => "Missing template",
       "FC034" => "Unused template variables",

@@ -1,5 +1,5 @@
 rule "FC041", "Execute resource used to run curl or wget commands" do
-  tags %w{style recipe etsy}
+  tags %w{style portability}
   recipe do |ast|
     find_resources(ast, type: "execute").select do |cmd|
       cmd_str = (resource_attribute(cmd, "command") || resource_name(cmd)).to_s

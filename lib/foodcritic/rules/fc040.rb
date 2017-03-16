@@ -1,5 +1,5 @@
 rule "FC040", "Execute resource used to run git commands" do
-  tags %w{style recipe etsy}
+  tags %w{style}
   recipe do |ast|
     possible_git_commands = %w{ clone fetch pull checkout reset }
     find_resources(ast, type: "execute").select do |cmd|

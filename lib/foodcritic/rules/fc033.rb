@@ -1,5 +1,5 @@
 rule "FC033", "Missing template" do
-  tags %w{correctness}
+  tags %w{correctness templates}
   recipe do |ast, filename|
     find_resources(ast, type: :template).reject do |resource|
       resource_attributes(resource)["local"] ||

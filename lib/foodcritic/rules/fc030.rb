@@ -1,5 +1,5 @@
 rule "FC030", "Cookbook contains debugger breakpoints" do
-  tags %w{annoyances}
+  tags %w{correctness}
   def pry_bindings(ast)
     ast.xpath('//call[(vcall|var_ref)/ident/@value="binding"]
       [ident/@value="pry"]')

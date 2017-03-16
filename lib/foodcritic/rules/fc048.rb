@@ -1,5 +1,5 @@
 rule "FC048", "Prefer Mixlib::ShellOut" do
-  tags %w{style processes}
+  tags %w{portability}
   recipe do |ast|
     xstring_literal = ast.xpath("//xstring_literal")
     next xstring_literal if xstring_literal.any?

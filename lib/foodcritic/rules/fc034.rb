@@ -1,5 +1,5 @@
 rule "FC034", "Unused template variables" do
-  tags %w{correctness}
+  tags %w{correctness templates}
   recipe do |ast, filename|
     Array(resource_attributes_by_type(ast)["template"]).select do |t|
       t["variables"] && t["variables"].respond_to?(:xpath)

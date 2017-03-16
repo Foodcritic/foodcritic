@@ -1,5 +1,5 @@
 rule "FC008", "Generated cookbook metadata needs updating" do
-  tags %w{style metadata}
+  tags %w{metadata supermarket}
   metadata do |ast, filename|
     {
       "maintainer" => "YOUR_COMPANY_NAME",

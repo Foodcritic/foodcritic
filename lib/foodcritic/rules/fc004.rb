@@ -1,5 +1,5 @@
 rule "FC004", "Use a service resource to start and stop services" do
-  tags %w{style services}
+  tags %w{portability services}
   recipe do |ast|
     find_resources(ast, type: "execute").find_all do |cmd|
       cmd_str = (resource_attribute(cmd, "command") || resource_name(cmd)).to_s
