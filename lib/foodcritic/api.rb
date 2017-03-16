@@ -95,7 +95,7 @@ module FoodCritic
       # get list of items in the dir and intersect with metadata array.
       # until we get an interfact (we have a metadata) walk up the dir structure
       until (Dir.entries(file) & %w{metadata.rb metadata.json}).any?
-        file = File.absolute_path(File.dirname(file.to_s))
+        file = File.dirname(file)
       end
 
       file
