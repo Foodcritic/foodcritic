@@ -19,6 +19,7 @@ describe FoodCritic::Api do
         :chef_dsl_methods,
         :chef_node_methods,
         :chef_solo_search_supported?,
+        :cookbook_base_path,
         :cookbook_maintainer,
         :cookbook_maintainer_email,
         :cookbook_name,
