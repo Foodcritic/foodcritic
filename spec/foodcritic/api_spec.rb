@@ -19,6 +19,7 @@ describe FoodCritic::Api do
         :chef_dsl_methods,
         :chef_node_methods,
         :chef_solo_search_supported?,
+        :cookbook_base_path,
         :cookbook_maintainer,
         :cookbook_maintainer_email,
         :cookbook_name,
@@ -166,6 +167,40 @@ describe FoodCritic::Api do
     end
     it "returns false if the recipe path does not exist" do
       refute api.chef_solo_search_supported?("/tmp/non-existent-path")
+    end
+  end
+
+  describe "#cookbook_base_path" do
+    # TODO we should do this with a double instead
+    # but this is the accepted pattern so far so...
+    def mock_cookbook(metadata_path)
+      dir = File.dirname(metadata_path)
+      unless File.directory?(dir)
+        FileUtils.mkdir_p(dir)
+      end
+      File.open(metadata_path, "w") { |file| file.write('name "YOUR_COOKBOOK_NAME"') }
+      FileUtils.mkdir_p(File.join(dir, "templates/defaults"))
+      File.open(File.join(dir, "templates", "defaults", "test.erb"), "w") { |file| file.write("Some erb") }
+    end
+
+    it "returns the cookbook dir when passed the path itself" do
+      mock_cookbook("/tmp/fc/mock/cb/metadata.rb")
+      api.cookbook_base_path("/tmp/fc/mock/cb/").must_equal "/tmp/fc/mock/cb"
+    end
+
+    it "returns the cookbook dir when passed a nested directory" do
+      mock_cookbook("/tmp/fc/mock/cb/metadata.rb")
+      api.cookbook_base_path("/tmp/fc/mock/cb/templates/defaults/test.erb").must_equal "/tmp/fc/mock/cb"
+    end
+
+    it "returns the cookbook dir when path contains cookbook like names" do
+      mock_cookbook("/tmp/fc/mock/resources/cb/metadata.rb")
+      api.cookbook_base_path("/tmp/fc/mock/resources/cb/templates/defaults/test.erb").must_equal "/tmp/fc/mock/resources/cb"
+    end
+
+    it "returns the cookbook dir when path has a metadata.json not metadata.rb" do
+      mock_cookbook("/tmp/fc/mock/cb/metadata.json")
+      api.cookbook_base_path("/tmp/fc/mock/cb/templates/defaults/test.erb").must_equal "/tmp/fc/mock/cb"
     end
   end
 

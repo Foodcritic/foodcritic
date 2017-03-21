@@ -33,7 +33,11 @@ module FoodCritic
     end
 
     # Does the specified recipe check for Chef Solo?
+    #
+    # @deprecated chef-solo functionality in Chef has been replaced with local-mode
+    #  so this helper is no longer necessary and will be removed in Foodcritic 11.0
     def checks_for_chef_solo?(ast)
+      puts "the checks_for_chef_solo? helper is deprecated and will be removed from the next release of Foodcritic"
       raise_unless_xpath!(ast)
       # TODO: This expression is too loose, but also will fail to match other
       # types of conditionals.
@@ -51,10 +55,13 @@ module FoodCritic
         end == %w{Chef Config}
     end
 
-    # Is the
-    # [chef-solo-search library](https://github.com/edelight/chef-solo-search)
-    # available?
+    # Is the chef-solo-search library available?
+    #
+    # @see https://github.com/edelight/chef-solo-search
+    # @deprecated chef-solo functionality in Chef has been replaced with local-mode
+    #  so this helper is no longer necessary and will be removed in Foodcritic 11.0
     def chef_solo_search_supported?(recipe_path)
+      puts "the chef_solo_search_supported? helper is deprecated and will be removed from the next release of Foodcritic"
       return false if recipe_path.nil? || !File.exist?(recipe_path)
 
       # Look for the chef-solo-search library.
@@ -73,6 +80,25 @@ module FoodCritic
         !read_ast(lib).xpath(%q{//class[count(descendant::const[@value='Chef']
           ) = 1]/descendant::def/ident[@value='search']}).empty?
       end
+    end
+
+    # The absolute path of a cookbook from the specified file.
+    #
+    # @author Tim Smith - tsmith@chef.io
+    # @since 11.0
+    # @param file [String, Pathname] relative or absolute path to a file in the cookbook
+    # @return [String] the absolute path to the base of the cookbook
+    def cookbook_base_path(file)
+      file = File.expand_path(file) # make sure we get an absolute path
+      file = File.dirname(file) unless File.directory?(file) # get the dir only
+
+      # get list of items in the dir and intersect with metadata array.
+      # until we get an interfact (we have a metadata) walk up the dir structure
+      until (Dir.entries(file) & %w{metadata.rb metadata.json}).any?
+        file = File.dirname(file)
+      end
+
+      file
     end
 
     # Support function to retrieve a metadata field
