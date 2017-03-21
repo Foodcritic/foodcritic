@@ -184,6 +184,11 @@ describe FoodCritic::Api do
       end
     end
 
+    it "raises if a non-existent file is passed" do
+      lambda { api.cookbook_base_path("/tmp/something/that/doesnt/exist.rb") }.must_raise ArgumentError
+    end
+  end
+
     context "with complex nested folders with metadata.rb" do
       file "metadata.rb"
       file "templates/metadata.rb"

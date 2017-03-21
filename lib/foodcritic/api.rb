@@ -51,6 +51,8 @@ module FoodCritic
     # @param file [String, Pathname] relative or absolute path to a file in the cookbook
     # @return [String] the absolute path to the base of the cookbook
     def cookbook_base_path(file)
+      raise ArgumentError, "#{file} not found. You must supply a valid file" unless File.exist?(file)
+
       file = File.expand_path(file) # make sure we get an absolute path
       file = File.dirname(file) unless File.directory?(file) # get the dir only
 
