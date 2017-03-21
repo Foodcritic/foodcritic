@@ -51,7 +51,7 @@ module FoodCritic
     # @param file [String, Pathname] relative or absolute path to a file in the cookbook
     # @return [String] the absolute path to the base of the cookbook
     def cookbook_base_path(file)
-      raise ArgumentError, "#{file} not found. You must supply a valid file" unless File.exist?(file)
+      raise "#{file} not found. You must supply a valid file" unless File.exist?(file)
 
       file = File.expand_path(file) # make sure we get an absolute path
       file = File.dirname(file) unless File.directory?(file) # get the dir only
@@ -78,9 +78,10 @@ module FoodCritic
         file = File.absolute_path(File.dirname(file.to_s))
       end
       file = File.dirname(file) unless File.extname(file).empty?
+      cb_path = cookbook_base_path(file)
 
       # find value in metadata.rb if it exists
-      md_path = File.join(file, "metadata.rb")
+      md_path = File.join(cb_path, "metadata.rb")
       if File.exist?(md_path)
         value = read_ast(md_path).xpath("//stmts_add/
           command[ident/@value='#{field}']/
@@ -90,7 +91,7 @@ module FoodCritic
       end
 
       # if we didn't have metadata.rb we'll check metadata.json now
-      json_path = File.join(file, "metadata.json")
+      json_path = File.join(cb_path, "metadata.json")
       if File.exist?(json_path)
         json = json_file_to_hash(json_path)
         raise "Can't read #{field} from #{json_path}" if !json.key?(field) && options[:fail_on_nonexist]

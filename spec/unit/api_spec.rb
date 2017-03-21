@@ -185,7 +185,7 @@ describe FoodCritic::Api do
     end
 
     it "raises if a non-existent file is passed" do
-      lambda { api.cookbook_base_path("/tmp/something/that/doesnt/exist.rb") }.must_raise ArgumentError
+      lambda { api.cookbook_base_path("/tmp/something/that/doesnt/exist.rb") }.must_raise RuntimeError
     end
   end
 
@@ -246,6 +246,17 @@ describe FoodCritic::Api do
       it "returns the cookbook maintainer when passed a template" do
         expect(api.cookbook_maintainer("#{temp_path}/templates/default/mock.erb")).to eq "YOUR_COMPANY_NAME"
       end
+    it "returns the cookbook maintainer when passed a recipe" do
+      mock_cookbook_metadata(metadata_path)
+      FileUtils.mkdir_p("/tmp/fc/mock/cb/recipes/")
+      File.open("/tmp/fc/mock/cb/recipes/default.rb", "w") { |file| file.write("") }
+      api.cookbook_maintainer("/tmp/fc/mock/cb/recipes/default.rb").must_equal "YOUR_COMPANY_NAME"
+    end
+    it "returns the cookbook maintainer when passed a template" do
+      mock_cookbook_metadata(metadata_path)
+      FileUtils.mkdir_p("/tmp/fc/mock/cb/templates/default/")
+      File.open('/tmp/fc/mock/cb/templates/default/mock.erb"', "w") { |file| file.write("") }
+      api.cookbook_maintainer("/tmp/fc/mock/cb/templates/default/mock.erb").must_equal "YOUR_COMPANY_NAME"
     end
   end
 
@@ -270,6 +281,23 @@ describe FoodCritic::Api do
       it "returns the cookbook maintainer_email when passed a template" do
         expect(api.cookbook_maintainer_email("#{temp_path}/templates/default/mock.erb")).to eq "YOUR_EMAIL"
       end
+      lambda { api.cookbook_maintainer_email("/tmp/non-existent-path") }.must_raise RuntimeError
+    end
+    it "returns the cookbook maintainer_email when passed the cookbook metadata" do
+      mock_cookbook_metadata(metadata_path)
+      api.cookbook_maintainer_email(metadata_path).must_equal "YOUR_EMAIL"
+    end
+    it "returns the cookbook maintainer_email when passed a recipe" do
+      mock_cookbook_metadata(metadata_path)
+      FileUtils.mkdir_p("/tmp/fc/mock/cb/recipes/")
+      File.open("/tmp/fc/mock/cb/recipes/default.rb", "w") { |file| file.write("") }
+      api.cookbook_maintainer_email("/tmp/fc/mock/cb/recipes/default.rb").must_equal "YOUR_EMAIL"
+    end
+    it "returns the cookbook maintainer_email when passed a template" do
+      mock_cookbook_metadata(metadata_path)
+      FileUtils.mkdir_p("/tmp/fc/mock/cb/templates/default/")
+      File.open("/tmp/fc/mock/cb/templates/default/mock.erb", "w") { |file| file.write("") }
+      api.cookbook_maintainer_email("/tmp/fc/mock/cb/templates/default/mock.erb").must_equal "YOUR_EMAIL"
     end
   end
 
