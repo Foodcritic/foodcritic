@@ -170,8 +170,35 @@ describe FoodCritic::Api do
     end
   end
 
-  describe "#cookbook_base_path" do
+  describe "#metadata_field" do
     # TODO we should do this with a double instead
+    # but this is the accepted pattern so far so...
+    def mock_cookbook(metadata_path)
+      dir = File.dirname(metadata_path)
+      unless File.directory?(dir)
+        FileUtils.mkdir_p(dir)
+      end
+      File.open(metadata_path, "w") { |file| file.write('name "YOUR_COOKBOOK_NAME"') }
+      FileUtils.mkdir_p(File.join(dir, "templates/defaults"))
+      File.open(File.join(dir, "templates", "defaults", "test.erb"), "w") { |file| file.write("Some erb") }
+    end
+
+    it "returns the 'name' value when passed a metadata file and the name field" do
+      mock_cookbook("/tmp/fc/mock/cb/metadata.rb")
+      api.metadata_field("/tmp/fc/mock/cb/", "name").must_equal "YOUR_COOKBOOK_NAME"
+    end
+
+    it "it raises if a invalid field is requested" do
+      lambda { api.metadata_field("/tmp/fc/mock/cb/", "bogus_field") }.must_raise RuntimeError
+    end
+
+    it "it raises if a invalid file is requested" do
+      lambda { api.metadata_field("/tmp/some/bogus/cookbook/path", "name") }.must_raise RuntimeError
+    end
+  end
+
+  describe "#cookbook_base_path" do
+    # TODO we should do this with a mock instead
     # but this is the accepted pattern so far so...
     def mock_cookbook(metadata_path)
       dir = File.dirname(metadata_path)
