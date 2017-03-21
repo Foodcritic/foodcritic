@@ -43,7 +43,6 @@ module FoodCritic
         standard_attribute_access(ast, options)
       end
     end
-
     # The absolute path of a cookbook from the specified file.
     #
     # @author Tim Smith - tsmith@chef.io
@@ -109,8 +108,10 @@ module FoodCritic
     def cookbook_name(file)
       raise ArgumentError, "File cannot be nil or empty" if file.to_s.empty?
 
-      # Name is a special case as we want to fallback to the cookbook directory
-      # name if metadata_field fails
+      # Determine the name of the cookbook given any file within the cookbook.
+      # Use metadata name property and fallback to dir name
+      #
+      # @return [String] the name of the cookbook
       begin
         metadata_field(file, "name")
       rescue RuntimeError
