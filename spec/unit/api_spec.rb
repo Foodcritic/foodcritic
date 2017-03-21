@@ -216,12 +216,22 @@ describe FoodCritic::Api do
     it "returns the cookbook name when passed a template" do
       erb_path = "cookbooks/apache2/templates/default/a2ensite.erb"
       expect(api.cookbook_name(erb_path)).to eq "apache2"
+    it "returns the cookbook name derived from the dir name not metadata" do
+      FileUtils.mkdir_p("/tmp/fc/cb2/")
+      File.open("/tmp/fc/cb2/metadata.rb", "w") { |file| file.write('chef_version ">= 12.1"') }
+      api.cookbook_name("/tmp/fc/cb2/metadata.rb").must_equal "cb2"
     end
     context "with a metadata.rb" do
       file "metadata.rb", 'name "YOUR_COOKBOOK_NAME"'
       it "returns the cookbook name when passed the cookbook metadata with a name field" do
         expect(api.cookbook_name(temp_path)).to eq "YOUR_COOKBOOK_NAME"
       end
+    end
+    it "returns the cookbook name when passed a recipe" do
+      FileUtils.mkdir_p("/tmp/fc/cb/recipes")
+      mock_cookbook_metadata("/tmp/fc/cb/metadata.rb")
+      File.open("/tmp/fc/cb/recipes/default.rb", "w") { |file| file.write("") }
+      api.cookbook_name("/tmp/fc/cb/recipes/default.rb").must_equal "YOUR_COOKBOOK_NAME"
     end
   end
 

@@ -114,11 +114,7 @@ module FoodCritic
       begin
         metadata_field(file, "name")
       rescue RuntimeError
-        until (file.split(File::SEPARATOR) & standard_cookbook_subdirs).empty?
-          file = File.absolute_path(File.dirname(file.to_s))
-        end
-        file = File.dirname(file) unless File.extname(file).empty?
-        File.basename(file)
+        File.basename(cookbook_base_path(file))
       end
     end
 
