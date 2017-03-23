@@ -265,7 +265,7 @@ describe FoodCritic::Api do
     it "returns the cookbook maintainer when passed a template" do
       mock_cookbook_metadata(metadata_path)
       FileUtils.mkdir_p("/tmp/fc/mock/cb/templates/default/")
-      File.open('/tmp/fc/mock/cb/templates/default/mock.erb"', "w") { |file| file.write("") }
+      File.open("/tmp/fc/mock/cb/templates/default/mock.erb", "w") { |file| file.write("") }
       api.cookbook_maintainer("/tmp/fc/mock/cb/templates/default/mock.erb").must_equal "YOUR_COMPANY_NAME"
     end
   end
