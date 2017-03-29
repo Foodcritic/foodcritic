@@ -1,7 +1,13 @@
 # Foodcritic Changelog:
 
-## [10.1.0](https://github.com/acrmp/foodcritic/tree/10.1.0) (2017-03-29)
+## [10.1.1](https://github.com/acrmp/foodcritic/tree/v10.1.1) (2017-03-29)
+[Full Changelog](https://github.com/acrmp/foodcritic/compare/v10.1.0...v10.1.1)
 
+**Fixed bugs:**
+
+- Fix FC016 triggering on custom resources [\#525](https://github.com/acrmp/foodcritic/pull/525) ([tas50](https://github.com/tas50))
+
+## [v10.1.0](https://github.com/acrmp/foodcritic/tree/v10.1.0) (2017-03-29)
 [Full Changelog](https://github.com/acrmp/foodcritic/compare/v10.0.0...v10.1.0)
 
 **Implemented enhancements:**
