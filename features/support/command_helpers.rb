@@ -35,7 +35,7 @@ module FoodCritic
       "FC019" => "Access node attributes in a consistent manner",
       "FC021" => "Resource condition in provider may not behave as expected",
       "FC022" => "Resource condition within loop may not behave as expected",
-      "FC023" => "Prefer conditional attributes",
+      # FC023 was yanked and is considered reserved, do not reuse it
       "FC024" => "Consider adding platform equivalents",
       "FC025" => "Prefer chef_gem to compile-time gem install",
       "FC026" => "Conditional execution block attribute contains only string",
