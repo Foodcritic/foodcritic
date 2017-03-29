@@ -85,7 +85,7 @@ module FoodCritic
     # The absolute path of a cookbook from the specified file.
     #
     # @author Tim Smith - tsmith@chef.io
-    # @since 11.0
+    # @since 10.1
     # @param file [String, Pathname] relative or absolute path to a file in the cookbook
     # @return [String] the absolute path to the base of the cookbook
     def cookbook_base_path(file)
