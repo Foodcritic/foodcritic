@@ -292,18 +292,6 @@ FC019: Access node attributes in a consistent manner: perl/recipes/default.rb:26
 FC019: Access node attributes in a consistent manner: powershell/recipes/default.rb:69
 FC019: Access node attributes in a consistent manner: ufw/attributes/default.rb:1
 FC019: Access node attributes in a consistent manner: ufw/attributes/default.rb:2
-FC023: Prefer conditional attributes: ./apt/providers/repository.rb:26
-FC023: Prefer conditional attributes: ./apt/providers/repository.rb:68
-FC023: Prefer conditional attributes: ./chef-client/recipes/config.rb:62
-FC023: Prefer conditional attributes: ./database/recipes/ebs_backup.rb:81
-FC023: Prefer conditional attributes: ./gecode/recipes/package.rb:29
-FC023: Prefer conditional attributes: ./homebrew/providers/tap.rb:14
-FC023: Prefer conditional attributes: ./homebrew/providers/tap.rb:22
-FC023: Prefer conditional attributes: ./lvm/providers/volume_group.rb:12
-FC023: Prefer conditional attributes: ./passenger_apache2/recipes/mod_rails.rb:27
-FC023: Prefer conditional attributes: ./users/providers/manage.rb:70
-FC023: Prefer conditional attributes: ./users/providers/manage.rb:101
-FC023: Prefer conditional attributes: ./yum/providers/key.rb:59
 FC024: Consider adding platform equivalents: ./mysql/recipes/server.rb:130
 FC024: Consider adding platform equivalents: ./mysql/recipes/server.rb:132
 FC024: Consider adding platform equivalents: ./transmission/recipes/default.rb:42
