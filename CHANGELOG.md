@@ -1,6 +1,17 @@
 # Foodcritic Changelog:
 
-## [10.0.0](https://github.com/acrmp/foodcritic/tree/v10.0.0) (2017-03-14)
+## [10.1.0](https://github.com/acrmp/foodcritic/tree/10.1.0) (2017-03-29)
+
+[Full Changelog](https://github.com/acrmp/foodcritic/compare/v10.0.0...v10.1.0)
+
+**Implemented enhancements:**
+
+- Remove FC023 which is no longer considered best practice [#523](https://github.com/acrmp/foodcritic/pull/523) ([tas50](https://github.com/tas50))
+- Add basic testing of the metadata_field api [#522](https://github.com/acrmp/foodcritic/pull/522) ([tas50](https://github.com/tas50))
+- Add a more robust cookbook_base_path helper to the API [#520](https://github.com/acrmp/foodcritic/pull/520) ([tas50](https://github.com/tas50))
+- Update various tags to better align the rules with the tag categories [#517](https://github.com/acrmp/foodcritic/pull/517) ([tas50](https://github.com/tas50))
+
+## [v10.0.0](https://github.com/acrmp/foodcritic/tree/v10.0.0) (2017-03-14)
 
 [Full Changelog](https://github.com/acrmp/foodcritic/compare/v9.0.0...v10.0.0)
 
