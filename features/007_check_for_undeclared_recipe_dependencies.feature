@@ -52,3 +52,8 @@ Feature: Check for undeclared recipe dependencies
     Given a cookbook that does not have defined metadata
     When I check the cookbook
     Then the undeclared dependency warning 007 should not be displayed
+
+    Scenario: Cookbook uses the include_recipe shorthand syntax
+      Given a cookbook that uses the include_recipe shorthand syntax
+      When I check the cookbook
+      Then the undeclared dependency warning 007 should not be displayed
