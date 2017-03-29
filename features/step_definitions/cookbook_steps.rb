@@ -984,6 +984,10 @@ Given /^a cookbook that contains a LWRP with (no|a) default action( defined via 
                        :notifies => :does_notify })
 end
 
+Given "a cookbook that contains a custom resource with no default action" do
+  cookbook_with_custom_resource
+end
+
 Given "a cookbook that contains no ruby blocks" do
   write_recipe %q{
     package "tar" do

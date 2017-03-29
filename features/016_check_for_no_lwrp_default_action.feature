@@ -18,3 +18,8 @@ Feature: Check for no LWRP default action
     Given a cookbook that contains a LWRP with a default action defined via a constructor
     When I check the cookbook
     Then the LWRP has no default action warning 016 should not be displayed against the resource file
+
+  Scenario: Custom resource with no default action
+    Given a cookbook that contains a custom resource with no default action
+    When I check the cookbook
+    Then the LWRP has no default action warning 016 should not be displayed against the resource file
