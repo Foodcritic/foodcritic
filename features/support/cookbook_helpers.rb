@@ -94,6 +94,27 @@ module FoodCritic
       }.strip)
     end
 
+    # Create a cookbook with a custom resource
+    #
+    # @author Tim Smith - tsmith@chef.io
+    # @since 10.1.1
+    def cookbook_with_custom_resource
+      write_resource("site", %Q{
+        property :name, String, name_property: true
+        property :variables, Hash, default: {}
+
+        action :create do
+          log "Here is where I would create a " + thing
+        end
+
+        action_class do
+          def thing
+            return "site"
+          end
+        end
+      })
+    end
+
     # Create a cookbook with a LRWP
     #
     # @param [Hash] lwrp The options to use for the created LWRP
