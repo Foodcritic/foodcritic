@@ -6,8 +6,8 @@ rule "FC007", "Ensure recipe dependencies are reflected in cookbook metadata" do
     next unless File.exist? metadata_path
     actual_included = included_recipes(ast, with_partial_names: false)
     undeclared = actual_included.keys.map do |recipe|
-      recipe.split("::").first
-    end - [cookbook_name(filename)] -
+      recipe.split("::").first unless recipe =~ /^::/ # skip shorthand included recipes. They're local
+    end.compact - [cookbook_name(filename)] -
       declared_dependencies(read_ast(metadata_path))
     actual_included.map do |recipe, include_stmts|
       if undeclared.include?(recipe) ||

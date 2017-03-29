@@ -509,6 +509,12 @@ Given "a cookbook recipe that includes both declared and undeclared recipe depen
   }
 end
 
+Given "a cookbook that uses the include_recipe shorthand syntax" do
+  write_recipe %q{
+    include_recipe "::some_recipe"
+  }
+end
+
 Given /^a cookbook recipe that includes several declared recipe dependencies - (brace|block)$/ do |brace_or_block|
   cookbook_declares_dependencies(brace_or_block.to_sym)
 end
