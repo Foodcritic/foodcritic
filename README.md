@@ -26,6 +26,22 @@ $ bundle install
 $ bundle exec rake
 ```
 
+## Testing Foodcritic
+
+Foodcritic includes rspec tests of the application itself and cucumber tests for each of the included rules. Each of these tests can be run via rake
+
+Running rspec tests:
+
+```
+$ bundle exec rake test
+```
+
+Running cucumber tests:
+
+```
+$ bundle exec rake features
+```
+
 ## License
 
 MIT - see the accompanying [LICENSE](https://github.com/acrmp/foodcritic/blob/master/LICENSE) file for details.
