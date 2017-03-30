@@ -166,9 +166,11 @@ module FoodCritic
     private
 
     def rule_files_in_gems
-      Gem::Specification.latest_specs(true).map do |spec|
-        spec.matches_for_glob("foodcritic/rules/**/*.rb")
-      end.flatten
+      Gem::Specification
+        .latest_specs(true)
+        .reject { |spec| spec.name == "foodcritic" }
+        .map { |spec| spec.matches_for_glob("foodcritic/rules/**/*.rb") }
+        .flatten
     end
 
     def remove_ignored(matches, rule, file)
