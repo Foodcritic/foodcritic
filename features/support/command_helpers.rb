@@ -76,6 +76,9 @@ module FoodCritic
       "FC063" => "Cookbook incorrectly depends on itself",
       "FC064" => "Ensure issues_url is set in metadata",
       "FC065" => "Ensure source_url is set in metadata",
+      "FC066" => "Ensure chef_version is set in metadata",
+      "FC067" => "Ensure at least one platform supported in metadata",
+      "FC068" => "Ensure license is set in metadata",
       "FCTEST001" => "Test Rule",
     }
 
