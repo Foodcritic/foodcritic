@@ -16,20 +16,20 @@ Feature: Continuous Integration Support
      And the build status should be <build_status>
 
   Examples:
-    | cookbook_matches  | tag_arguments       | warnings_shown    | build_status |
-    | FC002,FC004       |                     | FC002,FC004       | failed       |
-    | FC002,FC004       | -t style            | FC002             | failed       |
-    | FC002,FC004       | -t style -f ~any    | FC002             | successful   |
-    | FC002,FC004       | -f FC005            | FC002,FC004       | successful   |
-    | FC002,FC004       | -f FC004            | FC002,FC004       | failed       |
-    | FC002,FC004       | --epic-fail FC002   | FC002,FC004       | failed       |
-    | FC002,FC005       | -f ~any             | FC002,FC005       | successful   |
-    | FC002,FC005       | -f any -f ~FC014    | FC002,FC005       | failed       |
-    | FC002,FC005       | -f any,~FC014       | FC002,FC005       | failed       |
-    | FC002             | -f ~FC002           | FC002             | successful   |
-    | FC002,FC005       | -f ~FC002           | FC002,FC005       | failed       |
-    | FC002,FC005       | -f any -f ~FC002    | FC002,FC005       | failed       |
-    | FC002             | -f any,~FC002       | FC002             | failed       |
-    | FC002             | -f any -f ~FC002    | FC002             | successful   |
-    | FC002,FC005       | -f any,~FC002       | FC002,FC005       | failed       |
-    | FC002,FC005       | -f ~FC002 -f ~FC004 | FC002,FC005       | failed       |
+    | cookbook_matches  | tag_arguments                 | warnings_shown    | build_status |
+    | FC002,FC004       |                               | FC002,FC004       | failed       |
+    | FC002,FC004       | -t style                      | FC002             | failed       |
+    | FC002,FC004       | -t style -f ~any              | FC002             | successful   |
+    | FC002,FC004       | -f FC005                      | FC002,FC004       | successful   |
+    | FC002,FC004       | -f FC004                      | FC002,FC004       | failed       |
+    | FC002,FC004       | --epic-fail FC002             | FC002,FC004       | failed       |
+    | FC002,FC005       | -f ~any                       | FC002,FC005       | successful   |
+    | FC002,FC005       | -f any -f ~FC014              | FC002,FC005       | failed       |
+    | FC002,FC005       | -f any,~FC014                 | FC002,FC005       | failed       |
+    | FC002             | -f ~FC002 -f ~metadata        | FC002             | successful   |
+    | FC002,FC005       | -f ~FC002                     | FC002,FC005       | failed       |
+    | FC002,FC005       | -f any -f ~FC002              | FC002,FC005       | failed       |
+    | FC002             | -f any,~FC002                 | FC002             | failed       |
+    | FC002             | -f any -f ~FC002 -f ~metadata | FC002             | successful   |
+    | FC002,FC005       | -f any,~FC002                 | FC002,FC005       | failed       |
+    | FC002,FC005       | -f ~FC002 -f ~FC004           | FC002,FC005       | failed       |
