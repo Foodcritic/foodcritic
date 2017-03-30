@@ -1,6 +1,6 @@
 Feature: Check for no license metadata
 
-  In order to be clearly specify cookbook licensing to consumers
+  In order to clearly specify cookbook licensing to consumers
   As a developer
   I want to be notified when my cookbook metadata does not specify the license
 

@@ -1,6 +1,6 @@
 Feature: Check for no chef_version metadata
 
-  In order to be clearly specify chef version compatibility to users
+  In order to clearly specify chef version compatibility to users
   As a developer
   I want to be notified when my cookbook metadata does not specify the chef_version
 

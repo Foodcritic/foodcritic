@@ -1,6 +1,6 @@
 Feature: Check for no supports metadata
 
-  In order to be clearly specify platform support to users
+  In order to clearly specify platform support to users
   As a developer
   I want to be notified when my cookbook metadata does not specify the platform supports
 
