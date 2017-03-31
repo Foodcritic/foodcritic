@@ -1,7 +1,13 @@
 # Foodcritic Changelog:
 
-## [10.2.0](https://github.com/acrmp/foodcritic/tree/v10.2.0) (2017-03-30)
+## [10.2.1](https://github.com/acrmp/foodcritic/tree/10.2.1) (2017-03-31)
+[Full Changelog](https://github.com/acrmp/foodcritic/compare/v10.2.0...10.2.1)
 
+**Implemented enhancements:**
+
+- Add supermarket tag to FC067 and FC068 [\#532](https://github.com/acrmp/foodcritic/pull/532) ([tas50](https://github.com/tas50))
+
+## [v10.2.0](https://github.com/acrmp/foodcritic/tree/v10.2.0) (2017-03-30)
 [Full Changelog](https://github.com/acrmp/foodcritic/compare/v10.1.1...v10.2.0)
 
 **Implemented enhancements:**
