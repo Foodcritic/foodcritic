@@ -1,7 +1,14 @@
 # Foodcritic Changelog:
 
-## [10.2.1](https://github.com/acrmp/foodcritic/tree/10.2.1) (2017-03-31)
-[Full Changelog](https://github.com/acrmp/foodcritic/compare/v10.2.0...10.2.1)
+## [10.2.2](https://github.com/acrmp/foodcritic/tree/10.2.2) (2017-03-31)
+[Full Changelog](https://github.com/acrmp/foodcritic/compare/v10.2.1...10.2.2)
+
+**Implemented enhancements:**
+
+- Align rake setup better with CLI options to resolve bugs with tags in Rake [\#533](https://github.com/acrmp/foodcritic/pull/533) ([tas50](https://github.com/tas50))
+
+## [v10.2.1](https://github.com/acrmp/foodcritic/tree/v10.2.1) (2017-03-31)
+[Full Changelog](https://github.com/acrmp/foodcritic/compare/v10.2.0...v10.2.1)
 
 **Implemented enhancements:**
 
