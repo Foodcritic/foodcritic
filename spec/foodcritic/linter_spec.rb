@@ -16,7 +16,6 @@ describe FoodCritic::Linter do
   end
 
   describe "#check" do
-
     it "requires a cookbook_path, role_path or environment_path to be specified" do
       lambda { linter.check({}) }.must_raise ArgumentError
     end
@@ -39,10 +38,13 @@ describe FoodCritic::Linter do
         linter.check(key => ["."]).must_respond_to(:warnings)
       end
     end
-
   end
 
   describe "#list_rules" do
+    it "runs when --list is specified on the command line" do
+      cli = FoodCritic::CommandLine.new %w{--list -t FC001 --search-gems}
+      FoodCritic::Linter.run(cli)
+    end
 
     it "does not require cookbook_path, role_path or environment_path to be specified" do
       linter.list(:list => true)
@@ -94,7 +96,5 @@ describe FoodCritic::Linter do
 
       rule_dsl_load_mock.verify
     end
-
   end
-
 end
