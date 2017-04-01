@@ -71,4 +71,52 @@ describe FoodCritic::CommandLine do
       assert FoodCritic::CommandLine.new(["--list"]).list_rules?
     end
   end
+
+  describe ":progress" do
+    it "is true by default" do
+      assert FoodCritic::CommandLine.new(["."]).options[:progress]
+    end
+
+    it "is true if -P is specified" do
+      assert FoodCritic::CommandLine.new(["-P", "."]).options[:progress]
+    end
+
+    it "is true if --progres is specified" do
+      assert FoodCritic::CommandLine.new(["--progress", "."]).options[:progress]
+    end
+
+    it "is false if --no-progress is specified" do
+      refute FoodCritic::CommandLine.new(["--no-progress", "."]).options[:progress]
+    end
+  end
+
+  describe ":search_gems" do
+    it "is unset if -G/--search-gems is not specified" do
+      assert FoodCritic::CommandLine.new(["."]).options[:search_gems].nil?
+    end
+
+    it "is true if -G is specified" do
+      assert FoodCritic::CommandLine.new(["-G", "."]).options[:search_gems]
+    end
+
+    it "is true if --search-gems is specified" do
+      assert FoodCritic::CommandLine.new(["--search-gems", "."]).options[:search_gems]
+    end
+  end
+
+  describe "#show_context?" do
+    it "is unset by default" do
+      refute FoodCritic::CommandLine.new(["."]).show_context?
+    end
+
+    it "is true if -C is specified" do
+      assert FoodCritic::CommandLine.new(["-C", "."]).show_context?
+    end
+    it "is true if --context is specified" do
+      assert FoodCritic::CommandLine.new(["--context", "."]).show_context?
+    end
+    it "is false if --no-context is specified" do
+      refute FoodCritic::CommandLine.new(["--no-context", "."]).show_context?
+    end
+  end
 end
