@@ -2,10 +2,6 @@ source "https://rubygems.org"
 
 gem "foodcritic", :path => "."
 
-# faraday gem is corrupt on rubygems right now.
-# This pin can be removed when they fix it
-gem "faraday", "< 0.12.0"
-
 group :test do
   gem "aruba", "~> 0.5"
   gem "cucumber", ">= 2"
