@@ -1,14 +1,13 @@
 module FoodCritic
   # Command line parsing.
   class CommandLine
-    def self.main(argv=ARGV, out=$stdout)
+    def self.main(argv = ARGV, out = $stdout)
       cmd_line = CommandLine.new(argv)
       review, status = Linter.run(cmd_line)
       printer = cmd_line.show_context? ? ContextOutput.new(out) : SummaryOutput.new(out)
       printer.output(review)
       status.to_i
     end
-
 
     # Create a new instance of CommandLine
     #
