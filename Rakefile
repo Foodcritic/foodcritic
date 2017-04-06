@@ -9,6 +9,7 @@ RSpec::Core::RakeTask.new(:spec, :tag) do |t, args|
     a << "--format #{ENV['CI'] ? 'documentation' : 'Fuubar'}"
     a << '--backtrace' if ENV['DEBUG']
     a << "--seed #{ENV['SEED']}" if ENV['SEED']
+    a << "--tag ~regression" unless ENV['CI'] || args[:tag] == 'regression'
     a << "--tag #{args[:tag]}" if args[:tag]
   end.join(' ')
 end
