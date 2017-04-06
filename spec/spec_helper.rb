@@ -62,6 +62,9 @@ RSpec.configure do |config|
   config.order = 'random'
 
   # Set some metadata based on test folders.
+  config.define_derived_metadata(file_path: %r{spec/unit}) do |metadata|
+    metadata[:unit] = true
+  end
   config.define_derived_metadata(file_path: %r{spec/functional}) do |metadata|
     metadata[:functional] = true
   end
