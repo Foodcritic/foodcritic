@@ -24,11 +24,31 @@ module FunctionalHelpers
     end
   end
 
+  def foodcritic_command(*args)
+    output = StringIO.new
+    error = StringIO.new
+    begin
+      # Don't use the block form of chdir because for some reason it can't be
+      # nested.
+      cwd = Dir.pwd
+      Dir.chdir(temp_path)
+      $stderr = error
+      exitstatus = FoodCritic::CommandLine.main(args, output)
+    ensure
+      $stderr = STDERR
+      Dir.chdir(cwd)
+    end
+    RSpecCommand::OutputString.new(output.string, error.string).tap do |out|
+      out.define_singleton_method(:exitstatus) { exitstatus }
+    end
+  end
+
   module ClassMethods
     def foodcritic_command(*args)
-      # TODO this could work in-process in the future.
-      bin_path = File.expand_path("../../bin/foodcritic", __FILE__)
-      command("#{bin_path} #{Shellwords.join(args)}", allow_error: true)
+      metadata[:foodcritic_command] = true
+      subject do |example|
+        foodcritic_command(*args)
+      end
     end
 
     def attributes_file(*args, &block)
@@ -43,7 +63,7 @@ module FunctionalHelpers
       super
       klass.extend ClassMethods
       # Set a default subject command, can be overridden if needed.
-      klass.foodcritic_command(".")
+      klass.foodcritic_command("--no-progress", ".")
     end
   end
 
