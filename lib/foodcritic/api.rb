@@ -37,7 +37,7 @@ module FoodCritic
     # @deprecated chef-solo functionality in Chef has been replaced with local-mode
     #  so this helper is no longer necessary and will be removed in Foodcritic 11.0
     def checks_for_chef_solo?(ast)
-      puts "the checks_for_chef_solo? helper is deprecated and will be removed from the next release of Foodcritic"
+      $stderr.puts "the checks_for_chef_solo? helper is deprecated and will be removed from the next release of Foodcritic"
       raise_unless_xpath!(ast)
       # TODO: This expression is too loose, but also will fail to match other
       # types of conditionals.
@@ -61,7 +61,7 @@ module FoodCritic
     # @deprecated chef-solo functionality in Chef has been replaced with local-mode
     #  so this helper is no longer necessary and will be removed in Foodcritic 11.0
     def chef_solo_search_supported?(recipe_path)
-      puts "the chef_solo_search_supported? helper is deprecated and will be removed from the next release of Foodcritic"
+      $stderr.puts "the chef_solo_search_supported? helper is deprecated and will be removed from the next release of Foodcritic"
       return false if recipe_path.nil? || !File.exist?(recipe_path)
 
       # Look for the chef-solo-search library.

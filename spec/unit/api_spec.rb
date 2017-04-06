@@ -139,6 +139,14 @@ describe FoodCritic::Api do
 
   describe "#checks_for_chef_solo?" do
     let(:ast) { double() }
+    around do |ex|
+      begin
+        $stderr = StringIO.new
+        ex.run
+      ensure
+        $stderr = STDERR
+      end
+    end
     it "raises if the provided ast does not support XPath" do
       expect { api.checks_for_chef_solo?(nil) }.to raise_error ArgumentError
     end
@@ -157,6 +165,14 @@ describe FoodCritic::Api do
   end
 
   describe "#chef_solo_search_supported?" do
+    around do |ex|
+      begin
+        $stderr = StringIO.new
+        ex.run
+      ensure
+        $stderr = STDERR
+      end
+    end
     it "returns false if the recipe path is nil" do
       expect(api.chef_solo_search_supported?(nil)).to be_falsey
     end
