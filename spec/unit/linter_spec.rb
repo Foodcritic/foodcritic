@@ -62,7 +62,6 @@ describe FoodCritic::Linter do
       Dir.glob(File.expand_path(File.join(File.dirname(__FILE__), "../../lib/foodcritic/rules/*")))
     end
 
-
     it "should add the default rule file" do
       expect(FoodCritic::RuleDsl).to receive(:load).with(default_rule_files, nil)
       linter.load_rules!({})

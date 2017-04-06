@@ -1319,7 +1319,7 @@ describe FoodCritic::Api do
         expect(api.notifications(ast)).to eq [
            { :type => :notifies, :action => :run, :resource_type => :execute,
              :resource_name => "foo", :timing => :delayed,
-             :style => :old }
+             :style => :old },
           ]
       end
       it "old-style subscriptions" do
@@ -1332,7 +1332,7 @@ describe FoodCritic::Api do
         expect(api.notifications(ast)).to eq [
            { :type => :subscribes, :action => :run, :resource_type => :execute,
              :resource_name => "foo", :timing => :delayed,
-             :style => :old }
+             :style => :old },
           ]
       end
       it "old-style notifications" do
@@ -1345,7 +1345,7 @@ describe FoodCritic::Api do
         expect(api.notifications(ast)).to eq [
            { :type => :notifies, :action => :run, :resource_type => :execute,
              :resource_name => "foo", :timing => :delayed,
-             :style => :new }
+             :style => :new },
           ]
       end
       it "old-style subscriptions" do
@@ -1358,7 +1358,7 @@ describe FoodCritic::Api do
         expect(api.notifications(ast)).to eq [
            { :type => :subscribes, :action => :run, :resource_type => :execute,
              :resource_name => "foo", :timing => :delayed,
-             :style => :new }
+             :style => :new },
           ]
       end
     end

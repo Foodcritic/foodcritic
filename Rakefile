@@ -1,17 +1,17 @@
 require "bundler/setup"
 
-require 'bundler/gem_tasks'
+require "bundler/gem_tasks"
 
-require 'rspec/core/rake_task'
+require "rspec/core/rake_task"
 RSpec::Core::RakeTask.new(:spec, :tag) do |t, args|
   t.rspec_opts = [].tap do |a|
-    a << '--color'
+    a << "--color"
     a << "--format #{ENV['CI'] ? 'documentation' : 'Fuubar'}"
-    a << '--backtrace' if ENV['DEBUG']
-    a << "--seed #{ENV['SEED']}" if ENV['SEED']
-    a << "--tag ~regression" unless ENV['CI'] || args[:tag] == 'regression'
+    a << "--backtrace" if ENV["DEBUG"]
+    a << "--seed #{ENV['SEED']}" if ENV["SEED"]
+    a << "--tag ~regression" unless ENV["CI"] || args[:tag] == "regression"
     a << "--tag #{args[:tag]}" if args[:tag]
-  end.join(' ')
+  end.join(" ")
 end
 
 require "cucumber"
@@ -55,5 +55,5 @@ end
 
 task :default => [:man, :test, :rubocop]
 
-desc 'Run all tests'
+desc "Run all tests"
 task :test => [:spec, :features]

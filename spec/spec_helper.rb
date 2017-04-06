@@ -15,7 +15,7 @@ module FunctionalHelpers
       if location
         cmd.stdout =~ /^#{rule_id}:.*: \.\/#{location}/
       else
-         cmd.stdout =~/^#{rule_id}:/
+        cmd.stdout =~ /^#{rule_id}:/
       end
     end
     chain :in, :location
@@ -53,13 +53,13 @@ end
 RSpec.configure do |config|
   # Basic configuraiton
   config.run_all_when_everything_filtered = true
-  config.filter_run(:focus) unless ENV['CI']
+  config.filter_run(:focus) unless ENV["CI"]
 
   # Run specs in random order to surface order dependencies. If you find an
   # order dependency and want to debug it, you can fix the order by providing
   # the seed, which is printed after each run.
   #     --seed 1234
-  config.order = 'random'
+  config.order = "random"
 
   # Set some metadata based on test folders.
   config.define_derived_metadata(file_path: %r{spec/unit}) do |metadata|
@@ -71,7 +71,6 @@ RSpec.configure do |config|
   config.define_derived_metadata(file_path: %r{spec/regression}) do |metadata|
     metadata[:regression] = true
   end
-
 
   config.include RSpecCommand
   config.include FunctionalHelpers, functional: true
