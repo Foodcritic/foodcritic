@@ -13,12 +13,12 @@ module FunctionalHelpers
   matcher :violate_rule do |rule_id|
     match do |cmd|
       if location
-        cmd.stdout =~ /^#{rule_id}:.*:.\/#{location}/
+        cmd.stdout =~ /^#{rule_id}:.*: \.\/#{location}/
       else
          cmd.stdout =~/^#{rule_id}:/
       end
     end
-    chain :in_file, :location
+    chain :in, :location
     failure_message do |cmd|
       "expected a violation of rule #{rule_id}#{location && " in #{location}"}, output was:\n#{cmd.stdout}"
     end
@@ -29,6 +29,10 @@ module FunctionalHelpers
       # TODO this could work in-process in the future.
       bin_path = File.expand_path("../../bin/foodcritic", __FILE__)
       command("#{bin_path} #{Shellwords.join(args)}", allow_error: true)
+    end
+
+    def attributes_file(*args, &block)
+      file("attributes/default.rb", *args, &block)
     end
 
     def recipe_file(*args, &block)
