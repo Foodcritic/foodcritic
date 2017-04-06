@@ -1864,22 +1864,24 @@ When /^I check the cookbook specifying ([^ ]+) as the Chef version$/ do |version
   cd "." do
     options = ["-I", "rules/test.rb"] + options if Dir.exist?("rules")
   end
+  options += %w{--no-progress}
   run_lint(options)
 end
 
 When /^I check the cookbook( tree)?(?: specifying tags(.*))?(, specifying that context should be shown)?$/ do |whole_tree, tags, context|
   options = tags.nil? ? [] : tags.split(" ")
   options += ["-C"] unless context.nil?
+  options += %w{--no-progress}
   run_lint(options + ["cookbooks/#{whole_tree.nil? ? 'example' : ''}"])
 end
 
 Given /^the cookbook directory has a \.foodcritic file specifying tags (.*)$/ do |tags|
   write_file "cookbooks/example/.foodcritic", tags
-  run_lint(["cookbooks/example"])
+  run_lint(["--no-progress", "cookbooks/example"])
 end
 
 When "I check both cookbooks specified as arguments" do
-  run_lint(["cookbooks/another_example", "cookbooks/example"])
+  run_lint(["--no-progress", "cookbooks/another_example", "cookbooks/example"])
 end
 
 When /^I check both cookbooks with the command-line (.*)$/ do |command_line|
@@ -1890,15 +1892,16 @@ When /^I check both cookbooks with the command-line (.*)$/ do |command_line|
       c
     end
   end
-  run_lint(cmds)
+  run_lint(%w{--no-progress} + cmds)
 end
 
 When "I check both roles directories" do
-  run_lint ["-R", "roles1", "-R", "roles2"]
+  run_lint ["--no-progress", "-R", "roles1", "-R", "roles2"]
 end
 
 When "I check the cookbooks, role and environment together" do
   run_lint([
+    "--no-progress",
     "-B", "cookbooks/another_example", "-B", "cookbooks/example",
     "-E", "environments",
     "-R", "roles"
@@ -1906,24 +1909,24 @@ When "I check the cookbooks, role and environment together" do
 end
 
 When "I check the cookbook without specifying a Chef version" do
-  run_lint(["-I", "rules/test.rb", "cookbooks/example"])
+  run_lint(["--no-progress", "-I", "rules/test.rb", "cookbooks/example"])
 end
 
 When "I check the environment directory" do
-  run_lint ["-E", "environments"]
+  run_lint ["--no-progress", "-E", "environments"]
 end
 
 When "I check the eu environment file only" do
-  run_lint ["-E", "environments/production_eu.rb"]
+  run_lint ["--no-progress", "-E", "environments/production_eu.rb"]
 end
 
 When /^I check the cookbook( without)? excluding the ([^ ]+) directory$/ do |no_exclude, dir|
   options = no_exclude.nil? ? ["-X", dir] : []
-  run_lint(options + ["cookbooks/example"])
+  run_lint(options + ["--no-progress", "cookbooks/example"])
 end
 
 When "I check the recipe" do
-  run_lint(["cookbooks/example/recipes/default.rb"])
+  run_lint(["--no-progress", "cookbooks/example/recipes/default.rb"])
 end
 
 When "I compare the man page options against the usage options" do
@@ -1931,20 +1934,20 @@ When "I compare the man page options against the usage options" do
 end
 
 When "I check the role directory" do
-  run_lint ["-R", "roles"]
+  run_lint ["--no-progress", "-R", "roles"]
 end
 
 When /^I check the role directory as a (default|cookbook|role) path$/ do |path_type|
   options = case path_type
-    when "default" then ["roles"]
-    when "cookbook" then ["-B", "roles"]
-    when "role" then ["-R", "roles"]
+    when "default" then ["--no-progress", "roles"]
+    when "cookbook" then ["--no-progress", "-B", "roles"]
+    when "role" then ["--no-progress", "-R", "roles"]
   end
   run_lint(options)
 end
 
 When "I check the webserver role only" do
-  run_lint ["-R", "roles/webserver.rb"]
+  run_lint ["--no-progress", "-R", "roles/webserver.rb"]
 end
 
 When "I list the available build tasks" do
@@ -1960,7 +1963,7 @@ When /^I run it on the command line including a custom rule (file|directory) con
         end
       end
   }
-  run_lint(["-I",
+  run_lint(["--no-progress", "-I",
             path_type == "file" ? "rules/custom_rules.rb" : "rules",
             "cookbooks/example"])
 end
@@ -1968,25 +1971,25 @@ end
 When /^I run it on the command line including a file which does not contain Ruby code$/ do
   write_file "rules/invalid_rules.rb", 'echo "not ruby"'
   capture_error do
-    run_lint(["-I", "rules/invalid_rules.rb", "cookbooks/example"])
+    run_lint(["--no-progress", "-I", "rules/invalid_rules.rb", "cookbooks/example"])
   end
 end
 
 When /^I run it on the command line including a missing custom rule file$/ do
   capture_error do
-    run_lint(["-I", "rules/missing_rules.rb", "cookbooks/example"])
+    run_lint(["--no-progress", "-I", "rules/missing_rules.rb", "cookbooks/example"])
   end
 end
 
 When "I run it on the command line specifying a cookbook that does not exist" do
-  run_lint(["no-such-cookbook"])
+  run_lint(["--no-progress", "no-such-cookbook"])
 end
 
 When /^I run it on the command line specifying a( role|n environment) directory that does not exist$/ do |type|
   if type.include?("role")
-    run_lint(["-R", "no-such-role-dir"])
+    run_lint(["--no-progress", "-R", "no-such-role-dir"])
   else
-    run_lint(["-E", "no-such-environment-dir"])
+    run_lint(["--no-progress", "-E", "no-such-environment-dir"])
   end
 end
 
@@ -2338,7 +2341,7 @@ When /^I check the cookbook specifying a search grammar that (does not exist|is 
     when "is a valid treetop grammar"
       write_file("search.treetop", IO.read(FoodCritic::Chef::Search.new.chef_search_grammars.first))
   end
-  run_lint(["--search-grammar", "search.treetop", "cookbooks/example"])
+  run_lint(["--no-progress", "--search-grammar", "search.treetop", "cookbooks/example"])
 end
 
 Then /^the check should abort with an error$/ do
