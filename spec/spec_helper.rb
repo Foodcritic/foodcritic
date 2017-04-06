@@ -73,7 +73,7 @@ RSpec.configure do |config|
   end
 
 
-  config.include RSpecCommand, functional: true
+  config.include RSpecCommand
   config.include FunctionalHelpers, functional: true
 end
 
