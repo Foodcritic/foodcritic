@@ -1,4 +1,4 @@
-require_relative "../spec_helper"
+require "spec_helper"
 
 describe FoodCritic::Review do
   it "is instantiable with no warnings" do
@@ -6,19 +6,19 @@ describe FoodCritic::Review do
   end
   describe "#cookbook_paths" do
     it "returns the cookbook paths provided" do
-      FoodCritic::Review.new(["example"], []).cookbook_paths.must_equal ["example"]
+      expect(FoodCritic::Review.new(["example"], []).cookbook_paths).to eq ["example"]
     end
     it "returns the cookbook paths provided when there are multiple" do
-      FoodCritic::Review.new(%w{example example2}, []).cookbook_paths.must_equal %w{example example2}
+      expect(FoodCritic::Review.new(%w{example example2}, []).cookbook_paths).to eq %w{example example2}
     end
   end
   describe "#warnings" do
     it "returns empty when there are no warnings" do
-      FoodCritic::Review.new("example", []).warnings.must_be_empty
+      expect(FoodCritic::Review.new("example", []).warnings).to be_empty
     end
     it "makes the warnings available" do
       warning = "Danger Will Robinson"
-      FoodCritic::Review.new("example", [warning]).warnings.must_equal [warning]
+      expect(FoodCritic::Review.new("example", [warning]).warnings).to eq [warning]
     end
   end
 end
@@ -33,11 +33,11 @@ describe FoodCritic::RuleList do
   describe "#rules" do
 
     it "is empty when instantiated with an empty rule list" do
-      assert FoodCritic::RuleList.new([]).rules.empty?
+      expect(FoodCritic::RuleList.new([]).rules).to be_empty
     end
 
     it "contains the given rule" do
-      assert FoodCritic::RuleList.new([rule]).rules.include?(rule)
+      expect(FoodCritic::RuleList.new([rule]).rules).to include rule
     end
   end
 end
@@ -47,17 +47,17 @@ describe FoodCritic::Rule do
 
   describe "#matches_tags?" do
     it "matches the rule's code" do
-      rule.matches_tags?(["FCTEST001"]).must_equal true
+      expect(rule.matches_tags?(["FCTEST001"])).to be_truthy
     end
 
     it "doesn't match an unrelated code" do
-      rule.matches_tags?(["FCTEST999"]).must_equal false
+      expect(rule.matches_tags?(["FCTEST999"])).to be_falsey
     end
   end
 
   describe "#tags" do
     it "returns any + the rule's code" do
-      rule.tags.must_equal %w{any FCTEST001}
+      expect(rule.tags).to eq %w{any FCTEST001}
     end
   end
 end
@@ -68,11 +68,11 @@ describe FoodCritic::Warning do
 
   describe "failure indication" do
     it "is false if no fail_tags match" do
-      FoodCritic::Warning.new(rule, match_opts, { :fail_tags => [] }).failed?.must_equal false
+      expect(FoodCritic::Warning.new(rule, match_opts, { :fail_tags => [] })).to_not be_failed
     end
 
     it "is true if fail_tags do match" do
-      FoodCritic::Warning.new(rule, match_opts, { :fail_tags => ["any"] }).failed?.must_equal true
+      expect(FoodCritic::Warning.new(rule, match_opts, { :fail_tags => ["any"] })).to be_failed
     end
   end
 end
