@@ -27,5 +27,7 @@ Gem::Specification.new do |s|
   s.add_dependency("erubis")
   s.add_dependency("rufus-lru", "~> 1.0")
 
-  s.add_development_dependency("rspec-command", "~> 1.0")
+  s.add_development_dependency "rspec", "~> 3.5"
+  s.add_development_dependency "fuubar", "~> 2.0"
+  s.add_development_dependency "rspec-command", "~> 1.0"
 end

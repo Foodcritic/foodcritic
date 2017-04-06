@@ -51,11 +51,26 @@ module FunctionalHelpers
 end
 
 RSpec.configure do |config|
+  # Basic configuraiton
+  config.run_all_when_everything_filtered = true
+  config.filter_run(:focus)
+
+  # Run specs in random order to surface order dependencies. If you find an
+  # order dependency and want to debug it, you can fix the order by providing
+  # the seed, which is printed after each run.
+  #     --seed 1234
+  config.order = 'random'
+
+  # Set some metadata based on test folders.
   config.define_derived_metadata(file_path: %r{spec/functional}) do |metadata|
     metadata[:functional] = true
   end
+  config.define_derived_metadata(file_path: %r{spec/regression}) do |metadata|
+    metadata[:regression] = true
+  end
 
-  config.include RSpecCommand
+
+  config.include RSpecCommand, functional: true
   config.include FunctionalHelpers, functional: true
 end
 
