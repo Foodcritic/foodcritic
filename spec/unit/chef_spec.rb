@@ -1,4 +1,4 @@
-require_relative "../spec_helper"
+require "spec_helper"
 
 describe FoodCritic::Chef do
 
@@ -9,49 +9,49 @@ describe FoodCritic::Chef do
       api.chef_dsl_methods.each { |m| m }
     end
     it "does not return an empty" do
-      api.chef_dsl_methods.wont_be_empty
+      expect(api.chef_dsl_methods).to_not be_empty
     end
     it "returns dsl methods as symbols" do
-      assert api.chef_dsl_methods.all? { |m| m == m.to_sym }
+      expect(api.chef_dsl_methods.all? { |m| m == m.to_sym }).to be_truthy
     end
   end
 
   describe "#resource_attribute?" do
     it "raises if the resource_type is nil" do
-      lambda { api.resource_attribute?(nil, :name) }.must_raise(ArgumentError)
+      expect { api.resource_attribute?(nil, :name) }.to raise_error ArgumentError
     end
     it "raises if the resource_type is empty" do
-      lambda { api.resource_attribute?("", :name) }.must_raise(ArgumentError)
+      expect { api.resource_attribute?("", :name) }.to raise_error ArgumentError
     end
     it "raises if the attribute_name is nil" do
-      lambda { api.resource_attribute?(:file, nil) }.must_raise(ArgumentError)
+      expect { api.resource_attribute?(:file, nil) }.to raise_error ArgumentError
     end
     it "raises if the attribute_name is empty" do
-      lambda { api.resource_attribute?(:file, "") }.must_raise(ArgumentError)
+      expect { api.resource_attribute?(:file, "") }.to raise_error ArgumentError
     end
     it "returns true if the resource attribute is known" do
-      assert api.resource_attribute?(:file, :name)
+      expect(api.resource_attribute?(:file, :name)).to be_truthy
     end
     it "returns false if the resource attribute is not known" do
-      refute api.resource_attribute?(:file, :size)
+      expect(api.resource_attribute?(:file, :size)).to be_falsey
     end
     it "returns true for unrecognised resources" do
-      assert api.resource_attribute?(:cluster_file, :size)
+      expect(api.resource_attribute?(:cluster_file, :size)).to be_truthy
     end
     it "allows the resource type to be passed as a string" do
-      refute api.resource_attribute?("file", :size)
+      expect(api.resource_attribute?("file", :size)).to be_falsey
     end
     it "allows the attribute_name to be passed as a string" do
-      assert api.resource_attribute?(:file, "mode")
+      expect(api.resource_attribute?(:file, "mode")).to be_truthy
     end
   end
 
   describe "#valid_query?" do
     it "raises if the query is nil" do
-      lambda { api.valid_query?(nil) }.must_raise(ArgumentError)
+      expect { api.valid_query?(nil) }.to raise_error ArgumentError
     end
     it "raises if the query is empty" do
-      lambda { api.valid_query?("") }.must_raise(ArgumentError)
+      expect { api.valid_query?("") }.to raise_error ArgumentError
     end
     it "coerces the provided object to a string" do
       query = Class.new do
@@ -59,7 +59,7 @@ describe FoodCritic::Chef do
           "*:*"
         end
       end.new
-      assert api.valid_query?(query)
+      expect(api.valid_query?(query)).to be_truthy
     end
   end
 

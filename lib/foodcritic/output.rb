@@ -1,8 +1,22 @@
 require "set"
 
 module FoodCritic
+  class Output
+    # Create Output writer.
+    #
+    # @param out [File] File-like object to output to.
+    def initialize(out)
+      @out = out
+    end
+
+    # Write a line of output.
+    def puts(*args)
+      @out.puts(*args)
+    end
+  end
+
   # Default output showing a summary view.
-  class SummaryOutput
+  class SummaryOutput < Output
     # Output a summary view only listing the matching rules, file and line
     # number.
     #
@@ -13,7 +27,7 @@ module FoodCritic
   end
 
   # Display rule matches with surrounding context.
-  class ContextOutput
+  class ContextOutput < Output
     # Output the review showing matching lines with context.
     #
     # @param [Review] review The review to output.
@@ -101,7 +115,7 @@ module FoodCritic
     # @param bg [String] background color
     # @param attr [String] any formatting options
     def ansi_print(text, fg, bg = nil, attr = nil)
-      unless STDOUT.tty?
+      unless @out.tty?
         puts text
         return
       end

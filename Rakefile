@@ -1,49 +1,41 @@
-require "foodcritic/version"
-require "bundler"
-require "rake/testtask"
+require "bundler/setup"
 
-task :default => [:man, :install, :test, :features, :rubocop]
+require "bundler/gem_tasks"
 
-Bundler.setup
-Bundler::GemHelper.install_tasks
-
-Rake::TestTask.new do |t|
-  t.pattern = "spec/foodcritic/*_spec.rb"
+require "rspec/core/rake_task"
+RSpec::Core::RakeTask.new(:spec, :tag) do |t, args|
+  t.rspec_opts = [].tap do |a|
+    a << "--color"
+    a << "--format #{ENV['CI'] ? 'documentation' : 'Fuubar'}"
+    a << "--backtrace" if ENV["DEBUG"]
+    a << "--seed #{ENV['SEED']}" if ENV["SEED"]
+    a << "--tag ~regression" unless ENV["CI"] || args[:tag] == "regression"
+    a << "--tag #{args[:tag]}" if args[:tag]
+  end.join(" ")
 end
 
-Rake::TestTask.new do |t|
-  t.name = "regressions"
-  t.pattern = "spec/regression/*_spec.rb"
-end
-
-begin
-  require "cucumber"
-  require "cucumber/rake/task"
-  Cucumber::Rake::Task.new(:features) do |t|
-    t.cucumber_opts = ["-f", "progress", "--strict"]
-    unless ENV.has_key?("FC_FORK_PROCESS") && ENV["FC_FORK_PROCESS"] == true.to_s
-      t.cucumber_opts += ["-t", "~@build"]
-      t.cucumber_opts += ["-t", "~@context"]
-    end
-    t.cucumber_opts += ["features"]
+require "cucumber"
+require "cucumber/rake/task"
+Cucumber::Rake::Task.new(:features) do |t|
+  t.cucumber_opts = %w{--strict}
+  t.cucumber_opts += %w{-f progress} unless ENV["CI"]
+  unless ENV.has_key?("FC_FORK_PROCESS") && ENV["FC_FORK_PROCESS"] == "true"
+    t.cucumber_opts += ["-t", "~@build"]
+    t.cucumber_opts += ["-t", "~@context"]
   end
-rescue LoadError
-  puts "cucumber is not available. gem install cucumber to get 'rake features' to work"
+  t.cucumber_opts += ["features"]
 end
 
-begin
-  require "chefstyle"
-  require "rubocop/rake_task"
-  desc "Run Chefstyle (rubocop)"
-  RuboCop::RakeTask.new do |task|
-    task.options << "--display-cop-names"
-  end
-rescue LoadError
-  puts "chefstyle gem is not available. gem install chefstyle to get rake rubocop to work"
+require "chefstyle"
+require "rubocop/rake_task"
+desc "Run Chefstyle (rubocop)"
+RuboCop::RakeTask.new do |task|
+  task.options << "--display-cop-names"
 end
 
 begin
   require "github_changelog_generator/task"
+  require_relative "../lib/foodcritic/version"
 
   GitHubChangelogGenerator::RakeTask.new :changelog do |config|
     config.header = "# Foodcritic Changelog:"
@@ -61,3 +53,8 @@ desc "Build the manpage"
 task(:man) do
   sh "ronn -w --roff man/*.ronn"
 end
+
+task :default => [:man, :test, :rubocop]
+
+desc "Run all tests"
+task :test => [:spec, :features]

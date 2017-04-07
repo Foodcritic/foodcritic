@@ -1,6 +1,6 @@
 source "https://rubygems.org"
 
-gem "foodcritic", :path => "."
+gemspec
 
 group :test do
   gem "aruba", "~> 0.5"
@@ -13,6 +13,7 @@ end
 
 group :development do
   gem "ronn", "~> 0.7"
+  gem "pry"
 end
 
 group :changelog do

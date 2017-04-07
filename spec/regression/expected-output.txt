@@ -351,5 +351,4 @@ FC048: Prefer Mixlib::ShellOut: ./windows/providers/task.rb:106
 FC052: Metadata uses the unimplemented "suggests" keyword: ./build-essential/metadata.rb:14
 FC052: Metadata uses the unimplemented "suggests" keyword: ./mysql/metadata.rb:19
 FC052: Metadata uses the unimplemented "suggests" keyword: ./mysql/metadata.rb:20
-FC052: Metadata uses the unimplemented "suggests" keyword: ./nscd/metadata.rb:7
 FC053: Metadata uses the unimplemented "recommends" keyword: ./boost/metadata.rb:12
