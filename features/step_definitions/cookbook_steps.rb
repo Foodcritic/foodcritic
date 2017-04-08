@@ -997,12 +997,6 @@ Given /^a cookbook that does not contain a definition and has (no|a) definitions
   }
 end
 
-Given "a cookbook that does not have a README at all" do
-  write_recipe %q{
-    log "Use the source luke"
-  }
-end
-
 Given "a cookbook that does not have defined metadata" do
   write_recipe %q{
     include_recipe "foo::default"
@@ -1025,29 +1019,6 @@ Given /^a cookbook that has ([^ ]+) problems$/ do |problems|
       end
     end
   )
-end
-
-Given "a cookbook that has a README in markdown format" do
-  write_recipe %q{
-    log "Hello"
-  }
-  write_file "cookbooks/example/README.md", %q{
-    Description
-    ===========
-
-    Hi. This is markdown.
-  }
-end
-
-Given "a cookbook that has a README in RDoc format" do
-  write_recipe %q{
-    log "Hello"
-  }
-  write_file "cookbooks/example/README.rdoc", %q{
-    = DESCRIPTION:
-
-    I used to be the preferred format but not any more (sniff).
-  }
 end
 
 Given /^a cookbook that has maintainer metadata set to (.*) and ([^ ]+)$/ do |name, email|
@@ -1757,18 +1728,6 @@ Given "a recipe that tries to mask a systemd service" do
     service 'foo' do
        action :mask
     end
-  }
-end
-
-Given /^a recipe that uses require_recipe$/ do
-  write_recipe %Q{
-    require_recipe "foo::default"
-  }
-end
-
-Given /^a recipe that uses include_recipe$/ do
-  write_recipe %Q{
-    include_recipe "foo::default"
   }
 end
 
