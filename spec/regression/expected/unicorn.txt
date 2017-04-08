@@ -1,0 +1,6 @@
+FC015: Consider converting definition to a Custom Resource: ./definitions/unicorn_config.rb:1
+FC064: Ensure issues_url is set in metadata: ./metadata.rb:1
+FC065: Ensure source_url is set in metadata: ./metadata.rb:1
+FC066: Ensure chef_version is set in metadata: ./metadata.rb:1
+FC067: Ensure at least one platform supported in metadata: ./metadata.rb:1
+FC069: Ensure standardized license defined in metadata: ./metadata.rb:1

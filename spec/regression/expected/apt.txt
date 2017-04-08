@@ -1,0 +1,10 @@
+FC017: LWRP does not notify when updated: ./providers/repository.rb:124
+FC043: Prefer new notification syntax: ./providers/repository.rb:112
+FC043: Prefer new notification syntax: ./recipes/default.rb:48
+FC048: Prefer Mixlib::ShellOut: ./providers/repository.rb:26
+FC059: LWRP provider does not declare use_inline_resources: ./providers/preference.rb:1
+FC059: LWRP provider does not declare use_inline_resources: ./providers/repository.rb:1
+FC064: Ensure issues_url is set in metadata: ./metadata.rb:1
+FC065: Ensure source_url is set in metadata: ./metadata.rb:1
+FC066: Ensure chef_version is set in metadata: ./metadata.rb:1
+FC069: Ensure standardized license defined in metadata: ./metadata.rb:1

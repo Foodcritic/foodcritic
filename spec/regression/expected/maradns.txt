@@ -1,0 +1,12 @@
+FC001: Use strings in preference to symbols to access node attributes: ./attributes/default.rb:17
+FC001: Use strings in preference to symbols to access node attributes: ./recipes/default.rb:46
+FC001: Use strings in preference to symbols to access node attributes: ./recipes/default.rb:47
+FC001: Use strings in preference to symbols to access node attributes: ./templates/default/mararc.erb:8
+FC001: Use strings in preference to symbols to access node attributes: ./templates/default/mararc.erb:9
+FC001: Use strings in preference to symbols to access node attributes: ./templates/default/mararc.erb:31
+FC043: Prefer new notification syntax: ./recipes/default.rb:37
+FC043: Prefer new notification syntax: ./recipes/default.rb:46
+FC064: Ensure issues_url is set in metadata: ./metadata.rb:1
+FC065: Ensure source_url is set in metadata: ./metadata.rb:1
+FC066: Ensure chef_version is set in metadata: ./metadata.rb:1
+FC069: Ensure standardized license defined in metadata: ./metadata.rb:1

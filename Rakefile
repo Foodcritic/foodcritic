@@ -1,4 +1,5 @@
 require "bundler/setup"
+require "mixlib/shellout"
 
 require "bundler/gem_tasks"
 
@@ -58,3 +59,25 @@ task :default => [:man, :test, :rubocop]
 
 desc "Run all tests"
 task :test => [:spec, :features]
+
+desc "Regenerate regression test data"
+task :regen_regression do
+  in_path = File.expand_path("../spec/regression/cookbooks.txt", __FILE__)
+  cookbooks = IO.readlines(in_path)
+  cookbooks.each_with_index do |line, i|
+    name, ref = line.strip.split(":")
+    puts "Regenerating output for #{name} (#{i + 1}/#{cookbooks.size})"
+    Dir.mktmpdir do |temp|
+      clone_cmd = Mixlib::ShellOut.new("git", "clone", "https://github.com/chef-cookbooks/#{name}.git", ".", cwd: temp)
+      clone_cmd.run_command
+      clone_cmd.error!
+      checkout_cmd = Mixlib::ShellOut.new("git", "checkout", ref, cwd: temp)
+      checkout_cmd.run_command
+      checkout_cmd.error!
+      fc_cmd = Mixlib::ShellOut.new(File.expand_path("../bin/foodcritic", __FILE__), "--no-progress", ".", cwd: temp)
+      fc_cmd.run_command
+      out_path = File.expand_path("../spec/regression/expected/#{name}.txt", __FILE__)
+      IO.write(out_path, fc_cmd.stdout)
+    end
+  end
+end

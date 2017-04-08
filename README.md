@@ -33,13 +33,19 @@ Foodcritic includes rspec tests of the application itself and cucumber tests for
 Running rspec tests:
 
 ```
-$ bundle exec rake test
+$ bundle exec rake spec
 ```
 
 Running cucumber tests:
 
 ```
 $ bundle exec rake features
+```
+
+Running regression tests:
+
+```
+$ bundle exec rake 'spec[regression]'
 ```
 
 ## License
