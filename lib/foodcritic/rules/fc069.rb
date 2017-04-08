@@ -10,10 +10,8 @@ rule "FC069", "Ensure standardized license defined in metadata" do
       # require 'net/http'
       # json_data = JSON.parse(Net::HTTP.get(URI('https://raw.githubusercontent.com/spdx/license-list-data/master/json/licenses.json')))
       # licenses = json_data['licenses'].map {|l| l['licenseId'] }
-      # licenses << 'all_rights'
       #
       valid = %w{
-      all_rights
       Glide
       Abstyles
       AFL-1.1
@@ -358,6 +356,7 @@ rule "FC069", "Ensure standardized license defined in metadata" do
       StandardML-NJ
       WXwindows
       }
+      valid << "All Rights Reserved" # Chef-DK's non-standard extra value
       [file_match(filename)] unless valid.include?(license)
     rescue NoMethodError # no license in the metadata
       [file_match(filename)]
