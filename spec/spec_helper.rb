@@ -55,6 +55,10 @@ module FunctionalHelpers
       file("attributes/default.rb", *args, &block)
     end
 
+    def resource_file(*args, &block)
+      file("resources/my_resource.rb", *args, &block)
+    end
+
     def recipe_file(*args, &block)
       file("recipes/default.rb", *args, &block)
     end

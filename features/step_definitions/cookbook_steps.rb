@@ -978,22 +978,6 @@ Given "a cookbook that contains a LWRP with multiple notifications" do
   })
 end
 
-Given /^a cookbook that contains a LWRP with (no|a) default action( defined via a constructor)?$/ do |has_default_action, no_dsl|
-  default_action = if has_default_action == "no"
-                     :no_default_action
-                   elsif no_dsl.nil?
-                     :dsl_default_action
-                   else
-                     :ruby_default_action
-  end
-  cookbook_with_lwrp({ :default_action => default_action,
-                       :notifies => :does_notify })
-end
-
-Given "a cookbook that contains a custom resource with no default action" do
-  cookbook_with_custom_resource
-end
-
 Given "a cookbook that contains no ruby blocks" do
   write_recipe %q{
     package "tar" do
