@@ -12,6 +12,18 @@ module FoodCritic
 
     class RecursedTooFarError < StandardError; end
 
+    # Match unless a file exists using the basepath of the cookbook and the filepath
+    #
+    # @author Joseph Holsten - joseph@josephholsten.com
+    # @since 10.3
+    # @param basepath [String] base path of the cookbook
+    # @param filepath [String] path to the file within the cookbook
+    # @return [String] the absolute path to the base of the cookbook
+    def ensure_file_exists(basepath, filepath)
+      path = File.join(basepath, filepath)
+      [file_match(path)] unless File.exist?(path)
+    end
+
     # Find attribute access by type.
     def attribute_access(ast, options = {})
       options = { type: :any, ignore_calls: false }.merge!(options)
