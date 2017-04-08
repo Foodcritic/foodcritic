@@ -1,0 +1,13 @@
+FC001: Use strings in preference to symbols to access node attributes: ./libraries/provider_database_postgresql.rb:113
+FC001: Use strings in preference to symbols to access node attributes: ./recipes/ebs_backup.rb:31
+FC001: Use strings in preference to symbols to access node attributes: ./recipes/ebs_volume.rb:22
+FC001: Use strings in preference to symbols to access node attributes: ./recipes/ebs_volume.rb:86
+FC019: Access node attributes in a consistent manner: ./libraries/provider_database_postgresql.rb:113
+FC019: Access node attributes in a consistent manner: ./recipes/ebs_backup.rb:31
+FC019: Access node attributes in a consistent manner: ./recipes/ebs_volume.rb:22
+FC019: Access node attributes in a consistent manner: ./recipes/ebs_volume.rb:86
+FC043: Prefer new notification syntax: ./recipes/ebs_volume.rb:104
+FC064: Ensure issues_url is set in metadata: ./metadata.rb:1
+FC065: Ensure source_url is set in metadata: ./metadata.rb:1
+FC066: Ensure chef_version is set in metadata: ./metadata.rb:1
+FC069: Ensure standardized license defined in metadata: ./metadata.rb:1

@@ -1,0 +1,13 @@
+FC002: Avoid string interpolation where not required: ./recipes/cron.rb:103
+FC007: Ensure recipe dependencies are reflected in cookbook metadata: ./recipes/service.rb:197
+FC007: Ensure recipe dependencies are reflected in cookbook metadata: ./recipes/service.rb:209
+FC007: Ensure recipe dependencies are reflected in cookbook metadata: ./recipes/service.rb:223
+FC048: Prefer Mixlib::ShellOut: ./recipes/cron.rb:38
+FC048: Prefer Mixlib::ShellOut: ./recipes/delete_validation.rb:20
+FC048: Prefer Mixlib::ShellOut: ./recipes/service.rb:52
+FC048: Prefer Mixlib::ShellOut: ./recipes/task.rb:42
+FC064: Ensure issues_url is set in metadata: ./metadata.rb:1
+FC065: Ensure source_url is set in metadata: ./metadata.rb:1
+FC066: Ensure chef_version is set in metadata: ./metadata.rb:1
+FC069: Ensure standardized license defined in metadata: ./metadata.rb:1
+FC070: Ensure supports metadata defines valid platforms: ./metadata.rb:1

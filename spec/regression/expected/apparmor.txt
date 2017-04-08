@@ -1,0 +1,8 @@
+FC001: Use strings in preference to symbols to access node attributes: ./attributes/apparmor.rb:1
+FC001: Use strings in preference to symbols to access node attributes: ./recipes/default.rb:21
+FC001: Use strings in preference to symbols to access node attributes: ./recipes/default.rb:23
+FC029: No leading cookbook name in recipe metadata: ./metadata.rb:8
+FC064: Ensure issues_url is set in metadata: ./metadata.rb:1
+FC065: Ensure source_url is set in metadata: ./metadata.rb:1
+FC066: Ensure chef_version is set in metadata: ./metadata.rb:1
+FC069: Ensure standardized license defined in metadata: ./metadata.rb:1

@@ -1,0 +1,11 @@
+FC043: Prefer new notification syntax: ./recipes/cargo.rb:41
+FC043: Prefer new notification syntax: ./recipes/cargo.rb:56
+FC043: Prefer new notification syntax: ./recipes/cargo.rb:65
+FC043: Prefer new notification syntax: ./recipes/cargo.rb:80
+FC043: Prefer new notification syntax: ./recipes/default.rb:53
+FC043: Prefer new notification syntax: ./recipes/default.rb:61
+FC047: Attribute assignment does not specify precedence: ./recipes/cargo.rb:35
+FC064: Ensure issues_url is set in metadata: ./metadata.rb:1
+FC065: Ensure source_url is set in metadata: ./metadata.rb:1
+FC066: Ensure chef_version is set in metadata: ./metadata.rb:1
+FC069: Ensure standardized license defined in metadata: ./metadata.rb:1

@@ -1,0 +1,6 @@
+FC007: Ensure recipe dependencies are reflected in cookbook metadata: ./recipes/source.rb:1
+FC053: Metadata uses the unimplemented "recommends" keyword: ./metadata.rb:12
+FC064: Ensure issues_url is set in metadata: ./metadata.rb:1
+FC065: Ensure source_url is set in metadata: ./metadata.rb:1
+FC066: Ensure chef_version is set in metadata: ./metadata.rb:1
+FC069: Ensure standardized license defined in metadata: ./metadata.rb:1

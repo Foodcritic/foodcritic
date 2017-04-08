@@ -1,0 +1,9 @@
+FC043: Prefer new notification syntax: ./recipes/auth.rb:46
+FC043: Prefer new notification syntax: ./recipes/auth.rb:56
+FC043: Prefer new notification syntax: ./recipes/server.rb:71
+FC043: Prefer new notification syntax: ./recipes/server.rb:78
+FC043: Prefer new notification syntax: ./recipes/server.rb:97
+FC064: Ensure issues_url is set in metadata: ./metadata.rb:1
+FC065: Ensure source_url is set in metadata: ./metadata.rb:1
+FC066: Ensure chef_version is set in metadata: ./metadata.rb:1
+FC069: Ensure standardized license defined in metadata: ./metadata.rb:1

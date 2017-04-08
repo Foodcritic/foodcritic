@@ -1,0 +1,29 @@
+FC001: Use strings in preference to symbols to access node attributes: ./attributes/default.rb:1
+FC001: Use strings in preference to symbols to access node attributes: ./attributes/default.rb:2
+FC001: Use strings in preference to symbols to access node attributes: ./attributes/default.rb:3
+FC001: Use strings in preference to symbols to access node attributes: ./attributes/default.rb:4
+FC001: Use strings in preference to symbols to access node attributes: ./attributes/default.rb:5
+FC001: Use strings in preference to symbols to access node attributes: ./definitions/memcached_instance.rb:29
+FC001: Use strings in preference to symbols to access node attributes: ./definitions/memcached_instance.rb:30
+FC001: Use strings in preference to symbols to access node attributes: ./definitions/memcached_instance.rb:31
+FC001: Use strings in preference to symbols to access node attributes: ./recipes/default.rb:25
+FC001: Use strings in preference to symbols to access node attributes: ./recipes/default.rb:39
+FC001: Use strings in preference to symbols to access node attributes: ./recipes/default.rb:47
+FC001: Use strings in preference to symbols to access node attributes: ./recipes/default.rb:48
+FC001: Use strings in preference to symbols to access node attributes: ./recipes/default.rb:49
+FC001: Use strings in preference to symbols to access node attributes: ./recipes/default.rb:50
+FC001: Use strings in preference to symbols to access node attributes: ./recipes/default.rb:51
+FC001: Use strings in preference to symbols to access node attributes: ./recipes/default.rb:62
+FC001: Use strings in preference to symbols to access node attributes: ./recipes/default.rb:63
+FC001: Use strings in preference to symbols to access node attributes: ./recipes/default.rb:64
+FC001: Use strings in preference to symbols to access node attributes: ./recipes/default.rb:65
+FC001: Use strings in preference to symbols to access node attributes: ./recipes/default.rb:66
+FC001: Use strings in preference to symbols to access node attributes: ./recipes/default.rb:72
+FC015: Consider converting definition to a Custom Resource: ./definitions/memcached_instance.rb:1
+FC043: Prefer new notification syntax: ./recipes/default.rb:41
+FC043: Prefer new notification syntax: ./recipes/default.rb:56
+FC043: Prefer new notification syntax: ./recipes/default.rb:74
+FC064: Ensure issues_url is set in metadata: ./metadata.rb:1
+FC065: Ensure source_url is set in metadata: ./metadata.rb:1
+FC066: Ensure chef_version is set in metadata: ./metadata.rb:1
+FC069: Ensure standardized license defined in metadata: ./metadata.rb:1

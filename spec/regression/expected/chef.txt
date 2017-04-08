@@ -1,0 +1,36 @@
+FC001: Use strings in preference to symbols to access node attributes: ./attributes/default.rb:20
+FC001: Use strings in preference to symbols to access node attributes: ./attributes/default.rb:21
+FC001: Use strings in preference to symbols to access node attributes: ./attributes/default.rb:22
+FC001: Use strings in preference to symbols to access node attributes: ./attributes/default.rb:26
+FC001: Use strings in preference to symbols to access node attributes: ./attributes/default.rb:27
+FC001: Use strings in preference to symbols to access node attributes: ./attributes/default.rb:28
+FC001: Use strings in preference to symbols to access node attributes: ./attributes/default.rb:29
+FC001: Use strings in preference to symbols to access node attributes: ./attributes/default.rb:31
+FC001: Use strings in preference to symbols to access node attributes: ./attributes/default.rb:32
+FC001: Use strings in preference to symbols to access node attributes: ./attributes/default.rb:33
+FC001: Use strings in preference to symbols to access node attributes: ./attributes/default.rb:34
+FC001: Use strings in preference to symbols to access node attributes: ./attributes/default.rb:35
+FC001: Use strings in preference to symbols to access node attributes: ./attributes/default.rb:38
+FC001: Use strings in preference to symbols to access node attributes: ./attributes/default.rb:39
+FC001: Use strings in preference to symbols to access node attributes: ./attributes/default.rb:40
+FC001: Use strings in preference to symbols to access node attributes: ./attributes/default.rb:41
+FC001: Use strings in preference to symbols to access node attributes: ./attributes/default.rb:42
+FC001: Use strings in preference to symbols to access node attributes: ./attributes/default.rb:43
+FC001: Use strings in preference to symbols to access node attributes: ./attributes/default.rb:44
+FC001: Use strings in preference to symbols to access node attributes: ./attributes/default.rb:45
+FC001: Use strings in preference to symbols to access node attributes: ./attributes/default.rb:46
+FC001: Use strings in preference to symbols to access node attributes: ./attributes/default.rb:47
+FC001: Use strings in preference to symbols to access node attributes: ./attributes/default.rb:49
+FC001: Use strings in preference to symbols to access node attributes: ./attributes/default.rb:50
+FC001: Use strings in preference to symbols to access node attributes: ./attributes/server_proxy.rb:23
+FC001: Use strings in preference to symbols to access node attributes: ./attributes/server_proxy.rb:25
+FC001: Use strings in preference to symbols to access node attributes: ./attributes/server_proxy.rb:28
+FC001: Use strings in preference to symbols to access node attributes: ./attributes/server_proxy.rb:29
+FC019: Access node attributes in a consistent manner: ./attributes/default.rb:38
+FC019: Access node attributes in a consistent manner: ./attributes/default.rb:39
+FC019: Access node attributes in a consistent manner: ./attributes/default.rb:50
+FC019: Access node attributes in a consistent manner: ./attributes/server_proxy.rb:26
+FC064: Ensure issues_url is set in metadata: ./metadata.rb:1
+FC065: Ensure source_url is set in metadata: ./metadata.rb:1
+FC066: Ensure chef_version is set in metadata: ./metadata.rb:1
+FC069: Ensure standardized license defined in metadata: ./metadata.rb:1

@@ -1,0 +1,29 @@
+FC001: Use strings in preference to symbols to access node attributes: ./recipes/a_record.rb:22
+FC001: Use strings in preference to symbols to access node attributes: ./recipes/a_record.rb:25
+FC001: Use strings in preference to symbols to access node attributes: ./recipes/a_record.rb:26
+FC001: Use strings in preference to symbols to access node attributes: ./recipes/a_record.rb:27
+FC001: Use strings in preference to symbols to access node attributes: ./recipes/a_record.rb:28
+FC001: Use strings in preference to symbols to access node attributes: ./recipes/a_record.rb:29
+FC001: Use strings in preference to symbols to access node attributes: ./recipes/ec2.rb:23
+FC001: Use strings in preference to symbols to access node attributes: ./recipes/ec2.rb:25
+FC001: Use strings in preference to symbols to access node attributes: ./recipes/ec2.rb:26
+FC001: Use strings in preference to symbols to access node attributes: ./recipes/ec2.rb:40
+FC002: Avoid string interpolation where not required: ./recipes/ec2.rb:70
+FC016: LWRP does not declare a default action: ./resources/rr.rb:1
+FC019: Access node attributes in a consistent manner: ./recipes/a_record.rb:22
+FC019: Access node attributes in a consistent manner: ./recipes/a_record.rb:25
+FC019: Access node attributes in a consistent manner: ./recipes/a_record.rb:26
+FC019: Access node attributes in a consistent manner: ./recipes/a_record.rb:27
+FC019: Access node attributes in a consistent manner: ./recipes/a_record.rb:28
+FC019: Access node attributes in a consistent manner: ./recipes/a_record.rb:29
+FC019: Access node attributes in a consistent manner: ./recipes/ec2.rb:23
+FC019: Access node attributes in a consistent manner: ./recipes/ec2.rb:25
+FC019: Access node attributes in a consistent manner: ./recipes/ec2.rb:26
+FC019: Access node attributes in a consistent manner: ./recipes/ec2.rb:40
+FC043: Prefer new notification syntax: ./recipes/ec2.rb:69
+FC059: LWRP provider does not declare use_inline_resources: ./providers/rr.rb:1
+FC064: Ensure issues_url is set in metadata: ./metadata.rb:1
+FC065: Ensure source_url is set in metadata: ./metadata.rb:1
+FC066: Ensure chef_version is set in metadata: ./metadata.rb:1
+FC067: Ensure at least one platform supported in metadata: ./metadata.rb:1
+FC069: Ensure standardized license defined in metadata: ./metadata.rb:1

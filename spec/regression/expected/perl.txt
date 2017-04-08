@@ -1,0 +1,11 @@
+FC001: Use strings in preference to symbols to access node attributes: ./definitions/cpan_module.rb:27
+FC001: Use strings in preference to symbols to access node attributes: ./recipes/default.rb:26
+FC002: Avoid string interpolation where not required: ./recipes/default.rb:37
+FC002: Avoid string interpolation where not required: ./recipes/default.rb:43
+FC015: Consider converting definition to a Custom Resource: ./definitions/cpan_module.rb:1
+FC019: Access node attributes in a consistent manner: ./definitions/cpan_module.rb:27
+FC019: Access node attributes in a consistent manner: ./recipes/default.rb:26
+FC064: Ensure issues_url is set in metadata: ./metadata.rb:1
+FC065: Ensure source_url is set in metadata: ./metadata.rb:1
+FC066: Ensure chef_version is set in metadata: ./metadata.rb:1
+FC069: Ensure standardized license defined in metadata: ./metadata.rb:1

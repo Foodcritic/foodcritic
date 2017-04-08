@@ -1,0 +1,30 @@
+FC001: Use strings in preference to symbols to access node attributes: ./attributes/mirror.rb:1
+FC001: Use strings in preference to symbols to access node attributes: ./attributes/mirror.rb:2
+FC001: Use strings in preference to symbols to access node attributes: ./attributes/mirror.rb:3
+FC001: Use strings in preference to symbols to access node attributes: ./attributes/server.rb:1
+FC001: Use strings in preference to symbols to access node attributes: ./attributes/server.rb:2
+FC001: Use strings in preference to symbols to access node attributes: ./attributes/server.rb:3
+FC001: Use strings in preference to symbols to access node attributes: ./recipes/mirror.rb:23
+FC001: Use strings in preference to symbols to access node attributes: ./recipes/mirror.rb:29
+FC001: Use strings in preference to symbols to access node attributes: ./recipes/mirror.rb:36
+FC001: Use strings in preference to symbols to access node attributes: ./recipes/mirror.rb:41
+FC001: Use strings in preference to symbols to access node attributes: ./recipes/mirror.rb:44
+FC001: Use strings in preference to symbols to access node attributes: ./recipes/mirror.rb:45
+FC001: Use strings in preference to symbols to access node attributes: ./recipes/mirror.rb:46
+FC001: Use strings in preference to symbols to access node attributes: ./recipes/server.rb:26
+FC001: Use strings in preference to symbols to access node attributes: ./recipes/server.rb:29
+FC001: Use strings in preference to symbols to access node attributes: ./recipes/server.rb:30
+FC001: Use strings in preference to symbols to access node attributes: ./recipes/server.rb:31
+FC001: Use strings in preference to symbols to access node attributes: ./recipes/server.rb:40
+FC001: Use strings in preference to symbols to access node attributes: ./recipes/server.rb:44
+FC001: Use strings in preference to symbols to access node attributes: ./recipes/server.rb:50
+FC001: Use strings in preference to symbols to access node attributes: ./templates/default/gem_server.conf.erb:6
+FC001: Use strings in preference to symbols to access node attributes: ./templates/default/gem_server.conf.erb:29
+FC001: Use strings in preference to symbols to access node attributes: ./templates/default/gem_server.conf.erb:35
+FC002: Avoid string interpolation where not required: ./recipes/mirror.rb:23
+FC002: Avoid string interpolation where not required: ./recipes/server.rb:44
+FC043: Prefer new notification syntax: ./recipes/server.rb:50
+FC064: Ensure issues_url is set in metadata: ./metadata.rb:1
+FC065: Ensure source_url is set in metadata: ./metadata.rb:1
+FC066: Ensure chef_version is set in metadata: ./metadata.rb:1
+FC069: Ensure standardized license defined in metadata: ./metadata.rb:1
