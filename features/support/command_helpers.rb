@@ -79,6 +79,9 @@ module FoodCritic
       "FC066" => "Ensure chef_version is set in metadata",
       "FC067" => "Ensure at least one platform supported in metadata",
       "FC068" => "Ensure license is set in metadata",
+      "FC069" => "Ensure standardized license defined in metadata",
+      "FC070" => "Ensure supports metadata defines valid platforms",
+      "FC071" => "Missing LICENSE file",
       "FCTEST001" => "Test Rule",
     }
 

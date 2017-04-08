@@ -24,6 +24,7 @@ describe FoodCritic::Api do
         :cookbook_maintainer_email,
         :cookbook_name,
         :declared_dependencies,
+        :ensure_file_exists,
         :field,
         :field_value,
         :file_match,

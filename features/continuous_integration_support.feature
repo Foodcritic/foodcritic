@@ -26,10 +26,10 @@ Feature: Continuous Integration Support
     | FC002,FC005       | -f ~any                       | FC002,FC005       | successful   |
     | FC002,FC005       | -f any -f ~FC014              | FC002,FC005       | failed       |
     | FC002,FC005       | -f any,~FC014                 | FC002,FC005       | failed       |
-    | FC002             | -f ~FC002 -f ~metadata        | FC002             | successful   |
+    | FC002             | -f ~FC002 -f ~metadata        | FC002             | failed       |
     | FC002,FC005       | -f ~FC002                     | FC002,FC005       | failed       |
     | FC002,FC005       | -f any -f ~FC002              | FC002,FC005       | failed       |
     | FC002             | -f any,~FC002                 | FC002             | failed       |
-    | FC002             | -f any -f ~FC002 -f ~metadata | FC002             | successful   |
+    | FC002             | -f any -f ~FC002 -f ~metadata | FC002             | failed       |
     | FC002,FC005       | -f any,~FC002                 | FC002,FC005       | failed       |
     | FC002,FC005       | -f ~FC002 -f ~FC004           | FC002,FC005       | failed       |
