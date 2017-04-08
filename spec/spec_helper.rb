@@ -59,6 +59,10 @@ module FunctionalHelpers
       file("recipes/default.rb", *args, &block)
     end
 
+    def metadata_file(*args, &block)
+      file("metadata.rb", *args, &block)
+    end
+
     def included(klass)
       super
       klass.extend ClassMethods
