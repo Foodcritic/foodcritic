@@ -66,7 +66,7 @@ task :regen_regression do
   cookbooks = IO.readlines(in_path)
   cookbooks.each_with_index do |line, i|
     name, ref = line.strip.split(":")
-    puts "Regenerating output for #{name} (#{i+1}/#{cookbooks.size})"
+    puts "Regenerating output for #{name} (#{i + 1}/#{cookbooks.size})"
     Dir.mktmpdir do |temp|
       clone_cmd = Mixlib::ShellOut.new("git", "clone", "https://github.com/chef-cookbooks/#{name}.git", ".", cwd: temp)
       clone_cmd.run_command
