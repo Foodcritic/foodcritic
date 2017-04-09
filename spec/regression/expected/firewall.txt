@@ -8,3 +8,5 @@ FC065: Ensure source_url is set in metadata: ./metadata.rb:1
 FC066: Ensure chef_version is set in metadata: ./metadata.rb:1
 FC067: Ensure at least one platform supported in metadata: ./metadata.rb:1
 FC069: Ensure standardized license defined in metadata: ./metadata.rb:1
+FC074: LWRP should use DSL to define resource's default action: ./resources/default.rb:1
+FC074: LWRP should use DSL to define resource's default action: ./resources/rule.rb:1

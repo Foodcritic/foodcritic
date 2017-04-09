@@ -45,3 +45,13 @@ FC064: Ensure issues_url is set in metadata: ./metadata.rb:1
 FC065: Ensure source_url is set in metadata: ./metadata.rb:1
 FC066: Ensure chef_version is set in metadata: ./metadata.rb:1
 FC069: Ensure standardized license defined in metadata: ./metadata.rb:1
+FC074: LWRP should use DSL to define resource's default action: ./resources/auto_run.rb:1
+FC074: LWRP should use DSL to define resource's default action: ./resources/batch.rb:1
+FC074: LWRP should use DSL to define resource's default action: ./resources/feature.rb:1
+FC074: LWRP should use DSL to define resource's default action: ./resources/package.rb:1
+FC074: LWRP should use DSL to define resource's default action: ./resources/path.rb:1
+FC074: LWRP should use DSL to define resource's default action: ./resources/reboot.rb:1
+FC074: LWRP should use DSL to define resource's default action: ./resources/registry.rb:1
+FC074: LWRP should use DSL to define resource's default action: ./resources/shortcut.rb:1
+FC074: LWRP should use DSL to define resource's default action: ./resources/task.rb:1
+FC074: LWRP should use DSL to define resource's default action: ./resources/zipfile.rb:1
