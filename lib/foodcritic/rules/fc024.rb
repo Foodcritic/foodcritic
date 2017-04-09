@@ -1,6 +1,6 @@
 rule "FC024", "Consider adding platform equivalents" do
   tags %w{portability}
-  RHEL = %w{amazon centos redhat scientific oracle}
+  RHEL = %w{centos redhat scientific oracle}
   recipe do |ast, filename|
     next if Pathname.new(filename).basename.to_s == "metadata.rb"
     metadata_path = Pathname.new(

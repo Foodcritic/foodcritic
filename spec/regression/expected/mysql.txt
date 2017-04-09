@@ -3,8 +3,6 @@ FC002: Avoid string interpolation where not required: ./attributes/server.rb:206
 FC002: Avoid string interpolation where not required: ./attributes/server.rb:207
 FC002: Avoid string interpolation where not required: ./attributes/server.rb:208
 FC007: Ensure recipe dependencies are reflected in cookbook metadata: ./recipes/client.rb:42
-FC024: Consider adding platform equivalents: ./recipes/server.rb:130
-FC024: Consider adding platform equivalents: ./recipes/server.rb:132
 FC052: Metadata uses the unimplemented "suggests" keyword: ./metadata.rb:19
 FC052: Metadata uses the unimplemented "suggests" keyword: ./metadata.rb:20
 FC064: Ensure issues_url is set in metadata: ./metadata.rb:1

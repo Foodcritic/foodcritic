@@ -14,9 +14,8 @@ Feature: Check for missing platforms
       | type      | supports                    | flavours                                              | warning             |
       | case      |                             | chalk,cheese                                          | should not be shown |
       | case      |                             | debian,ubuntu                                         | should not be shown |
-      | case      |                             | amazon,centos,redhat,scientific,oracle                | should not be shown |
-      | case      |                             | centos,redhat,amazon,scientific,oracle                | should not be shown |
-      | case      |                             | centos,debian,fedora,redhat,amazon,scientific,oracle  | should not be shown |
+      | case      |                             | centos,redhat,scientific,oracle                       | should not be shown |
+      | case      |                             | centos,debian,fedora,redhat,scientific,oracle         | should not be shown |
       | case      |                             | redhat                                                | should not be shown |
       | case      |                             | centos,redhat                                         | should be shown     |
       | case      | centos,redhat               | centos,redhat                                         | should not be shown |
@@ -25,7 +24,7 @@ Feature: Check for missing platforms
       | case      | centos,debian,scientific    | centos,scientific                                     | should not be shown |
       | case      | centos,redhat,scientific    | redhat,scientific                                     | should be shown     |
       | case      | debian,redhat,centos,fedora | redhat,centos,fedora                                  | should not be shown |
-      | platform? |                             | centos,redhat,amazon,scientific,oracle                | should not be shown |
+      | platform? |                             | centos,redhat,scientific,oracle                       | should not be shown |
       | platform? |                             | redhat                                                | should not be shown |
       | platform? |                             | redhat,scientific                                     | should be shown     |
       | platform? | redhat,scientific           | redhat,scientific                                     | should not be shown |
