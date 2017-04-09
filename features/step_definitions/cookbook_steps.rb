@@ -2114,6 +2114,13 @@ Then "the missing template warning 033 should not be displayed against the templ
   expect_warning("FC033", :line => 3, :expect_warning => false)
 end
 
+Then "the node access warning 001 should warn on lines 2 and 10 in that order" do
+  expected_warnings = [2, 10].map do |line|
+    "FC001: Use strings in preference to symbols to access node attributes: cookbooks/example/recipes/default.rb:#{line}"
+  end
+  expect_output(expected_warnings.join("\n"))
+end
+
 Then "the prefer chef_gem to manual install warning 025 should be shown" do
   expect_warning("FC025", :line => nil)
 end
