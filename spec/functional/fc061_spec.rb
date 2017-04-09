@@ -16,11 +16,10 @@ describe "FC061" do
     it { is_expected.not_to violate_rule("FC061") }
   end
 
-  # this should be the case, but FC061 has a bug
-  # context "with a cookbook with metadata that does not include a version keyword" do
-  #   metadata_file("name 'something'")
-  #   it { is_expected.to violate_rule("FC061") }
-  # end
+  context "with a cookbook with metadata that does not include a version keyword" do
+    metadata_file("name 'something'")
+    pending("should throw FC061 except https://github.com/acrmp/foodcritic/issues/547")
+  end
 
   context "with a cookbook with metadata that includes the version keyword and an invalid version string" do
     metadata_file("version 'one'")
