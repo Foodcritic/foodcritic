@@ -1,5 +1,5 @@
 rule "FC073", "Root alias file shadowing non-alias file" do
-  tags %w{correctness}
+  tags %w{correctness chef13}
   cookbook do |path|
     {
       "attributes.rb" => "attributes/default.rb",
