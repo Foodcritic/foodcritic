@@ -1286,17 +1286,6 @@ Given "a cookbook with five recipes" do
 
 end
 
-Given /^a cookbook with metadata that declares a recipe with (.*)$/ do |declaration|
-  write_metadata declaration
-  write_recipe ""
-end
-
-Given /^a cookbook with metadata that (specifies|does not specify) the cookbook name$/ do |specifies|
-  write_metadata %Q{
-    #{"name 'example'" if specifies == 'specifies'}
-  }
-end
-
 Given /^a directory that contains a role file ([^ ]+) in (json|ruby) that defines role name (.*)$/ do |file_name, format, role_name|
   role(:role_name => %Q{"#{role_name}"}, :file_name => file_name, :format => format.to_sym)
 end
@@ -2123,39 +2112,6 @@ end
 
 Then "the missing template warning 033 should not be displayed against the template" do
   expect_warning("FC033", :line => 3, :expect_warning => false)
-end
-
-Then /^the no leading cookbook name warning 029 should be (not )?shown$/ do |should_not|
-  expect_warning("FC029", :line => 1, :expect_warning => should_not.nil?, :file => "metadata.rb")
-end
-
-Then "the node access warning 001 should be displayed for each match" do
-  expect_warning("FC001", :line => 1)
-  expect_warning("FC001", :line => 2)
-end
-
-Then "the node access warning 001 should be displayed against the variables" do
-  expect_warning("FC001", :line => 4)
-  expect_warning("FC001", :line => 5)
-end
-
-Then "the node access warning 001 should be displayed twice for the same line" do
-  expect_warning("FC001", :line => 1, :num_occurrences => 2)
-end
-
-Then "the node access warning 001 should warn on lines 2 and 10 in that order" do
-  expected_warnings = [2, 10].map do |line|
-    "FC001: Use strings in preference to symbols to access node attributes: cookbooks/example/recipes/default.rb:#{line}"
-  end
-  expect_output(expected_warnings.join("\n"))
-end
-
-Then "the node access warning 001 should be displayed for the recipe" do
-  expect_warning("FC001")
-end
-
-Then "the node access warning 001 should not be displayed for the attributes" do
-  expect_warning("FC001", :file_type => :attributes, :line => 1, :expect_warning => false)
 end
 
 Then "the prefer chef_gem to manual install warning 025 should be shown" do
