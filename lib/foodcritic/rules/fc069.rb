@@ -1,5 +1,5 @@
 rule "FC069", "Ensure standardized license defined in metadata" do
-  tags %w{metadata}
+  tags %w{metadata supermarket license}
   metadata do |ast, filename|
     begin
       license = ast.xpath(%Q{//command[ident/@value='license']/
