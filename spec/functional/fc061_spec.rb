@@ -18,7 +18,7 @@ describe "FC061" do
 
   context "with a cookbook with metadata that does not include a version keyword" do
     metadata_file("name 'something'")
-    pending("should throw FC061 except https://github.com/acrmp/foodcritic/issues/547")
+    it { is_expected.not_to violate_rule("FC061") }
   end
 
   context "with a cookbook with metadata that includes the version keyword and an invalid version string" do
