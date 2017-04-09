@@ -10,7 +10,7 @@ end
 module FunctionalHelpers
   extend RSpec::Matchers::DSL
 
-  matcher :violate_rule do |_rule_id=nil|
+  matcher :violate_rule do |rule_id = nil|
     match do |cmd|
       if location
         cmd.stdout =~ /^#{expected}:.*: \.\/#{location}/
@@ -29,7 +29,7 @@ module FunctionalHelpers
     # define_method insetad of def so we can see the _rule_id variable in closure.
     define_method(:expected) do
       # Fill in the top-level example group description as the rule ID if not specified.
-      _rule_id || method_missing(:class).parent_groups.last.description
+      rule_id || method_missing(:class).parent_groups.last.description
     end
   end
 
