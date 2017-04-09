@@ -2,7 +2,7 @@ rule "FC073", "Root alias file shadowing non-alias file" do
   tags %w{correctness}
   cookbook do |path|
     {
-      "attributes.rb" => "default/attributes.rb",
+      "attributes.rb" => "attributes/default.rb",
       "recipe.rb" => "recipes/default.rb",
     }.map do |alias_path, folder_path|
       full_alias_path = File.join(path, alias_path)
