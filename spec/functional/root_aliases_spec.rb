@@ -1,6 +1,6 @@
 require "spec_helper"
 
-fdescribe "root aliases" do
+describe "root aliases" do
   context "with a recipe root alias" do
     file "recipe.rb", "log node[:foo]\n"
     it { is_expected.to violate_rule("FC001") }
