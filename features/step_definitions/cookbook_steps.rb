@@ -1297,40 +1297,6 @@ Given /^a cookbook with metadata that (specifies|does not specify) the cookbook 
   }
 end
 
-Given /^a cookbook with metadata that (includes|does not include) a maintainer keyword$/ do |includes|
-  write_metadata %Q{
-    #{"maintainer 'A Maintainer'" if includes == 'includes'}
-  }
-end
-
-Given /^a cookbook with metadata that (includes|does not include) a maintainer email$/ do |includes|
-  write_metadata %Q{
-   #{"maintainer_email 'maintainer@example.com'" if includes == 'includes'}
-  }
-end
-
-Given "a cookbook with metadata that includes a maintainer expression" do
-  write_metadata "maintainer an(expression)"
-end
-
-Given "a cookbook with metadata that includes a maintainer email expression" do
-  write_metadata "maintainer_email an(expression)"
-end
-
-Given /^a cookbook with metadata that (includes|does not include) a recommends keyword$/ do |includes|
-  write_metadata %Q{
-    depends "bar"
-    #{"recommends 'foo'" if includes == 'includes'}
-  }
-end
-
-Given /^a cookbook with metadata that (includes|does not include) a suggests keyword$/ do |includes|
-  write_metadata %Q{
-    depends "bar"
-    #{"suggests 'foo'" if includes == 'includes'}
-  }
-end
-
 Given /^a directory that contains a role file ([^ ]+) in (json|ruby) that defines role name (.*)$/ do |file_name, format, role_name|
   role(:role_name => %Q{"#{role_name}"}, :file_name => file_name, :format => format.to_sym)
 end
@@ -2385,54 +2351,4 @@ Given /^a cookbook that contains a library resource$/ do
     end
   }
   write_library("lib", library_file)
-end
-
-Given "a cookbook with metadata that includes the version keyword and a valid version string" do
-  write_metadata %q{version '1.2.3'}
-end
-
-Given "a cookbook with metadata that includes the version keyword and a valid version string with double quotes" do
-  write_metadata %q{version '1.2.3'}
-end
-
-Given "a cookbook with metadata that includes the version keyword and a valid x.y version string" do
-  write_metadata %q{version '1.2'}
-end
-
-Given "a cookbook with metadata that does not include a version keyword" do
-  write_metadata %Q{
-    name 'test'
-  }
-end
-
-Given "a cookbook with metadata that includes the version keyword and an invalid version string" do
-  write_metadata %q{version '1.a.3'}
-end
-
-Given "a cookbook with metadata that includes the version keyword and an invalid single digit version string" do
-  write_metadata %q{version '1'}
-end
-
-Given "a cookbook with metadata that includes the version keyword and an invalid 4 digit version string" do
-  write_metadata %q{version '1.2.3.4'}
-end
-
-Given "a cookbook with a metadata version that uses string interpolation" do
-  write_metadata %q{
-    patch = 3
-    version "1.2.#{patch}"
-  }
-end
-
-Given "a cookbook with a metadata version that is not a string literal" do
-  write_metadata %q{
-    v = "1.2.3"
-    version v
-  }
-end
-
-Given "a cookbook with a metadata version that is a method call" do
-  write_metadata %q{
-    version magic_version_generator('and its args')
-  }
 end
