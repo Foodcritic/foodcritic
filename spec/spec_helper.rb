@@ -10,17 +10,26 @@ end
 module FunctionalHelpers
   extend RSpec::Matchers::DSL
 
-  matcher :violate_rule do |rule_id|
+  matcher :violate_rule do |rule_id = nil|
     match do |cmd|
       if location
-        cmd.stdout =~ /^#{rule_id}:.*: \.\/#{location}/
+        cmd.stdout =~ /^#{expected}:.*: \.\/#{location}/
       else
-        cmd.stdout =~ /^#{rule_id}:/
+        cmd.stdout =~ /^#{expected}:/
       end
     end
     chain :in, :location
     failure_message do |cmd|
-      "expected a violation of rule #{rule_id}#{location && " in #{location}"}, output was:\n#{cmd.stdout}"
+      "expected a violation of rule #{expected}#{location && " in #{location}"}, output was:\n#{cmd.stdout}"
+    end
+    failure_message_when_negated do |cmd|
+      "expected no violation of rule #{expected}#{location && " in #{location}"}, output was:\n#{cmd.stdout}"
+    end
+    # Override the default behavior from RSpec for the expected value, use
+    # define_method insetad of def so we can see the _rule_id variable in closure.
+    define_method(:expected) do
+      # Fill in the top-level example group description as the rule ID if not specified.
+      rule_id || method_missing(:class).parent_groups.last.description
     end
   end
 
