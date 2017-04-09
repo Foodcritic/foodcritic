@@ -12,8 +12,13 @@ describe "FC075" do
     it { is_expected.not_to violate_rule("FC075") }
   end
 
+  context "with a cookbook with recipe that includes node['save']" do
+    recipe_file("node['save']")
+    it { is_expected.not_to violate_rule("FC075") }
+  end
+
   context "with a cookbook with a library that uses node.save" do
-    libary_file <<-EOH
+    library_file <<-EOH
       module CookbookHelper
         def some_method
           node.save
