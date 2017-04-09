@@ -2,7 +2,6 @@ FC011: Missing README in markdown format: examples/README.md:1
 FC017: LWRP does not notify when updated: ./providers/serve.rb:65
 FC017: LWRP does not notify when updated: ./providers/serve.rb:69
 FC031: Cookbook without metadata.rb file: examples/metadata.rb:1
-FC045: Metadata does not contain cookbook name: examples/metadata.rb:1
 FC059: LWRP provider does not declare use_inline_resources: ./providers/serve.rb:1
 FC064: Ensure issues_url is set in metadata: ./metadata.rb:1
 FC065: Ensure source_url is set in metadata: ./metadata.rb:1
