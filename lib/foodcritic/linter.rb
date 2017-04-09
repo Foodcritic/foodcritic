@@ -257,7 +257,7 @@ module FoodCritic
 
           if File.directory?(dir)
             glob = if path_type == :cookbook
-                     "{metadata.rb,{attributes,definitions,libraries,"\
+                     "{metadata.rb,attributes.rb,recipe.rb,{attributes,definitions,libraries,"\
                      "providers,recipes,resources}/*.rb,templates/*/*.erb}"
                    else
                      "*.rb"
