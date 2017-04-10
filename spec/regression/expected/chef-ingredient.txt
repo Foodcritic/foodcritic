@@ -1,0 +1,2 @@
+FC067: Ensure at least one platform supported in metadata: ./metadata.rb:1
+FC069: Ensure standardized license defined in metadata: ./metadata.rb:1

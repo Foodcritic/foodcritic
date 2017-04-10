@@ -1,0 +1,7 @@
+FC009: Resource attribute not recognised: ./recipes/vc10.rb:24
+FC009: Resource attribute not recognised: ./recipes/vc11.rb:24
+FC009: Resource attribute not recognised: ./recipes/vc12.rb:24
+FC009: Resource attribute not recognised: ./recipes/vc14.rb:24
+FC009: Resource attribute not recognised: ./recipes/vc6.rb:24
+FC009: Resource attribute not recognised: ./recipes/vc9.rb:24
+FC069: Ensure standardized license defined in metadata: ./metadata.rb:1

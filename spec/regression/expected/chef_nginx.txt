@@ -1,0 +1,2 @@
+FC015: Consider converting definition to a Custom Resource: ./definitions/nginx_site.rb:1
+FC069: Ensure standardized license defined in metadata: ./metadata.rb:1
