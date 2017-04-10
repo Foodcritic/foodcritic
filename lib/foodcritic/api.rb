@@ -451,6 +451,23 @@ module FoodCritic
         File.basename(path) == ".DS_Store" || File.extname(path) == ".swp"
       end
     end
+    
+    # Give a filename path it returns the hash of the JSON contents
+    #
+    # @author Tim Smith - tsmith@chef.io
+    # @since 11.0
+    # @param filename [String] path to a file in JSON format
+    # @return [Hash] hash of JSON content
+    def json_file_to_hash(filename)
+      raise "File #{filename} not found" unless File.exist?(filename)
+
+      file = File.read(filename)
+      begin
+        JSON.parse(file)
+      rescue JSON::ParserError
+        raise "File #{filename} does not appear to contain valid JSON"
+      end
+    end
 
     private
 
