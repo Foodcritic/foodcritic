@@ -15,10 +15,8 @@ describe FoodCritic::Api do
     it "exposes the expected api to rule authors" do
       expect(api.public_methods.sort - ignorable_methods).to eq [
         :attribute_access,
-        :checks_for_chef_solo?,
         :chef_dsl_methods,
         :chef_node_methods,
-        :chef_solo_search_supported?,
         :cookbook_base_path,
         :cookbook_maintainer,
         :cookbook_maintainer_email,
@@ -31,6 +29,7 @@ describe FoodCritic::Api do
         :find_resources,
         :gem_version,
         :included_recipes,
+        :json_file_to_hash,
         :literal_searches,
         :match,
         :metadata_field,
@@ -135,50 +134,6 @@ describe FoodCritic::Api do
         })
         expect(api.attribute_access(ast, :ignore => %w{foo bar})).to be_empty
       end
-    end
-  end
-
-  describe "#checks_for_chef_solo?" do
-    let(:ast) { double() }
-    around do |ex|
-      begin
-        $stderr = StringIO.new
-        ex.run
-      ensure
-        $stderr = STDERR
-      end
-    end
-    it "raises if the provided ast does not support XPath" do
-      expect { api.checks_for_chef_solo?(nil) }.to raise_error ArgumentError
-    end
-    it "returns false if there is no reference to chef solo" do
-      expect(ast).to receive(:xpath).with(kind_of(String)).and_return([]).twice
-      expect(api.checks_for_chef_solo?(ast)).to be_falsey
-    end
-    it "returns true if there is one reference to chef solo" do
-      expect(ast).to receive(:xpath).with(kind_of(String)).and_return(["aref"])
-      expect(api.checks_for_chef_solo?(ast)).to be_truthy
-    end
-    it "returns true if there are multiple references to chef solo" do
-      expect(ast).to receive(:xpath).with(kind_of(String)).and_return(%w{aref aref})
-      expect(api.checks_for_chef_solo?(ast)).to be_truthy
-    end
-  end
-
-  describe "#chef_solo_search_supported?" do
-    around do |ex|
-      begin
-        $stderr = StringIO.new
-        ex.run
-      ensure
-        $stderr = STDERR
-      end
-    end
-    it "returns false if the recipe path is nil" do
-      expect(api.chef_solo_search_supported?(nil)).to be_falsey
-    end
-    it "returns false if the recipe path does not exist" do
-      expect(api.chef_solo_search_supported?("/tmp/non-existent-path")).to be_falsey
     end
   end
 
