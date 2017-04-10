@@ -1,5 +1,17 @@
 # Foodcritic Changelog:
 
+## [10.3.1](https://github.com/acrmp/foodcritic/tree/v10.3.1) (2017-04-10)
+
+[Full Changelog](https://github.com/acrmp/foodcritic/compare/v10.3.0...v10.3.1)
+
+**Implemented enhancements:**
+
+- Added Chef 13.0.113 metadata, but retained 12.19.36 as the default
+
+**Fixed bugs:**
+
+- Resolved a regression when running Foodcritic as a Rake task
+
 ## [10.3.0](https://github.com/acrmp/foodcritic/tree/v10.3.0) (2017-04-10)
 
 [Full Changelog](https://github.com/acrmp/foodcritic/compare/v10.2.2...v10.3.0)
