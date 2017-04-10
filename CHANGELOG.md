@@ -1,13 +1,34 @@
 # Foodcritic Changelog:
 
-## [10.2.2](https://github.com/acrmp/foodcritic/tree/10.2.2) (2017-03-31)
-[Full Changelog](https://github.com/acrmp/foodcritic/compare/v10.2.1...10.2.2)
+## [10.3.0](https://github.com/acrmp/foodcritic/tree/v10.3.0) (2017-04-10)
+
+[Full Changelog](https://github.com/acrmp/foodcritic/compare/v10.2.2...v10.3.0)
+
+**Implemented enhancements:**
+
+- Added `FC069` to ensure standardized licenses are defined in metadata
+- Added `FC070` to detect invalid platform supports in metadata
+- Added `FC071` to ensure a LICENSE file is included with the cookbook
+- Added `FC072` to detect attributes defined in metadata
+- Added `FC073` to detect root alias collisions with non-root alias files
+- Added `FC074` to detect setting the default_action in a LWRP without using the default_action DSL
+- Added `FC075` to detect node.save usage
+- Updated `FC008` to fail if the ChefDK generated boilerplate is included
+- Updated `FC024` to not recommend adding amazon as an equivalent platform to Redhat as Amazon is its own platform family in Chef 13
+- Updated `FC045` to no longer fail if metadata.rb cannot be found
+- Added support for the Chef 13 root alias cookbook structure changes defined in <https://github.com/chef/chef-rfc/blob/master/rfc033-root-aliases.md>
+- Testing has been completed reworked to simplify testing and allow for far more robust functional tests. Minitest unit tests have been converted to rspec and a new functional testing framework has been added utilizing rspec. Tests for a large number of the existing rules have been converted to this new framework. The new testing framework allows for simple all-in-one tests that are easier to read and much simpler to write. Additionally the regression tests have been reworked, and are now enabled in Travis CI, which will require regeneration of the expected output if new tests are added using `rake regen_regression`. See the readme for additional details on running tests.
+
+## [10.2.2](https://github.com/acrmp/foodcritic/tree/v10.2.2) (2017-03-31)
+
+[Full Changelog](https://github.com/acrmp/foodcritic/compare/v10.2.1...v10.2.2)
 
 **Implemented enhancements:**
 
 - Align rake setup better with CLI options to resolve bugs with tags in Rake [\#533](https://github.com/acrmp/foodcritic/pull/533) ([tas50](https://github.com/tas50))
 
 ## [v10.2.1](https://github.com/acrmp/foodcritic/tree/v10.2.1) (2017-03-31)
+
 [Full Changelog](https://github.com/acrmp/foodcritic/compare/v10.2.0...v10.2.1)
 
 **Implemented enhancements:**
@@ -15,6 +36,7 @@
 - Add supermarket tag to FC067 and FC068 [\#532](https://github.com/acrmp/foodcritic/pull/532) ([tas50](https://github.com/tas50))
 
 ## [v10.2.0](https://github.com/acrmp/foodcritic/tree/v10.2.0) (2017-03-30)
+
 [Full Changelog](https://github.com/acrmp/foodcritic/compare/v10.1.1...v10.2.0)
 
 **Implemented enhancements:**
