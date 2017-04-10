@@ -1,7 +1,7 @@
 require "spec_helper"
 
 describe "regression test" do
-  command("#{File.expand_path("../../../bin/foodcritic --tags any", __FILE__)} .", allow_error: true)
+  command("#{File.expand_path("../../../bin/foodcritic", __FILE__)} --tags any .", allow_error: true)
 
   IO.readlines(File.expand_path("../cookbooks.txt", __FILE__)).each do |line|
     name, ref = line.strip.split(":")
