@@ -1,5 +1,5 @@
 rule "FC070", "Ensure supports metadata defines valid platforms" do
-  tags %w{metadata}
+  tags %w{metadata supermarket}
   metadata do |ast, filename|
     # Where did this come from? We pulled every unique platform for supermarket cookbooks
     # and then looked at all the invalid names. Lots of typos and bad characters and then
