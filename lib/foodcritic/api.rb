@@ -44,56 +44,6 @@ module FoodCritic
       end
     end
 
-    # Does the specified recipe check for Chef Solo?
-    #
-    # @deprecated chef-solo functionality in Chef has been replaced with local-mode
-    #  so this helper is no longer necessary and will be removed in Foodcritic 11.0
-    def checks_for_chef_solo?(ast)
-      $stderr.puts "the checks_for_chef_solo? helper is deprecated and will be removed from the next release of Foodcritic"
-      raise_unless_xpath!(ast)
-      # TODO: This expression is too loose, but also will fail to match other
-      # types of conditionals.
-      (!ast.xpath(%q{//*[self::if or self::ifop or self::unless]/
-        *[self::aref or child::aref or self::call]
-        [count(descendant::const[@value = 'Chef' or @value = 'Config']) = 2
-          and
-            (   count(descendant::ident[@value='solo']) > 0
-            or  count(descendant::tstring_content[@value='solo']) > 0
-            )
-          ]}).empty?) ||
-        ast.xpath('//if_mod[return][aref/descendant::ident/@value="solo"]/aref/
-          const_path_ref/descendant::const').map do |c|
-          c["value"]
-        end == %w{Chef Config}
-    end
-
-    # Is the chef-solo-search library available?
-    #
-    # @see https://github.com/edelight/chef-solo-search
-    # @deprecated chef-solo functionality in Chef has been replaced with local-mode
-    #  so this helper is no longer necessary and will be removed in Foodcritic 11.0
-    def chef_solo_search_supported?(recipe_path)
-      $stderr.puts "the chef_solo_search_supported? helper is deprecated and will be removed from the next release of Foodcritic"
-      return false if recipe_path.nil? || !File.exist?(recipe_path)
-
-      # Look for the chef-solo-search library.
-      #
-      # TODO: This will not work if the cookbook that contains the library
-      # is not under the same `cookbook_path` as the cookbook being checked.
-      cbk_tree_path = Pathname.new(File.join(recipe_path, "../../.."))
-      search_libs = Dir[File.join(cbk_tree_path.realpath,
-                                  "*/libraries/search.rb")]
-
-      # True if any of the candidate library files match the signature:
-      #
-      #     class Chef
-      #       def search
-      search_libs.any? do |lib|
-        !read_ast(lib).xpath(%q{//class[count(descendant::const[@value='Chef']
-          ) = 1]/descendant::def/ident[@value='search']}).empty?
-      end
-    end
-
     # The absolute path of a cookbook from the specified file.
     #
     # @author Tim Smith - tsmith@chef.io
@@ -451,7 +401,7 @@ module FoodCritic
         File.basename(path) == ".DS_Store" || File.extname(path) == ".swp"
       end
     end
-    
+
     # Give a filename path it returns the hash of the JSON contents
     #
     # @author Tim Smith - tsmith@chef.io
