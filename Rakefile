@@ -74,7 +74,7 @@ task :regen_regression do
       checkout_cmd = Mixlib::ShellOut.new("git", "checkout", ref, cwd: temp)
       checkout_cmd.run_command
       checkout_cmd.error!
-      fc_cmd = Mixlib::ShellOut.new(File.expand_path("../bin/foodcritic", __FILE__), "--no-progress", ".", cwd: temp)
+      fc_cmd = Mixlib::ShellOut.new("#{File.expand_path("../bin/foodcritic", __FILE__)} --tags any --no-progress .", cwd: temp)
       fc_cmd.run_command
       out_path = File.expand_path("../spec/regression/expected/#{name}.txt", __FILE__)
       IO.write(out_path, fc_cmd.stdout)
