@@ -113,7 +113,11 @@ module FoodCritic
       file
     end
 
-    # Support function to retrieve a metadata field
+    # Retrieves a value of a metadata field.
+    #
+    # @author Miguel Fonseca
+    # @since 7.0.0
+    # @return [String] the value of the metadata field
     def metadata_field(file, field)
       until (file.split(File::SEPARATOR) & standard_cookbook_subdirs).empty?
         file = File.absolute_path(File.dirname(file.to_s))
@@ -133,6 +137,9 @@ module FoodCritic
     end
 
     # The name of the cookbook containing the specified file.
+    #
+    # @param file [String] file within a cookbook
+    # @return [String] name of the cookbook
     def cookbook_name(file)
       raise ArgumentError, "File cannot be nil or empty" if file.to_s.empty?
 
@@ -149,14 +156,20 @@ module FoodCritic
       end
     end
 
-    # The maintainer of the cookbook containing the specified file.
+    # Return metadata maintainer property given any file in the cookbook
+    #
+    # @param file [String] file within a cookbook
+    # @return [String] the maintainer of the cookbook
     def cookbook_maintainer(file)
       raise ArgumentError, "File cannot be nil or empty" if file.to_s.empty?
 
       metadata_field(file, "maintainer")
     end
 
-    # The maintainer email of the cookbook containing the specified file.
+    # Return metadata maintainer_email property given any file in the cookbook
+    #
+    # @param file [String] file within a cookbook
+    # @return [String] email of the maintainer of the cookbook
     def cookbook_maintainer_email(file)
       raise ArgumentError, "File cannot be nil or empty" if file.to_s.empty?
 
@@ -376,6 +389,9 @@ module FoodCritic
     end
 
     # The list of standard cookbook sub-directories.
+    #
+    # @since 1.0.0
+    # @return [array] array of all default sub-directories in a cookbook
     def standard_cookbook_subdirs
       %w{attributes definitions files libraries providers recipes resources
          templates}
