@@ -69,7 +69,7 @@ module FunctionalHelpers
     end
 
     def library_file(*args, &block)
-      file("library/helper.rb", *args, &block)
+      file("libraries/helper.rb", *args, &block)
     end
 
     def recipe_file(*args, &block)
