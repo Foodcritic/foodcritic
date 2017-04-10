@@ -19,7 +19,11 @@ module FoodCritic
         task(name) do
           puts "Starting Foodcritic linting..."
           result = FoodCritic::Linter.new.check(default_options.merge(options))
-          printer = options[:context] ? ContextOutput.new : SummaryOutput.new
+          printer = if options[:context]
+                      ContextOutput.new($stdout)
+                    else
+                      SummaryOutput.new($stdout)
+                    end
           printer.output(result) if result.warnings.any?
           abort if result.failed?
           puts "Completed!"
