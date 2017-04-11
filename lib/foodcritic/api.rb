@@ -1,5 +1,6 @@
 require "nokogiri"
 require "rufus-lru"
+require "json"
 
 module FoodCritic
   # Helper methods that form part of the Rules DSL.
@@ -414,7 +415,7 @@ module FoodCritic
       file = File.read(filename)
       begin
         JSON.parse(file)
-      rescue JSON::ParserError
+      rescue RuntimeError
         raise "File #{filename} does not appear to contain valid JSON"
       end
     end

@@ -1895,4 +1895,22 @@ describe FoodCritic::Api do
     end
   end
 
+  describe "#json_file_to_hash" do
+
+    it "raises if the filename is not provided" do
+      expect { api.json_file_to_hash }.to raise_error ArgumentError
+    end
+
+    it "raises if the filename is not found" do
+      expect(::File).to receive(:exist?).with("/some/path/with/a/file").and_return(false)
+      expect { api.json_file_to_hash("/some/path/with/a/file") }.to raise_error
+    end
+
+    it "raises if the json is not valid" do
+      expect(::File).to receive(:exist?).with("/some/path/with/a/file").and_return(true)
+      allow(File).to receive(:read).with("/some/path/with/a/file").and_return("I am bogus data")
+      expect { api.json_file_to_hash("/some/path/with/a/file") }.to raise_error JSON::ParserError
+    end
+  end
+
 end
