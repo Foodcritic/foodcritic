@@ -11,4 +11,9 @@ describe "FC071" do
     metadata_file "name 'mycookbook'"
     it { is_expected.to violate_rule("FC071") }
   end
+
+  context "with a cookbook without a LICENSE file but with license of 'All Rights Reserved'" do
+    metadata_file "license 'All Rights Reserved'"
+    it { is_expected.not_to violate_rule("FC071") }
+  end
 end
