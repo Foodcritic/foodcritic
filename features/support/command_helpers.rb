@@ -62,8 +62,8 @@ module FoodCritic
       "FC049" => "Role name does not match containing file name",
       "FC050" => "Name includes invalid characters",
       "FC051" => "Template partials loop indefinitely",
-      "FC052" => 'Metadata uses the unimplemented "suggests" keyword',
-      "FC053" => 'Metadata uses the unimplemented "recommends" keyword',
+      "FC052" => 'Metadata uses the deprecated "suggests" keyword',
+      "FC053" => 'Metadata uses the deprecated "recommends" keyword',
       # FC054 was yanked and is considered reserved, do not reuse it
       "FC055" => "Ensure maintainer is set in metadata",
       "FC056" => "Ensure maintainer_email is set in metadata",
