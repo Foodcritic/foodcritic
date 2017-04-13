@@ -1,5 +1,21 @@
 # Foodcritic Changelog:
 
+## [10.4.0](https://github.com/acrmp/foodcritic/tree/v10.4.0) (2017-04-13)
+
+[Full Changelog](https://github.com/acrmp/foodcritic/compare/v10.3.1...v10.4.0)
+
+**Implemented enhancements:**
+
+- Added FC076 to alert when the deprecated `conflicts` metadata is used
+- Added FC077 to alert when the deprecated `replaces` metadata is used
+- Added FC076 to alert when a non-OSI-approved license is used in metadata. You can disable this rule turning off the new `opensource` tag. For example: `foodcritic -t ~opensource .`
+
+**Fixed bugs:**
+
+- Regression tests now ignore .foodcritic files so we see all possible failures
+- FC053 / FC052 updated to properly refer the metadata as deprecated and not unimplemented
+- FC071 no longer alerts when cookbooks are licensed as "All Rights Reserved"
+
 ## [10.3.1](https://github.com/acrmp/foodcritic/tree/v10.3.1) (2017-04-10)
 
 [Full Changelog](https://github.com/acrmp/foodcritic/compare/v10.3.0...v10.3.1)
