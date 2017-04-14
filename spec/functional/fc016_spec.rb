@@ -35,10 +35,19 @@ describe "FC016" do
     it { is_expected.to violate_rule("FC016") }
   end
 
-  context "with a custom resource" do
+  context "with a custom resource that includes a property" do
     resource_file <<-EOH
       property :name, String, name_property: true
 
+      action :create do
+        cookbook_file "/etc/something"
+      end
+    EOH
+    it { is_expected.to_not violate_rule("FC016") }
+  end
+
+  context "with a custom resource that includes only an action" do
+    resource_file <<-EOH
       action :create do
         cookbook_file "/etc/something"
       end
