@@ -2015,7 +2015,6 @@ Given(/^a cookbook with an? (.*) file with an interpolated name$/) do |file_type
   write_library "lib", content if file_type == "library"
 end
 
-
 Given /^a cookbook that contains a LWRP provider (with|without) use_inline_resources( and uses def action_create)?$/ do |with_use_inline_resources, uses_def|
   write_resource("site", %q{
     actions :create
