@@ -1,3 +1,4 @@
 FC059: LWRP provider does not declare use_inline_resources: ./providers/target.rb:1
 FC066: Ensure chef_version is set in metadata: ./metadata.rb:1
 FC069: Ensure standardized license defined in metadata: ./metadata.rb:1
+FC078: Ensure cookbook shared under an OSI-approved open source license: ./metadata.rb:1

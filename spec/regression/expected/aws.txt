@@ -11,3 +11,7 @@ FC074: LWRP should use DSL to define resource's default action: ./resources/ebs_
 FC074: LWRP should use DSL to define resource's default action: ./resources/elastic_ip.rb:1
 FC074: LWRP should use DSL to define resource's default action: ./resources/elastic_lb.rb:1
 FC074: LWRP should use DSL to define resource's default action: ./resources/resource_tag.rb:1
+FC075: Cookbook uses node.save to save partial node data to the chef-server mid-run: ./providers/ebs_volume.rb:33
+FC075: Cookbook uses node.save to save partial node data to the chef-server mid-run: ./providers/ebs_volume.rb:40
+FC075: Cookbook uses node.save to save partial node data to the chef-server mid-run: ./providers/ebs_volume.rb:60
+FC078: Ensure cookbook shared under an OSI-approved open source license: ./metadata.rb:1
