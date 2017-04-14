@@ -55,3 +55,4 @@ FC074: LWRP should use DSL to define resource's default action: ./resources/regi
 FC074: LWRP should use DSL to define resource's default action: ./resources/shortcut.rb:1
 FC074: LWRP should use DSL to define resource's default action: ./resources/task.rb:1
 FC074: LWRP should use DSL to define resource's default action: ./resources/zipfile.rb:1
+FC078: Ensure cookbook shared under an OSI-approved open source license: ./metadata.rb:1

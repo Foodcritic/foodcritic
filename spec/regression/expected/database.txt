@@ -11,3 +11,5 @@ FC064: Ensure issues_url is set in metadata: ./metadata.rb:1
 FC065: Ensure source_url is set in metadata: ./metadata.rb:1
 FC066: Ensure chef_version is set in metadata: ./metadata.rb:1
 FC069: Ensure standardized license defined in metadata: ./metadata.rb:1
+FC075: Cookbook uses node.save to save partial node data to the chef-server mid-run: ./recipes/master.rb:37
+FC078: Ensure cookbook shared under an OSI-approved open source license: ./metadata.rb:1

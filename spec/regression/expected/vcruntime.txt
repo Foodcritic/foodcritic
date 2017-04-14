@@ -5,3 +5,4 @@ FC009: Resource attribute not recognised: ./recipes/vc14.rb:24
 FC009: Resource attribute not recognised: ./recipes/vc6.rb:24
 FC009: Resource attribute not recognised: ./recipes/vc9.rb:24
 FC069: Ensure standardized license defined in metadata: ./metadata.rb:1
+FC078: Ensure cookbook shared under an OSI-approved open source license: ./metadata.rb:1

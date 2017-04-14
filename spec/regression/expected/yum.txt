@@ -15,3 +15,4 @@ FC070: Ensure supports metadata defines valid platforms: ./metadata.rb:1
 FC072: Metadata should not contain "attribute" keyword: ./metadata.rb:1
 FC074: LWRP should use DSL to define resource's default action: ./resources/key.rb:1
 FC074: LWRP should use DSL to define resource's default action: ./resources/repository.rb:1
+FC078: Ensure cookbook shared under an OSI-approved open source license: ./metadata.rb:1

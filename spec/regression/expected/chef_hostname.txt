@@ -1,2 +1,3 @@
 FC069: Ensure standardized license defined in metadata: ./metadata.rb:1
 FC070: Ensure supports metadata defines valid platforms: ./metadata.rb:1
+FC078: Ensure cookbook shared under an OSI-approved open source license: ./metadata.rb:1

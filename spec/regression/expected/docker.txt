@@ -1,2 +1,3 @@
 FC005: Avoid repetition of resource declarations: ./libraries/docker_service_manager_sysvinit_debian.rb:5
 FC069: Ensure standardized license defined in metadata: ./metadata.rb:1
+FC078: Ensure cookbook shared under an OSI-approved open source license: ./metadata.rb:1
