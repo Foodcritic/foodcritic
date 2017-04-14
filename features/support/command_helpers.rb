@@ -5,7 +5,7 @@ module FoodCritic
   # Unless the environment variable FC_FORK_PROCESS is set to 'true' then the features will be run in the same process.
   module CommandHelpers
 
-    require 'minitest'
+    require "minitest"
     include MiniTest::Assertions
 
     attr_writer :assertions
