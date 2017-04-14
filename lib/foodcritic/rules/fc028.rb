@@ -1,5 +1,5 @@
-rule "FC028", "Incorrect #platform? or #platform_family? usage" do
-  tags %w{correctness}
+rule "FC028", "Use platform? and platform_family? not node.platform? and node.platform_family?" do
+  tags %w{style}
   recipe do |ast|
     ast.xpath(%q{//*[self::call | self::command_call]
       [(var_ref|vcall)/ident/@value='node']
