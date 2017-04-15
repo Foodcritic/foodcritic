@@ -33,7 +33,14 @@ module FoodCritic
     # Define a new rule, the outer block of a rule definition.
     def rule(code, name, &block)
       @rules = [] if @rules.nil?
-      @rules << Rule.new(code, name)
+      @rule = Rule.new(code, name)
+      @rules << @rule
+      yield self
+    end
+
+    # update a rule
+    def update(code, &block)
+      @rule = rules.find {|rule| rule.code == code }
       yield self
     end
 
@@ -51,7 +58,7 @@ module FoodCritic
 
     def self.rule_block(name)
       define_method(name) do |&block|
-        rules.last.send("#{name}=".to_sym, block)
+        @rule.send("#{name}=".to_sym, block)
       end
     end
 
