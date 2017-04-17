@@ -17,6 +17,11 @@ describe "FC071" do
     it { is_expected.not_to violate_rule("FC071") }
   end
 
+  context "with a cookbook without a LICENSE file but with license of 'all rights reserved'" do
+    metadata_file "license 'all rights reserved'"
+    it { is_expected.not_to violate_rule("FC071") }
+  end
+
   context "with a cookbook without a LICENSE file, using a sub folder" do
     subject { foodcritic_command("--no-progress", "mycookbook/") }
     file "mycookbook/metadata.rb"
