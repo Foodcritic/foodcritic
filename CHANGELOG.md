@@ -1,6 +1,6 @@
 # Foodcritic Changelog:
 
-## [10.4.0](https://github.com/acrmp/foodcritic/tree/v10.4.1) (2017-04-17)
+## [10.4.1](https://github.com/acrmp/foodcritic/tree/v10.4.1) (2017-04-17)
 
 [Full Changelog](https://github.com/acrmp/foodcritic/compare/v10.4.0...v10.4.1)
 
