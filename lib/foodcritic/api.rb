@@ -393,7 +393,7 @@ module FoodCritic
       platforms.map do |platform|
         versions = platform.xpath('ancestor::args_add[position() > 1]/
 	  string_literal/descendant::tstring_content/@value').map { |v| v.to_s }
-        { platform: platform["value"], versions: versions }
+        { platform: platform["value"].lstrip, versions: versions }
       end.sort { |a, b| a[:platform] <=> b[:platform] }
     end
 

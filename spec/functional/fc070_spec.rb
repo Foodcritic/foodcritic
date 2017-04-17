@@ -35,4 +35,22 @@ describe "FC070" do
     metadata_file "supports 'ubuntu >= 16.04'"
     it { is_expected.to violate_rule("FC070") }
   end
+
+  context "with a cookbook with a metadata file specifying a valid supports platforms from an array" do
+    metadata_file <<-'EOH'
+    %w(
+      amazon
+      centos
+      debian
+      fedora
+      redhat
+      scientific
+      oracle
+      ubuntu
+    ).each do |os|
+      supports os
+    end
+    EOH
+    it { is_expected.to_not violate_rule("FC070") }
+  end
 end
