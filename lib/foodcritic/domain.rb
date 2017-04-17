@@ -106,3 +106,13 @@ module FoodCritic
     end
   end
 end
+
+# Gherkin versions prior to 2.11.7 did not have the evaluate() method. For
+# backwards compatibility, provide evaluate() if it is not available.
+module Gherkin
+  class TagExpression
+    unless public_instance_methods.include? :evaluate
+      alias_method :evaluate, :eval
+    end
+  end
+end
