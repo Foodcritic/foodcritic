@@ -36,7 +36,7 @@ describe "FC070" do
     it { is_expected.to violate_rule("FC070") }
   end
 
-  context "with a cookbook with a metadata file specifying a valid supports platforms from an array" do
+  context "with a cookbook with a metadata file specifying valid platforms from an array with leading whitespace" do
     metadata_file <<-'EOH'
     %w(
       amazon

@@ -1880,6 +1880,17 @@ describe FoodCritic::Api do
                  { :platform => "fedora", :versions => [] },
                  { :platform => "redhat", :versions => [] }]
     end
+    it "handles support declarations from arrays that include whitespace" do
+      expect(supports(%q{
+        %w(
+          amazon
+          ubuntu
+        ).each do |os|
+          supports os
+        end
+      })).to eq [{ :platform => "amazon", :versions => [] },
+                 { :platform => "ubuntu", :versions => [] }]
+    end
   end
 
   describe "#templates_included" do
