@@ -1,5 +1,23 @@
 # Foodcritic Changelog:
 
+## [10.4.0](https://github.com/acrmp/foodcritic/tree/v10.4.1) (2017-04-17)
+
+[Full Changelog](https://github.com/acrmp/foodcritic/compare/v10.4.0...v10.4.1)
+
+**Implemented enhancements:**
+
+- Removed the development dependency on github_changelog_generator
+
+**Fixed bugs:**
+
+- Fixed running cucumber tests using the cucumber CLI command
+- Fixed FC016 incorrectly firing on custom resources that have no properties. FC016 will now skip over resources that have any actions as those are custom resources and custom resources don't need to declare a default_action.
+- Added the missing chef13 tag to FC018
+- Updated FC028 to detect both `node.platform_family?` in addition to the existing `node.platform?` usage. This rule has also been renamed and tags updated since the use of `node.platform?` is a style issue and not a correctness issue. Both `node.platform?` and `platform?` are acceptable in cookbooks.
+- Fixed FC071 to not alert for cookbooks where the license is 'all rights reserved' in addition to the existing allowed 'All Rights Reserved' string
+- Fixed FC071 to detect the LICENSE file if foodcritic is not running in the root of the cookbook
+- Fixed FC070 to not alert when platform supports is defined through an array of platforms
+
 ## [10.4.0](https://github.com/acrmp/foodcritic/tree/v10.4.0) (2017-04-13)
 
 [Full Changelog](https://github.com/acrmp/foodcritic/compare/v10.3.1...v10.4.0)
@@ -53,7 +71,7 @@
 
 **Implemented enhancements:**
 
-- Align rake setup better with CLI options to resolve bugs with tags in Rake [\#533](https://github.com/acrmp/foodcritic/pull/533) ([tas50](https://github.com/tas50))
+- Align rake setup better with CLI options to resolve bugs with tags in Rake [#533](https://github.com/acrmp/foodcritic/pull/533) ([tas50](https://github.com/tas50))
 
 ## [v10.2.1](https://github.com/acrmp/foodcritic/tree/v10.2.1) (2017-03-31)
 
@@ -61,7 +79,7 @@
 
 **Implemented enhancements:**
 
-- Add supermarket tag to FC067 and FC068 [\#532](https://github.com/acrmp/foodcritic/pull/532) ([tas50](https://github.com/tas50))
+- Add supermarket tag to FC067 and FC068 [#532](https://github.com/acrmp/foodcritic/pull/532) ([tas50](https://github.com/tas50))
 
 ## [v10.2.0](https://github.com/acrmp/foodcritic/tree/v10.2.0) (2017-03-30)
 
