@@ -16,9 +16,11 @@ describe "FC080" do
 
   context "with a cookbook with a recipe that includes a user resource not using supports" do
     recipe_file <<-EOF
-      user "betty" do
+      user username do
+        shell "/bin/false"
+        home  deploy_path
+        system true
         action :create
-        manage_home: true,
       end
     EOF
     it { is_expected.not_to violate_rule("FC080") }
