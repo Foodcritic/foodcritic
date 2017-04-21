@@ -1,5 +1,5 @@
 rule "FC078", "Ensure cookbook shared under an OSI-approved open source license" do
-  tags %w{opensource}
+  tags %w{opensource license supermarket}
   metadata do |ast, filename|
     begin
       license = ast.xpath(%Q{//command[ident/@value='license']/
