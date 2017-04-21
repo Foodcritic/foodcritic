@@ -14,6 +14,16 @@ describe "FC080" do
     it { is_expected.to violate_rule("FC080") }
   end
 
+  context "with a cookbook with a recipe that includes a user resource using supports w/o parens" do
+    recipe_file <<-EOF
+      user "betty" do
+        action :create
+        supports manage_home: true
+      end
+    EOF
+    it { is_expected.to violate_rule }
+  end
+
   context "with a cookbook with a recipe that includes a user resource not using supports" do
     recipe_file <<-EOF
       user username do
@@ -23,7 +33,7 @@ describe "FC080" do
         action :create
       end
     EOF
-    it { is_expected.not_to violate_rule("FC080") }
+    it { is_expected.not_to violate_rule }
   end
 
   context "with a cookbook with a recipe that includes a resource with supports" do
@@ -33,6 +43,6 @@ describe "FC080" do
         supports :restart
       end
     EOF
-    it { is_expected.not_to violate_rule("FC080") }
+    it { is_expected.not_to violate_rule }
   end
 end
