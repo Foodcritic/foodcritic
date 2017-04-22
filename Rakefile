@@ -66,7 +66,7 @@ task :regen_regression do
   end
 end
 
-desc 'Run one regression test (or all of them)'
+desc "Run one regression test (or all of them)"
 task :regression, [:cookbook] do |t, args|
   tag = args[:cookbook] ? "regression_#{args[:cookbook]}" : "regression"
   Rake::Task["spec"].invoke(tag)
