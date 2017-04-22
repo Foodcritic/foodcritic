@@ -55,7 +55,7 @@ describe "FC070" do
   end
 
   context "with a word list and a version constraint" do
-    metadata_file <<~EOH
+    metadata_file <<-EOH
       %w{ redhat centos scientific amazon }.each do |os|
         supports os, ">= 5.0"
       end
