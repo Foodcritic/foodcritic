@@ -4,7 +4,7 @@ describe 'FC050' do
   context 'with a role' do
     foodcritic_command('--no-progress', '-R', 'roles')
     let(:role_name) { '' }
-    file('roles/webserver.rb') { "name '#{role_name}'" }
+    file('roles/webserver.rb') { "name '#{role_name}'\nrun_list ['recipe[apache]']" }
 
     context 'with name webserver' do
       let(:role_name) { 'webserver' }
@@ -45,7 +45,7 @@ describe 'FC050' do
   context 'with an environment' do
     foodcritic_command('--no-progress', '-E', 'environments')
     let(:environment_name) { '' }
-    file('environments/production.rb') { "name '#{environment_name}'" }
+    file('environments/production.rb') { "name '#{environment_name}'\ncookbook 'apache2'" }
 
     context 'with name production' do
       let(:environment_name) { 'production' }
