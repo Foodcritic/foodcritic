@@ -15,4 +15,9 @@ describe "FC082" do
     recipe_file "node.normal['foo']['bar'] = baz"
     it { is_expected.to_not violate_rule }
   end
+
+  context "with a cookbook with a recipe that reads a value using node.set" do
+    recipe_file "foo = node.set['foo']"
+    it { is_expected.to violate_rule }
+  end
 end
