@@ -20,4 +20,14 @@ describe "FC069" do
     metadata_file "license 'All Rights Reserved'"
     it { is_expected.to_not violate_rule("FC069") }
   end
+
+  context "with a cookbook with a metadata file that specifies a license with parens" do
+    metadata_file "license('Apache-2.0')"
+    it { is_expected.to_not violate_rule }
+  end
+
+  context "with a cookbook with a metadata file that does not specifiy a license" do
+    metadata_file
+    it { is_expected.to violate_rule }
+  end
 end

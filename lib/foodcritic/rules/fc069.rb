@@ -2,8 +2,7 @@ rule "FC069", "Ensure standardized license defined in metadata" do
   tags %w{metadata supermarket license}
   metadata do |ast, filename|
     begin
-      license = ast.xpath(%Q{//command[ident/@value='license']/
-                            descendant::tstring_content}).attribute("value").to_s
+      license = field_value(ast, 'license')
 
       # list of valid SPDX.org license strings. To build an array run this:
       # require 'json'
