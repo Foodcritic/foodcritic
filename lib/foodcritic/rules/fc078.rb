@@ -2,7 +2,7 @@ rule "FC078", "Ensure cookbook shared under an OSI-approved open source license"
   tags %w{opensource license supermarket}
   metadata do |ast, filename|
     begin
-      license = field_value(ast, 'license')
+      license = field_value(ast, "license")
 
       # list of valid SPDX.org license strings. To build an array run this:
       # require 'json'

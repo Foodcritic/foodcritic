@@ -2,7 +2,7 @@ rule "FC069", "Ensure standardized license defined in metadata" do
   tags %w{metadata supermarket license}
   metadata do |ast, filename|
     begin
-      license = field_value(ast, 'license')
+      license = field_value(ast, "license")
 
       # list of valid SPDX.org license strings. To build an array run this:
       # require 'json'

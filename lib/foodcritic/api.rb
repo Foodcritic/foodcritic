@@ -135,14 +135,14 @@ module FoodCritic
       # String literals.
       #
       #     depends 'foo'
-      deps += field(ast, 'depends').xpath('descendant::args_add/descendant::tstring_content[1]')
+      deps += field(ast, "depends").xpath("descendant::args_add/descendant::tstring_content[1]")
 
       # Quoted word arrays are also common.
       #
       #     %w{foo bar baz}.each do |cbk|
       #       depends cbk
       #     end
-      deps += word_list_values(field(ast, 'depends'))
+      deps += word_list_values(field(ast, "depends"))
       deps.uniq!
       deps.map! { |dep| dep["value"].strip }
       deps
@@ -360,16 +360,16 @@ module FoodCritic
     # @return [Array<Hash>]
     def supported_platforms(ast)
       # Find the supports() method call.
-      platforms_ast = field(ast, 'supports')
+      platforms_ast = field(ast, "supports")
       # Look for the first argument (the node next to the top args_new) and
       # filter out anything with a string_embexpr since that can't be parsed
       # statically. Then grab the static value for both strings and symbols, and
       # finally combine it with the word list (%w{}) analyzer.
-      platforms = platforms_ast.xpath('(.//args_new)[1]/../*[not(.//string_embexpr)]').xpath('.//tstring_content|.//symbol/ident') | word_list_values(platforms_ast)
+      platforms = platforms_ast.xpath("(.//args_new)[1]/../*[not(.//string_embexpr)]").xpath(".//tstring_content|.//symbol/ident") | word_list_values(platforms_ast)
       platforms.map do |platform|
         # For each platform value, look for all arguments after the first, then
         # extract the string literal value.
-        versions = platform.xpath('ancestor::args_add[not(args_new)]/*[position()=2]//tstring_content/@value')
+        versions = platform.xpath("ancestor::args_add[not(args_new)]/*[position()=2]//tstring_content/@value")
         { platform: platform["value"].lstrip, versions: versions.map(&:to_s) }
       end.sort_by { |p| p[:platform] }
     end
@@ -636,7 +636,7 @@ module FoodCritic
       end.sort
     end
 
-    def word_list_values(ast, xpath=nil)
+    def word_list_values(ast, xpath = nil)
       # Find the node for the field argument variable. (e.g. given `foo d`, find `d`)
       var_ref = ast.xpath("#{xpath ? xpath + '/' : ''}descendant::var_ref/ident")
       if var_ref.empty?
