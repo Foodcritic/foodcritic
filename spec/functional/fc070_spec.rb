@@ -53,4 +53,13 @@ describe "FC070" do
     EOH
     it { is_expected.to_not violate_rule("FC070") }
   end
+
+  context "with a word list and a version constraint" do
+    metadata_file <<~EOH
+      %w{ redhat centos scientific amazon }.each do |os|
+        supports os, ">= 5.0"
+      end
+    EOH
+    it { is_expected.to_not violate_rule("FC070") }
+  end
 end

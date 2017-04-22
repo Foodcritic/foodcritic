@@ -11,7 +11,6 @@ FC064: Ensure issues_url is set in metadata: ./metadata.rb:1
 FC065: Ensure source_url is set in metadata: ./metadata.rb:1
 FC066: Ensure chef_version is set in metadata: ./metadata.rb:1
 FC069: Ensure standardized license defined in metadata: ./metadata.rb:1
-FC070: Ensure supports metadata defines valid platforms: ./metadata.rb:1
 FC072: Metadata should not contain "attribute" keyword: ./metadata.rb:1
 FC074: LWRP should use DSL to define resource's default action: ./resources/key.rb:1
 FC074: LWRP should use DSL to define resource's default action: ./resources/repository.rb:1
