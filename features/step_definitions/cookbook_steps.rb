@@ -1428,19 +1428,11 @@ Given "a recipe that tries to mask a systemd service" do
   }
 end
 
-Given /^a ruby environment file that defines an environment with name (.*)$/ do |env_name|
-  environment(:environment_name => %Q{"#{env_name}"}, :file_name => "production.rb")
-end
-
 Given /^a ruby environment that triggers FC050 with comment (.*)$/ do |comment|
   write_file "environments/production.rb", %Q{
     name "Production (eu-west-1)" #{comment}
     run_list "recipe[apache2]"
   }.strip
-end
-
-Given /^a ruby role file that defines a role with name (.*)$/ do |role_name|
-  role(:role_name => [%Q{"#{role_name}"}], :file_name => "webserver.rb")
 end
 
 Given /^a ruby role that triggers FC049 with comment (.*)$/ do |comment|
