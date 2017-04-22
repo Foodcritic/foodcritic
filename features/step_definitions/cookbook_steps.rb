@@ -1071,14 +1071,6 @@ Given /^a directory that contains a role file ([^ ]+) in (json|ruby) that define
   role(:role_name => %Q{"#{role_name}"}, :file_name => file_name, :format => format.to_sym)
 end
 
-Given "a directory that contains a ruby role that declares the role name more than once" do
-  role(:role_name => ['"webserver"', '"apache"'], :file_name => "webserver.rb")
-end
-
-Given "a directory that contains a ruby role with an expression as its name" do
-  role(:role_name => '"#{foo}#{bar}"', :file_name => "webserver.rb")
-end
-
 Given /^a directory that contains an environment file (.*) in ruby that defines environment name (.*)$/ do |file_name, env_name|
   environment(:environment_name => %Q{"#{env_name}"}, :file_name => "production.rb")
 end
@@ -1350,10 +1342,6 @@ Given "the gems have been vendored" do
   vendor_gems
 end
 
-Given "the last role name declared does not match the containing filename" do
-
-end
-
 Given /^the inferred template contains the expression (.*)$/ do |expr|
   write_file "cookbooks/example/templates/default/config.conf.erb", %Q{
     <%= #{expr} %>
@@ -1563,15 +1551,6 @@ end
 
 When "I check the role directory" do
   run_lint ["--no-progress", "-R", "roles"]
-end
-
-When /^I check the role directory as a (default|cookbook|role) path$/ do |path_type|
-  options = case path_type
-    when "default" then ["--no-progress", "roles"]
-    when "cookbook" then ["--no-progress", "-B", "roles"]
-    when "role" then ["--no-progress", "-R", "roles"]
-  end
-  run_lint(options)
 end
 
 When "I check the webserver role only" do
