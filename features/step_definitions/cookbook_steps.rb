@@ -409,61 +409,6 @@ Given 'a cookbook recipe that has a confusingly named local variable "default"' 
   }
 end
 
-Given /^a cookbook recipe that includes a local recipe(.*)$/ do |diff_name|
-  cookbook = diff_name.empty? ? "example" : "foo"
-  write_recipe %Q{
-    include_recipe '#{cookbook}::server'
-  }
-  write_metadata %Q{
-    name '#{cookbook}'
-  }
-end
-
-Given /^a cookbook recipe that includes a recipe name from an( embedded)? expression(.*)$/ do |embedded, expr|
-  if embedded
-    write_recipe %Q{
-      include_recipe "#{expr.strip}"
-    }
-  else
-    write_recipe %q{
-      include_recipe node['foo']['bar']
-    }
-  end
-
-  write_metadata %q{
-    depends "foo"
-  }
-end
-
-Given /^a cookbook recipe that includes a(n un| )?declared recipe dependency(?: {0,1})(unscoped)?( with parentheses)?$/ do |undeclared, unscoped, parens|
-  recipe_with_dependency(:is_declared => undeclared.strip.empty?,
-                         :is_scoped => unscoped.nil?, :parentheses => parens)
-end
-
-Given "a cookbook recipe that includes both declared and undeclared recipe dependencies" do
-  write_recipe %q{
-    include_recipe "foo::default"
-    include_recipe "bar::default"
-    file "/tmp/something" do
-      action :delete
-    end
-    include_recipe "baz::default"
-  }
-  write_metadata %q{
-    ['foo', 'bar'].each{|cbk| depends cbk}
-  }
-end
-
-Given "a cookbook that uses the include_recipe shorthand syntax" do
-  write_recipe %q{
-    include_recipe "::some_recipe"
-  }
-end
-
-Given /^a cookbook recipe that includes several declared recipe dependencies - (brace|block)$/ do |brace_or_block|
-  cookbook_declares_dependencies(brace_or_block.to_sym)
-end
-
 Given /a cookbook recipe that (install|upgrade)s (a gem|multiple gems)(.*)$/ do |action, arity, approach|
   if arity == "a gem"
     if approach.empty?
@@ -939,12 +884,6 @@ Given /^a cookbook that does not contain a definition and has (no|a) definitions
   create_directory "cookbooks/example/definitions/" unless has_dir == "no"
   write_recipe %q{
     log "A defining characteristic of this cookbook is that it has no definitions"
-  }
-end
-
-Given "a cookbook that does not have defined metadata" do
-  write_recipe %q{
-    include_recipe "foo::default"
   }
 end
 
@@ -1943,12 +1882,6 @@ Then /^the template partials loop indefinitely warning 051 should (not )?be disp
                           :expect_warning => ! not_shown)
   expect_warning("FC051", :file => "templates/default/b.erb", :line => 1,
                           :expect_warning => ! not_shown)
-end
-
-Then "the undeclared dependency warning 007 should be displayed only for the undeclared dependencies" do
-  expect_warning("FC007", :file => "recipes/default.rb", :line => 1, :expect_warning => false)
-  expect_warning("FC007", :file => "recipes/default.rb", :line => 2, :expect_warning => false)
-  expect_warning("FC007", :file => "recipes/default.rb", :line => 6, :expect_warning => true)
 end
 
 Then /^the unused template variables warning 034 should (not )?be displayed against the (?:inferred )?template(.*)?$/ do |not_shown, ext|
