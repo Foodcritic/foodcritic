@@ -7,7 +7,7 @@ describe "FC079" do
         action :install
       end
     EOF
-    it { is_expected.to violate_rule("FC079") }
+    it { is_expected.to violate_rule }
   end
 
   context "with a cookbook with a recipe that doesn't include an easy_install_package resource" do
@@ -16,6 +16,6 @@ describe "FC079" do
         action :install
       end
     EOF
-    it { is_expected.not_to violate_rule("FC079") }
+    it { is_expected.not_to violate_rule }
   end
 end
