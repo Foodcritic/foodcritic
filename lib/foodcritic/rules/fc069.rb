@@ -355,8 +355,7 @@ rule "FC069", "Ensure standardized license defined in metadata" do
       StandardML-NJ
       WXwindows
       }
-      valid << "All Rights Reserved" # Chef-DK's non-standard extra value
-      [file_match(filename)] unless valid.include?(license)
+      [file_match(filename)] unless valid.include?(license) || license =~ /all rights reserved/i
     rescue NoMethodError # no license in the metadata
       [file_match(filename)]
     end

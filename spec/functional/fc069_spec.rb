@@ -21,6 +21,11 @@ describe "FC069" do
     it { is_expected.to_not violate_rule("FC069") }
   end
 
+  context "with a cookbook with a metadata file that specifies ChefDK's non-SPDX all rights reserved string with a different casing" do
+    metadata_file "license 'All rights reserved'"
+    it { is_expected.to_not violate_rule("FC069") }
+  end
+
   context "with a cookbook with a metadata file that specifies a license with parens" do
     metadata_file "license('Apache-2.0')"
     it { is_expected.to_not violate_rule }
