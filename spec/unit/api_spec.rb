@@ -1914,7 +1914,7 @@ describe FoodCritic::Api do
 
     it "raises if the filename is not found" do
       expect(::File).to receive(:exist?).with("/some/path/with/a/file").and_return(false)
-      expect { api.json_file_to_hash("/some/path/with/a/file") }.to raise_error
+      expect { api.json_file_to_hash("/some/path/with/a/file") }.to raise_error RuntimeError
     end
 
     it "raises if the json is not valid" do
