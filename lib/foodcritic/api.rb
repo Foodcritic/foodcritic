@@ -131,33 +131,38 @@ module FoodCritic
     def declared_dependencies(ast)
       raise_unless_xpath!(ast)
 
+      deps = []
       # String literals.
       #
       #     depends 'foo'
-      deps = ast.xpath(%q{//command[ident/@value='depends']/
-        descendant::args_add/descendant::tstring_content[1]})
+      deps += field(ast, "depends").xpath("descendant::args_add/descendant::tstring_content[1]")
 
       # Quoted word arrays are also common.
       #
       #     %w{foo bar baz}.each do |cbk|
       #       depends cbk
       #     end
-      deps = deps.to_a +
-        word_list_values(ast, "//command[ident/@value='depends']")
-      deps.uniq.map { |dep| dep["value"].strip }
+      deps += word_list_values(field(ast, "depends"))
+      deps.uniq!
+      deps.map! { |dep| dep["value"].strip }
+      deps
     end
 
-    # The key / value pair in an environment or role ruby file
+    # Look for a method call with a given name.
+    #
+    # @param ast [Nokogiri::XML::Node] Document to search under
+    # @param field_name [String] Method name to search for
+    # @return [Nokogiri::XML::NodeSet]
     def field(ast, field_name)
       if field_name.nil? || field_name.to_s.empty?
         raise ArgumentError, "Field name cannot be nil or empty"
       end
-      ast.xpath("//command[ident/@value='#{field_name}']")
+      ast.xpath("(.//command[ident/@value='#{field_name}']|.//fcall[ident/@value='#{field_name}']/..)")
     end
 
     # The value for a specific key in an environment or role ruby file
     def field_value(ast, field_name)
-      field(ast, field_name).xpath('args_add_block/descendant::tstring_content
+      field(ast, field_name).xpath('.//args_add_block//tstring_content
         [count(ancestor::args_add) = 1][count(ancestor::string_add) = 1]
         /@value').map { |a| a.to_s }.last
     end
@@ -348,20 +353,25 @@ module FoodCritic
          templates}
     end
 
-    # Platforms declared as supported in cookbook metadata
+    # Platforms declared as supported in cookbook metadata. Returns an array
+    # of hashes containing the name and version constraints for each platform.
+    #
+    # @param ast [Nokogiri::XML::Node] Document to search from.
+    # @return [Array<Hash>]
     def supported_platforms(ast)
-      platforms = ast.xpath('//command[ident/@value="supports"]/
-        descendant::*[self::string_literal or self::symbol_literal]
-        [position() = 1]
-        [self::symbol_literal or count(descendant::string_add) = 1]/
-        descendant::*[self::tstring_content | self::ident]')
-      platforms = platforms.to_a +
-        word_list_values(ast, "//command[ident/@value='supports']")
+      # Find the supports() method call.
+      platforms_ast = field(ast, "supports")
+      # Look for the first argument (the node next to the top args_new) and
+      # filter out anything with a string_embexpr since that can't be parsed
+      # statically. Then grab the static value for both strings and symbols, and
+      # finally combine it with the word list (%w{}) analyzer.
+      platforms = platforms_ast.xpath("(.//args_new)[1]/../*[not(.//string_embexpr)]").xpath(".//tstring_content|.//symbol/ident") | word_list_values(platforms_ast)
       platforms.map do |platform|
-        versions = platform.xpath('ancestor::args_add[position() > 1]/
-	  string_literal/descendant::tstring_content/@value').map { |v| v.to_s }
-        { platform: platform["value"].lstrip, versions: versions }
-      end.sort { |a, b| a[:platform] <=> b[:platform] }
+        # For each platform value, look for all arguments after the first, then
+        # extract the string literal value.
+        versions = platform.xpath("ancestor::args_add[not(args_new)]/*[position()=2]//tstring_content/@value")
+        { platform: platform["value"].lstrip, versions: versions.map(&:to_s) }
+      end.sort_by { |p| p[:platform] }
     end
 
     # Template filename
@@ -626,14 +636,18 @@ module FoodCritic
       end.sort
     end
 
-    def word_list_values(ast, xpath)
-      var_ref = ast.xpath("#{xpath}/descendant::var_ref/ident")
+    def word_list_values(ast, xpath = nil)
+      # Find the node for the field argument variable. (e.g. given `foo d`, find `d`)
+      var_ref = ast.xpath("#{xpath ? xpath + '/' : ''}descendant::var_ref/ident")
       if var_ref.empty?
-        []
+        # The field is either a static value, or took no arguments, or something
+        # more complex than we care to evaluate.
+        Nokogiri::XML::NodeSet.new(ast.document)
       else
-        ast.xpath(%Q{descendant::block_var/params/
-          ident#{var_ref.first['value']}/ancestor::method_add_block/call/
-          descendant::tstring_content})
+        # Look back out the tree for a method_add_block which contains a block
+        # variable matching the field argument variable, and then drill down to
+        # all the literal content nodes.
+        ast.xpath(%Q{ancestor::method_add_block[//block_var//ident/@value='#{var_ref.first['value']}']/call//tstring_content})
       end
     end
   end

@@ -21,5 +21,15 @@ describe "FC078" do
       metadata_file "license 'All Rights Reserved'"
       it { is_expected.to violate_rule }
     end
+
+    context "a license with parens" do
+      metadata_file "license('Apache-2.0')"
+      it { is_expected.to_not violate_rule }
+    end
+
+    context "no license" do
+      metadata_file
+      it { is_expected.to violate_rule }
+    end
   end
 end

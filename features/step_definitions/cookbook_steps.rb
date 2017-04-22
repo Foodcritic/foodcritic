@@ -409,61 +409,6 @@ Given 'a cookbook recipe that has a confusingly named local variable "default"' 
   }
 end
 
-Given /^a cookbook recipe that includes a local recipe(.*)$/ do |diff_name|
-  cookbook = diff_name.empty? ? "example" : "foo"
-  write_recipe %Q{
-    include_recipe '#{cookbook}::server'
-  }
-  write_metadata %Q{
-    name '#{cookbook}'
-  }
-end
-
-Given /^a cookbook recipe that includes a recipe name from an( embedded)? expression(.*)$/ do |embedded, expr|
-  if embedded
-    write_recipe %Q{
-      include_recipe "#{expr.strip}"
-    }
-  else
-    write_recipe %q{
-      include_recipe node['foo']['bar']
-    }
-  end
-
-  write_metadata %q{
-    depends "foo"
-  }
-end
-
-Given /^a cookbook recipe that includes a(n un| )?declared recipe dependency(?: {0,1})(unscoped)?( with parentheses)?$/ do |undeclared, unscoped, parens|
-  recipe_with_dependency(:is_declared => undeclared.strip.empty?,
-                         :is_scoped => unscoped.nil?, :parentheses => parens)
-end
-
-Given "a cookbook recipe that includes both declared and undeclared recipe dependencies" do
-  write_recipe %q{
-    include_recipe "foo::default"
-    include_recipe "bar::default"
-    file "/tmp/something" do
-      action :delete
-    end
-    include_recipe "baz::default"
-  }
-  write_metadata %q{
-    ['foo', 'bar'].each{|cbk| depends cbk}
-  }
-end
-
-Given "a cookbook that uses the include_recipe shorthand syntax" do
-  write_recipe %q{
-    include_recipe "::some_recipe"
-  }
-end
-
-Given /^a cookbook recipe that includes several declared recipe dependencies - (brace|block)$/ do |brace_or_block|
-  cookbook_declares_dependencies(brace_or_block.to_sym)
-end
-
 Given /a cookbook recipe that (install|upgrade)s (a gem|multiple gems)(.*)$/ do |action, arity, approach|
   if arity == "a gem"
     if approach.empty?
@@ -942,12 +887,6 @@ Given /^a cookbook that does not contain a definition and has (no|a) definitions
   }
 end
 
-Given "a cookbook that does not have defined metadata" do
-  write_recipe %q{
-    include_recipe "foo::default"
-  }
-end
-
 Given /^a cookbook that has ([^ ]+) problems$/ do |problems|
   cookbook_that_matches_rules(
     problems.split(",").map do |problem|
@@ -1130,14 +1069,6 @@ end
 
 Given /^a directory that contains a role file ([^ ]+) in (json|ruby) that defines role name (.*)$/ do |file_name, format, role_name|
   role(:role_name => %Q{"#{role_name}"}, :file_name => file_name, :format => format.to_sym)
-end
-
-Given "a directory that contains a ruby role that declares the role name more than once" do
-  role(:role_name => ['"webserver"', '"apache"'], :file_name => "webserver.rb")
-end
-
-Given "a directory that contains a ruby role with an expression as its name" do
-  role(:role_name => '"#{foo}#{bar}"', :file_name => "webserver.rb")
 end
 
 Given /^a directory that contains an environment file (.*) in ruby that defines environment name (.*)$/ do |file_name, env_name|
@@ -1411,10 +1342,6 @@ Given "the gems have been vendored" do
   vendor_gems
 end
 
-Given "the last role name declared does not match the containing filename" do
-
-end
-
 Given /^the inferred template contains the expression (.*)$/ do |expr|
   write_file "cookbooks/example/templates/default/config.conf.erb", %Q{
     <%= #{expr} %>
@@ -1489,19 +1416,11 @@ Given "a recipe that tries to mask a systemd service" do
   }
 end
 
-Given /^a ruby environment file that defines an environment with name (.*)$/ do |env_name|
-  environment(:environment_name => %Q{"#{env_name}"}, :file_name => "production.rb")
-end
-
 Given /^a ruby environment that triggers FC050 with comment (.*)$/ do |comment|
   write_file "environments/production.rb", %Q{
     name "Production (eu-west-1)" #{comment}
     run_list "recipe[apache2]"
   }.strip
-end
-
-Given /^a ruby role file that defines a role with name (.*)$/ do |role_name|
-  role(:role_name => [%Q{"#{role_name}"}], :file_name => "webserver.rb")
 end
 
 Given /^a ruby role that triggers FC049 with comment (.*)$/ do |comment|
@@ -1632,15 +1551,6 @@ end
 
 When "I check the role directory" do
   run_lint ["--no-progress", "-R", "roles"]
-end
-
-When /^I check the role directory as a (default|cookbook|role) path$/ do |path_type|
-  options = case path_type
-    when "default" then ["--no-progress", "roles"]
-    when "cookbook" then ["--no-progress", "-B", "roles"]
-    when "role" then ["--no-progress", "-R", "roles"]
-  end
-  run_lint(options)
 end
 
 When "I check the webserver role only" do
@@ -1943,12 +1853,6 @@ Then /^the template partials loop indefinitely warning 051 should (not )?be disp
                           :expect_warning => ! not_shown)
   expect_warning("FC051", :file => "templates/default/b.erb", :line => 1,
                           :expect_warning => ! not_shown)
-end
-
-Then "the undeclared dependency warning 007 should be displayed only for the undeclared dependencies" do
-  expect_warning("FC007", :file => "recipes/default.rb", :line => 1, :expect_warning => false)
-  expect_warning("FC007", :file => "recipes/default.rb", :line => 2, :expect_warning => false)
-  expect_warning("FC007", :file => "recipes/default.rb", :line => 6, :expect_warning => true)
 end
 
 Then /^the unused template variables warning 034 should (not )?be displayed against the (?:inferred )?template(.*)?$/ do |not_shown, ext|

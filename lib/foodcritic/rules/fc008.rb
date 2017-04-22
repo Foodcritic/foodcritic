@@ -7,8 +7,8 @@ rule "FC008", "Generated cookbook metadata needs updating" do
       { "maintainer_email" => "YOUR_EMAIL" },
       { "maintainer_email" => "you@example.com" },
     ].map do |metadata_hash|
-      ast.xpath(%Q{//command[ident/@value='#{metadata_hash.keys[0]}']/
-                   descendant::tstring_content[@value='#{metadata_hash.values[0]}']})
+      field, value = metadata_hash.to_a.first
+      field(ast, field).xpath("descendant::tstring_content[@value='#{value}']")
     end
   end
 end

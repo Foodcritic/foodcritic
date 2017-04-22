@@ -10,7 +10,7 @@ RSpec::Core::RakeTask.new(:spec, :tag) do |t, args|
     a << "--format #{ENV['CI'] ? 'documentation' : 'Fuubar'}"
     a << "--backtrace" if ENV["DEBUG"]
     a << "--seed #{ENV['SEED']}" if ENV["SEED"]
-    a << "--tag ~regression" unless ENV["CI"] || args[:tag] == "regression"
+    a << "--tag ~regression" unless ENV["CI"] || args[:tag].to_s =~ /regression/
     a << "--tag #{args[:tag]}" if args[:tag]
   end.join(" ")
 end
@@ -64,4 +64,10 @@ task :regen_regression do
       IO.write(out_path, fc_cmd.stdout)
     end
   end
+end
+
+desc "Run one regression test (or all of them)"
+task :regression, [:cookbook] do |t, args|
+  tag = args[:cookbook] ? "regression_#{args[:cookbook]}" : "regression"
+  Rake::Task["spec"].invoke(tag)
 end

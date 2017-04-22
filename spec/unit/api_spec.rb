@@ -6,6 +6,10 @@ describe FoodCritic::Api do
     api.send(:build_xml, Ripper::SexpBuilder.new(str).parse)
   end
 
+  def self.ast(str)
+    let(:ast) { parse_ast(str) }
+  end
+
   let(:api) { Object.new.extend(FoodCritic::Api) }
 
   describe :exposed_api do
@@ -265,46 +269,34 @@ describe FoodCritic::Api do
   end
 
   describe "#declared_dependencies" do
-    it "raises if the ast does not support XPath" do
-      expect { api.declared_dependencies(nil) }.to raise_error ArgumentError
+    let(:ast) { nil }
+    subject { api.declared_dependencies(ast) }
+    context "with an invalid options" do
+      it { expect { subject }.to raise_error ArgumentError }
     end
-    it "returns an empty if there are no declared dependencies" do
-      ast = double
-      expect(ast).to receive(:xpath).with(kind_of(String)).and_return([]).twice
-      expect(api.declared_dependencies(ast)).to be_empty
+    context "with no dependencies" do
+      ast 'name "cook"'
+      it { is_expected.to eq [] }
     end
-    it "includes only cookbook names in the returned array" do
-      ast = Nokogiri::XML(%q{
-            <command>
-              <ident value="depends">
-                <pos line="14" column="0"/>
-              </ident>
-              <args_add_block value="false">
-                <args_add>
-                  <args_add>
-                    <args_new/>
-                    <string_literal>
-                      <string_add>
-                        <string_content/>
-                        <tstring_content value="mysql">
-                          <pos line="14" column="9"/>
-                        </tstring_content>
-                      </string_add>
-                    </string_literal>
-                  </args_add>
-                  <string_literal>
-                    <string_add>
-                      <string_content/>
-                      <tstring_content value="&gt;= 1.2.0">
-                        <pos line="14" column="18"/>
-                      </tstring_content>
-                    </string_add>
-                  </string_literal>
-                </args_add>
-              </args_add_block>
-            </command>
-      })
-      expect(api.declared_dependencies(ast)).to eq ["mysql"]
+    context "with a simple dependency" do
+      ast 'depends "one"'
+      it { is_expected.to eq %w{one} }
+    end
+    context "with multiple simple dependencies" do
+      ast %Q{depends "one"\ndepends 'two'\ndepends('three')}
+      it { is_expected.to eq %w{one two three} }
+    end
+    context "using a word array and a one-line block" do
+      ast "%w{one two three}.each {|d| depends d }"
+      it { is_expected.to eq %w{one two three} }
+    end
+    context "using a word array and a multi-line block" do
+      ast "%w{one two three}.each do |d|\n  depends d\nend"
+      it { is_expected.to eq %w{one two three} }
+    end
+    context "using a non-standard word array" do
+      ast "%w|one two three|.each {|d| depends d }"
+      it { is_expected.to eq %w{one two three} }
     end
   end
 
@@ -1776,75 +1768,91 @@ describe FoodCritic::Api do
   end
 
   describe "#supported_platforms" do
-    def supports(str)
-      api.supported_platforms(parse_ast(str))
+    subject { api.supported_platforms(ast) }
+
+    context "with no platforms" do
+      ast 'name "supports"'
+      it { is_expected.to eq [] }
     end
-    it "returns an empty if no platforms are specified as supported" do
-      expect(supports("name 'example'")).to be_empty
+    context "with supports but no argument" do
+      ast "supports"
+      it { is_expected.to eq [] }
     end
-    describe :ignored_support_declarations do
-      it "should ignore supports without any arguments" do
-        expect(supports("supports")).to be_empty
-      end
-      it "should ignore supports where an embedded string expression is used" do
-        expect(supports('supports "red#{hat}"')).to be_empty
-      end
+    context "with supports using a string expression" do
+      ast 'supports "red#{hat}"'
+      it { is_expected.to eq [] }
     end
-    it "returns the supported platform names if multiple are given" do
-      expect(supports(%q{
-        supports "redhat"
-        supports "scientific"
-      })).to eq [{ :platform => "redhat", :versions => [] },
-                 { :platform => "scientific", :versions => [] }]
+    context "with supports using a complex string expression" do
+      ast 'supports "red#{hat(foo "bar")}"'
+      it { is_expected.to eq [] }
     end
-    it "sorts the platform names in alphabetical order" do
-      expect(supports(%q{
-        supports "scientific"
-        supports "redhat"
-      })).to eq [{ :platform => "redhat", :versions => [] },
-                 { :platform => "scientific", :versions => [] }]
+    context "with a single platform" do
+      ast 'supports "redhat"'
+      it { is_expected.to eq [{ platform: "redhat", versions: [] }] }
     end
-    it "handles support declarations that include version constraints" do
-      expect(supports(%q{
-        supports "redhat", '>= 6'
-      })).to eq [{ :platform => "redhat", :versions => [">= 6"] }]
+    context "with multiple platforms" do
+      ast "supports 'oracle'\nsupports 'redhat'\nsupports 'scientific'"
+      it do
+        is_expected.to eq [{ platform: "oracle", versions: [] },
+                              { platform: "redhat", versions: [] },
+                              { platform: "scientific", versions: [] }] end
     end
-    it "handles support declarations that include obsoleted version constraints" do
-      expect(supports(%q{
+    context "with multiple platforms not in alphabetical order" do
+      ast "supports 'redhat'\nsupports 'scientific'\nsupports 'oracle'"
+      it do
+        is_expected.to eq [{ platform: "oracle", versions: [] },
+                              { platform: "redhat", versions: [] },
+                              { platform: "scientific", versions: [] }] end
+    end
+    context "with a version constraint" do
+      ast 'supports "redhat", ">= 6"'
+      it { is_expected.to eq [{ platform: "redhat", versions: [">= 6"] }] }
+    end
+    context "with complex version constraints" do
+      ast %q{
         supports 'redhat', '> 5.0', '< 7.0'
         supports 'scientific', '> 5.0', '< 6.0'
-      })).to eq [{ :platform => "redhat", :versions => ["> 5.0", "< 7.0"] },
-                 { :platform => "scientific", :versions => ["> 5.0", "< 6.0"] }]
+      }
+      it do
+        is_expected.to eq [{ platform: "redhat", versions: ["> 5.0", "< 7.0"] },
+                              { platform: "scientific", versions: ["> 5.0", "< 6.0"] }] end
     end
-    it "normalises platform symbol references to strings" do
-      expect(supports(%q{
-        supports :ubuntu
-      })).to eq [{ :platform => "ubuntu", :versions => [] }]
+    context "with a symbol platform" do
+      ast "supports :ubuntu"
+      it { is_expected.to eq [{ platform: "ubuntu", versions: [] }] }
     end
-    it "handles support declarations as symbols that include version constraints" do
-      expect(supports(%q{
-        supports :redhat, '>= 6'
-      })).to eq [{ :platform => "redhat", :versions => [">= 6"] }]
+    context "with a symbol platform with a version constraint" do
+      ast 'supports :ubuntu, ">= 6"'
+      it { is_expected.to eq [{ platform: "ubuntu", versions: [">= 6"] }] }
     end
-    it "understands support declarations that use word lists" do
-      expect(supports(%q{
-        %w{redhat centos fedora}.each do |os|
-          supports os
-        end
-      })).to eq [{ :platform => "centos", :versions => [] },
-                 { :platform => "fedora", :versions => [] },
-                 { :platform => "redhat", :versions => [] }]
+    context "with a word list" do
+      ast "%w{redhat centos fedora}.each {|os| supports os }"
+      it do
+        is_expected.to eq [{ platform: "centos", versions: [] },
+                              { platform: "fedora", versions: [] },
+                              { platform: "redhat", versions: [] }] end
     end
-    it "handles support declarations from arrays that include whitespace" do
-      expect(supports(%q{
+    context "with a multi-line word list" do
+      ast %q{
         %w(
-          amazon
-          ubuntu
+          redhat
+          centos
+          fedora
         ).each do |os|
           supports os
         end
-      })).to eq [{ :platform => "amazon", :versions => [] },
-                 { :platform => "ubuntu", :versions => [] }]
+      }
+      it do
+        is_expected.to eq [{ platform: "centos", versions: [] },
+                              { platform: "fedora", versions: [] },
+                              { platform: "redhat", versions: [] }] end
+    end
+    context "with both a word list and a non-word list" do
+      ast "supports 'redhat'\n%w{centos fedora}.each {|os| supports os }"
+      it do
+        is_expected.to eq [{ platform: "centos", versions: [] },
+                              { platform: "fedora", versions: [] },
+                              { platform: "redhat", versions: [] }] end
     end
   end
 
@@ -1914,7 +1922,7 @@ describe FoodCritic::Api do
 
     it "raises if the filename is not found" do
       expect(::File).to receive(:exist?).with("/some/path/with/a/file").and_return(false)
-      expect { api.json_file_to_hash("/some/path/with/a/file") }.to raise_error
+      expect { api.json_file_to_hash("/some/path/with/a/file") }.to raise_error RuntimeError
     end
 
     it "raises if the json is not valid" do
