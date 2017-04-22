@@ -1,5 +1,5 @@
 rule "FC083", "Execute resource using 'path' property" do
-  tags %w{deprecated chef13}
+  tags %w{deprecated chef12}
   recipe do |ast|
     matches = []
     find_resources(ast, type: "execute").find_all do |cmd|
