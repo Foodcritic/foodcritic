@@ -6,7 +6,7 @@ describe "regression test" do
   IO.readlines(File.expand_path("../cookbooks.txt", __FILE__)).each do |line|
     name, ref = line.strip.split(":")
 
-    context "with cookbook #{name}" do
+    context "with cookbook #{name}", "regression_#{name}": true do
       before do
         command("git clone -q https://github.com/chef-cookbooks/#{name}.git .")
         command("git checkout -q #{ref}")
