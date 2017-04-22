@@ -10,4 +10,24 @@ describe "FC066" do
     metadata_file "chef_version '>= 12.1'"
     it { is_expected.to_not violate_rule("FC066") }
   end
+
+  context "with a cookbook with a metadata file that specifies a chef_version with a guard" do
+    metadata_file "chef_version '>= 12.1' if defined?(chef_version)"
+    it { is_expected.to_not violate_rule("FC066") }
+  end
+
+  context "with a cookbook with a metadata file that specifies a chef_version with parens" do
+    metadata_file "chef_version('>= 12.1')"
+    it { is_expected.to_not violate_rule("FC066") }
+  end
+
+  context "with a cookbook with a metadata file that specifies a chef_version with multiple arguments" do
+    metadata_file "chef_version '>= 12.1', '< 14'"
+    it { is_expected.to_not violate_rule("FC066") }
+  end
+
+  context "with a cookbook with a metadata file that specifies a chef_version with a splat" do
+    metadata_file "chef_version(*['>= 12.1', '< 14'])"
+    it { is_expected.to_not violate_rule("FC066") }
+  end
 end
