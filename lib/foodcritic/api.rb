@@ -152,12 +152,12 @@ module FoodCritic
       if field_name.nil? || field_name.to_s.empty?
         raise ArgumentError, "Field name cannot be nil or empty"
       end
-      ast.xpath("(//command|//fcall)[ident/@value='#{field_name}']")
+      ast.xpath("(//command[ident/@value='#{field_name}']|//fcall[ident/@value='#{field_name}']/..)")
     end
 
     # The value for a specific key in an environment or role ruby file
     def field_value(ast, field_name)
-      field(ast, field_name).xpath('args_add_block/descendant::tstring_content
+      field(ast, field_name).xpath('//args_add_block/descendant::tstring_content
         [count(ancestor::args_add) = 1][count(ancestor::string_add) = 1]
         /@value').map { |a| a.to_s }.last
     end
