@@ -1,4 +1,4 @@
 module FoodCritic
   # The current version of foodcritic
-  VERSION = "10.4.1"
+  VERSION = "11.0.0"
 end
