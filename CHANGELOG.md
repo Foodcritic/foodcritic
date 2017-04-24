@@ -1,5 +1,30 @@
 # Foodcritic Changelog:
 
+## [11.0.0](https://github.com/acrmp/foodcritic/tree/v11.0.0) (2017-04-24)
+
+[Full Changelog](https://github.com/acrmp/foodcritic/compare/v10.4.1...v11.0.0)
+
+**Implemented enhancements:**
+
+- Added `FC079` to detect the usage of the easy_install_package resource which is deprecated in Chef 13\. Tags: deprecated, chef13.
+- Added `FC080` to detect user resources that include the supports property, which is deprecated in Chef 13\. Tags: deprecated, chef13.
+- Added `FC081` to detect a cookbook that depends on the partial_search cookbook as partial search functionality is built into Chef 12 and later. Tags: chef12.
+- Added `FC082` to detect the usage of node.set and node.set_unless which will be removed in Chef 14\. Tags: deprecated, chef14.
+- Added `FC083` to detect execute resources that include the path property, which is deprecated in Chef 12\. Tags: deprecated, chef13.
+- Added `FC084` to detect usage of the deprecated Chef::REST class. Tags: deprecated, chef13.
+- Added `FC085` to detect usage of new_resource.updated_by_last_action to converge resources. Tags: deprecated, chef13.
+- Updated and refactored API methods `declared_dependencies`, `supported_platforms`, and `word_list_values`
+- Deprecated API methods `checks_for_chef_solo` and `chef_solo_search_supported?` have been removed.
+- Added a new API method `json_file_to_hash` for loading json files as a hash.
+- Added a new rake command to run the regression test on just a single cookbook
+
+**Fixed bugs:**
+
+- Multiple rules have been rewritten to use Foodcritic APIs instead of using XPATH queries directly. This avoids false positives created by overly simplistic queries.
+- Fixed FC069 to skip if the license metadata is any formatting of 'All Rights Reserved'.
+- Added the `license` and `supermarket` tag to FC078.
+- Updated the `field` and `field_value` API methods to correctly recognize additional formats of data in the metdata.
+
 ## [10.4.1](https://github.com/acrmp/foodcritic/tree/v10.4.1) (2017-04-17)
 
 [Full Changelog](https://github.com/acrmp/foodcritic/compare/v10.4.0...v10.4.1)
