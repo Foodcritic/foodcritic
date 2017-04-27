@@ -28,3 +28,7 @@ FC066: Ensure chef_version is set in metadata: ./metadata.rb:1
 FC067: Ensure at least one platform supported in metadata: ./metadata.rb:1
 FC069: Ensure standardized license defined in metadata: ./metadata.rb:1
 FC078: Ensure cookbook shared under an OSI-approved open source license: ./metadata.rb:1
+FC085: Resource using new_resource.updated_by_last_action to converge resource: ./providers/rr.rb:54
+FC085: Resource using new_resource.updated_by_last_action to converge resource: ./providers/rr.rb:75
+FC085: Resource using new_resource.updated_by_last_action to converge resource: ./providers/rr.rb:90
+FC085: Resource using new_resource.updated_by_last_action to converge resource: ./providers/rr.rb:98

@@ -11,3 +11,7 @@ FC069: Ensure standardized license defined in metadata: ./metadata.rb:1
 FC074: LWRP should use DSL to define resource's default action: ./resources/preference.rb:1
 FC074: LWRP should use DSL to define resource's default action: ./resources/repository.rb:1
 FC078: Ensure cookbook shared under an OSI-approved open source license: ./metadata.rb:1
+FC085: Resource using new_resource.updated_by_last_action to converge resource: ./providers/preference.rb:26
+FC085: Resource using new_resource.updated_by_last_action to converge resource: ./providers/preference.rb:59
+FC085: Resource using new_resource.updated_by_last_action to converge resource: ./providers/repository.rb:87
+FC085: Resource using new_resource.updated_by_last_action to converge resource: ./providers/repository.rb:121
