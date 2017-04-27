@@ -2,4 +2,6 @@ FC059: LWRP provider does not declare use_inline_resources: ./providers/target.r
 FC066: Ensure chef_version is set in metadata: ./metadata.rb:1
 FC069: Ensure standardized license defined in metadata: ./metadata.rb:1
 FC078: Ensure cookbook shared under an OSI-approved open source license: ./metadata.rb:1
-FC082: node.set or node.set_unless used to set node attributes: ./recipes/example_slave.rb:19
+FC082: Deprecated node.set or node.set_unless used to set node attributes: ./recipes/example_slave.rb:19
+FC085: Resource using new_resource.updated_by_last_action to converge resource: ./providers/target.rb:53
+FC085: Resource using new_resource.updated_by_last_action to converge resource: ./providers/target.rb:63

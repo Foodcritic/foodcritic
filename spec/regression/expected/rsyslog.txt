@@ -8,4 +8,4 @@ FC069: Ensure standardized license defined in metadata: ./metadata.rb:1
 FC072: Metadata should not contain "attribute" keyword: ./metadata.rb:1
 FC075: Cookbook uses node.save to save partial node data to the chef-server mid-run: ./recipes/server.rb:23
 FC078: Ensure cookbook shared under an OSI-approved open source license: ./metadata.rb:1
-FC082: node.set or node.set_unless used to set node attributes: ./recipes/server.rb:22
+FC082: Deprecated node.set or node.set_unless used to set node attributes: ./recipes/server.rb:22

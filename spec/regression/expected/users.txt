@@ -6,5 +6,7 @@ FC066: Ensure chef_version is set in metadata: ./metadata.rb:1
 FC069: Ensure standardized license defined in metadata: ./metadata.rb:1
 FC074: LWRP should use DSL to define resource's default action: ./resources/manage.rb:1
 FC078: Ensure cookbook shared under an OSI-approved open source license: ./metadata.rb:1
-FC080: User resource uses supports property: ./providers/manage.rb:87
-FC080: User resource uses supports property: ./providers/manage.rb:89
+FC080: User resource uses deprecated supports property: ./providers/manage.rb:87
+FC080: User resource uses deprecated supports property: ./providers/manage.rb:89
+FC085: Resource using new_resource.updated_by_last_action to converge resource: ./providers/manage.rb:39
+FC085: Resource using new_resource.updated_by_last_action to converge resource: ./providers/manage.rb:143
