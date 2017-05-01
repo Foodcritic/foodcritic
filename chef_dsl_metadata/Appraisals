@@ -13,6 +13,7 @@ chef_versions = [
   '12.17.44',
   '12.18.31',
   '12.19.36',
+  '12.20.3',
   '13.0.113'
 ]
 chef_versions.each do |version|
