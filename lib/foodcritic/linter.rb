@@ -201,7 +201,7 @@ module FoodCritic
 
     def cookbook_tags(file)
       tags = []
-      fc_file = "#{cookbook_dir(file)}/.foodcritic"
+      fc_file = @options[:rule_file] || "#{cookbook_dir(file)}/.foodcritic"
       if File.exist? fc_file
         begin
           tag_text = File.read fc_file
