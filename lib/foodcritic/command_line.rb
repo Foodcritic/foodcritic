@@ -46,7 +46,7 @@ module FoodCritic
                 "of Chef.") do |c|
           @options[:chef_version] = c
         end
-         opts.on("-r", "--rule-file PATH",
+        opts.on("-r", "--rule-file PATH",
                 "Specify file with rules to be used or ignored ") do |c|
           @options[:rule_file] = c
         end
