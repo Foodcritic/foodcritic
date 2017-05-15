@@ -10,7 +10,7 @@
 - Added `FC080` to detect user resources that include the supports property, which is deprecated in Chef 13\. Tags: deprecated, chef13.
 - Added `FC081` to detect a cookbook that depends on the partial_search cookbook as partial search functionality is built into Chef 12 and later. Tags: chef12.
 - Added `FC082` to detect the usage of node.set and node.set_unless which will be removed in Chef 14\. Tags: deprecated, chef14.
-- Added `FC083` to detect execute resources that include the path property, which is deprecated in Chef 12\. Tags: deprecated, chef13.
+- Added `FC083` to detect execute resources that include the path property, which is deprecated in Chef 12\. Tags: deprecated, chef12.
 - Added `FC084` to detect usage of the deprecated Chef::REST class. Tags: deprecated, chef13.
 - Added `FC085` to detect usage of new_resource.updated_by_last_action to converge resources. Tags: deprecated, chef13.
 - Updated and refactored API methods `declared_dependencies`, `supported_platforms`, and `word_list_values`
