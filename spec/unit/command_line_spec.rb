@@ -119,4 +119,18 @@ describe FoodCritic::CommandLine do
       expect(FoodCritic::CommandLine.new(["--no-context", "."]).show_context?).to be_falsey
     end
   end
+
+  describe ":rule_file" do
+    it "is unset if -r/--rule-file is not specified" do
+      expect(FoodCritic::CommandLine.new(["."]).options[:rule_file].nil?).to be_truthy
+    end
+
+    it "is equal to the provided path if -r is set and path is specified" do
+      expect(FoodCritic::CommandLine.new(["-r", "example", "."]).options[:rule_file]).to eq "example"
+    end
+
+    it "is equal to the provided path if --rule-file is set and path is specified" do
+      expect(FoodCritic::CommandLine.new(["--rule-file", "example", "."]).options[:rule_file]).to eq "example"
+    end
+  end
 end
