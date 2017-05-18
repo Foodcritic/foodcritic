@@ -15,4 +15,9 @@ describe "FC089" do
     resource_file "include Mixlib::Shellout"
     it { is_expected.not_to violate_rule }
   end
+
+  context "with a cookbook with a resource that uses Chef::Mixin::ShellOut" do
+    resource_file "include Chef::Mixin::ShellOut"
+    it { is_expected.not_to violate_rule }
+  end
 end
