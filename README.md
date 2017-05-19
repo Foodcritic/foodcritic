@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/acrmp/foodcritic.svg?branch=master)](https://travis-ci.org/acrmp/foodcritic) [![Gem Version](https://badge.fury.io/rb/foodcritic.svg)](http://badge.fury.io/rb/foodcritic)
 
-Foodcritic is a code linting tool for writing better and safer Chef cookbooks that runs both as a command line tool and as a Rake task. Out of the box Foodcritic contains over 50 cookbook rules, and plugin system for writing your own rules.
+Foodcritic is a code linting tool for writing better and safer Chef cookbooks that runs both as a command line tool and as a Rake task. Out of the box Foodcritic contains over 70 cookbook rules, and plugin system for writing your own rules.
 
 ## Basic Usage
 
