@@ -1,5 +1,19 @@
 # Foodcritic Changelog:
 
+## [11.1.0](https://github.com/acrmp/foodcritic/tree/v11.1.0) (2017-05-18)
+
+[Full Changelog](https://github.com/acrmp/foodcritic/compare/v11.0.0...v11.1.0)
+
+**Implemented enhancements:**
+
+- Added `FC086` - Use databag helper methods to load data bag items. Tags: style
+- Added `FC087` - Library maps provider with deprecated Chef::Platform.set. Tags: chef13 deprecated
+- Added `FC088` - Prefer Mixlib::Shellout over deprecated Chef::Mixin::Command. Tags: chef13 deprecated
+- Added `FC089` - Prefer Mixlib::Shellout over deprecated Chef::ShellOut. Tags: chef13 deprecated
+- Added a new `--rule-file` flag to specify the path to your .foodcritic file
+- Added metadata for Chef 12.20.3 and made it the default
+- Updated several rule names to be more clear that we're checking for deprecated functionality
+
 ## [11.0.0](https://github.com/acrmp/foodcritic/tree/v11.0.0) (2017-04-24)
 
 [Full Changelog](https://github.com/acrmp/foodcritic/compare/v10.4.1...v11.0.0)

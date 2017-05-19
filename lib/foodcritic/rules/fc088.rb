@@ -1,4 +1,4 @@
-rule "FC088", "Prefer Mixlib::Shellout over Chef::Mixin::Command" do
+rule "FC088", "Prefer Mixlib::Shellout over deprecated Chef::Mixin::Command" do
   tags %w{chef13 deprecated}
 
   def includes_command(ast)

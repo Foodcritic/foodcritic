@@ -1,4 +1,4 @@
-rule "FC089", "Prefer Mixlib::Shellout over Chef::ShellOut" do
+rule "FC089", "Prefer Mixlib::Shellout over deprecated Chef::ShellOut" do
   tags %w{chef13 deprecated}
 
   def old_shellout(ast)
