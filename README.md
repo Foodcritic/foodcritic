@@ -48,6 +48,24 @@ Running regression tests:
 $ bundle exec rake 'spec[regression]'
 ```
 
+## Docker
+
+Foodcritic can also be used with Docker. To build and run Foodcritic in a Docker container please follow the instructions below.
+
+Building the Docker image:
+
+```shell
+$ docker build --rm -t foodcritic/foodcritic .
+```
+
+Running Foodcritic inside a Docker container:
+
+```shell
+$ docker run -it --rm -v ~/cookbooks:/cookbooks foodcritic/foodcritic "/cookbooks"
+```
+
+**Note:** This will mount the host directory `~/cookbooks` into the container in the path `/cookbooks`.
+
 ## License
 
 MIT - see the accompanying [LICENSE](https://github.com/acrmp/foodcritic/blob/master/LICENSE) file for details.
