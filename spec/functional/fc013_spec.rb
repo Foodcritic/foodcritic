@@ -7,7 +7,7 @@ describe "FC013" do
         source "http://www.example.org/large-file.tar.gz"
       end
     EOH
-    it { is_expected.to violate_rule("FC013") }
+    it { is_expected.to violate_rule }
   end
 
   context "with a cookbook that downloads a file to /tmp with an expression" do
@@ -16,7 +16,7 @@ describe "FC013" do
         source "http://www.example.org/large-file.tar.gz"
       end
     EOH
-    it { is_expected.to violate_rule("FC013") }
+    it { is_expected.to violate_rule }
   end
 
   context "with a cookbook that downloads a file to a users home directory" do
@@ -25,7 +25,7 @@ describe "FC013" do
         source "http://www.example.org/large-file.tar.gz"
       end
     EOH
-    it { is_expected.not_to violate_rule("FC013") }
+    it { is_expected.not_to violate_rule }
   end
 
   context "with a cookbook that downloads a file to the Chef file cache" do
@@ -34,6 +34,6 @@ describe "FC013" do
         source "http://www.example.org/large-file.tar.gz"
       end
     EOH
-    it { is_expected.not_to violate_rule("FC013") }
+    it { is_expected.not_to violate_rule }
   end
 end
