@@ -38,11 +38,11 @@ Feature: Check for invalid resource actions
     | service  | enble, start         | should     |
     | foo      | energize, revitalize | should not |
 
-  Scenario Outline: Try to mask a systemd service
-    Given a recipe that tries to mask a systemd service
+  Scenario Outline: Try to lock an apt_package
+    Given a recipe that tries to lock an apt_package
      When I check the cookbook specifying <version> as the Chef version
      Then the invalid resource action warning 038 should be <shown>
   Examples:
-    | version   | shown  |
-    | 12.8.1    | false  |
-    | 12.7.2    | true   |
+    | version     | shown  |
+    | 12.15.19    | true   |
+    | 12.16.42    | false  |

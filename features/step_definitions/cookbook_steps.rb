@@ -1397,21 +1397,20 @@ Given "unit tests under a top-level test directory" do
   minitest_spec_attributes
 end
 
-Given "a recipe that creates a raid array with mdadm specifying layout" do
+Given "a recipe that includes dsc_resource with the module_version attribute" do
   write_recipe %q{
-    mdadm '/dev/md0' do
-      devices [ '/dev/sda', '/dev/sdb', '/dev/sdc', '/dev/sdd' ]
-      level 5
-      layout 'left-asymmetric'
-      action [ :create, :assemble ]
+    dsc_resource 'foo' do
+      resource :something
+      module_name 'foo'
+      module_version '1.0.0.0'
     end
   }
 end
 
-Given "a recipe that tries to mask a systemd service" do
+Given "a recipe that tries to lock an apt_package" do
   write_recipe %q{
-    service 'foo' do
-       action :mask
+    apt_package 'foo' do
+       action :lock
     end
   }
 end

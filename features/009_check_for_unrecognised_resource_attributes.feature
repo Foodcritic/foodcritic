@@ -54,11 +54,11 @@ Feature: Check for unrecognised resource attributes
      When I check the cookbook
      Then the unrecognised attribute warning 009 should not be displayed
 
-  Scenario Outline: Create raid array with mdadm specifying layout
-    Given a recipe that creates a raid array with mdadm specifying layout
+  Scenario Outline: Uses dsc_resource with the module_version attribute
+    Given a recipe that includes dsc_resource with the module_version attribute
      When I check the cookbook specifying <version> as the Chef version
      Then the unrecognised attribute warning 009 should be <shown>
   Examples:
-    | version  | shown |
-    | 12.6.0   | true  |
-    | 12.11.18 | false |
+    | version    | shown |
+    | 12.18.31   | true  |
+    | 12.19.36   | false |
