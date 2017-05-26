@@ -6,6 +6,5 @@ rule "FC091", "Use property not attribute in custom resources" do
     if ast.xpath("//command/ident/@value='action'")
       ast.xpath("//command[ident/@value='attribute']")
     end
-
   end
 end

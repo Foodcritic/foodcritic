@@ -9,7 +9,7 @@ describe "FC016" do
 
       attribute :name, String, name_attribute: true
     EOH
-    it { is_expected.to_not violate_rule("FC016") }
+    it { is_expected.to_not violate_rule }
   end
 
   context "with a cookbook with a LWRP that includes a non-DSL default_action" do
@@ -23,7 +23,7 @@ describe "FC016" do
 
       attribute :name, String, name_attribute: true
     EOH
-    it { is_expected.to_not violate_rule("FC016") }
+    it { is_expected.to_not violate_rule }
   end
 
   context "with a cookbook with a LWRP that does not include a default_action" do
@@ -32,7 +32,7 @@ describe "FC016" do
 
       attribute :name, String, name_attribute: true
     EOH
-    it { is_expected.to violate_rule("FC016") }
+    it { is_expected.to violate_rule }
   end
 
   context "with a custom resource that includes a property" do
@@ -43,7 +43,7 @@ describe "FC016" do
         cookbook_file "/etc/something"
       end
     EOH
-    it { is_expected.to_not violate_rule("FC016") }
+    it { is_expected.to_not violate_rule }
   end
 
   context "with a custom resource that includes only an action" do
@@ -52,6 +52,6 @@ describe "FC016" do
         cookbook_file "/etc/something"
       end
     EOH
-    it { is_expected.to_not violate_rule("FC016") }
+    it { is_expected.to_not violate_rule }
   end
 end

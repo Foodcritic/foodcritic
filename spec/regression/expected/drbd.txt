@@ -26,3 +26,4 @@ FC069: Ensure standardized license defined in metadata: ./metadata.rb:1
 FC075: Cookbook uses node.save to save partial node data to the chef-server mid-run: ./recipes/default.rb:21
 FC078: Ensure cookbook shared under an OSI-approved open source license: ./metadata.rb:1
 FC082: Deprecated node.set or node.set_unless used to set node attributes: ./recipes/pair.rb:87
+FC089: Prefer Mixlib::Shellout over deprecated Chef::ShellOut: ./recipes/pair.rb:49

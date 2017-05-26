@@ -9,7 +9,7 @@ describe "FC074" do
 
       attribute :name, String, name_attribute: true
     EOH
-    it { is_expected.to_not violate_rule("FC074") }
+    it { is_expected.to_not violate_rule }
   end
 
   context "with a cookbook with a LWRP that includes a non-DSL default_action" do
@@ -23,7 +23,7 @@ describe "FC074" do
 
       attribute :name, String, name_attribute: true
     EOH
-    it { is_expected.to violate_rule("FC074") }
+    it { is_expected.to violate_rule }
   end
 
   context "with a custom resource" do
@@ -34,6 +34,6 @@ describe "FC074" do
         cookbook_file "/etc/something"
       end
     EOH
-    it { is_expected.to_not violate_rule("FC074") }
+    it { is_expected.to_not violate_rule }
   end
 end

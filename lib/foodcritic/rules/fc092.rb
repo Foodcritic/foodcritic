@@ -6,6 +6,5 @@ rule "FC092", "Custom resources should not define actions" do
     if ast.xpath("//command/ident/@value='action'")
       ast.xpath("//command[ident/@value='actions']")
     end
-
   end
 end
