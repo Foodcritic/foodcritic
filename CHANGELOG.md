@@ -1,5 +1,13 @@
 # Foodcritic Changelog:
 
+## [11.2.0](https://github.com/acrmp/foodcritic/tree/v11.2.0) (...)
+
+[Full Changelog](https://github.com/acrmp/foodcritic/compare/v11.1.0...v11.2.0)
+
+**Implemented enhancements:**
+
+- Disabled `FC078` by default to simply use of Foodcritic for non-community cookbook developers. To enable it again: `foodcritic -t any .`
+
 ## [11.1.0](https://github.com/acrmp/foodcritic/tree/v11.1.0) (2017-05-18)
 
 [Full Changelog](https://github.com/acrmp/foodcritic/compare/v11.0.0...v11.1.0)
@@ -65,7 +73,7 @@
 
 - Added FC076 to alert when the deprecated `conflicts` metadata is used
 - Added FC077 to alert when the deprecated `replaces` metadata is used
-- Added FC076 to alert when a non-OSI-approved license is used in metadata. You can disable this rule turning off the new `opensource` tag. For example: `foodcritic -t ~opensource .`
+- Added FC078 to alert when a non-OSI-approved license is used in metadata. You can disable this rule turning off the new `opensource` tag. For example: `foodcritic -t ~opensource .`
 
 **Fixed bugs:**
 
