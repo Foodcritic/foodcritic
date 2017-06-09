@@ -16,7 +16,7 @@ module FoodCritic
       @args = args
       @original_args = args.dup
       @options = {
-        fail_tags: ["any"],
+        fail_tags: ["~opensource"],
         tags: [],
         include_rules: [],
         cookbook_paths: [],
