@@ -6,7 +6,7 @@
 
 **Implemented enhancements:**
 
-- Disabled `FC078` by default to simply use of Foodcritic for non-community cookbook developers. To enable it again: `foodcritic -t any .`
+- Disabled the `opensource` tag by default to simply use of Foodcritic for non-community cookbook developers. At the time of writing this only includes `FC078`. To enable it again: `foodcritic -t any .`
 
 ## [11.1.0](https://github.com/acrmp/foodcritic/tree/v11.1.0) (2017-05-18)
 
