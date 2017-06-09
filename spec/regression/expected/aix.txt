@@ -1,3 +1,4 @@
+FC009: Resource attribute not recognised: ./recipes/default.rb:1
 FC069: Ensure standardized license defined in metadata: ./metadata.rb:1
 FC078: Ensure cookbook shared under an OSI-approved open source license: ./metadata.rb:1
 FC080: User resource uses deprecated supports property: ./recipes/default.rb:8

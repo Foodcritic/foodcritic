@@ -2,6 +2,7 @@ FC001: Use strings in preference to symbols to access node attributes: ./definit
 FC001: Use strings in preference to symbols to access node attributes: ./recipes/default.rb:26
 FC002: Avoid string interpolation where not required: ./recipes/default.rb:37
 FC002: Avoid string interpolation where not required: ./recipes/default.rb:43
+FC009: Resource attribute not recognised: ./definitions/cpan_module.rb:21
 FC015: Consider converting definition to a Custom Resource: ./definitions/cpan_module.rb:1
 FC019: Access node attributes in a consistent manner: ./definitions/cpan_module.rb:27
 FC019: Access node attributes in a consistent manner: ./recipes/default.rb:26
