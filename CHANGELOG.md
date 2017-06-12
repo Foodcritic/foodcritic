@@ -1,12 +1,17 @@
 # Foodcritic Changelog:
 
-## [11.2.0](https://github.com/acrmp/foodcritic/tree/v11.2.0) (...)
+## [11.2.0](https://github.com/acrmp/foodcritic/tree/v11.2.0) (2017-06-12)
 
 [Full Changelog](https://github.com/acrmp/foodcritic/compare/v11.1.0...v11.2.0)
 
 **Implemented enhancements:**
 
+- Added metadata for Chef 13.1 and made this the default. This means that FC009 will now alert on cookbooks using code that has been removed in Chef 13.
+- Added FC091: Use property not attribute in custom resources.
+- Added FC092: Custom resources should not define actions.
+- Removed metadata for Chef 12.6, 12.7, and 12.8\. This only impacts users specifically setting these metadata versions via the command line.
 - Disabled the `opensource` tag by default to simply use of Foodcritic for non-community cookbook developers. At the time of writing this only includes `FC078`. To enable it again: `foodcritic -t any .`
+- Added a Dockerfile for running Foodcritic in Docker.
 
 ## [11.1.0](https://github.com/acrmp/foodcritic/tree/v11.1.0) (2017-05-18)
 
