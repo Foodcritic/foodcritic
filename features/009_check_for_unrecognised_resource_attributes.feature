@@ -53,12 +53,3 @@ Feature: Check for unrecognised resource attributes
     Given a recipe that declares a resource with an attribute value set to the result of a method call
      When I check the cookbook
      Then the unrecognised attribute warning 009 should not be displayed
-
-  Scenario Outline: Uses dsc_resource with the module_version attribute
-    Given a recipe that includes dsc_resource with the module_version attribute
-     When I check the cookbook specifying <version> as the Chef version
-     Then the unrecognised attribute warning 009 should be <shown>
-  Examples:
-    | version    | shown |
-    | 12.18.31   | true  |
-    | 12.19.36   | false |

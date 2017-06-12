@@ -68,6 +68,14 @@ module FunctionalHelpers
       file("resources/my_resource.rb", *args, &block)
     end
 
+    def provider_file(*args, &block)
+      file("providers/my_resource.rb", *args, &block)
+    end
+
+    def definition_file(*args, &block)
+      file("definitions/my_definition.rb", *args, &block)
+    end
+
     def library_file(*args, &block)
       file("libraries/helper.rb", *args, &block)
     end

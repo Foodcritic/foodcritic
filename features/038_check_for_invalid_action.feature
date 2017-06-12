@@ -37,12 +37,3 @@ Feature: Check for invalid resource actions
     | service  | enable, start        | should not |
     | service  | enble, start         | should     |
     | foo      | energize, revitalize | should not |
-
-  Scenario Outline: Try to lock an apt_package
-    Given a recipe that tries to lock an apt_package
-     When I check the cookbook specifying <version> as the Chef version
-     Then the invalid resource action warning 038 should be <shown>
-  Examples:
-    | version     | shown  |
-    | 12.15.19    | true   |
-    | 12.16.42    | false  |

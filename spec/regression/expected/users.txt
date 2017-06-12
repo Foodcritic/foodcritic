@@ -1,3 +1,4 @@
+FC009: Resource attribute not recognised: ./providers/manage.rb:78
 FC047: Attribute assignment does not specify precedence: ./providers/manage.rb:55
 FC059: LWRP provider does not declare use_inline_resources: ./providers/manage.rb:1
 FC064: Ensure issues_url is set in metadata: ./metadata.rb:1

@@ -255,7 +255,7 @@ Given /^a cookbook recipe that declares a resource with a (.*)$/ do |conditional
   }
 end
 
-Given /^a cookbook recipe (?:that declares a resource with no conditions at all|with no notifications)$/ do
+Given "a cookbook recipe that declares a resource with no conditions at all" do
   write_recipe %q{
     service "apache" do
       action :enable
@@ -650,14 +650,6 @@ Given /^a cookbook recipe with a resource that (notifies|subscribes) a ([^ ]+) t
   }
 end
 
-Given "a cookbook recipe with a resource that uses the old notification syntax" do
-  write_recipe %q{
-    template "/etc/www/configures-apache.conf" do
-      notifies :restart, resources(:service => "apache")
-    end
-  }
-end
-
 Given /^a cookbook recipe with a '([^']+)' condition for flavours (.*)$/ do |type, flavours|
   platforms = %Q{"#{flavours.split(',').join('","')}"}
   if type == "case"
@@ -765,17 +757,6 @@ Given /^a cookbook that contains a (short|long) ruby block$/ do |length|
   recipe_with_ruby_block(length.to_sym)
 end
 
-Given "a cookbook that contains a definition" do
-  write_definition("apache_site", %q{
-    define :apache_site, :enable => true do
-      log "I am a definition"
-    end
-  })
-  write_recipe %q{
-    apache_site "default"
-  }
-end
-
 Given /^a cookbook that contains a LWRP (?:with a single notification|that uses the current notification syntax)$/ do
   cookbook_with_lwrp({ :notifies => :does_notify })
 end
@@ -878,13 +859,6 @@ end
 
 Given /^a cookbook that declares ([a-z]+) attributes via symbols$/ do |attribute_type|
   attributes_with_symbols(attribute_type)
-end
-
-Given /^a cookbook that does not contain a definition and has (no|a) definitions directory$/ do |has_dir|
-  create_directory "cookbooks/example/definitions/" unless has_dir == "no"
-  write_recipe %q{
-    log "A defining characteristic of this cookbook is that it has no definitions"
-  }
 end
 
 Given /^a cookbook that has ([^ ]+) problems$/ do |problems|
@@ -1407,14 +1381,6 @@ Given "a recipe that includes dsc_resource with the module_version attribute" do
   }
 end
 
-Given "a recipe that tries to lock an apt_package" do
-  write_recipe %q{
-    apt_package 'foo' do
-       action :lock
-    end
-  }
-end
-
 Given /^a ruby environment that triggers FC050 with comment (.*)$/ do |comment|
   write_file "environments/production.rb", %Q{
     name "Production (eu-west-1)" #{comment}
@@ -1868,10 +1834,6 @@ Then /^the unrecognised attribute warning 009 should be (true|false)$/ do |shown
   shown == "true" ? expect_warning("FC009") : expect_no_warning("FC009")
 end
 
-Then /^the invalid resource action warning 038 should be (true|false)$/ do |shown|
-  shown == "true" ? expect_warning("FC038") : expect_no_warning("FC038")
-end
-
 Then "the unrecognised attribute warning 009 should be displayed against the correct resource" do
   expect_warning("FC009", :line => 7)
 end
@@ -1910,83 +1872,4 @@ Given(/^a cookbook with an? (.*) file with an interpolated name$/) do |file_type
   write_resource "site", content if file_type == "resource"
   write_definition "apache_site", content if file_type == "definition"
   write_library "lib", content if file_type == "library"
-end
-
-Given /^a cookbook that contains a LWRP provider (with|without) use_inline_resources( and uses def action_create)?$/ do |with_use_inline_resources, uses_def|
-  write_resource("site", %q{
-    actions :create
-    attribute :name, :kind_of => String, :name_attribute => true
-  })
-  provider_file = ""
-  if with_use_inline_resources == "with"
-    provider_file += %q{
-      use_inline_resources
-    }
-  end
-  if uses_def
-    provider_file += %q{
-      def action_create
-    }
-  else
-    provider_file += %q{
-      action :create do
-    }
-  end
-  provider_file += %q{
-       file "/tmp/foo.txt"
-    end
-  }
-  write_provider("site", provider_file)
-end
-
-Given /^a cookbook that contains a library provider (with|without) use_inline_resources( and uses def action_create)?$/ do |with_use_inline_resources, uses_def|
-  library_file = %q{
-    class MyResources
-      class Site < Chef::Resource::LWRPBase
-        provides :site
-        resource_name :site
-        actions :create
-        attribute :name, :kind_of => String, :name_attribute => true
-      end
-    end
-
-    class MyProviders
-      class Site < Chef::Provider::LWRPBase
-        provides :site
-  }
-  if with_use_inline_resources == "with"
-    library_file += %q{
-        use_inline_resources
-    }
-  end
-  if uses_def
-    library_file += %q{
-          def action_create
-    }
-  else
-    library_file += %q{
-          action :create do
-    }
-  end
-  library_file += %q{
-          file "/tmp/foo.txt"
-        end
-      end
-    end
-  }
-  write_library("lib", library_file)
-end
-
-Given /^a cookbook that contains a library resource$/ do
-  library_file = %q{
-    class MyResources
-      class Site < Chef::Resource::LWRPBase
-        provides :site
-        resource_name :site
-        actions :create
-        attribute :name, :kind_of => String, :name_attribute => true
-      end
-    end
-  }
-  write_library("lib", library_file)
 end
