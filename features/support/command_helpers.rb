@@ -93,11 +93,9 @@ module FoodCritic
 
     # Capture an error expected when calling a command.
     def capture_error
-      begin
-        yield
-        @error = all_output unless last_exit_status == 0
-      rescue => @error
-      end
+      yield
+      @error = all_output unless last_exit_status == 0
+    rescue => @error
     end
 
     # Return the last error captured

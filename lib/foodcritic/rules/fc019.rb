@@ -21,9 +21,7 @@ rule "FC019", "Access node attributes in a consistent manner" do
       }
     end.reject { |type| type[:count] == 0 }
     if asts.size > 1
-      least_used = asts[types.min do |a, b|
-        a[:count] <=> b[:count]
-      end[:access_type]]
+      least_used = asts[types.min_by { |a| a[:count] }[:access_type]]
       least_used.map do |file|
         file[:ast].map do |ast|
           match(ast).merge(filename: file[:path])
