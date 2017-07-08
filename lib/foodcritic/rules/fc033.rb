@@ -1,4 +1,4 @@
-rule "FC033", "Missing template" do
+rule "FC033", "Missing template file" do
   tags %w{correctness templates}
   recipe do |ast, filename|
     # find all template resources that don't fetch a template

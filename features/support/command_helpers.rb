@@ -46,7 +46,7 @@ module FoodCritic
       "FC030" => "Cookbook contains debugger breakpoints",
       "FC031" => "Cookbook without metadata.rb file",
       "FC032" => "Invalid notification timing",
-      "FC033" => "Missing template",
+      "FC033" => "Missing template file",
       "FC034" => "Unused template variables",
       "FC037" => "Invalid notification action",
       "FC038" => "Invalid resource action",
