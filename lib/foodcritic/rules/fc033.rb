@@ -20,9 +20,12 @@ rule "FC033", "Missing template file" do
         relative_path = []
         Pathname.new(path).ascend do |template_path|
           relative_path << template_path.basename
-          break if gem_version(chef_version) >= gem_version("12.0.0") &&
-              template_path.dirname.basename.to_s == "templates"
-          break if template_path.dirname.dirname.basename.to_s == "templates"
+          # stop building relative path if we've hit template or 1 dir above
+          # NOTE: This is a totally flawed attempt to strip things like
+          # templates/ubuntu/something.erb down to something.erb, which breaks
+          # legit nested dirs in the templates dir like templates/something/something.erb
+          break if template_path.dirname.basename.to_s == "templates" ||
+              template_path.dirname.dirname.basename.to_s == "templates"
         end
         File.join(relative_path.reverse) == resource[:file]
       end
