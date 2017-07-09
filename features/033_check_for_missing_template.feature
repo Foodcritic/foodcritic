@@ -30,9 +30,8 @@ Feature: Check for missing template
      When I check the cookbook specifying <version> as the Chef version
      Then the missing template warning 033 <warning>
   Examples:
-    | version   | warning                   |
-    | 11.18.12  | should be displayed       |
-    | 12.0.0    | should not be displayed   |
+    | version    | warning                   |
+    | 12.9.38    | should not be displayed   |
 
   Scenario: Template within deploy resource
     Given a cookbook recipe with a deploy resource that contains a template resource
