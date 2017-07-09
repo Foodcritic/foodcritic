@@ -22,6 +22,6 @@ module FoodCritic
       end
     end
 
-    self.register_error_handlers
+    register_error_handlers
   end
 end

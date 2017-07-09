@@ -46,7 +46,7 @@ module FoodCritic
     # The DSL metadata doesn't necessarily reflect the version of Chef in the
     # local user gemset.
     def load_metadata
-      version = if self.respond_to?(:chef_version)
+      version = if respond_to?(:chef_version)
                   chef_version
                 else
                   Linter::DEFAULT_CHEF_VERSION
