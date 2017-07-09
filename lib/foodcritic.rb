@@ -2,7 +2,7 @@ require "pathname"
 require "cucumber/core"
 require "treetop"
 require "ripper"
-require "yajl"
+require "ffi_yajl"
 require "erubis"
 
 require_relative "foodcritic/chef"
