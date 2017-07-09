@@ -1928,7 +1928,7 @@ describe FoodCritic::Api do
     it "raises if the json is not valid" do
       expect(::File).to receive(:exist?).with("/some/path/with/a/file").and_return(true)
       allow(File).to receive(:read).with("/some/path/with/a/file").and_return("I am bogus data")
-      expect { api.json_file_to_hash("/some/path/with/a/file") }.to raise_error JSON::ParserError
+      expect { api.json_file_to_hash("/some/path/with/a/file") }.to raise_error RuntimeError
     end
   end
 

@@ -424,7 +424,7 @@ module FoodCritic
       file = File.read(filename)
       begin
         FFI_Yajl::Parser.parse(file)
-      rescue RuntimeError
+      rescue FFI_Yajl::ParseError
         raise "File #{filename} does not appear to contain valid JSON"
       end
     end
