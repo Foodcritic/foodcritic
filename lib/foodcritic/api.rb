@@ -43,6 +43,7 @@ module FoodCritic
         standard_attribute_access(ast, options)
       end
     end
+
     # The absolute path of a cookbook from the specified file.
     #
     # @author Tim Smith - tsmith@chef.io
