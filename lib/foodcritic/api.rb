@@ -73,11 +73,6 @@ module FoodCritic
     # @return [String] the value of the metadata field
     def metadata_field(file, field, options = {})
       options = { fail_on_nonexist: true }.merge!(options)
-
-      until (file.split(File::SEPARATOR) & standard_cookbook_subdirs).empty?
-        file = File.absolute_path(File.dirname(file.to_s))
-      end
-      file = File.dirname(file) unless File.extname(file).empty?
       cb_path = cookbook_base_path(file)
 
       # find value in metadata.rb if it exists
