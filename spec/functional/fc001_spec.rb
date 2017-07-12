@@ -6,6 +6,11 @@ describe "FC001" do
     it { is_expected.to violate_rule("FC001") }
   end
 
+  context "with a cookbook with a single recipe that references the node run_state" do
+    recipe_file "node.run_state[:foo]\n"
+    it { is_expected.not_to violate_rule("FC001") }
+  end
+
   context "with a cookbook with a single recipe that accesses multiple node attributes via symbols" do
     recipe_file "node[:foo] = 'bar'\nnode[:testing] = 'bar'\n"
     it { is_expected.to violate_rule("FC001") }
