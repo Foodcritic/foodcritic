@@ -68,11 +68,11 @@ $ docker run -it --rm -v ~/cookbooks:/cookbooks foodcritic/foodcritic "/cookbook
 
 ## License
 
-MIT - see the accompanying [LICENSE](https://github.com/acrmp/foodcritic/blob/master/LICENSE) file for details.
+MIT - see the accompanying [LICENSE](https://github.com/Foodcritic/foodcritic/blob/master/LICENSE) file for details.
 
 ## Changelog
 
-To see what has changed in recent versions see the [CHANGELOG](https://github.com/acrmp/foodcritic/blob/master/CHANGELOG.md). Foodcritic follows the [Rubygems Semantic Versioning Policy](http://guides.rubygems.org/patterns/#semantic-versioning).
+To see what has changed in recent versions see the [CHANGELOG](https://github.com/Foodcritic/foodcritic/blob/master/CHANGELOG.md). Foodcritic follows the [Rubygems Semantic Versioning Policy](http://guides.rubygems.org/patterns/#semantic-versioning).
 
 ## Contributing
 
