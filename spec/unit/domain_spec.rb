@@ -68,7 +68,7 @@ describe FoodCritic::Warning do
 
   describe "failure indication" do
     it "is false if no fail_tags match" do
-      expect(FoodCritic::Warning.new(rule, match_opts, { :fail_tags => [] })).to_not be_failed
+      expect(FoodCritic::Warning.new(rule, match_opts)).to_not be_failed
     end
 
     it "is true if fail_tags do match" do

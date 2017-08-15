@@ -12,7 +12,7 @@ module FoodCritic
     #
     def initialize(rule, match = {}, options = {})
       @rule, @match = rule, match
-      @is_failed = if options[:fail_tags].empty?
+      @is_failed = if options[:fail_tags].nil? || options[:fail_tags].empty?
                      false
                    else
                      rule.matches_tags?(options[:fail_tags])
