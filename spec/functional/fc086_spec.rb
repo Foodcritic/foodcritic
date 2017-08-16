@@ -33,4 +33,9 @@ describe "FC086" do
     recipe_file "data_bag_item('bag', 'item', IO.read('secret_file').strip)"
     it { is_expected.not_to violate_rule }
   end
+
+  context "with a recipe that uses Chef::EncryptedDataBagItem.load_secret" do
+    recipe_file "data_bag_item('bag', 'item', Chef::EncryptedDataBagItem.load_secret('secret_file'))"
+    it { is_expected.not_to violate_rule }
+  end
 end
