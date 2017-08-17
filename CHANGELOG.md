@@ -1,5 +1,11 @@
 # Foodcritic Changelog:
 
+## [11.3.1](https://github.com/Foodcritic/foodcritic/tree/v11.3.1) (2017-08-17)
+
+**Fixed bugs:**
+
+- Allow EncryptedDataBagItem.load_secret in FC086
+
 ## [11.3.0](https://github.com/Foodcritic/foodcritic/tree/v11.3.0) (2017-07-12)
 
 [Full Changelog](https://github.com/Foodcritic/foodcritic/compare/v11.2.0...v11.3.0)
