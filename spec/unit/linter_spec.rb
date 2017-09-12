@@ -12,7 +12,7 @@ describe FoodCritic::Linter do
 
   describe "chef version" do
     it "should be the latest stable version of Chef" do
-      expect(FoodCritic::Linter::DEFAULT_CHEF_VERSION).to eq "13.1.31"
+      expect(FoodCritic::Linter::DEFAULT_CHEF_VERSION).to eq "13.3.42"
     end
   end
 
