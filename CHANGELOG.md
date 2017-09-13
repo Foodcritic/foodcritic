@@ -1,5 +1,11 @@
 # Foodcritic Changelog:
 
+## [11.4.0](https://github.com/Foodcritic/foodcritic/tree/v11.4.0) (2017-09-13)
+
+**Implemented enhancements:**
+
+- Added metadata for Chef 13.3.42 and 13.4.19 to include the latest new resources shipped in chef-client
+
 ## [11.3.1](https://github.com/Foodcritic/foodcritic/tree/v11.3.1) (2017-08-17)
 
 **Fixed bugs:**
