@@ -51,6 +51,8 @@ module FoodCritic
     # @param file [String, Pathname] relative or absolute path to a file in the cookbook
     # @return [String] the absolute path to the base of the cookbook
     def cookbook_base_path(file)
+      raise "#{file} not found. You must supply a valid file" unless File.exist?(file)
+
       file = File.expand_path(file) # make sure we get an absolute path
       file = File.dirname(file) unless File.directory?(file) # get the dir only
 
@@ -63,27 +65,36 @@ module FoodCritic
       file
     end
 
-    # Retrieves a value of a metadata field.
+    # Retrieves a value of a metadata field. Defaults to metadata.rb
+    # and falls back to metadata.json
     #
     # @author Miguel Fonseca
     # @since 7.0.0
     # @return [String] the value of the metadata field
-    def metadata_field(file, field)
-      until (file.split(File::SEPARATOR) & standard_cookbook_subdirs).empty?
-        file = File.absolute_path(File.dirname(file.to_s))
-      end
-      file = File.dirname(file) unless File.extname(file).empty?
+    def metadata_field(file, field, options = {})
+      options = { fail_on_nonexist: true }.merge!(options)
+      cb_path = cookbook_base_path(file)
 
-      md_path = File.join(file, "metadata.rb")
+      # find value in metadata.rb if it exists
+      md_path = File.join(cb_path, "metadata.rb")
       if File.exist?(md_path)
         value = read_ast(md_path).xpath("//stmts_add/
           command[ident/@value='#{field}']/
           descendant::tstring_content/@value").to_s
-        raise "Cant read #{field} from #{md_path}" if value.to_s.empty?
-        return value
-      else
-        raise "Cant find #{md_path}"
+        raise "Can't read #{field} from #{md_path}" if value.to_s.empty? && options[:fail_on_nonexist]
+        return value.to_s.empty? ? nil : value
       end
+
+      # if we didn't have metadata.rb we'll check metadata.json now
+      json_path = File.join(cb_path, "metadata.json")
+      if File.exist?(json_path)
+        json = json_file_to_hash(json_path)
+        raise "Can't read #{field} from #{json_path}" if !json.key?(field) && options[:fail_on_nonexist]
+        return json[field]
+      end
+
+      # neither metadata.rb or metdata.json existed so fail
+      raise "Can't find #{md_path} or #{json_path}"
     end
 
     # The name of the cookbook containing the specified file.
@@ -93,16 +104,14 @@ module FoodCritic
     def cookbook_name(file)
       raise ArgumentError, "File cannot be nil or empty" if file.to_s.empty?
 
-      # Name is a special case as we want to fallback to the cookbook directory
-      # name if metadata_field fails
+      # Determine the name of the cookbook given any file within the cookbook.
+      # Use metadata name property and fallback to dir name
+      #
+      # @return [String] the name of the cookbook
       begin
         metadata_field(file, "name")
       rescue RuntimeError
-        until (file.split(File::SEPARATOR) & standard_cookbook_subdirs).empty?
-          file = File.absolute_path(File.dirname(file.to_s))
-        end
-        file = File.dirname(file) unless File.extname(file).empty?
-        File.basename(file)
+        File.basename(cookbook_base_path(file))
       end
     end
 

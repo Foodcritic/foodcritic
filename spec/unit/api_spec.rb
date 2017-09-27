@@ -184,63 +184,90 @@ describe FoodCritic::Api do
       end
     end
 
-    context "with complex nested folders with metadata.rb" do
-      file "metadata.rb"
-      file "templates/metadata.rb"
-
-      it "returns the cookbook dir when path contains cookbook like names" do
-        expect(api.cookbook_base_path("#{temp_path}/templates/defaults/test.erb")).to eq "#{temp_path}/templates"
-      end
+    it "raises if a non-existent file is passed" do
+      lambda { api.cookbook_base_path("/tmp/something/that/doesnt/exist.rb") }.must_raise RuntimeError
     end
   end
 
-  describe "#cookbook_name" do
-    it "raises if passed a nil" do
-      expect { api.cookbook_name(nil) }.to raise_error ArgumentError
-    end
-    it "raises if passed an empty string" do
-      expect { api.cookbook_name("") }.to raise_error ArgumentError
-    end
-    it "returns the cookbook name when passed a recipe" do
-      recipe_path = "cookbooks/apache2/recipes/default.rb"
-      expect(api.cookbook_name(recipe_path)).to eq "apache2"
-    end
-    it "returns the cookbook name when passed the cookbook metadata" do
-      expect(api.cookbook_name("cookbooks/apache2/metadata.rb")).to eq "apache2"
-    end
-    it "returns the cookbook name when passed a template" do
-      erb_path = "cookbooks/apache2/templates/default/a2ensite.erb"
-      expect(api.cookbook_name(erb_path)).to eq "apache2"
-    end
-    context "with a metadata.rb" do
-      file "metadata.rb", 'name "YOUR_COOKBOOK_NAME"'
-      it "returns the cookbook name when passed the cookbook metadata with a name field" do
-        expect(api.cookbook_name(temp_path)).to eq "YOUR_COOKBOOK_NAME"
-      end
+  context "with complex nested folders with metadata.rb" do
+    file "metadata.rb"
+    file "templates/metadata.rb"
+
+    it "returns the cookbook dir when path contains cookbook like names" do
+      expect(api.cookbook_base_path("#{temp_path}/templates/defaults/test.erb")).to eq "#{temp_path}/templates"
     end
   end
+end
 
-  describe "#cookbook_maintainer" do
-    it "raises if passed a nil" do
-      expect { api.cookbook_maintainer(nil) }.to raise_error ArgumentError
+describe "#cookbook_name" do
+  it "raises if passed a nil" do
+    expect { api.cookbook_name(nil) }.to raise_error ArgumentError
+  end
+  it "raises if passed an empty string" do
+    expect { api.cookbook_name("") }.to raise_error ArgumentError
+  end
+  it "returns the cookbook name when passed a recipe" do
+    recipe_path = "cookbooks/apache2/recipes/default.rb"
+    expect(api.cookbook_name(recipe_path)).to eq "apache2"
+  end
+  it "returns the cookbook name when passed the cookbook metadata" do
+    expect(api.cookbook_name("cookbooks/apache2/metadata.rb")).to eq "apache2"
+  end
+  it "returns the cookbook name when passed a template" do
+    erb_path = "cookbooks/apache2/templates/default/a2ensite.erb"
+    expect(api.cookbook_name(erb_path)).to eq "apache2"
+  end
+  it "returns the cookbook name derived from the dir name not metadata" do
+    FileUtils.mkdir_p("/tmp/fc/cb2/")
+    File.open("/tmp/fc/cb2/metadata.rb", "w") { |file| file.write('chef_version ">= 12.1"') }
+    api.cookbook_name("/tmp/fc/cb2/metadata.rb").must_equal "cb2"
+  end
+  context "with a metadata.rb" do
+    file "metadata.rb", 'name "YOUR_COOKBOOK_NAME"'
+    it "returns the cookbook name when passed the cookbook metadata with a name field" do
+      expect(api.cookbook_name(temp_path)).to eq "YOUR_COOKBOOK_NAME"
     end
-    it "raises if passed an empty string" do
-      expect { api.cookbook_maintainer("") }.to raise_error ArgumentError
+  end
+  it "returns the cookbook name when passed a recipe" do
+    FileUtils.mkdir_p("/tmp/fc/cb/recipes")
+    mock_cookbook_metadata("/tmp/fc/cb/metadata.rb")
+    File.open("/tmp/fc/cb/recipes/default.rb", "w") { |file| file.write("") }
+    api.cookbook_name("/tmp/fc/cb/recipes/default.rb").must_equal "YOUR_COOKBOOK_NAME"
+  end
+end
+
+describe "#cookbook_maintainer" do
+  it "raises if passed a nil" do
+    expect { api.cookbook_maintainer(nil) }.to raise_error ArgumentError
+  end
+  it "raises if passed an empty string" do
+    expect { api.cookbook_maintainer("") }.to raise_error ArgumentError
+  end
+  it "raises if the path does not exist" do
+    expect { api.cookbook_maintainer("/invalid") }.to raise_error RuntimeError
+  end
+  context "with a metadata.rb" do
+    file "metadata.rb", 'maintainer "YOUR_COMPANY_NAME"'
+    it "returns the cookbook maintainer when passed the cookbook metadata" do
+      expect(api.cookbook_maintainer(temp_path)).to eq "YOUR_COMPANY_NAME"
     end
-    it "raises if the path does not exist" do
-      expect { api.cookbook_maintainer("/invalid") }.to raise_error RuntimeError
+    it "returns the cookbook maintainer when passed a recipe" do
+      expect(api.cookbook_maintainer("#{temp_path}/recipes/default.rb")).to eq "YOUR_COMPANY_NAME"
     end
-    context "with a metadata.rb" do
-      file "metadata.rb", 'maintainer "YOUR_COMPANY_NAME"'
-      it "returns the cookbook maintainer when passed the cookbook metadata" do
-        expect(api.cookbook_maintainer(temp_path)).to eq "YOUR_COMPANY_NAME"
-      end
-      it "returns the cookbook maintainer when passed a recipe" do
-        expect(api.cookbook_maintainer("#{temp_path}/recipes/default.rb")).to eq "YOUR_COMPANY_NAME"
-      end
-      it "returns the cookbook maintainer when passed a template" do
-        expect(api.cookbook_maintainer("#{temp_path}/templates/default/mock.erb")).to eq "YOUR_COMPANY_NAME"
-      end
+    it "returns the cookbook maintainer when passed a template" do
+      expect(api.cookbook_maintainer("#{temp_path}/templates/default/mock.erb")).to eq "YOUR_COMPANY_NAME"
+    end
+    it "returns the cookbook maintainer when passed a recipe" do
+      mock_cookbook_metadata(metadata_path)
+      FileUtils.mkdir_p("/tmp/fc/mock/cb/recipes/")
+      File.open("/tmp/fc/mock/cb/recipes/default.rb", "w") { |file| file.write("") }
+      api.cookbook_maintainer("/tmp/fc/mock/cb/recipes/default.rb").must_equal "YOUR_COMPANY_NAME"
+    end
+    it "returns the cookbook maintainer when passed a template" do
+      mock_cookbook_metadata(metadata_path)
+      FileUtils.mkdir_p("/tmp/fc/mock/cb/templates/default/")
+      File.open("/tmp/fc/mock/cb/templates/default/mock.erb", "w") { |file| file.write("") }
+      api.cookbook_maintainer("/tmp/fc/mock/cb/templates/default/mock.erb").must_equal "YOUR_COMPANY_NAME"
     end
   end
 
@@ -265,6 +292,23 @@ describe FoodCritic::Api do
       it "returns the cookbook maintainer_email when passed a template" do
         expect(api.cookbook_maintainer_email("#{temp_path}/templates/default/mock.erb")).to eq "YOUR_EMAIL"
       end
+      lambda { api.cookbook_maintainer_email("/tmp/non-existent-path") }.must_raise RuntimeError
+    end
+    it "returns the cookbook maintainer_email when passed the cookbook metadata" do
+      mock_cookbook_metadata(metadata_path)
+      api.cookbook_maintainer_email(metadata_path).must_equal "YOUR_EMAIL"
+    end
+    it "returns the cookbook maintainer_email when passed a recipe" do
+      mock_cookbook_metadata(metadata_path)
+      FileUtils.mkdir_p("/tmp/fc/mock/cb/recipes/")
+      File.open("/tmp/fc/mock/cb/recipes/default.rb", "w") { |file| file.write("") }
+      api.cookbook_maintainer_email("/tmp/fc/mock/cb/recipes/default.rb").must_equal "YOUR_EMAIL"
+    end
+    it "returns the cookbook maintainer_email when passed a template" do
+      mock_cookbook_metadata(metadata_path)
+      FileUtils.mkdir_p("/tmp/fc/mock/cb/templates/default/")
+      File.open("/tmp/fc/mock/cb/templates/default/mock.erb", "w") { |file| file.write("") }
+      api.cookbook_maintainer_email("/tmp/fc/mock/cb/templates/default/mock.erb").must_equal "YOUR_EMAIL"
     end
   end
 
@@ -1915,7 +1959,6 @@ describe FoodCritic::Api do
   end
 
   describe "#json_file_to_hash" do
-
     it "raises if the filename is not provided" do
       expect { api.json_file_to_hash }.to raise_error ArgumentError
     end
