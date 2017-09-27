@@ -88,6 +88,10 @@ module FunctionalHelpers
       file("metadata.rb", *args, &block)
     end
 
+    def readme_file(*args, &block)
+      file("README.md", *args, &block)
+    end
+
     def included(klass)
       super
       klass.extend ClassMethods
