@@ -12,12 +12,9 @@ Gem::Specification.new do |s|
   s.executables << "foodcritic"
   s.required_ruby_version = ">= 2.2.2"
 
-  s.files = Dir["chef_dsl_metadata/*.json"] +
-    Dir["lib/**/*.rb"] +
-    Dir["misc/**/*"]
-  s.files += Dir["Rakefile"] + Dir["Gemfile"] + Dir["*.gemspec"]
-  s.files += Dir["spec/**/*"] + Dir["features/**/*"]
-  s.files += Dir["*.md"] + Dir["LICENSE"] + Dir["man/*"]
+  s.files = Dir["chef_dsl_metadata/*.json"] + Dir["lib/**/*.rb"] +
+    Dir["misc/**/*"] + Dir["*.gemspec"] + Dir["*.md"] + Dir["LICENSE"] +
+    Dir["man/*"]
 
   s.add_dependency("cucumber-core", ">= 1.3")
   s.add_dependency("nokogiri", ">= 1.5", "< 2.0")
