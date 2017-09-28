@@ -21,8 +21,8 @@ Cucumber::Rake::Task.new(:features) do |t|
   t.cucumber_opts = %w{--strict}
   t.cucumber_opts += %w{-f progress} unless ENV["CI"]
   unless ENV.has_key?("FC_FORK_PROCESS") && ENV["FC_FORK_PROCESS"] == "true"
-    t.cucumber_opts += ["-t", "~@build"]
-    t.cucumber_opts += ["-t", "~@context"]
+    t.cucumber_opts += ["--tags", "not @build"]
+    t.cucumber_opts += ["--tags", "not @context"]
   end
   t.cucumber_opts += ["features"]
 end
