@@ -1759,7 +1759,7 @@ Then "the dodgy resource condition warning 022 should not be shown" do
   expect_warning("FC022", { :line => nil, :expect_warning => false })
 end
 
-Then /^the warning (\d+) should be (valid|invalid)$/ do |code, valid|
+Then /^the warning (\w+) should be (valid|invalid)$/ do |code, valid|
   code = "FC#{code}"
   valid == "valid" ? expect_no_warning(code) : expect_warning(code)
 end
