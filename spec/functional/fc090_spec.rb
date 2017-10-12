@@ -1,4 +1,4 @@
-require 'spec_helper'
+require "spec_helper"
 
 describe "FC090" do
   context "with a recipe that installs package with ignore_failure set true" do
