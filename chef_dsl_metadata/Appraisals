@@ -1,11 +1,8 @@
 chef_versions = [
-  "12.20.3",
-  # "12.21.4", # this is the same as 12.20 so why bother
-  "13.0.113",
-  "13.1.31",
-  # "13.2.20", # this is the same as 13.1 so why bother
+  "12.21.14",
   "13.3.42",
   "13.4.19",
+  "13.5.3",
 ]
 chef_versions.each do |version|
   appraise "chef_#{version}" do
