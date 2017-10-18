@@ -1,5 +1,5 @@
 rule "FC094", "Cookbook uses deprecated filesystem2 ohai plugin data" do
-  tags %w{deprecated chef13}
+  tags %w{deprecated chef15}
 
   recipe do |ast|
     ast.xpath('//aref[vcall/ident/@value="node"]
