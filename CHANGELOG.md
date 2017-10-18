@@ -1,5 +1,20 @@
 # Foodcritic Changelog:
 
+## [12.0.0](https://github.com/Foodcritic/foodcritic/tree/v11.5.0) (2017-10-18)
+
+**Implemented enhancements:**
+
+- Added FC093 - Generated README text needs updating
+- Added FC094 - Deprecated filesystem2 ohai plugin data used
+- Added FC095 - Deprecated cloud_v2 ohai plugin data used
+- Added FC096 - Deprecated libvirt virtualization ohai data used
+- Added FC097 - Deprecated Chef::Mixin::LanguageIncludeAttribute class used
+- Added FC098 - Deprecated Chef::Mixin::RecipeDefinitionDSLCore class used
+- Added FC099 - Deprecated Chef::Mixin::LanguageIncludeRecipe class used
+- Added FC100 - Deprecated Chef::Mixin::Language class used
+- Removed metadata for Chef versions 12.10, 12.11, 12.13, 12.14
+- Added metadata for Chef 12.21 and 13.5
+
 ## [11.4.0](https://github.com/Foodcritic/foodcritic/tree/v11.4.0) (2017-09-13)
 
 **Implemented enhancements:**
