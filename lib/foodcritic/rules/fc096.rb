@@ -1,5 +1,5 @@
 rule "FC096", "Cookbook uses deprecated libvirt virtualization ohai data" do
-  tags %w{deprecated chef13}
+  tags %w{deprecated chef14}
 
   recipe do |ast|
     ast.xpath('//aref[aref/vcall/ident/@value="node"]

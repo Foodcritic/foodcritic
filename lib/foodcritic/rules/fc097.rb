@@ -1,4 +1,4 @@
-rule "FC097", "Deprecated Chef::Mixin::LanguageIncludeAttribute class used" do
+rule "FC097", "Deprecated Chef::Mixin::LanguageIncludeAttribute mixin used" do
   tags %w{chef14 deprecated}
   def lang_include_attrib_mixin(ast)
     # include Chef::Mixin::LanguageIncludeAttribute
