@@ -6,7 +6,7 @@ describe "FC100" do
     it { is_expected.to violate_rule }
   end
 
-  context "with a cookbook with a recipe that includes Chef::Mixin::Languagee" do
+  context "with a cookbook with a recipe that includes Chef::Mixin::Language" do
     recipe_file "include Chef::Mixin::Language"
     it { is_expected.to violate_rule }
   end
