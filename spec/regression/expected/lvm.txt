@@ -11,3 +11,4 @@ FC074: LWRP should use DSL to define resource's default action: ./resources/logi
 FC074: LWRP should use DSL to define resource's default action: ./resources/physical_volume.rb:1
 FC074: LWRP should use DSL to define resource's default action: ./resources/volume_group.rb:1
 FC078: Ensure cookbook shared under an OSI-approved open source license: ./metadata.rb:1
+FC098: Deprecated Chef::Mixin::RecipeDefinitionDSLCore mixin used: ./resources/volume_group.rb:1
