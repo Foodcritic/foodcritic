@@ -1,6 +1,12 @@
 # Foodcritic Changelog:
 
-## [12.0.0](https://github.com/Foodcritic/foodcritic/tree/v11.5.0) (2017-10-18)
+## [12.0.1](https://github.com/Foodcritic/foodcritic/tree/v12.0.1) (2017-10-19)
+
+**Fixed bugs:**
+
+- Fixed the tags for new rules to correctly specify the version of Chef where the breaking change will occur, not the version of Chef were the deprecation warning was introduced
+
+## [12.0.0](https://github.com/Foodcritic/foodcritic/tree/v12.0.0) (2017-10-18)
 
 **Implemented enhancements:**
 
