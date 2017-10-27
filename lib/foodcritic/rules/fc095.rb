@@ -1,5 +1,5 @@
 rule "FC095", "Cookbook uses deprecated cloud_v2 ohai plugin data" do
-  tags %w{deprecated chef15}
+  tags %w{deprecated chef14}
 
   recipe do |ast|
     ast.xpath('//aref[vcall/ident/@value="node"]
