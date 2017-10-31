@@ -1,5 +1,14 @@
 # Foodcritic Changelog:
 
+## [12.1.0](https://github.com/Foodcritic/foodcritic/tree/v12.1.0) (2017-10-31)
+
+**Implemented enhancements:**
+
+- Updated FC094 and FC095 tags from chef15 -> chef14 as the deprecation timeline has been changed
+- Updated FC087 to check for all deprecated Chef::Platform methods
+- Added FC101: Cookbook uses the deprecated deploy resource
+- Added FC102: Cookbook uses the deprecated Chef::DSL::Recipe::FullDSL class
+
 ## [12.0.1](https://github.com/Foodcritic/foodcritic/tree/v12.0.1) (2017-10-19)
 
 **Fixed bugs:**
