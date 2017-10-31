@@ -9,6 +9,20 @@ describe "FC087" do
     it { is_expected.to violate_rule }
   end
 
+  context "with a cookbook with a library that maps providers with Chef::Platform.provider_for_resource" do
+    library_file <<-EOF
+      provider = Chef::Platform.provider_for_resource(resource, :create)
+    EOF
+    it { is_expected.to violate_rule }
+  end
+
+  context "with a cookbook with a library that maps providers with Chef::Platform.provider_for_resource" do
+    library_file <<-EOF
+      provider = Chef::Platform.find_provider("ubuntu", "16.04", resource)
+    EOF
+    it { is_expected.to violate_rule }
+  end
+
   context "with a cookbook with a library that includes Chef::Platform.foo" do
     library_file <<-EOF
     module AuditD
