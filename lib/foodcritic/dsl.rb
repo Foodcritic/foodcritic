@@ -56,7 +56,7 @@ module FoodCritic
     end
 
     # The most frequently used block within a rule. A slight misnomer because
-    # `recipe` rule blocks are also evaluated against providers.
+    # `recipe` rule blocks are also evaluated against resources, providers and libraries
     rule_block :recipe
 
     rule_block :cookbook
