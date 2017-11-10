@@ -6,7 +6,7 @@ rule "FC108", "Resource should not define a property named 'name'" do
       # command has a child of type ident with a value of "property". That tells us
       # we're in a property. Quite a ways desecendant from that is another ident
       # with value of "name"
-      ast.xpath("//command[ident/@value='property' and descendant::ident/@value='name']")
+      ast.xpath("//command[ident/@value='property' and descendant::symbol_literal/symbol/ident/@value='name']")
     end
   end
 end
