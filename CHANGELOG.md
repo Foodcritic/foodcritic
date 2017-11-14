@@ -1,5 +1,24 @@
 # Foodcritic Changelog:
 
+## [12.2.0](https://github.com/Foodcritic/foodcritic/tree/v12.2.0) (2017-11-14)
+
+**Implemented enhancements:**
+
+- Added Chef 13.6 resource metadata
+- Added FC103: Deprecated :uninstall action in chocolatey_package used
+- Added FC104: Use the :run action in ruby_block instead of :create
+- Added FC105: Deprecated erl_call resource used
+- Added FC106: Use the plist_hash property in launchd instead of hash
+- Added FC107: Resource uses epic_fail instead of ignore_failure
+- Added FC108: Resource should not define a property named 'name'
+- Added FC109: Use platform-specific package resources instead of provider property
+- Updated FC085 to also alert on @new_resource.updated_by_last_action
+- Refactored multiple rules to simplify which files they trigger on
+
+**Fixed bugs:**
+
+- Updated FC086 to only alert if someone is using DataBagItem/EncryptedDataBagItem to load a data bag
+
 ## [12.1.0](https://github.com/Foodcritic/foodcritic/tree/v12.1.0) (2017-10-31)
 
 **Implemented enhancements:**
