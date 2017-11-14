@@ -4,9 +4,7 @@ rule "FC104", "Use the :run action in ruby_block instead of :create" do
     matches = []
     find_resources(ast).each do |resource|
       # if it's a ruby_block check for the :create action
-      if ast.xpath('//method_add_block[command/ident[@value="ruby_block"]]')
-        matches << resource if resource_attribute(resource, "action") == :create
-      end
+      matches << resource if resource_attribute(resource, "action") == :create && resource_type(resource) == "ruby_block"
 
       # no matter what check notification
       notifications(resource).any? do |notification|
