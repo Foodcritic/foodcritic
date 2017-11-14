@@ -42,4 +42,13 @@ describe "FC104" do
     EOF
     it { is_expected.to_not violate_rule }
   end
+
+  context "with a cookbook with a recipe that has a non-ruby_block resource with :create action" do
+    library_file <<-EOF
+    directory 'foo' do
+      action :create
+    end
+    EOF
+    it { is_expected.to_not violate_rule }
+  end
 end
