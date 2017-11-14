@@ -15,7 +15,7 @@ describe "FC085" do
   end
 
   context "with a cookbook with a LWRP that converges with @new_resource.updated_by_last_action" do
-    resource_file <<-EOF
+    provider_file <<-EOF
     use_inline_resources
 
     action :create do
@@ -24,6 +24,15 @@ describe "FC085" do
       end
 
       @new_resource.updated_by_last_action(true)
+    end
+    EOF
+    it { is_expected.to violate_rule }
+  end
+
+  context "with a cookbook with a LWRP that converges with new_resource.updated_by_last_action in a method" do
+    provider_file <<-EOF
+    def update_me(new_resource)
+      new_resource.updated_by_last_action(true)
     end
     EOF
     it { is_expected.to violate_rule }
@@ -42,7 +51,7 @@ describe "FC085" do
   end
 
   context "with a cookbook with a LWRP that relies on resources for convergence" do
-    resource_file <<-EOF
+    provider_file <<-EOF
     use_inline_resources
 
     action :create do
@@ -56,7 +65,7 @@ describe "FC085" do
   end
 
   context "with a cookbook with a LWRP that calls foo.updated_by_last_action" do
-    resource_file <<-EOF
+    provider_file <<-EOF
     use_inline_resources
 
     action :create do
