@@ -1,5 +1,11 @@
 # Foodcritic Changelog:
 
+## [12.2.1](https://github.com/Foodcritic/foodcritic/tree/v12.2.0) (2017-11-14)
+
+**Fixed bugs:**
+
+- Fixed FC104 alerting for any resource with a :create action instead of just ruby_block resources
+
 ## [12.2.0](https://github.com/Foodcritic/foodcritic/tree/v12.2.0) (2017-11-14)
 
 **Implemented enhancements:**
