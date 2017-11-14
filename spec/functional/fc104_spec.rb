@@ -14,7 +14,7 @@ describe "FC104" do
   end
 
   context "with a cookbook with a recipe where ruby_block specifies a run action" do
-    library_file <<-EOF
+    recipe_file <<-EOF
     ruby_block 'puts' do
       block do
         puts "test test test"
@@ -26,7 +26,7 @@ describe "FC104" do
   end
 
   context "with a cookbook with a recipe that notifies :create on a ruby_block" do
-    library_file <<-EOF
+    recipe_file <<-EOF
     file 'foo' do
       notifies :create, 'ruby_block[bar]', :delayed
     end
@@ -35,7 +35,7 @@ describe "FC104" do
   end
 
   context "with a cookbook with a recipe that notifies :run on a ruby_block" do
-    library_file <<-EOF
+    recipe_file <<-EOF
     file 'foo' do
       notifies :run, 'ruby_block[bar]', :delayed
     end
@@ -44,7 +44,7 @@ describe "FC104" do
   end
 
   context "with a cookbook with a recipe that has a non-ruby_block resource with :create action" do
-    library_file <<-EOF
+    recipe_file <<-EOF
     directory 'foo' do
       action :create
     end
