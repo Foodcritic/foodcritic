@@ -24,4 +24,22 @@ describe "FC104" do
     EOF
     it { is_expected.to_not violate_rule }
   end
+
+  context "with a cookbook with a recipe that notifies :create on a ruby_block" do
+    library_file <<-EOF
+    file 'foo' do
+      notifies :create, 'ruby_block[bar]', :delayed
+    end
+    EOF
+    it { is_expected.to violate_rule }
+  end
+
+  context "with a cookbook with a recipe that notifies :run on a ruby_block" do
+    library_file <<-EOF
+    file 'foo' do
+      notifies :run, 'ruby_block[bar]', :delayed
+    end
+    EOF
+    it { is_expected.to_not violate_rule }
+  end
 end
