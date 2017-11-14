@@ -34,8 +34,12 @@ describe "FC086" do
     it { is_expected.not_to violate_rule }
   end
 
-  context "with a recipe that uses Chef::EncryptedDataBagItem.load_secret" do
-    recipe_file "data_bag_item('bag', 'item', Chef::EncryptedDataBagItem.load_secret('secret_file'))"
+  context "with a recipe that uses other Chef::EncryptedDataBagItem methods" do
+    recipe_file <<-EOF
+     data_bag_item('bag', 'item', Chef::EncryptedDataBagItem.load_secret('secret_file'))
+     encrypted_item = Chef::EncryptedDataBagItem.encrypt_data_bag_item(original_item, Chef::EncryptedDataBagItem.load_secret)
+     bag = Chef::DataBagItem.new
+    EOF
     it { is_expected.not_to violate_rule }
   end
 end

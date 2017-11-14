@@ -19,4 +19,3 @@ FC086: Use databag helper methods to load data bag items: ./recipes/ebs_backup.r
 FC086: Use databag helper methods to load data bag items: ./recipes/ebs_volume.rb:27
 FC086: Use databag helper methods to load data bag items: ./recipes/ebs_volume.rb:70
 FC086: Use databag helper methods to load data bag items: ./recipes/ebs_volume.rb:78
-FC086: Use databag helper methods to load data bag items: ./recipes/ebs_volume.rb:94
