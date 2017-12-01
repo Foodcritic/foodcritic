@@ -41,6 +41,16 @@ describe "FC004" do
       EOH
       it { is_expected.to violate_rule }
     end
+
+    context "using a execute to run systemcl to #{command}" do
+      recipe_file <<-EOH
+        execute 'service stuff' do
+          command "systemctl #{command} foo"
+          action :run
+        end
+      EOH
+      it { is_expected.to violate_rule }
+    end
   end
 
   context "using a execute to run a windows start command" do
