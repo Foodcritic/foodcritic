@@ -29,3 +29,15 @@ FC074: LWRP should use DSL to define resource's default action: ./resources/conf
 FC074: LWRP should use DSL to define resource's default action: ./resources/pool.rb:1
 FC074: LWRP should use DSL to define resource's default action: ./resources/site.rb:1
 FC078: Ensure cookbook shared under an OSI-approved open source license: ./metadata.rb:1
+FC085: Resource using new_resource.updated_by_last_action to converge resource: ./providers/app.rb:60
+FC085: Resource using new_resource.updated_by_last_action to converge resource: ./providers/pool.rb:34
+FC085: Resource using new_resource.updated_by_last_action to converge resource: ./providers/pool.rb:71
+FC085: Resource using new_resource.updated_by_last_action to converge resource: ./providers/pool.rb:81
+FC085: Resource using new_resource.updated_by_last_action to converge resource: ./providers/pool.rb:91
+FC085: Resource using new_resource.updated_by_last_action to converge resource: ./providers/pool.rb:102
+FC085: Resource using new_resource.updated_by_last_action to converge resource: ./providers/pool.rb:108
+FC085: Resource using new_resource.updated_by_last_action to converge resource: ./providers/site.rb:43
+FC085: Resource using new_resource.updated_by_last_action to converge resource: ./providers/site.rb:87
+FC085: Resource using new_resource.updated_by_last_action to converge resource: ./providers/site.rb:97
+FC085: Resource using new_resource.updated_by_last_action to converge resource: ./providers/site.rb:107
+FC085: Resource using new_resource.updated_by_last_action to converge resource: ./providers/site.rb:118

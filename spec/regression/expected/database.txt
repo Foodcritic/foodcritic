@@ -14,8 +14,29 @@ FC069: Ensure standardized license defined in metadata: ./metadata.rb:1
 FC075: Cookbook uses node.save to save partial node data to the chef-server mid-run: ./recipes/master.rb:37
 FC078: Ensure cookbook shared under an OSI-approved open source license: ./metadata.rb:1
 FC082: Deprecated node.set or node.set_unless used to set node attributes: ./recipes/master.rb:36
+FC085: Resource using new_resource.updated_by_last_action to converge resource: ./libraries/provider_database_mysql.rb:44
+FC085: Resource using new_resource.updated_by_last_action to converge resource: ./libraries/provider_database_mysql.rb:56
+FC085: Resource using new_resource.updated_by_last_action to converge resource: ./libraries/provider_database_mysql.rb:69
+FC085: Resource using new_resource.updated_by_last_action to converge resource: ./libraries/provider_database_mysql_user.rb:39
+FC085: Resource using new_resource.updated_by_last_action to converge resource: ./libraries/provider_database_mysql_user.rb:50
+FC085: Resource using new_resource.updated_by_last_action to converge resource: ./libraries/provider_database_mysql_user.rb:70
+FC085: Resource using new_resource.updated_by_last_action to converge resource: ./libraries/provider_database_postgresql.rb:53
+FC085: Resource using new_resource.updated_by_last_action to converge resource: ./libraries/provider_database_postgresql.rb:65
+FC085: Resource using new_resource.updated_by_last_action to converge resource: ./libraries/provider_database_postgresql.rb:78
+FC085: Resource using new_resource.updated_by_last_action to converge resource: ./libraries/provider_database_postgresql_user.rb:40
+FC085: Resource using new_resource.updated_by_last_action to converge resource: ./libraries/provider_database_postgresql_user.rb:51
+FC085: Resource using new_resource.updated_by_last_action to converge resource: ./libraries/provider_database_postgresql_user.rb:64
+FC085: Resource using new_resource.updated_by_last_action to converge resource: ./libraries/provider_database_sql_server.rb:40
+FC085: Resource using new_resource.updated_by_last_action to converge resource: ./libraries/provider_database_sql_server.rb:52
+FC085: Resource using new_resource.updated_by_last_action to converge resource: ./libraries/provider_database_sql_server.rb:65
+FC085: Resource using new_resource.updated_by_last_action to converge resource: ./libraries/provider_database_sql_server_user.rb:39
+FC085: Resource using new_resource.updated_by_last_action to converge resource: ./libraries/provider_database_sql_server_user.rb:49
+FC085: Resource using new_resource.updated_by_last_action to converge resource: ./libraries/provider_database_sql_server_user.rb:60
+FC085: Resource using new_resource.updated_by_last_action to converge resource: ./libraries/provider_database_sql_server_user.rb:64
+FC085: Resource using new_resource.updated_by_last_action to converge resource: ./libraries/provider_database_sql_server_user.rb:81
 FC086: Use databag helper methods to load data bag items: ./recipes/ebs_backup.rb:22
 FC086: Use databag helper methods to load data bag items: ./recipes/ebs_backup.rb:38
 FC086: Use databag helper methods to load data bag items: ./recipes/ebs_volume.rb:27
 FC086: Use databag helper methods to load data bag items: ./recipes/ebs_volume.rb:70
 FC086: Use databag helper methods to load data bag items: ./recipes/ebs_volume.rb:78
+FC104: Use the :run action in ruby_block instead of :create: ./recipes/ebs_volume.rb:104

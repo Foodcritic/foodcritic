@@ -2,7 +2,6 @@ FC001: Use strings in preference to symbols to access node attributes: ./librari
 FC001: Use strings in preference to symbols to access node attributes: ./libraries/omnitruck_client.rb:77
 FC001: Use strings in preference to symbols to access node attributes: ./libraries/omnitruck_client.rb:78
 FC007: Ensure recipe dependencies are reflected in cookbook metadata: ./recipes/dev.rb:16
-FC009: Resource attribute not recognised: ./recipes/default.rb:46
 FC019: Access node attributes in a consistent manner: ./libraries/omnitruck_client.rb:76
 FC019: Access node attributes in a consistent manner: ./libraries/omnitruck_client.rb:77
 FC019: Access node attributes in a consistent manner: ./libraries/omnitruck_client.rb:78
@@ -11,3 +10,4 @@ FC065: Ensure source_url is set in metadata: ./metadata.rb:1
 FC066: Ensure chef_version is set in metadata: ./metadata.rb:1
 FC069: Ensure standardized license defined in metadata: ./metadata.rb:1
 FC078: Ensure cookbook shared under an OSI-approved open source license: ./metadata.rb:1
+FC109: Use platform-specific package resources instead of provider property: ./recipes/default.rb:46
