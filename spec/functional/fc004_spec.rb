@@ -21,7 +21,7 @@ describe "FC004" do
     it { is_expected.to violate_rule }
   end
 
-  %w(reload start stop restart).each do |command|
+  %w{reload start stop restart}.each do |command|
     context "using a execute to run an upstart #{command} command" do
       recipe_file <<-EOH
         execute 'service stuff' do
@@ -71,4 +71,14 @@ describe "FC004" do
     it { is_expected.not_to violate_rule }
   end
 
+  context "using a execute to run check the contents of an init script" do
+    recipe_file <<-EOH
+      execute "Configure the scheduler" do
+          user "root"
+          command 'sed -i "s/\([^/]\)ondemand/\1performace/g" /etc/init.d/ondemand'
+          notifies :start, "service[ondemand]"
+      end
+    EOH
+    it { is_expected.not_to violate_rule }
+  end
 end
