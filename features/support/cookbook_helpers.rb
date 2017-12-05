@@ -339,22 +339,6 @@ module FoodCritic
       }
     end
 
-    # Create a recipe that controls a service using the specified method.
-    #
-    # @param [Symbol] method How to start the service, one of: :init_d, :invoke_rc_d, :upstart, :service, :service_full_path.
-    # @param [Boolean] do_sleep Whether to prefix the service cmd with a bash sleep
-    # @param [Symbol] action The action to take (start, stop, reload, restart)
-    def recipe_controls_service(method = :service, do_sleep = false, action = :start)
-      cmds = { :init_d => "/etc/init.d/foo #{action}", :invoke_rc_d => "invoke-rc.d foo #{action}", :upstart => "#{action} foo",
-               :service => "service foo #{action}", :service_full_path => "/sbin/service foo #{action}" }
-      write_recipe %Q{
-        execute "#{action}-foo-service" do
-          command "#{do_sleep ? 'sleep 5; ' : ''}#{cmds[method]}"
-          action :run
-        end
-      }
-    end
-
     # Create a recipe with an external dependency on another cookbook.
     #
     # @param [Hash] dep The options to use for dependency
