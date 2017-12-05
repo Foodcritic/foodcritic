@@ -13,7 +13,7 @@ module FoodCritic
     attr_reader :chef_version
 
     # Perform a lint check. This method is intended for use by the command-line
-    # wrapper. If you are programatically using foodcritic you should use
+    # wrapper. If you are programmatically using foodcritic you should use
     # `#check` below.
     def self.run(cmd_line)
       # The first item is the string output, the second is exit code.

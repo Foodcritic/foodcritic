@@ -14,3 +14,4 @@ FC070: Ensure supports metadata defines valid platforms: ./metadata.rb:1
 FC078: Ensure cookbook shared under an OSI-approved open source license: ./metadata.rb:1
 FC082: Deprecated node.set or node.set_unless used to set node attributes: ./recipes/service.rb:59
 FC082: Deprecated node.set or node.set_unless used to set node attributes: ./recipes/task.rb:49
+FC104: Use the :run action in ruby_block instead of :create: ./recipes/config.rb:78

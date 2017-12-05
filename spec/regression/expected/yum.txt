@@ -17,3 +17,4 @@ FC074: LWRP should use DSL to define resource's default action: ./resources/repo
 FC078: Ensure cookbook shared under an OSI-approved open source license: ./metadata.rb:1
 FC085: Resource using new_resource.updated_by_last_action to converge resource: ./providers/key.rb:76
 FC085: Resource using new_resource.updated_by_last_action to converge resource: ./providers/repository.rb:41
+FC104: Use the :run action in ruby_block instead of :create: ./providers/repository.rb:94

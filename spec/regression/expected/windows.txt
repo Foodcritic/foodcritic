@@ -53,3 +53,17 @@ FC074: LWRP should use DSL to define resource's default action: ./resources/shor
 FC074: LWRP should use DSL to define resource's default action: ./resources/task.rb:1
 FC074: LWRP should use DSL to define resource's default action: ./resources/zipfile.rb:1
 FC078: Ensure cookbook shared under an OSI-approved open source license: ./metadata.rb:1
+FC085: Resource using new_resource.updated_by_last_action to converge resource: ./libraries/feature_base.rb:9
+FC085: Resource using new_resource.updated_by_last_action to converge resource: ./libraries/feature_base.rb:19
+FC085: Resource using new_resource.updated_by_last_action to converge resource: ./providers/batch.rb:42
+FC085: Resource using new_resource.updated_by_last_action to converge resource: ./providers/package.rb:48
+FC085: Resource using new_resource.updated_by_last_action to converge resource: ./providers/package.rb:59
+FC085: Resource using new_resource.updated_by_last_action to converge resource: ./providers/package.rb:68
+FC085: Resource using new_resource.updated_by_last_action to converge resource: ./providers/pagefile.rb:63
+FC085: Resource using new_resource.updated_by_last_action to converge resource: ./providers/pagefile.rb:75
+FC085: Resource using new_resource.updated_by_last_action to converge resource: ./providers/registry.rb:70
+FC085: Resource using new_resource.updated_by_last_action to converge resource: ./providers/task.rb:38
+FC085: Resource using new_resource.updated_by_last_action to converge resource: ./providers/task.rb:50
+FC085: Resource using new_resource.updated_by_last_action to converge resource: ./providers/task.rb:68
+FC085: Resource using new_resource.updated_by_last_action to converge resource: ./providers/task.rb:79
+FC085: Resource using new_resource.updated_by_last_action to converge resource: ./providers/zipfile.rb:41
