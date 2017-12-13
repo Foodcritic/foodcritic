@@ -46,7 +46,7 @@ Feature: Ignoring rules on per line basis
   Examples:
     | comment         | warnings    |
     |                 | FC002,FC039 |
-    | # ~FC002,~FC007 | FC002       |
+    | # ~FC002,~FC007 | FC039       |
     | # ~FC002,~FC039 |             |
     | # ~FC002        | FC039       |
 
