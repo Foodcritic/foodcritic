@@ -24,4 +24,16 @@ describe "FC059" do
     EOF
     it { is_expected.not_to violate_rule }
   end
+
+  context "with a cookbook ignoring the rule" do
+    provider_file <<~EOF
+    # ~FC059
+    action :create do
+      template "/etc/something.conf" do
+        notifies :restart, "service[something]"
+      end
+    end
+    EOF
+    it { is_expected.not_to violate_rule }
+  end
 end
