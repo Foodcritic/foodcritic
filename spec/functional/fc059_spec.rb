@@ -26,7 +26,7 @@ describe "FC059" do
   end
 
   context "with a cookbook ignoring the rule" do
-    provider_file <<~EOF
+    provider_file <<-EOF.gsub(/^    /, '') # When we drop 2.2 support, this can use <<~EOF.
     # ~FC059
     action :create do
       template "/etc/something.conf" do
