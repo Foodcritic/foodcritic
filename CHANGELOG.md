@@ -1,6 +1,14 @@
 # Foodcritic Changelog:
 
-## [12.2.1](https://github.com/Foodcritic/foodcritic/tree/v12.2.0) (2017-11-14)
+## [12.2.2](https://github.com/Foodcritic/foodcritic/tree/v12.2.2) (2017-12-13)
+
+**Fixed bugs:**
+
+- Don't require a space before the # in an ignore comment.
+- FC009 should not alert on a raise in a resource
+- Catch systemd service starts in FC004 and resolve several false positives
+
+## [12.2.1](https://github.com/Foodcritic/foodcritic/tree/v12.2.1) (2017-11-14)
 
 **Fixed bugs:**
 
