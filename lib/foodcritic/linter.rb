@@ -183,7 +183,7 @@ module FoodCritic
     end
 
     def ignore_line_match?(line, rule)
-      ignores = line.to_s[/\s+#\s*(.*)/, 1]
+      ignores = line.to_s[/.*#\s*(.*)/, 1]
       if ignores && ignores.include?("~")
         !rule.matches_tags?(ignores.split(/[ ,]/))
       else
