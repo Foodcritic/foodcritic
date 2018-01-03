@@ -179,17 +179,21 @@ module FoodCritic
     # These are equivalent:
     #
     #     find_resources(ast)
-    #     find_resources(ast, :type => :any)
+    #     find_resources(ast, type: :any)
     #
-    # Restrict to a specific type of resource:
+    # Restrict to a specific type of resource(s):
     #
-    #     find_resources(ast, :type => :service)
+    #     find_resources(ast, type: 'service')
+    #     find_resources(ast, type: %w(service file))
     #
     def find_resources(ast, options = {})
       options = { type: :any }.merge!(options)
       return [] unless ast.respond_to?(:xpath)
       scope_type = ""
-      scope_type = "[@value='#{options[:type]}']" unless options[:type] == :any
+      unless options[:type] == :any
+        type_array =  Array(options[:type]).map! { |x| "@value='#{x}'" }
+        scope_type = "[#{type_array.join(' or ')}]"
+      end
 
       # TODO: Include nested resources (provider actions)
       no_actions = "[command/ident/@value != 'action']"
