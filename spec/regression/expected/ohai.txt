@@ -5,3 +5,5 @@ FC067: Ensure at least one platform supported in metadata: ./metadata.rb:1
 FC069: Ensure standardized license defined in metadata: ./metadata.rb:1
 FC072: Metadata should not contain "attribute" keyword: ./metadata.rb:1
 FC078: Ensure cookbook shared under an OSI-approved open source license: ./metadata.rb:1
+FC114: Cookbook uses legacy Ohai config syntax: ./recipes/default.rb:20
+FC114: Cookbook uses legacy Ohai config syntax: ./recipes/default.rb:21
