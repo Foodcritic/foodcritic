@@ -6,3 +6,5 @@ FC069: Ensure standardized license defined in metadata: ./metadata.rb:1
 FC071: Missing LICENSE file: ./LICENSE:1
 FC074: LWRP should use DSL to define resource's default action: ./resources/package.rb:1
 FC078: Ensure cookbook shared under an OSI-approved open source license: ./metadata.rb:1
+FC113: Resource declares deprecated use_inline_resources: ./providers/extract.rb:26
+FC113: Resource declares deprecated use_inline_resources: ./providers/package.rb:22

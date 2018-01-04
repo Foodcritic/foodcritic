@@ -4,18 +4,6 @@ FC002: Avoid string interpolation where not required: ./libraries/windows_privil
 FC002: Avoid string interpolation where not required: ./libraries/windows_privileged.rb:56
 FC018: LWRP uses deprecated notification syntax: ./providers/shortcut.rb:54
 FC048: Prefer Mixlib::ShellOut: ./providers/task.rb:106
-FC059: LWRP provider does not declare use_inline_resources: ./providers/auto_run.rb:1
-FC059: LWRP provider does not declare use_inline_resources: ./providers/batch.rb:1
-FC059: LWRP provider does not declare use_inline_resources: ./providers/feature_dism.rb:1
-FC059: LWRP provider does not declare use_inline_resources: ./providers/feature_servermanagercmd.rb:1
-FC059: LWRP provider does not declare use_inline_resources: ./providers/package.rb:1
-FC059: LWRP provider does not declare use_inline_resources: ./providers/pagefile.rb:1
-FC059: LWRP provider does not declare use_inline_resources: ./providers/path.rb:1
-FC059: LWRP provider does not declare use_inline_resources: ./providers/reboot.rb:1
-FC059: LWRP provider does not declare use_inline_resources: ./providers/registry.rb:1
-FC059: LWRP provider does not declare use_inline_resources: ./providers/shortcut.rb:1
-FC059: LWRP provider does not declare use_inline_resources: ./providers/task.rb:1
-FC059: LWRP provider does not declare use_inline_resources: ./providers/zipfile.rb:1
 FC064: Ensure issues_url is set in metadata: ./metadata.rb:1
 FC065: Ensure source_url is set in metadata: ./metadata.rb:1
 FC066: Ensure chef_version is set in metadata: ./metadata.rb:1

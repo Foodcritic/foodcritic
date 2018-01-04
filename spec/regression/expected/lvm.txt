@@ -1,7 +1,4 @@
 FC014: Consider extracting long ruby_block to library: ./providers/logical_volume.rb:18
-FC059: LWRP provider does not declare use_inline_resources: ./providers/logical_volume.rb:1
-FC059: LWRP provider does not declare use_inline_resources: ./providers/physical_volume.rb:1
-FC059: LWRP provider does not declare use_inline_resources: ./providers/volume_group.rb:1
 FC064: Ensure issues_url is set in metadata: ./metadata.rb:1
 FC065: Ensure source_url is set in metadata: ./metadata.rb:1
 FC066: Ensure chef_version is set in metadata: ./metadata.rb:1
