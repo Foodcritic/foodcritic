@@ -1618,11 +1618,6 @@ Then "the execute resource used to run git commands warning 040 should be displa
   expect_warning "FC040", { :line => 7 }
 end
 
-Then /^the LWRP does not notify when updated warning 017 should( not)? be shown against the :([^ ]+) action$/ do |not_shown, action|
-  line = action == "create" ? 1 : 8
-  expect_warning("FC017", :file_type => :provider, :expect_warning => ! not_shown, :line => line)
-end
-
 Then /^the invalid (role|environment) name warning 050 should( not)? be shown$/ do |type, not_shown|
   file = type == "role" ? "roles/webserver.rb" : "environments/production.rb"
   expect_warning "FC050", { :expect_warning => ! not_shown, :file => file }

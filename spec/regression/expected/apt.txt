@@ -1,4 +1,3 @@
-FC017: LWRP does not notify when updated: ./providers/repository.rb:124
 FC043: Prefer new notification syntax: ./providers/repository.rb:112
 FC043: Prefer new notification syntax: ./recipes/default.rb:48
 FC048: Prefer Mixlib::ShellOut: ./providers/repository.rb:26

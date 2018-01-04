@@ -1,6 +1,3 @@
-FC017: LWRP does not notify when updated: ./providers/rule_ufw.rb:23
-FC017: LWRP does not notify when updated: ./providers/rule_ufw.rb:27
-FC017: LWRP does not notify when updated: ./providers/rule_ufw.rb:31
 FC059: LWRP provider does not declare use_inline_resources: ./providers/rule_ufw.rb:1
 FC059: LWRP provider does not declare use_inline_resources: ./providers/ufw.rb:1
 FC064: Ensure issues_url is set in metadata: ./metadata.rb:1

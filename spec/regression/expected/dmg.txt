@@ -1,6 +1,5 @@
 FC001: Use strings in preference to symbols to access node attributes: ./attributes/default.rb:19
 FC001: Use strings in preference to symbols to access node attributes: ./attributes/default.rb:20
-FC017: LWRP does not notify when updated: ./providers/package.rb:27
 FC048: Prefer Mixlib::ShellOut: ./providers/package.rb:44
 FC048: Prefer Mixlib::ShellOut: ./providers/package.rb:47
 FC048: Prefer Mixlib::ShellOut: ./providers/package.rb:76

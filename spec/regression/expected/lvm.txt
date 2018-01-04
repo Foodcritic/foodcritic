@@ -1,5 +1,4 @@
 FC014: Consider extracting long ruby_block to library: ./providers/logical_volume.rb:18
-FC017: LWRP does not notify when updated: ./providers/physical_volume.rb:6
 FC059: LWRP provider does not declare use_inline_resources: ./providers/logical_volume.rb:1
 FC059: LWRP provider does not declare use_inline_resources: ./providers/physical_volume.rb:1
 FC059: LWRP provider does not declare use_inline_resources: ./providers/volume_group.rb:1
