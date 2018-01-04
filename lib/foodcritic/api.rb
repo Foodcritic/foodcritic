@@ -191,7 +191,7 @@ module FoodCritic
       return [] unless ast.respond_to?(:xpath)
       scope_type = ""
       unless options[:type] == :any
-        type_array =  Array(options[:type]).map! { |x| "@value='#{x}'" }
+        type_array =  Array(options[:type]).map { |x| "@value='#{x}'" }
         scope_type = "[#{type_array.join(' or ')}]"
       end
 
