@@ -402,7 +402,11 @@ describe FoodCritic::Api do
     it "returns empty unless the ast supports XPath" do
       expect(api.find_resources(nil)).to be_empty
     end
-    it "restricts by resource type when provided" do
+    it "restricts by resource type when provided an array" do
+      expect(ast).to receive(:xpath).with("//method_add_block[command/ident[@value='file' or @value='template']][command/ident/@value != 'action']").and_return(["method_add_block"])
+      api.find_resources(ast, :type => %w{file template})
+    end
+    it "restricts by resource type when provided a string" do
       expect(ast).to receive(:xpath).with("//method_add_block[command/ident[@value='file']][command/ident/@value != 'action']").and_return(["method_add_block"])
       api.find_resources(ast, :type => "file")
     end
