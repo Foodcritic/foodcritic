@@ -17,7 +17,7 @@ The Foodcritic site at <http://foodcritic.io/> contains documentation for each o
 
 ## Requirements
 
-- Ruby 2.2.2+
+- Ruby 2.3+
 
 ## Building Foodcritic
 
