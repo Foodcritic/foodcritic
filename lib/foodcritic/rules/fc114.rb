@@ -1,6 +1,8 @@
 rule "FC114", "Cookbook uses legacy Ohai config syntax" do
   tags %w{chef13 deprecated}
   recipe do |ast|
+    # Ohai::Config[:something]
+    #
     # <aref value="aref"> <-- if assigning this will be aref_field
     #   <const_path_ref value="const_path_ref">
     #     <var_ref value="var_ref">
