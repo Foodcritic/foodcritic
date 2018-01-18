@@ -1,5 +1,5 @@
 rule "FC113", "Resource declares deprecated use_inline_resources" do
-  tags %w{deprecation lwrp}
+  tags %w{deprecation chef15 lwrp}
   library do |ast|
     matches = []
     ast.xpath('//const_path_ref/const[@value="LWRPBase"]/..//const[@value="Provider"]/../../..').select do |x|
