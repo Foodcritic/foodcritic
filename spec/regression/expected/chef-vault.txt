@@ -4,3 +4,4 @@ FC069: Ensure standardized license defined in metadata: ./metadata.rb:1
 FC078: Ensure cookbook shared under an OSI-approved open source license: ./metadata.rb:1
 FC085: Resource using new_resource.updated_by_last_action to converge resource: ./libraries/chef_vault_secret.rb:92
 FC086: Use databag helper methods to load data bag items: ./libraries/helpers.rb:39
+FC113: Resource declares deprecated use_inline_resources: ./libraries/chef_vault_secret.rb:49

@@ -2,3 +2,22 @@ FC009: Resource attribute not recognised: ./recipes/default.rb:1
 FC069: Ensure standardized license defined in metadata: ./metadata.rb:1
 FC078: Ensure cookbook shared under an OSI-approved open source license: ./metadata.rb:1
 FC080: User resource uses deprecated supports property: ./recipes/default.rb:8
+FC113: Resource declares deprecated use_inline_resources: ./providers/altdisk.rb:23
+FC113: Resource declares deprecated use_inline_resources: ./providers/bootlist.rb:24
+FC113: Resource declares deprecated use_inline_resources: ./providers/chdev.rb:23
+FC113: Resource declares deprecated use_inline_resources: ./providers/chsec.rb:23
+FC113: Resource declares deprecated use_inline_resources: ./providers/etchosts.rb:22
+FC113: Resource declares deprecated use_inline_resources: ./providers/fixes.rb:23
+FC113: Resource declares deprecated use_inline_resources: ./providers/inittab.rb:24
+FC113: Resource declares deprecated use_inline_resources: ./providers/multibos.rb:22
+FC113: Resource declares deprecated use_inline_resources: ./providers/nimclient.rb:21
+FC113: Resource declares deprecated use_inline_resources: ./providers/niminit.rb:20
+FC113: Resource declares deprecated use_inline_resources: ./providers/no.rb:23
+FC113: Resource declares deprecated use_inline_resources: ./providers/pagingspace.rb:23
+FC113: Resource declares deprecated use_inline_resources: ./providers/subserver.rb:24
+FC113: Resource declares deprecated use_inline_resources: ./providers/subsystem.rb:13
+FC113: Resource declares deprecated use_inline_resources: ./providers/tcpservice.rb:24
+FC113: Resource declares deprecated use_inline_resources: ./providers/toolboxpackage.rb:23
+FC113: Resource declares deprecated use_inline_resources: ./providers/tunables.rb:23
+FC113: Resource declares deprecated use_inline_resources: ./providers/volume_group.rb:5
+FC113: Resource declares deprecated use_inline_resources: ./providers/wpar.rb:24

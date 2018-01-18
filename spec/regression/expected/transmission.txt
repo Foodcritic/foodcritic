@@ -2,7 +2,6 @@ FC016: LWRP does not declare a default action: ./resources/torrent_file.rb:1
 FC024: Consider adding platform equivalents: ./recipes/default.rb:42
 FC025: Prefer chef_gem to compile-time gem install: ./recipes/default.rb:25
 FC025: Prefer chef_gem to compile-time gem install: ./recipes/default.rb:31
-FC059: LWRP provider does not declare use_inline_resources: ./providers/torrent_file.rb:1
 FC064: Ensure issues_url is set in metadata: ./metadata.rb:1
 FC065: Ensure source_url is set in metadata: ./metadata.rb:1
 FC066: Ensure chef_version is set in metadata: ./metadata.rb:1

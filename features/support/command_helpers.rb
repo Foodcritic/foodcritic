@@ -17,7 +17,6 @@ module FoodCritic
     WARNINGS = {
       "FC001" => "Use strings in preference to symbols to access node attributes",
       "FC002" => "Avoid string interpolation where not required",
-      # FC003 was yanked and is considered reserved, do not reuse it
       "FC004" => "Use a service resource to start and stop services",
       "FC005" => "Avoid repetition of resource declarations",
       "FC006" => "Mode should be quoted or fully specified when setting file permissions",
@@ -31,12 +30,10 @@ module FoodCritic
       "FC014" => "Consider extracting long ruby_block to library",
       "FC015" => "Consider converting definition to a Custom Resource",
       "FC016" => "LWRP does not declare a default action",
-      "FC017" => "LWRP does not notify when updated",
       "FC018" => "LWRP uses deprecated notification syntax",
       "FC019" => "Access node attributes in a consistent manner",
       "FC021" => "Resource condition in provider may not behave as expected",
       "FC022" => "Resource condition within loop may not behave as expected",
-      # FC023 was yanked and is considered reserved, do not reuse it
       "FC024" => "Consider adding platform equivalents",
       "FC025" => "Prefer chef_gem to compile-time gem install",
       "FC026" => "Conditional execution block attribute contains only string",
@@ -65,12 +62,9 @@ module FoodCritic
       "FC051" => "Template partials loop indefinitely",
       "FC052" => 'Metadata uses the deprecated "suggests" keyword',
       "FC053" => 'Metadata uses the deprecated "recommends" keyword',
-      # FC054 was yanked and is considered reserved, do not reuse it
       "FC055" => "Ensure maintainer is set in metadata",
       "FC056" => "Ensure maintainer_email is set in metadata",
-      "FC057" => "Library provider does not declare use_inline_resources",
       "FC058" => "Library provider declares use_inline_resources and declares #action_<name> methods",
-      "FC059" => "LWRP provider does not declare use_inline_resources",
       "FC060" => "LWRP provider declares use_inline_resources and declares #action_<name> methods",
       "FC061" => "Valid cookbook versions are of the form x.y or x.y.z",
       "FC062" => "Cookbook should have version metadata",

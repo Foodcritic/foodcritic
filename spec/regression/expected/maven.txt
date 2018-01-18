@@ -1,7 +1,4 @@
-FC017: LWRP does not notify when updated: ./providers/default.rb:61
-FC017: LWRP does not notify when updated: ./providers/default.rb:65
 FC045: Metadata does not contain cookbook name: ./metadata.rb:1
-FC059: LWRP provider does not declare use_inline_resources: ./providers/default.rb:1
 FC064: Ensure issues_url is set in metadata: ./metadata.rb:1
 FC065: Ensure source_url is set in metadata: ./metadata.rb:1
 FC066: Ensure chef_version is set in metadata: ./metadata.rb:1

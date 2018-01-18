@@ -1,12 +1,7 @@
 FC009: Resource attribute not recognised: ./recipes/epel.rb:27
-FC017: LWRP does not notify when updated: ./providers/key.rb:25
-FC017: LWRP does not notify when updated: ./providers/repository.rb:28
-FC017: LWRP does not notify when updated: ./providers/repository.rb:45
 FC038: Invalid resource action: ./recipes/epel.rb:27
 FC043: Prefer new notification syntax: ./providers/key.rb:60
 FC043: Prefer new notification syntax: ./providers/repository.rb:94
-FC059: LWRP provider does not declare use_inline_resources: ./providers/key.rb:1
-FC059: LWRP provider does not declare use_inline_resources: ./providers/repository.rb:1
 FC064: Ensure issues_url is set in metadata: ./metadata.rb:1
 FC065: Ensure source_url is set in metadata: ./metadata.rb:1
 FC066: Ensure chef_version is set in metadata: ./metadata.rb:1

@@ -1,2 +1,3 @@
 FC069: Ensure standardized license defined in metadata: ./metadata.rb:1
 FC078: Ensure cookbook shared under an OSI-approved open source license: ./metadata.rb:1
+FC113: Resource declares deprecated use_inline_resources: ./providers/default.rb:25

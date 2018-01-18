@@ -1,6 +1,2 @@
-FC017: LWRP does not notify when updated: ./providers/builtins.rb:22
-FC017: LWRP does not notify when updated: ./providers/ruleset.rb:21
-FC059: LWRP provider does not declare use_inline_resources: ./providers/builtins.rb:1
-FC059: LWRP provider does not declare use_inline_resources: ./providers/ruleset.rb:1
 FC069: Ensure standardized license defined in metadata: ./metadata.rb:1
 FC078: Ensure cookbook shared under an OSI-approved open source license: ./metadata.rb:1
