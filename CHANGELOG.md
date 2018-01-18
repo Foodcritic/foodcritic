@@ -1,5 +1,17 @@
 # Foodcritic Changelog:
 
+## [12.3.0](https://github.com/Foodcritic/foodcritic/tree/v12.3.0) (2018-01-18)
+
+**Implemented enhancements:**
+
+- Removed FC017, FC057, and FC059 as use_inline_resources is the default in Chef 13 and no longer required
+- Added FC110: Script resources should use 'code' property not 'command' property
+- Added FC111: search using deprecated sort flag
+- Added FC112 Resource using deprecated dsl_name method
+- Added FC113 Resource declares deprecated use_inline_resources
+- Added FC114 Cookbook uses legacy Ohai config syntax
+- Extended the find_resources method to allow accepting an array of resource names not just a single resource name
+
 ## [12.2.2](https://github.com/Foodcritic/foodcritic/tree/v12.2.2) (2017-12-13)
 
 **Fixed bugs:**
