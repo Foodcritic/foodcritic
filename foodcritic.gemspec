@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.homepage = "http://foodcritic.io"
   s.license = "MIT"
   s.executables << "foodcritic"
-  s.required_ruby_version = ">= 2.2.2"
+  s.required_ruby_version = ">= 2.3"
 
   s.files = Dir["chef_dsl_metadata/*.json"] +
     Dir["lib/**/*.rb"] +
