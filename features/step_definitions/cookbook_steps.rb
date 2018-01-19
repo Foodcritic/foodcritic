@@ -409,20 +409,6 @@ Given 'a cookbook recipe that has a confusingly named local variable "default"' 
   }
 end
 
-Given /a cookbook recipe that (install|upgrade)s (a gem|multiple gems)(.*)$/ do |action, arity, approach|
-  if arity == "a gem"
-    if approach.empty?
-      recipe_installs_gem(:simple, action.to_sym)
-    else
-      recipe_installs_gem(:compile_time, action.to_sym)
-    end
-  elsif approach.include? "array"
-    recipe_installs_gem(:compile_time_from_array, action.to_sym)
-  else
-    recipe_installs_gem(:compile_time_from_word_list, action.to_sym)
-  end
-end
-
 Given "a cookbook recipe that refers to a hidden template" do
   write_recipe %q{
     template '/etc/.s3cfg' do
@@ -1777,10 +1763,6 @@ Then "the node access warning 001 should warn on lines 2 and 10 in that order" d
     "FC001: Use strings in preference to symbols to access node attributes: cookbooks/example/recipes/default.rb:#{line}"
   end
   expect_output(expected_warnings.join("\n"))
-end
-
-Then "the prefer chef_gem to manual install warning 025 should be shown" do
-  expect_warning("FC025", :line => nil)
 end
 
 Then "the recipe filename should be displayed" do
