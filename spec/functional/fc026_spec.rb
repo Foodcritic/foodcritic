@@ -1,7 +1,7 @@
 require "spec_helper"
 
 describe "FC026" do
-  context "with a recipe that has a conditional that shouldn't be in a block" do
+  context "with a recipe that has a bracketed conditional that shouldn't be in a block" do
     recipe_file <<-EOH
       file 'foo' do
         not_if { "ls foo" }
@@ -10,7 +10,7 @@ describe "FC026" do
     it { is_expected.to violate_rule }
   end
 
-  context "with a recipe that has a bracketed conditional that shouldn't be in a block" do
+  context "with a recipe that has a conditional that shouldn't be in a block" do
     recipe_file <<-EOH
       file 'foo' do
         not_if do "ls foo" end
