@@ -35,8 +35,6 @@ module FoodCritic
       "FC021" => "Resource condition in provider may not behave as expected",
       "FC022" => "Resource condition within loop may not behave as expected",
       "FC024" => "Consider adding platform equivalents",
-      "FC025" => "Prefer chef_gem to compile-time gem install",
-      "FC026" => "Conditional execution block attribute contains only string",
       "FC027" => "Resource sets internal attribute",
       "FC028" => "Incorrect #platform? usage",
       "FC029" => "No leading cookbook name in recipe metadata",
