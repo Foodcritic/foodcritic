@@ -1,5 +1,12 @@
 # Foodcritic Changelog:
 
+## Unreleased
+
+- Support for Ruby 2.2 has been removed
+- Chef 12 metadata files have been removed as Chef 12 is EOL 4/2018
+- Incompatibilities with Ruby 2.5 and FC025/FC026 have been resolved
+- Added Chef 13.7.16 metadata
+
 ## [12.3.0](https://github.com/Foodcritic/foodcritic/tree/v12.3.0) (2018-01-18)
 
 **Implemented enhancements:**
