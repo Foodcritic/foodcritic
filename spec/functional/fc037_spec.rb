@@ -21,6 +21,16 @@ describe "FC037" do
     it { is_expected.not_to violate_rule }
   end
 
+  context "with a resource that notifies using an action as a :'symbol'" do
+    recipe_file <<-EOF
+    file '/tmp/a.txt' do
+      content 'content'
+      notifies :'restart', 'service[httpd]', :delayed
+    end
+    EOF
+    it { is_expected.not_to violate_rule }
+  end
+
   context "with a resource that notifies using an action that is an attribute" do
     recipe_file <<-EOF
     file '/tmp/a.txt' do
