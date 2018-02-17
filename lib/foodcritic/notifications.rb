@@ -126,10 +126,21 @@ module FoodCritic
       resource_hash_references(notify).empty?
     end
 
+    # return the notification action as either a symbol or string or nil if it's a variable.
+    # Yes you can notify an action as a string but it's wrong and we want to return it as
+    # a string so we can tell people not to do that.
     def notification_action(notify)
-      notify.xpath('descendant::symbol[1]/ident/@value |
-        descendant::dyna_symbol[1]/xstring_add/
-        tstring_content/@value').first.to_s.to_sym
+      is_variable = true unless notify.xpath("args_add_block/args_add//args_add[aref or vcall or call or var_ref]").empty?
+      string_val = notify.xpath("descendant::args_add/string_literal/string_add/tstring_content/@value").first
+      symbol_val = notify.xpath('descendant::args_add/args_add//symbol/ident/@value |
+        descendant::dyna_symbol[1]/xstring_add/tstring_content/@value').first
+
+      # 1) return a nil if the action is a variable like node['foo']['bar']
+      # 2) return the symbol if it exists
+      # 3) return the string since we're positive that we're not a symbol or variable
+      return nil if is_variable
+      return symbol_val.value.to_sym unless symbol_val.nil?
+      string_val.value
     end
 
     def notification_nodes(ast, &block)
