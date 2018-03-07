@@ -2,6 +2,7 @@ AllCops:
   Exclude:
     - tmp/**/*
     - vendor/**/*
+    - features/**/*
 
 Lint/EndAlignment:
   Exclude:
