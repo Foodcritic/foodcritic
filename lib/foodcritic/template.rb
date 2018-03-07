@@ -38,8 +38,8 @@ module FoodCritic
       def expressions(template_code)
         expr_lines = expressions_with_lines(template_code)
         expr_lines.map do |expr, line|
-          e = @expressions.find { |e| e[:code] == expr }
-          { code: expr, type: e[:type], line: line } if e
+          ex = @expressions.find { |e| e[:code] == expr }
+          { code: expr, type: ex[:type], line: line } if ex
         end.compact
       end
 
