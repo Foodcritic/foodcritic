@@ -1,11 +1,37 @@
 # Foodcritic Changelog:
 
-## Unreleased
+## [13.0.0](https://github.com/Foodcritic/foodcritic/tree/v13.0.0) (2018-03-07)
 
-- Support for Ruby 2.2 has been removed
-- Chef 12 metadata files have been removed as Chef 12 is EOL 4/2018
+### Chef 12 Support
+
+As Chef 12 goes end of life next month this release makes several changes assuming Chef 13+:
+
+Support for Ruby 2.2 has been removed
+
+Chef 12 metadata files have been removed.
+
+A new rule FC113: Resource declares deprecated use_inline_resources, which suggests a coding standard that requires Chef 13+. This rule is being introduced as use_inline_resources will begin throwing deprecation warnings in later Chef 14 releases and will eventually be removed from Chef.
+
+Removed FC017: LWRP does not notify when updated. This is no longer applicable with Chef 13+ since inline resources are always used and notifications in resources happen automatically.
+
+If full Chef 12 support is necessary then Foodcritic 12.2.2 is probably the best release to stick with. Keep in mind that later Foodcritic releases include rules that aid in Chef upgrades so sticking with an older release is not advised. Instead you should disable individual rules or tags that don't apply to your organization.
+
+### New/Removed Rules
+
+- Added FC113: Resource declares deprecated use_inline_resources.
+- Added FC115: Custom resource contains a name_property that is required
+- Added FC117: Do not use kind_of in custom resource properties
+- Added FC118: Resource property setting name_attribute vs. name_property
+- Added FC119: windows_task :change action no longer exists in Chef 13
+- Removed FC017: LWRP does not notify when updated.
+
+### Other Changes
+
+- Updated the notification_action API to detect actions that aren't symbols
+- Expand FC037 to detect notifying with actions as strings
 - Incompatibilities with Ruby 2.5 and FC025/FC026 have been resolved
 - Added Chef 13.7.16 metadata
+- The chef12 tag has been removed from FC064/FC065 has issue_url and source_url metadata aren't actually required by chef 12\. This makes it seem as though users need to add this metadata to migrate to Chef 12, which isn't the case.
 
 ## [12.3.0](https://github.com/Foodcritic/foodcritic/tree/v12.3.0) (2018-01-18)
 
