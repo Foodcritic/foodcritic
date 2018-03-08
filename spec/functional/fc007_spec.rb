@@ -76,7 +76,7 @@ describe "FC007" do
   end
 
   context "with an include from the same cookbook" do
-    recipe_file 'incldue_recipe "test::other"'
+    recipe_file 'include_recipe "test::other"'
     it { is_expected.to_not violate_rule }
 
     context "with the shorthand syntax" do
