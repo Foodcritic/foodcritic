@@ -285,7 +285,7 @@ module FoodCritic
         if m.respond_to?(:node_name)
           match(m)
         elsif m.respond_to?(:xpath)
-          m.to_a.map { |m| match(m) }
+          m.to_a.map { |n| match(n) }
         else
           m
         end

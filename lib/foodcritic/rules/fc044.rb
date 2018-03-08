@@ -9,8 +9,8 @@ rule "FC044", "Avoid bare attribute keys" do
               [count(child::kw) = 0]/ident').select do |v|
 
       local_declared = v.xpath("ancestor::*[self::brace_block or self::do_block]
-                                /block_var/descendant::ident/@value").map do |v|
-        v.to_s
+                                /block_var/descendant::ident/@value").map do |val|
+        val.to_s
       end
 
       (v["value"] != "secure_password") &&
