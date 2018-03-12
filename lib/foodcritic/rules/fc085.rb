@@ -1,5 +1,5 @@
 rule "FC085", "Resource using new_resource.updated_by_last_action to converge resource" do
-  tags %w{chef13 deprecated}
+  tags %w{correctness}
   def updated_by(ast)
     # we need to handle both @new_resource.updated_by_last_action(true) or new_resource.updated_by_last_action(true)
     # Here's the ast that xpath sees in all 3 possible scenarios from those two:
