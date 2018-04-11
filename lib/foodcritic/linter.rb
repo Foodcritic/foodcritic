@@ -233,8 +233,8 @@ module FoodCritic
       return cook_val unless cook_val.nil?
 
       # we didn't find something in cache so look it up and cache it for later
-      cook_val = Pathname.new(File.join(File.dirname(abs_file),
-                                        case File.basename(abs_file)
+      cook_val = Pathname.new(File.join(File.dirname(file),
+                                        case File.basename(file)
                                         when "metadata.rb" then ""
                                         when /\.erb$/ then "../.."
                                         else ".."
