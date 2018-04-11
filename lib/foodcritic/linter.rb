@@ -264,8 +264,14 @@ module FoodCritic
       # we didn't find something in cache so look it up and cache it for later
       cook_val = Pathname.new(File.join(File.dirname(file),
                                         case File.basename(file)
-                                        when "metadata.rb" then ""
-                                        when /\.erb$/ then "../.."
+                                        when "recipe.rb", "attribute.rb", "metadata.rb" then ""
+                                        when /\.erb$/
+                                          if File.exist?(File.join(File.dirname(file), "../../metadata.rb")) ||
+                                             File.exist?(File.join(File.dirname(file), "../../metadata.json"))
+                                            "../.." # we're in a subdir in the templates dir (Chef < 12 style)
+                                          else
+                                            ".." # the erb is directly in the templates directory (Chef 12+ style)
+                                          end
                                         else ".."
                                         end)).cleanpath
       @dir_cache[abs_file] = cook_val
