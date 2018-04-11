@@ -242,8 +242,10 @@ module FoodCritic
       end
     end
 
-    # Return the files within a cookbook tree that we are interested in trying
-    # to match rules against.
+    # Return the files within a cookbook tree that we are interested in trying to match rules against.
+    #
+    # @param [Hash] paths - paths of interest: {:exclude=>[], :cookbook=>[], :role=>[], :environment=>[]}
+    # @return [Array] array of hashes for each file {:filename=>"./metadata.rb", :path_type=>:cookbook}
     def files_to_process(paths)
       paths.reject { |type, _| type == :exclude }.map do |path_type, dirs|
         dirs.map do |dir|
@@ -258,7 +260,7 @@ module FoodCritic
           if File.directory?(dir)
             glob = if path_type == :cookbook
                      "{metadata.rb,attributes.rb,recipe.rb,{attributes,definitions,libraries,"\
-                     "providers,recipes,resources}/*.rb,templates/*/*.erb}"
+                     "providers,recipes,resources}/*.rb,templates/**/*.erb}"
                    else
                      "*.rb"
                    end
