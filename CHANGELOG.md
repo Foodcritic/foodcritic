@@ -1,5 +1,12 @@
 # Foodcritic Changelog:
 
+## [13.0.1](https://github.com/Foodcritic/foodcritic/tree/v13.0.1) (2018-04-11)
+
+- Properly discover templates not in templates/default/. Templates in the root of the templates directory would be skipped previously
+- Force encoding to UTF8 to prevent errors when encoding isn't set on the host
+- Alert with the filename when an improperly encoded file is encountered instead of silently failing
+- Removed the chef13 tag from FC085
+
 ## [13.0.0](https://github.com/Foodcritic/foodcritic/tree/v13.0.0) (2018-03-07)
 
 ### Chef 12 Support
