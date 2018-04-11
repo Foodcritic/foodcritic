@@ -218,13 +218,29 @@ module FoodCritic
       end
     end
 
+    # provides the path to the cookbook from a file within the cookbook
+    # we cache this data in a hash because this method gets called often
+    # for the same files.
+    #
+    # @param [String] file - a file path in the cookbook
+    # @return [String] the path to the cookbook
     def cookbook_dir(file)
-      Pathname.new(File.join(File.dirname(file),
-                             case File.basename(file)
-                             when "metadata.rb" then ""
-                             when /\.erb$/ then "../.."
-                             else ".."
-                             end)).cleanpath
+      @dir_cache ||= {}
+      abs_file = File.absolute_path(file)
+
+      # lookup the file in the cache has and return that if we find something
+      cook_val = @dir_cache[abs_file]
+      return cook_val unless cook_val.nil?
+
+      # we didn't find something in cache so look it up and cache it for later
+      cook_val = Pathname.new(File.join(File.dirname(abs_file),
+                                        case File.basename(abs_file)
+                                        when "metadata.rb" then ""
+                                        when /\.erb$/ then "../.."
+                                        else ".."
+                                        end)).cleanpath
+      @dir_cache[abs_file] = cook_val
+      cook_val
     end
 
     def dsl_method_for_file(file)
