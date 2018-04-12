@@ -16,6 +16,28 @@ describe FoodCritic::Linter do
     end
   end
 
+  describe "#cookbook_dir" do
+    it "given a root alias file the cookbook is correctly detected" do
+      expect(linter.send(:cookbook_dir, "./cookbook/recipe.rb").to_s).to eq "cookbook"
+    end
+
+    it "given the metadata.rb file the cookbook is correctly detected" do
+      expect(linter.send(:cookbook_dir, "./cookbook/metadata.rb").to_s).to eq "cookbook"
+    end
+
+    it "given a template nested multiple levels deep the cookbook is correctly detected" do
+      expect(linter.send(:cookbook_dir, "./cookbook/templates/foo/bar/file.erb").to_s).to eq "./cookbook"
+    end
+
+    it "given a template directly in the templates directory the cookbook is correctly detected" do
+      expect(linter.send(:cookbook_dir, "./cookbook/templates/file.erb").to_s).to eq "./cookbook"
+    end
+
+    it "given a standard recipe file the cookbook is correctly detected" do
+      expect(linter.send(:cookbook_dir, "./cookbook/recipes/default.rb").to_s).to eq "cookbook"
+    end
+  end
+
   describe "#check" do
     it "requires a cookbook_path, role_path or environment_path to be specified" do
       expect { linter.check({}) }.to raise_error ArgumentError

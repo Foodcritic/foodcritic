@@ -261,13 +261,30 @@ module FoodCritic
       cook_val = @dir_cache[abs_file]
       return cook_val unless cook_val.nil?
 
-      # we didn't find something in cache so look it up and cache it for later
-      cook_val = Pathname.new(File.join(File.dirname(file),
-                                        case File.basename(file)
-                                        when "metadata.rb" then ""
-                                        when /\.erb$/ then "../.."
-                                        else ".."
-                                        end)).cleanpath
+      if file =~ /\.erb$/
+        # split each directory into an item in the array
+        dir_array = File.dirname(file).split(File::SEPARATOR)
+
+        # walk through the array of directories backwards until we hit the templates directory
+        position = -1
+        position -= 1 until dir_array[position] == "templates"
+
+        # go back 1 more position to get to the cookbook dir
+        position -= 1
+
+        # slice from the start to the cookbook dir and then join it all back to a string
+        cook_val = dir_array.slice(0..position).join(File::SEPARATOR)
+      else
+        # determine the difference to the root of the CB from our file's directory
+        relative_difference = case File.basename(file)
+                              when "recipe.rb", "attribute.rb", "metadata.rb" then ""
+                              else # everything else is 1 directory up ie. cookbook/recipes/default.rb
+                                ".."
+                              end
+
+        cook_val = Pathname.new(File.join(File.dirname(file), relative_difference)).cleanpath
+      end
+
       @dir_cache[abs_file] = cook_val
       cook_val
     end
