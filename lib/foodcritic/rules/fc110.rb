@@ -1,5 +1,5 @@
 rule "FC110", "Script resources should use 'code' property not 'command' property" do
-  tags %w{deprecation chef13}
+  tags %w{deprecated chef13}
   recipe do |ast|
     script_resources = %w{ bash
                            ksh
