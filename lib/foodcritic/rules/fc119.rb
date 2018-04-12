@@ -1,5 +1,5 @@
 rule "FC119", "windows_task :change action no longer exists in Chef 13" do
-  tags %w{deprecation chef13}
+  tags %w{deprecated chef13}
   recipe do |ast|
     matches = []
     find_resources(ast).each do |resource|
