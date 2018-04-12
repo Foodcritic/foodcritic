@@ -557,7 +557,11 @@ module FoodCritic
                else
                  File.read(file).encode("utf-8", "binary", :undef => :replace)
                end
-      build_xml(Ripper::SexpBuilder.new(source).parse)
+      begin
+        build_xml(Ripper::SexpBuilder.new(source).parse)
+      rescue RuntimeError => e # this generally means bad encoding
+        raise "Could not parse the file at #{file}. #{e}"
+      end
     end
 
     # XPath custom function
