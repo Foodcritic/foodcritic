@@ -1,5 +1,25 @@
 # Foodcritic Changelog:
 
+## [13.1.0](https://github.com/Foodcritic/foodcritic/tree/v13.1.0) (2018-04-12)
+
+### Speed improvements
+
+Foodcritic now caches some of the information on cookbooks it previously calculated repeatedly. This results in a 10X reduction in some disk reads and a 7% improvement in runtime overall.
+
+### Rule file improvements
+
+The fetching and parsing of Foodcritic rule files (.foodcritic files) has been improved. If a non-existent file is specified on the CLI we will now fail instead of silently continuing. Additionally, if the .foodcritic file exists, but cannot be read/parsed we will also fail instead of silently continuing.
+
+### Improved file detection
+
+Several deficiencies in how Foodcritic detected files within a cookbook have been resolved. If you use the Chef 13+ root alias files such as attributes.rb or recipe.rb these will now be detected. Additionally we will detect template files not in the default directory, or deeply nested in directories within the templates directory.
+
+### New Rules
+
+- `FC116` - Cookbook depends on the deprecated compat_resource cookbook
+- `FC120` - Do not set the name property directly on a resource
+- `FC122` - Use the build_essential resource instead of the recipe
+
 ## [13.0.1](https://github.com/Foodcritic/foodcritic/tree/v13.0.1) (2018-04-11)
 
 - Properly discover templates not in templates/default/. Templates in the root of the templates directory would be skipped previously
