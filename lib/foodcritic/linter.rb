@@ -84,7 +84,7 @@ module FoodCritic
         relevant_tags = if options[:tags].any?
                           options[:tags]
                         else
-                          cookbook_tags(p[:filename])
+                          rule_file_tags(p[:filename])
                         end
 
         progress = "."
@@ -199,15 +199,44 @@ module FoodCritic
       rule.applies_to.yield(Gem::Version.create(version))
     end
 
-    def cookbook_tags(file)
+    # given a file in the cookbook lookup all the applicable tag rules defined in rule
+    # files. The rule file is either that specified via CLI or the .foodcritic file
+    # in the cookbook. We cache this information at the cookbook level to prevent looking
+    #  up the same thing dozens of times
+    #
+    # @param [String] file in the cookbook
+    # @return [Array] array of tag rules
+    def rule_file_tags(file)
+      cookbook = cookbook_dir(file)
+      @tag_cache ||= {}
+
+      # lookup the tags in the cache has and return that if we find something
+      cb_tags = @tag_cache[cookbook]
+      return cb_tags unless cb_tags.nil?
+
+      # if a rule file has been specified use that. Otherwise use the .foodcritic file in the CB
+      tags = if @options[:rule_file]
+               raise "ERROR: Could not find the specified rule file at #{@options[:rule_file]}" unless File.exist?(@options[:rule_file])
+               parse_rule_file(@options[:rule_file])
+             else
+               File.exist?("#{cookbook}/.foodcritic") ? parse_rule_file("#{cookbook}/.foodcritic") : []
+             end
+
+      @tag_cache[cookbook] = tags
+      tags
+    end
+
+    # given a filename parse any tag rules in that file
+    #
+    # @param [String] rule file path
+    # @return [Array] array of tag rules from the file
+    def parse_rule_file(file)
       tags = []
-      fc_file = @options[:rule_file] || "#{cookbook_dir(file)}/.foodcritic"
-      if File.exist? fc_file
-        begin
-          tag_text = File.read fc_file
-          tags = tag_text.split(/\s/)
-        rescue Errno::EACCES
-        end
+      begin
+        tag_text = File.read file
+        tags = tag_text.split(/\s/)
+      rescue
+        raise "ERROR: Could not read or parse the specified rule file at #{file}"
       end
       tags
     end
