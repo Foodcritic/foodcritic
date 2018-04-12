@@ -277,7 +277,7 @@ module FoodCritic
       else
         # determine the difference to the root of the CB from our file's directory
         relative_difference = case File.basename(file)
-                              when "recipe.rb", "attribute.rb", "metadata.rb" then ""
+                              when "recipe.rb", "attributes.rb", "metadata.rb" then ""
                               else # everything else is 1 directory up ie. cookbook/recipes/default.rb
                                 ".."
                               end
