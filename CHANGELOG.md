@@ -1,5 +1,10 @@
 # Foodcritic Changelog:
 
+## [13.1.1](https://github.com/Foodcritic/foodcritic/tree/v13.1.1) (2018-04-12)
+
+- Fixed an error in the detection of attributes.rb files when using root alias functionality
+- Updated rules that used the 'deprecation' tag to instead use the 'deprecated' tag. All rules for deprecated functionality now have the same catch all tag.
+
 ## [13.1.0](https://github.com/Foodcritic/foodcritic/tree/v13.1.0) (2018-04-12)
 
 ### Speed improvements
