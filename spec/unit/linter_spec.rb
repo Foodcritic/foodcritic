@@ -17,8 +17,12 @@ describe FoodCritic::Linter do
   end
 
   describe "#cookbook_dir" do
-    it "given a root alias file the cookbook is correctly detected" do
+    it "given a recipe.rb root alias file the cookbook is correctly detected" do
       expect(linter.send(:cookbook_dir, "./cookbook/recipe.rb").to_s).to eq "cookbook"
+    end
+
+    it "given an attributes.rb root alias file the cookbook is correctly detected" do
+      expect(linter.send(:cookbook_dir, "./cookbook/attributes.rb").to_s).to eq "cookbook"
     end
 
     it "given the metadata.rb file the cookbook is correctly detected" do
@@ -35,6 +39,18 @@ describe FoodCritic::Linter do
 
     it "given a standard recipe file the cookbook is correctly detected" do
       expect(linter.send(:cookbook_dir, "./cookbook/recipes/default.rb").to_s).to eq "cookbook"
+    end
+
+    it "given a resource file the cookbook is correctly detected" do
+      expect(linter.send(:cookbook_dir, "./cookbook/resources/something.rb").to_s).to eq "cookbook"
+    end
+
+    it "given a recipe named the same as a root alias recipe the cookbook is correctly detected" do
+      expect(linter.send(:cookbook_dir, "./cookbook/recipes/recipe.rb").to_s).to eq "cookbook"
+    end
+
+    it "given an attribute named the same as a root alias attribute the cookbook is correctly detected" do
+      expect(linter.send(:cookbook_dir, "./cookbook/attributes/attributes.rb").to_s).to eq "cookbook"
     end
   end
 
