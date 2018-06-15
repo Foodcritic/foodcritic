@@ -1,21 +1,21 @@
 require "spec_helper"
 
 describe "FC009" do
-  context "on chef 13.6.4 with a cookbook that new dsc_resource attributes" do
-    foodcritic_command("--chef-version", "13.6.4", "--no-progress", ".")
+  context "on chef 14.2.0 with a cookbook that uses ifconfig attributes introduced in 14.0" do
+    foodcritic_command("--chef-version", "14.2.0", "--no-progress", ".")
     recipe_file <<-EOH
       ifconfig 'foo' do
-        ethtool_opts 'something'
+        family 'inet'
       end
     EOH
     it { is_expected.not_to violate_rule }
   end
 
-  context "on chef 13.0.113 with a cookbook that new dsc_resource attributes" do
-    foodcritic_command("--chef-version", "13.0.113", "--no-progress", ".")
+  context "on chef 13.9.1 with a cookbook that uses ifconfig attributes introduced in 14.0" do
+    foodcritic_command("--chef-version", "13.9.1", "--no-progress", ".")
     recipe_file <<-EOH
       ifconfig 'foo' do
-        ethtool_opts 'something'
+        family 'inet'
       end
     EOH
     it { is_expected.to violate_rule }
