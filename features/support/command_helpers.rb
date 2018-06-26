@@ -54,7 +54,6 @@ module FoodCritic
       "FC045" => "Metadata does not contain cookbook name",
       "FC046" => "Attribute assignment uses assign unless nil",
       "FC047" => "Attribute assignment does not specify precedence",
-      "FC048" => "Prefer Mixlib::ShellOut",
       "FC049" => "Role name does not match containing file name",
       "FC050" => "Name includes invalid characters",
       "FC051" => "Template partials loop indefinitely",
