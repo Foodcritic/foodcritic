@@ -55,4 +55,13 @@ describe "FC048" do
     recipe_file "shell_out('ls')"
     it { is_expected.to_not violate_rule }
   end
+
+  context "with a recipe that specifies system in a user resource" do
+    recipe_file <<-EOF
+    user 'foo' do
+      system true
+    end
+    EOF
+    it { is_expected.to_not violate_rule }
+  end
 end
