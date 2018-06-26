@@ -1,7 +1,3 @@
-FC002: Avoid string interpolation where not required: ./attributes/server.rb:205
-FC002: Avoid string interpolation where not required: ./attributes/server.rb:206
-FC002: Avoid string interpolation where not required: ./attributes/server.rb:207
-FC002: Avoid string interpolation where not required: ./attributes/server.rb:208
 FC007: Ensure recipe dependencies are reflected in cookbook metadata: ./recipes/client.rb:42
 FC052: Metadata uses the deprecated "suggests" keyword: ./metadata.rb:19
 FC052: Metadata uses the deprecated "suggests" keyword: ./metadata.rb:20

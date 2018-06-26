@@ -1,4 +1,3 @@
-FC002: Avoid string interpolation where not required: ./providers/site.rb:36
 FC064: Ensure issues_url is set in metadata: ./metadata.rb:1
 FC065: Ensure source_url is set in metadata: ./metadata.rb:1
 FC066: Ensure chef_version is set in metadata: ./metadata.rb:1

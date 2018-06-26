@@ -8,7 +8,6 @@ FC001: Use strings in preference to symbols to access node attributes: ./recipes
 FC001: Use strings in preference to symbols to access node attributes: ./recipes/ec2.rb:25
 FC001: Use strings in preference to symbols to access node attributes: ./recipes/ec2.rb:26
 FC001: Use strings in preference to symbols to access node attributes: ./recipes/ec2.rb:40
-FC002: Avoid string interpolation where not required: ./recipes/ec2.rb:70
 FC016: LWRP does not declare a default action: ./resources/rr.rb:1
 FC019: Access node attributes in a consistent manner: ./recipes/a_record.rb:22
 FC019: Access node attributes in a consistent manner: ./recipes/a_record.rb:25

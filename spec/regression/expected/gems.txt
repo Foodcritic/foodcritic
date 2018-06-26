@@ -21,8 +21,6 @@ FC001: Use strings in preference to symbols to access node attributes: ./recipes
 FC001: Use strings in preference to symbols to access node attributes: ./templates/default/gem_server.conf.erb:6
 FC001: Use strings in preference to symbols to access node attributes: ./templates/default/gem_server.conf.erb:29
 FC001: Use strings in preference to symbols to access node attributes: ./templates/default/gem_server.conf.erb:35
-FC002: Avoid string interpolation where not required: ./recipes/mirror.rb:23
-FC002: Avoid string interpolation where not required: ./recipes/server.rb:44
 FC043: Prefer new notification syntax: ./recipes/server.rb:50
 FC064: Ensure issues_url is set in metadata: ./metadata.rb:1
 FC065: Ensure source_url is set in metadata: ./metadata.rb:1

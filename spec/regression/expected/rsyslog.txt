@@ -1,6 +1,4 @@
 FC001: Use strings in preference to symbols to access node attributes: ./recipes/client.rb:26
-FC002: Avoid string interpolation where not required: ./recipes/default.rb:24
-FC002: Avoid string interpolation where not required: ./recipes/default.rb:63
 FC064: Ensure issues_url is set in metadata: ./metadata.rb:1
 FC065: Ensure source_url is set in metadata: ./metadata.rb:1
 FC066: Ensure chef_version is set in metadata: ./metadata.rb:1

@@ -19,8 +19,6 @@ FC001: Use strings in preference to symbols to access node attributes: ./templat
 FC001: Use strings in preference to symbols to access node attributes: ./templates/default/web_app.conf.erb:17
 FC001: Use strings in preference to symbols to access node attributes: ./templates/default/web_app.conf.erb:18
 FC001: Use strings in preference to symbols to access node attributes: ./templates/default/web_app.conf.erb:21
-FC002: Avoid string interpolation where not required: ./templates/default/passenger_web_app.conf.erb:3
-FC002: Avoid string interpolation where not required: ./templates/default/web_app.conf.erb:3
 FC019: Access node attributes in a consistent manner: ./recipes/default.rb:33
 FC019: Access node attributes in a consistent manner: ./recipes/default.rb:41
 FC064: Ensure issues_url is set in metadata: ./metadata.rb:1
