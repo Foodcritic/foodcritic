@@ -1,4 +1,5 @@
 FC015: Consider converting definition to a Custom Resource: ./definitions/nginx_site.rb:1
 FC069: Ensure standardized license defined in metadata: ./metadata.rb:1
 FC078: Ensure cookbook shared under an OSI-approved open source license: ./metadata.rb:1
+FC121: Cookbook depends on cookbook where resources are built into Chef 14: ./metadata.rb:1
 FC122: Use the build_essential resource instead of the recipe: ./recipes/source.rb:38
