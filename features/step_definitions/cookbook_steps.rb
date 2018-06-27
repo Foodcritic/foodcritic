@@ -682,20 +682,6 @@ Given "a cookbook recipe with a service resource with an action specified via a 
   }.strip
 end
 
-Given "a cookbook recipe with multiple execute resources where the last uses git" do
-  write_recipe %q{
-    execute "one" do
-      command "ls -al"
-    end
-    execute "two" do
-      command "df -H"
-    end
-    execute "three" do
-      command "git clone https://example.org/bar.git"
-    end
-  }.strip
-end
-
 Given "a cookbook template that uses all variables passed" do
   write_recipe %q{
     template "/tmp/config.conf" do
@@ -1612,18 +1598,6 @@ end
 Then /^the invalid environment name warning 050 should( not)? be shown against the (eu|us) environment$/ do |not_shown, env|
   expect_warning "FC050", { :expect_warning => ! not_shown,
                             :file => "environments/production_#{env}.rb", :line => 1 }
-end
-
-Then "the prefer mixlib shellout warning 048 should not be displayed against the group resource" do
-  expect_warning "FC048", { :expect_warning => false, :line => 2 }
-end
-
-Then "the prefer mixlib shellout warning 048 should not be displayed against the user resource" do
-  expect_warning "FC048", { :expect_warning => false, :line => 2 }
-end
-
-Then "the prefer mixlib shellout warning 048 should be displayed against the ruby_block resource" do
-  expect_warning("FC048", :file_type => :provider, :line => 4)
 end
 
 Then /^the role name does not match file name warning 049 should( not)? be shown( against the second name)?$/ do |not_shown, second|

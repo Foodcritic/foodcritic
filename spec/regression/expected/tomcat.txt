@@ -1,2 +1,18 @@
 FC069: Ensure standardized license defined in metadata: ./metadata.rb:1
 FC078: Ensure cookbook shared under an OSI-approved open source license: ./metadata.rb:1
+FC116: Cookbook depends on the deprecated compat_resource cookbook: ./metadata.rb:1
+FC117: Do not use kind_of in custom resource properties: ./resources/install.rb:7
+FC117: Do not use kind_of in custom resource properties: ./resources/install.rb:8
+FC117: Do not use kind_of in custom resource properties: ./resources/install.rb:9
+FC117: Do not use kind_of in custom resource properties: ./resources/install.rb:10
+FC117: Do not use kind_of in custom resource properties: ./resources/install.rb:12
+FC117: Do not use kind_of in custom resource properties: ./resources/install.rb:13
+FC117: Do not use kind_of in custom resource properties: ./resources/service_systemd.rb:23
+FC117: Do not use kind_of in custom resource properties: ./resources/service_systemd.rb:24
+FC117: Do not use kind_of in custom resource properties: ./resources/service_systemd.rb:28
+FC117: Do not use kind_of in custom resource properties: ./resources/service_sysv_init.rb:16
+FC117: Do not use kind_of in custom resource properties: ./resources/service_sysv_init.rb:17
+FC117: Do not use kind_of in custom resource properties: ./resources/service_sysv_init.rb:21
+FC117: Do not use kind_of in custom resource properties: ./resources/service_upstart.rb:10
+FC117: Do not use kind_of in custom resource properties: ./resources/service_upstart.rb:11
+FC117: Do not use kind_of in custom resource properties: ./resources/service_upstart.rb:15

@@ -16,3 +16,4 @@ FC082: Deprecated node.set or node.set_unless used to set node attributes: ./rec
 FC082: Deprecated node.set or node.set_unless used to set node attributes: ./recipes/server.rb:39
 FC082: Deprecated node.set or node.set_unless used to set node attributes: ./recipes/server.rb:40
 FC082: Deprecated node.set or node.set_unless used to set node attributes: ./recipes/server.rb:41
+FC122: Use the build_essential resource instead of the recipe: ./recipes/ruby.rb:29
