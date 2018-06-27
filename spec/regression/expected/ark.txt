@@ -1,4 +1,4 @@
 FC069: Ensure standardized license defined in metadata: ./metadata.rb:1
 FC078: Ensure cookbook shared under an OSI-approved open source license: ./metadata.rb:1
 FC113: Resource declares deprecated use_inline_resources: ./providers/default.rb:25
-FC121: Cookbook depends on cookbook where resources are built into Chef 14: ./metadata.rb:1
+FC121: Cookbook depends on cookbook made obsolete by Chef 14: ./metadata.rb:1

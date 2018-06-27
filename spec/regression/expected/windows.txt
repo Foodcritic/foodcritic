@@ -33,4 +33,4 @@ FC085: Resource using new_resource.updated_by_last_action to converge resource: 
 FC085: Resource using new_resource.updated_by_last_action to converge resource: ./providers/task.rb:68
 FC085: Resource using new_resource.updated_by_last_action to converge resource: ./providers/task.rb:79
 FC085: Resource using new_resource.updated_by_last_action to converge resource: ./providers/zipfile.rb:41
-FC121: Cookbook depends on cookbook where resources are built into Chef 14: ./metadata.rb:1
+FC121: Cookbook depends on cookbook made obsolete by Chef 14: ./metadata.rb:1
