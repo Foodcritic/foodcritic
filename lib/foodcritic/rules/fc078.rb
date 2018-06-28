@@ -8,123 +8,129 @@ rule "FC078", "Ensure cookbook shared under an OSI-approved open source license"
       # require 'json'
       # require 'net/http'
       # json_data = JSON.parse(Net::HTTP.get(URI('https://raw.githubusercontent.com/spdx/license-list-data/master/json/licenses.json')))
-      # licenses = json_data['licenses']
-      #  .select { |license| license['isOsiApproved'] }
-      #  .map {|l| l['licenseId'] }
+      # licenses = json_data['licenses'].select { |license| license['isOsiApproved'] }.map {|l| l['licenseId']}.sort
       #
       osi_approved_licenses = %w{
+        AAL
         AFL-1.1
         AFL-1.2
         AFL-2.0
         AFL-2.1
         AFL-3.0
+        AGPL-3.0
+        AGPL-3.0-only
+        AGPL-3.0-or-later
         APL-1.0
-        Apache-1.1
-        Apache-2.0
         APSL-1.0
         APSL-1.1
         APSL-1.2
         APSL-2.0
+        Apache-1.1
+        Apache-2.0
         Artistic-1.0
         Artistic-1.0-Perl
         Artistic-1.0-cl8
         Artistic-2.0
-        AAL
-        BSL-1.0
         BSD-2-Clause
+        BSD-2-Clause-Patent
         BSD-3-Clause
-        0BSD
+        BSL-1.0
+        CATOSL-1.1
+        CDDL-1.0
         CECILL-2.1
         CNRI-Python
-        CDDL-1.0
         CPAL-1.0
         CPL-1.0
-        CATOSL-1.1
         CUA-OPL-1.0
-        EPL-1.0
         ECL-1.0
         ECL-2.0
         EFL-1.0
         EFL-2.0
-        Entessa
+        EPL-1.0
+        EPL-2.0
         EUDatagrid
         EUPL-1.1
+        EUPL-1.2
+        Entessa
         Fair
         Frameworx-1.0
-        AGPL-3.0
         GPL-2.0
+        GPL-2.0+
+        GPL-2.0-only
+        GPL-2.0-or-later
         GPL-3.0
-        LGPL-2.1
-        LGPL-3.0
-        LGPL-2.0
+        GPL-3.0+
+        GPL-3.0-only
+        GPL-3.0-or-later
+        GPL-3.0-with-GCC-exception
         HPND
-        IPL-1.0
-        Intel
         IPA
+        IPL-1.0
         ISC
+        Intel
+        LGPL-2.0
+        LGPL-2.0+
+        LGPL-2.0-only
+        LGPL-2.0-or-later
+        LGPL-2.1
+        LGPL-2.1+
+        LGPL-2.1-only
+        LGPL-2.1-or-later
+        LGPL-3.0
+        LGPL-3.0+
+        LGPL-3.0-only
+        LGPL-3.0-or-later
+        LPL-1.0
+        LPL-1.02
         LPPL-1.3c
         LiLiQ-P-1.1
-        LiLiQ-Rplus-1.1
         LiLiQ-R-1.1
-        LPL-1.02
-        LPL-1.0
-        MS-PL
-        MS-RL
-        MirOS
+        LiLiQ-Rplus-1.1
         MIT
-        Motosoto
+        MIT-0
         MPL-1.0
         MPL-1.1
         MPL-2.0
         MPL-2.0-no-copyleft-exception
+        MS-PL
+        MS-RL
+        MirOS
+        Motosoto
         Multics
         NASA-1.3
-        Naumen
+        NCSA
         NGPL
-        Nokia
         NPOSL-3.0
         NTP
+        Naumen
+        Nokia
         OCLC-2.0
+        OFL-1.1
         OGTSL
+        OSET-PL-2.1
         OSL-1.0
         OSL-2.0
         OSL-2.1
         OSL-3.0
-        OSET-PL-2.1
         PHP-3.0
         PostgreSQL
         Python-2.0
         QPL-1.0
-        RPSL-1.0
         RPL-1.1
         RPL-1.5
+        RPSL-1.0
         RSCPL
-        OFL-1.1
-        SimPL-2.0
-        Sleepycat
         SISSL
         SPL-1.0
-        Watcom-1.0
+        SimPL-2.0
+        Sleepycat
         UPL-1.0
-        NCSA
         VSL-1.0
         W3C
+        Watcom-1.0
         Xnet
-        Zlib
         ZPL-2.0
-        GPL-2.0+
-        GPL-2.0-with-autoconf-exception
-        GPL-2.0-with-bison-exception
-        GPL-2.0-with-classpath-exception
-        GPL-2.0-with-font-exception
-        GPL-2.0-with-GCC-exception
-        GPL-3.0+
-        GPL-3.0-with-autoconf-exception
-        GPL-3.0-with-GCC-exception
-        LGPL-2.1+
-        LGPL-3.0+
-        LGPL-2.0+
-        WXwindows
+        Zlib
       }
       [file_match(filename)] unless osi_approved_licenses.include?(license)
     rescue NoMethodError # no license in the metadata
