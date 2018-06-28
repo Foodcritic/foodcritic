@@ -1,5 +1,16 @@
 # Foodcritic Changelog:
 
+## [14.0.0](https://github.com/Foodcritic/foodcritic/tree/v14.0.0) (2018-06-28)
+
+- Removed Chef 13.0, 13.1, and 13.3 metadata.
+- Added Chef 13.9, 14.1, and 14.2 metadata and made 14.2 the new default, which adds property checking for all new Chef 14 resources to Foodcritic.
+- Renamed FC048 from "Prefer Mixlib::ShellOut" to "Prefer shell_out helper method to shelling out with Ruby" since Chef includes a helpful shell_out helper that is the preferred way to shell out in resources or libraries.
+- Removed FC012, which looked for legacy README.rdoc files. These haven't existed since the very early days of Chef and our existing check for README.MD files will catch any cookbooks still missing the proper format.
+- Added the opensource tag to FC071: Missing LICENSE file. This lets you easily skip this by excluding any rules tagged with opensource.
+- Added a new rule FC121: Cookbook depends on cookbook made obsolete by Chef 14\. This rule detects cookbook which depend on build-essential, dmg, chef_handler, chef_hostname, mac_os_x, swap, or sysctl cookbooks. The resources from these cookbooks now ship in Chef 14 and depending on the cookbooks is no longer necessary. Note removing these dependencies does increase the minimum required chef-client for
+- The non-existent resource UnresolvedSubscribes has been removed from the metadata files slimming Foodcritic's install size by 1500 lines.
+- Updated the list of SPDX licenses in FC069 and FC078 to the current list.
+
 ## [13.1.1](https://github.com/Foodcritic/foodcritic/tree/v13.1.1) (2018-04-12)
 
 - Fixed an error in the detection of attributes.rb files when using root alias functionality
