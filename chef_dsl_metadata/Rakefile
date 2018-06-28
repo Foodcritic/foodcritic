@@ -78,7 +78,7 @@ def chef_resources
     resource = Chef::Resource.const_get(resource_klazz)
     if resource.respond_to?(:public_instance_methods) &&
         resource.ancestors.include?(Chef::Resource) &&
-        resource.name != "Chef::Resource::LWRPBase"
+        ! %i{LWRPBase UnresolvedSubscribes}.include?(resource_klazz)
       yield resource_klazz, resource
     end
   end
