@@ -10,12 +10,3 @@ bundler_args: --jobs 3 --retry 3
 branches:
   only:
     - master
-
-# this avoids build issues with rainbow on old bundler/rubygems
-before_install:
-  - gem update --system
-  - gem --version
-  - rvm @global do gem uninstall bundler -a -x -I || true
-  - gem install bundler
-  - bundle --version
-  - rm -f .bundle/config
