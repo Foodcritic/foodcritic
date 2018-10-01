@@ -1,5 +1,11 @@
 # Foodcritic Changelog:
 
+## [14.2.0](https://github.com/Foodcritic/foodcritic/tree/v14.2.0) (2018-09-30)
+
+- Add Chef 14.5 metadata with 14.4 being the new default
+- Removed Chef 13.4 metadata
+- Pin cucumber-core to prevent pulling in new breaking changes
+
 ## [14.1.0](https://github.com/Foodcritic/foodcritic/tree/v14.1.0) (2018-08-30)
 
 - Add Chef 14.3 and 14.4 metadata with 14.4 being the new default
