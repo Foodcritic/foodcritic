@@ -9,7 +9,7 @@ module FoodCritic
 
     # The default version that will be used to determine relevant rules. This
     # can be over-ridden at the command line with the `--chef-version` option.
-    DEFAULT_CHEF_VERSION = "14.4.56"
+    DEFAULT_CHEF_VERSION = "14.5.33"
     attr_reader :chef_version
 
     # Perform a lint check. This method is intended for use by the command-line
