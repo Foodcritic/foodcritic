@@ -11,8 +11,8 @@ describe "FC009" do
     it { is_expected.not_to violate_rule }
   end
 
-  context "on chef 13.9.1 with a cookbook that uses ifconfig attributes introduced in 14.0" do
-    foodcritic_command("--chef-version", "13.9.1", "--no-progress", ".")
+  context "on chef 13.11.3 with a cookbook that uses ifconfig attributes introduced in 14.0" do
+    foodcritic_command("--chef-version", "13.11.3", "--no-progress", ".")
     recipe_file <<-EOH
       ifconfig 'foo' do
         family 'inet'
