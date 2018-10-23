@@ -1,5 +1,11 @@
 # Foodcritic Changelog:
 
+## [14.3.0](https://github.com/Foodcritic/foodcritic/tree/v14.3.0) (2018-10-23)
+
+- Added Chef 13.11.3 metadata
+- Removed Chef 13.5, 13.6, 13.7 and 13.9 metadata
+- Disabled FC121 for now. This rule was causing a lot of confusion and resulting in authors dropping support for Chef 13 prematurely. This rule we get enabled again when Chef 13 goes EOL this coming April
+
 ## [14.2.0](https://github.com/Foodcritic/foodcritic/tree/v14.2.0) (2018-09-30)
 
 - Add Chef 14.5 metadata with 14.4 being the new default
