@@ -3,5 +3,4 @@ FC065: Ensure source_url is set in metadata: ./metadata.rb:1
 FC066: Ensure chef_version is set in metadata: ./metadata.rb:1
 FC069: Ensure standardized license defined in metadata: ./metadata.rb:1
 FC078: Ensure cookbook shared under an OSI-approved open source license: ./metadata.rb:1
-FC121: Cookbook depends on cookbook made obsolete by Chef 14: ./metadata.rb:1
 FC122: Use the build_essential resource instead of the recipe: ./recipes/source.rb:23
