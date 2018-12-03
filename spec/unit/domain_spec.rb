@@ -64,15 +64,15 @@ end
 
 describe FoodCritic::Warning do
   let(:rule) { FoodCritic::Rule.new("FCTEST001", "Test rule") }
-  let(:match_opts) { { :filename => "foo/recipes.default.rb", :line => 5, :column => 40 } }
+  let(:match_opts) { { filename: "foo/recipes.default.rb", line: 5, column: 40 } }
 
   describe "failure indication" do
     it "is false if no fail_tags match" do
-      expect(FoodCritic::Warning.new(rule, match_opts, { :fail_tags => [] })).to_not be_failed
+      expect(FoodCritic::Warning.new(rule, match_opts, { fail_tags: [] })).to_not be_failed
     end
 
     it "is true if fail_tags do match" do
-      expect(FoodCritic::Warning.new(rule, match_opts, { :fail_tags => ["any"] })).to be_failed
+      expect(FoodCritic::Warning.new(rule, match_opts, { fail_tags: ["any"] })).to be_failed
     end
   end
 end

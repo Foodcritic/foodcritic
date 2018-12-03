@@ -560,7 +560,7 @@ module FoodCritic
       source = if file.to_s.split(File::SEPARATOR).include?("templates")
                  template_expressions_only(file)
                else
-                 File.read(file).encode("utf-8", "binary", :undef => :replace)
+                 File.read(file).encode("utf-8", "binary", undef: :replace)
                end
       begin
         build_xml(Ripper::SexpBuilder.new(source).parse)
@@ -625,7 +625,7 @@ module FoodCritic
 
     def template_expressions_only(file)
       exprs = Template::ExpressionExtractor.new.extract(
-        File.read(file).encode("utf-8", "binary", :undef => :replace)
+        File.read(file).encode("utf-8", "binary", undef: :replace)
       )
       lines = Array.new(exprs.map { |e| e[:line] }.max || 0, "")
       exprs.each do |e|

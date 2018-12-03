@@ -4,11 +4,11 @@ require "ffi_yajl"
 
 task :generate_chef_metadata do
   require_chef
-  chef_dsl_metadata = { :dsl_methods => chef_dsl_methods,
-                        :node_methods => chef_node_methods,
-                        :actions => chef_resource_actions,
-                        :attributes => chef_resource_attributes }
-  json = FFI_Yajl::Encoder.encode(chef_dsl_metadata, :pretty => true)
+  chef_dsl_metadata = { dsl_methods: chef_dsl_methods,
+                        node_methods: chef_node_methods,
+                        actions: chef_resource_actions,
+                        attributes: chef_resource_attributes }
+  json = FFI_Yajl::Encoder.encode(chef_dsl_metadata, pretty: true)
   File.open("chef_#{Chef::VERSION}.json", "w") { |f| f.write(json) }
 end
 
