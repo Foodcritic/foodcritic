@@ -1,5 +1,9 @@
 # Foodcritic Changelog:
 
+## [15.0.0](https://github.com/Foodcritic/foodcritic/tree/v15.0.0) (2018-12-03)
+
+With this release of Foodcritic we are now shipping only metadata for the latest versions of each supported Chef version. Chef metadata files are getting increasingly large and this is increasing the size of Chef DK/Workstation significantly. This release ships with Chef 14.7 and 13.12 metadata and future releases will update the metadata versions without a major version bump as this should not be considered a breaking change.
+
 ## [14.3.0](https://github.com/Foodcritic/foodcritic/tree/v14.3.0) (2018-10-23)
 
 - Added Chef 13.11.3 metadata

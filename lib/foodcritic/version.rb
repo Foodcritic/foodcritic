@@ -1,4 +1,4 @@
 module FoodCritic
   # The current version of foodcritic
-  VERSION = "14.3.0".freeze
+  VERSION = "15.0.0".freeze
 end
