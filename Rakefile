@@ -20,7 +20,7 @@ require "cucumber/rake/task"
 Cucumber::Rake::Task.new(:features) do |t|
   t.cucumber_opts = %w{--strict}
   t.cucumber_opts += %w{-f progress} unless ENV["CI"]
-  unless ENV.has_key?("FC_FORK_PROCESS") && ENV["FC_FORK_PROCESS"] == "true"
+  unless ENV.key?("FC_FORK_PROCESS") && ENV["FC_FORK_PROCESS"] == "true"
     t.cucumber_opts += ["-t", "~@build"]
     t.cucumber_opts += ["-t", "~@context"]
   end
@@ -39,10 +39,10 @@ task(:man) do
   sh "ronn -w --roff man/*.ronn"
 end
 
-task :default => [:man, :test, :rubocop]
+task default: [:man, :test, :rubocop]
 
 desc "Run all tests"
-task :test => [:spec, :features]
+task test: [:spec, :features]
 
 desc "Regenerate regression test data"
 task :regen_regression do

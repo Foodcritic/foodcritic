@@ -4,7 +4,11 @@ AllCops:
     - vendor/**/*
     - features/**/*
 
-Lint/EndAlignment:
+Lint/Void:
+  Exclude:
+    - 'spec/**/*'
+
+Layout/EndAlignment:
   Exclude:
     - features/support/cookbook_helpers.rb
     - features/step_definitions/cookbook_steps.rb

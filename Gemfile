@@ -8,7 +8,7 @@ group :test do
   gem "minitest", "~> 5.3"
   gem "minitest-reporters"
   gem "simplecov", "~> 0.8"
-  gem "chefstyle", "= 0.8.0"
+  gem "chefstyle", "= 0.11.0"
 end
 
 group :development do
