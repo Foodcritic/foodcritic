@@ -15,7 +15,7 @@ Gem::Specification.new do |s|
   s.files = Dir["chef_dsl_metadata/*.json"] +
     Dir["lib/**/*.rb"] +
     Dir["misc/**/*"]
-  s.files += Dir["LICENSE"]
+  s.files += Dir["Gemfile", "foodcritic.gemspec", "LICENSE"]
 
   s.add_dependency("cucumber-core", ">= 1.3", "< 4.0")
   s.add_dependency("nokogiri", ">= 1.5", "< 2.0")
