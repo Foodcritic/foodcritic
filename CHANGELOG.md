@@ -1,5 +1,11 @@
 # Foodcritic Changelog:
 
+## [15.1.0](https://github.com/Foodcritic/foodcritic/tree/v15.1.0) (2018-12-26)
+
+- Stripped test files from the gem artifact to slim the install size
+- Removed the legacy man page file that appears to be used
+- Updated chef metadata to 14.8 which provides information on the actions / properties of windows_task
+
 ## [15.0.0](https://github.com/Foodcritic/foodcritic/tree/v15.0.0) (2018-12-03)
 
 With this release of Foodcritic we are now shipping only metadata for the latest versions of each supported Chef version. Chef metadata files are getting increasingly large and this is increasing the size of Chef DK/Workstation significantly. This release ships with Chef 14.7 and 13.12 metadata and future releases will update the metadata versions without a major version bump as this should not be considered a breaking change.
