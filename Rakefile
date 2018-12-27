@@ -34,12 +34,7 @@ RuboCop::RakeTask.new do |task|
   task.options << "--display-cop-names"
 end
 
-desc "Build the manpage"
-task(:man) do
-  sh "ronn -w --roff man/*.ronn"
-end
-
-task default: [:man, :test, :rubocop]
+task default: [:test, :rubocop]
 
 desc "Run all tests"
 task test: [:spec, :features]
