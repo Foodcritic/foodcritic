@@ -10,7 +10,7 @@ rule "FC070", "Ensure supports metadata defines valid platforms" do
       archlinux
       amazonlinux
       darwin
-      debuan
+      debian
       mingw32
       mswin
       mac_os_x_server
