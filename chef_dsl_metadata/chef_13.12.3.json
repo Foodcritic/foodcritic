@@ -1,29 +1,13 @@
 {
   "dsl_methods": [
-    "!",
-    "!=",
-    "!~",
-    "<=>",
-    "==",
-    "===",
-    "=~",
-    "[]",
-    "__id__",
-    "__send__",
     "a_to_s",
     "add_machine_options",
     "aix_user",
-    "apply_expansion_attributes",
     "apt_package",
     "apt_preference",
     "apt_repository",
     "apt_update",
     "assert_valid_windows_architecture!",
-    "attribute",
-    "attribute?",
-    "attributes",
-    "automatic_attrs",
-    "automatic_attrs=",
     "bash",
     "batch",
     "bff_package",
@@ -36,132 +20,68 @@
     "chef_data_bag",
     "chef_data_bag_item",
     "chef_environment",
-    "chef_environment=",
     "chef_gem",
     "chef_group",
     "chef_mirror",
     "chef_node",
     "chef_organization",
     "chef_role",
-    "chef_server_rest",
-    "chef_server_rest=",
     "chef_user",
     "chocolatey_package",
-    "class",
-    "class_from_file",
     "clean_array",
-    "clone",
-    "constantize",
-    "construct_attributes",
-    "consume_attributes",
-    "consume_chef_environment",
-    "consume_external_attrs",
-    "consume_ohai_data",
-    "consume_run_list",
     "control_group",
-    "convert_to_class_name",
-    "convert_to_snake_case",
     "cookbook_file",
-    "create",
     "cron",
     "csh",
     "current_image_options",
     "current_machine_options",
     "data_bag",
     "data_bag_item",
-    "dclone",
     "declare_resource",
-    "default",
-    "default!",
-    "default_attrs",
-    "default_attrs=",
-    "default_unless",
-    "define_singleton_method",
     "delete_resource",
     "delete_resource!",
     "deploy",
     "deploy_branch",
     "deploy_revision",
-    "destroy",
     "directory",
     "disable_wow64_file_redirection",
-    "display",
-    "display_hash",
     "dnf_package",
     "docker?",
     "dpkg_package",
     "dsc_resource",
     "dsc_script",
     "dscl_user",
-    "dup",
-    "each",
-    "each_attribute",
-    "each_key",
-    "each_value",
     "edit_resource",
     "edit_resource!",
     "encrypted?",
     "enforce_path_sanity",
-    "enum_for",
     "env",
-    "environment",
-    "eql?",
-    "equal?",
     "erl_call",
     "evaluate_resource_definition",
     "execute",
-    "expand!",
-    "extend",
-    "ffi_yajl",
     "file",
-    "filename_to_qualified_string",
     "find_resource",
     "find_resource!",
-    "for_json",
-    "force_default!",
-    "force_override!",
     "forced_32bit_override_required?",
     "freebsd_package",
-    "freeze",
-    "from_file",
-    "frozen?",
-    "gem",
     "gem_package",
     "get_private_key",
     "git",
     "group",
-    "has_key?",
     "has_resource_definition?",
-    "hash",
     "homebrew_package",
     "http_request",
     "ifconfig",
-    "include_attribute",
     "include_recipe",
-    "inspect",
-    "instance_eval",
-    "instance_exec",
-    "instance_of?",
-    "instance_variable_defined?",
-    "instance_variable_get",
-    "instance_variable_set",
-    "instance_variables",
     "ips_package",
-    "is_a?",
     "is_i386_process_on_x86_64_windows?",
-    "itself",
-    "key?",
-    "keys",
-    "kind_of?",
     "ksh",
     "l_w_r_p_base",
     "launchd",
-    "lazy",
     "link",
     "linux_user",
     "load_balancer",
     "load_recipe",
-    "loaded_recipe",
     "log",
     "machine",
     "machine_batch",
@@ -171,74 +91,33 @@
     "macosx_service",
     "macports_package",
     "mdadm",
-    "method",
-    "method_missing",
-    "methods",
     "mount",
     "msu_package",
-    "name",
-    "nil?",
-    "node",
     "node_supports_windows_architecture?",
     "node_windows_architecture",
-    "normal",
-    "normal!",
-    "normal_attrs",
-    "normal_attrs=",
-    "normal_unless",
-    "normalize_snake_case_name",
     "notifying_block",
-    "object_id",
     "ohai",
     "openbsd_package",
     "osx_config_profile",
     "osx_profile",
-    "override",
-    "override!",
-    "override_attrs",
-    "override_attrs=",
-    "override_runlist",
-    "override_runlist=",
-    "override_unless",
     "package",
     "pacman_package",
     "paludis_package",
-    "parse_attribute_file_spec",
     "perl",
     "platform?",
     "platform_family?",
-    "policy_group",
-    "policy_group=",
-    "policy_name",
-    "policy_name=",
     "portage_package",
     "powershell_out",
     "powershell_out!",
     "powershell_package",
     "powershell_script",
-    "pretty_inspect",
-    "pretty_print",
-    "pretty_print_cycle",
-    "pretty_print_inspect",
-    "pretty_print_instance_variables",
-    "primary_runlist",
     "private_key",
-    "private_methods",
-    "protected_methods",
     "ps_credential",
     "public_key",
-    "public_method",
-    "public_methods",
-    "public_send",
     "pw_user",
     "python",
-    "read",
-    "read!",
     "reboot",
     "reboot_pending?",
-    "recipe?",
-    "recipe_list",
-    "recipe_list=",
     "registry_data_exists?",
     "registry_get_subkeys",
     "registry_get_values",
@@ -248,39 +127,17 @@
     "registry_value_exists?",
     "remote_directory",
     "remote_file",
-    "remove_instance_variable",
     "require_recipe",
-    "reset_defaults_and_overrides",
-    "respond_to?",
     "restore_wow64_file_redirection",
-    "rm",
-    "rm_default",
-    "rm_normal",
-    "rm_override",
-    "role?",
     "route",
     "rpm_package",
     "ruby",
     "ruby_block",
-    "run_context",
-    "run_context=",
-    "run_list",
-    "run_list=",
-    "run_list?",
-    "run_state",
-    "run_state=",
     "sanitized_path",
-    "save",
     "scm",
     "script",
     "search",
-    "select_run_list",
-    "send",
     "service",
-    "set",
-    "set_cookbook_attribute",
-    "set_or_return",
-    "set_unless",
     "shell_out",
     "shell_out!",
     "shell_out_compact",
@@ -289,39 +146,17 @@
     "shell_out_compact_timeout!",
     "shell_out_with_systems_locale",
     "shell_out_with_systems_locale!",
-    "singleton_class",
-    "singleton_method",
-    "singleton_methods",
     "smartos_package",
-    "snake_case_basename",
     "solaris_package",
     "solaris_user",
     "subcontext_block",
     "subversion",
     "systemd_unit",
-    "tag",
-    "tags",
-    "taint",
-    "tainted?",
-    "tap",
     "template",
     "timestamped_deploy",
-    "to_enum",
-    "to_hash",
-    "to_json",
-    "to_s",
-    "to_yaml",
-    "trust",
-    "unlink",
-    "unlink!",
-    "untaint",
-    "untrust",
-    "untrusted?",
-    "update_from!",
     "user",
     "user_resource_abstract_base_class",
     "valid_windows_architecture?",
-    "validate",
     "value_for_platform",
     "value_for_platform_family",
     "whyrun_safe_ruby_block",
@@ -343,9 +178,6 @@
     "with_run_context",
     "wow64_architecture_override_required?",
     "wow64_directory",
-    "write",
-    "write!",
-    "yield_self",
     "yum_package",
     "yum_repository",
     "zypper_package",
@@ -578,6 +410,7 @@
     "primary_runlist",
     "private_methods",
     "protected_methods",
+    "psych_to_yaml",
     "public_method",
     "public_methods",
     "public_send",
@@ -641,7 +474,6 @@
     "singleton_method",
     "singleton_methods",
     "size",
-    "slice",
     "slice_after",
     "slice_before",
     "slice_when",
@@ -669,8 +501,7 @@
     "to_s",
     "to_set",
     "to_yaml",
-    "transform_keys",
-    "transform_keys!",
+    "to_yaml_properties",
     "transform_values",
     "transform_values!",
     "trust",
@@ -694,7 +525,6 @@
     "wow64_directory",
     "write",
     "write!",
-    "yield_self",
     "zip"
   ],
   "actions": {
@@ -1426,6 +1256,7 @@
       "provider",
       "provider=",
       "provider_for_action",
+      "psych_to_yaml",
       "public_method",
       "public_methods",
       "public_send",
@@ -1497,6 +1328,7 @@
       "to_s",
       "to_text",
       "to_yaml",
+      "to_yaml_properties",
       "trust",
       "untaint",
       "untrust",
@@ -1516,8 +1348,7 @@
       "version=",
       "with_os_architecture",
       "wow64_architecture_override_required?",
-      "wow64_directory",
-      "yield_self"
+      "wow64_directory"
     ],
     "apt_preference": [
       "!",
@@ -1653,6 +1484,7 @@
       "provider",
       "provider=",
       "provider_for_action",
+      "psych_to_yaml",
       "public_method",
       "public_methods",
       "public_send",
@@ -1716,6 +1548,7 @@
       "to_s",
       "to_text",
       "to_yaml",
+      "to_yaml_properties",
       "trust",
       "untaint",
       "untrust",
@@ -1733,8 +1566,7 @@
       "value_to_text",
       "with_os_architecture",
       "wow64_architecture_override_required?",
-      "wow64_directory",
-      "yield_self"
+      "wow64_directory"
     ],
     "apt_repository": [
       "!",
@@ -1880,6 +1712,7 @@
       "provider",
       "provider=",
       "provider_for_action",
+      "psych_to_yaml",
       "public_method",
       "public_methods",
       "public_send",
@@ -1945,6 +1778,7 @@
       "to_s",
       "to_text",
       "to_yaml",
+      "to_yaml_properties",
       "trust",
       "trusted",
       "trusted=",
@@ -1966,8 +1800,7 @@
       "value_to_text",
       "with_os_architecture",
       "wow64_architecture_override_required?",
-      "wow64_directory",
-      "yield_self"
+      "wow64_directory"
     ],
     "apt_update": [
       "!",
@@ -2097,6 +1930,7 @@
       "provider",
       "provider=",
       "provider_for_action",
+      "psych_to_yaml",
       "public_method",
       "public_methods",
       "public_send",
@@ -2160,6 +1994,7 @@
       "to_s",
       "to_text",
       "to_yaml",
+      "to_yaml_properties",
       "trust",
       "untaint",
       "untrust",
@@ -2177,8 +2012,7 @@
       "value_to_text",
       "with_os_architecture",
       "wow64_architecture_override_required?",
-      "wow64_directory",
-      "yield_self"
+      "wow64_directory"
     ],
     "bash": [
       "!",
@@ -2328,6 +2162,7 @@
       "provider",
       "provider=",
       "provider_for_action",
+      "psych_to_yaml",
       "public_method",
       "public_methods",
       "public_send",
@@ -2394,6 +2229,7 @@
       "to_s",
       "to_text",
       "to_yaml",
+      "to_yaml_properties",
       "trust",
       "umask",
       "untaint",
@@ -2415,8 +2251,7 @@
       "value_to_text",
       "with_os_architecture",
       "wow64_architecture_override_required?",
-      "wow64_directory",
-      "yield_self"
+      "wow64_directory"
     ],
     "batch": [
       "!",
@@ -2567,6 +2402,7 @@
       "provider",
       "provider=",
       "provider_for_action",
+      "psych_to_yaml",
       "public_method",
       "public_methods",
       "public_send",
@@ -2633,6 +2469,7 @@
       "to_s",
       "to_text",
       "to_yaml",
+      "to_yaml_properties",
       "trust",
       "umask",
       "untaint",
@@ -2654,8 +2491,7 @@
       "value_to_text",
       "with_os_architecture",
       "wow64_architecture_override_required?",
-      "wow64_directory",
-      "yield_self"
+      "wow64_directory"
     ],
     "bff_package": [
       "!",
@@ -2787,6 +2623,7 @@
       "provider",
       "provider=",
       "provider_for_action",
+      "psych_to_yaml",
       "public_method",
       "public_methods",
       "public_send",
@@ -2858,6 +2695,7 @@
       "to_s",
       "to_text",
       "to_yaml",
+      "to_yaml_properties",
       "trust",
       "untaint",
       "untrust",
@@ -2877,8 +2715,7 @@
       "version=",
       "with_os_architecture",
       "wow64_architecture_override_required?",
-      "wow64_directory",
-      "yield_self"
+      "wow64_directory"
     ],
     "breakpoint": [
       "!",
@@ -3006,6 +2843,7 @@
       "provider",
       "provider=",
       "provider_for_action",
+      "psych_to_yaml",
       "public_method",
       "public_methods",
       "public_send",
@@ -3069,6 +2907,7 @@
       "to_s",
       "to_text",
       "to_yaml",
+      "to_yaml_properties",
       "trust",
       "untaint",
       "untrust",
@@ -3086,8 +2925,7 @@
       "value_to_text",
       "with_os_architecture",
       "wow64_architecture_override_required?",
-      "wow64_directory",
-      "yield_self"
+      "wow64_directory"
     ],
     "cab_package": [
       "!",
@@ -3220,6 +3058,7 @@
       "provider",
       "provider=",
       "provider_for_action",
+      "psych_to_yaml",
       "public_method",
       "public_methods",
       "public_send",
@@ -3291,6 +3130,7 @@
       "to_s",
       "to_text",
       "to_yaml",
+      "to_yaml_properties",
       "trust",
       "untaint",
       "untrust",
@@ -3311,8 +3151,7 @@
       "version=",
       "with_os_architecture",
       "wow64_architecture_override_required?",
-      "wow64_directory",
-      "yield_self"
+      "wow64_directory"
     ],
     "chef_gem": [
       "!",
@@ -3452,6 +3291,7 @@
       "provider",
       "provider=",
       "provider_for_action",
+      "psych_to_yaml",
       "public_method",
       "public_methods",
       "public_send",
@@ -3523,6 +3363,7 @@
       "to_s",
       "to_text",
       "to_yaml",
+      "to_yaml_properties",
       "trust",
       "untaint",
       "untrust",
@@ -3542,8 +3383,7 @@
       "version=",
       "with_os_architecture",
       "wow64_architecture_override_required?",
-      "wow64_directory",
-      "yield_self"
+      "wow64_directory"
     ],
     "chocolatey_package": [
       "!",
@@ -3675,6 +3515,7 @@
       "provider",
       "provider=",
       "provider_for_action",
+      "psych_to_yaml",
       "public_method",
       "public_methods",
       "public_send",
@@ -3748,6 +3589,7 @@
       "to_s",
       "to_text",
       "to_yaml",
+      "to_yaml_properties",
       "trust",
       "untaint",
       "untrust",
@@ -3767,8 +3609,7 @@
       "version=",
       "with_os_architecture",
       "wow64_architecture_override_required?",
-      "wow64_directory",
-      "yield_self"
+      "wow64_directory"
     ],
     "cookbook_file": [
       "!",
@@ -3919,6 +3760,7 @@
       "provider",
       "provider=",
       "provider_for_action",
+      "psych_to_yaml",
       "public_method",
       "public_methods",
       "public_send",
@@ -3985,6 +3827,7 @@
       "to_s",
       "to_text",
       "to_yaml",
+      "to_yaml_properties",
       "trust",
       "untaint",
       "untrust",
@@ -4006,8 +3849,7 @@
       "verify",
       "with_os_architecture",
       "wow64_architecture_override_required?",
-      "wow64_directory",
-      "yield_self"
+      "wow64_directory"
     ],
     "cron": [
       "!",
@@ -4145,6 +3987,7 @@
       "provider",
       "provider=",
       "provider_for_action",
+      "psych_to_yaml",
       "public_method",
       "public_methods",
       "public_send",
@@ -4210,6 +4053,7 @@
       "to_s",
       "to_text",
       "to_yaml",
+      "to_yaml_properties",
       "trust",
       "untaint",
       "untrust",
@@ -4229,8 +4073,7 @@
       "weekday",
       "with_os_architecture",
       "wow64_architecture_override_required?",
-      "wow64_directory",
-      "yield_self"
+      "wow64_directory"
     ],
     "csh": [
       "!",
@@ -4380,6 +4223,7 @@
       "provider",
       "provider=",
       "provider_for_action",
+      "psych_to_yaml",
       "public_method",
       "public_methods",
       "public_send",
@@ -4446,6 +4290,7 @@
       "to_s",
       "to_text",
       "to_yaml",
+      "to_yaml_properties",
       "trust",
       "umask",
       "untaint",
@@ -4467,8 +4312,7 @@
       "value_to_text",
       "with_os_architecture",
       "wow64_architecture_override_required?",
-      "wow64_directory",
-      "yield_self"
+      "wow64_directory"
     ],
     "deploy": [
       "!",
@@ -4617,6 +4461,7 @@
       "provider",
       "provider=",
       "provider_for_action",
+      "psych_to_yaml",
       "public_method",
       "public_methods",
       "public_send",
@@ -4703,6 +4548,7 @@
       "to_s",
       "to_text",
       "to_yaml",
+      "to_yaml_properties",
       "trust",
       "untaint",
       "untrust",
@@ -4721,8 +4567,7 @@
       "value_to_text",
       "with_os_architecture",
       "wow64_architecture_override_required?",
-      "wow64_directory",
-      "yield_self"
+      "wow64_directory"
     ],
     "deploy_branch": [
       "!",
@@ -4871,6 +4716,7 @@
       "provider",
       "provider=",
       "provider_for_action",
+      "psych_to_yaml",
       "public_method",
       "public_methods",
       "public_send",
@@ -4957,6 +4803,7 @@
       "to_s",
       "to_text",
       "to_yaml",
+      "to_yaml_properties",
       "trust",
       "untaint",
       "untrust",
@@ -4975,8 +4822,7 @@
       "value_to_text",
       "with_os_architecture",
       "wow64_architecture_override_required?",
-      "wow64_directory",
-      "yield_self"
+      "wow64_directory"
     ],
     "deploy_revision": [
       "!",
@@ -5125,6 +4971,7 @@
       "provider",
       "provider=",
       "provider_for_action",
+      "psych_to_yaml",
       "public_method",
       "public_methods",
       "public_send",
@@ -5211,6 +5058,7 @@
       "to_s",
       "to_text",
       "to_yaml",
+      "to_yaml_properties",
       "trust",
       "untaint",
       "untrust",
@@ -5229,8 +5077,7 @@
       "value_to_text",
       "with_os_architecture",
       "wow64_architecture_override_required?",
-      "wow64_directory",
-      "yield_self"
+      "wow64_directory"
     ],
     "directory": [
       "!",
@@ -5363,6 +5210,7 @@
       "provider",
       "provider=",
       "provider_for_action",
+      "psych_to_yaml",
       "public_method",
       "public_methods",
       "public_send",
@@ -5428,6 +5276,7 @@
       "to_s",
       "to_text",
       "to_yaml",
+      "to_yaml_properties",
       "trust",
       "untaint",
       "untrust",
@@ -5446,8 +5295,7 @@
       "value_to_text",
       "with_os_architecture",
       "wow64_architecture_override_required?",
-      "wow64_directory",
-      "yield_self"
+      "wow64_directory"
     ],
     "dnf_package": [
       "!",
@@ -5584,6 +5432,7 @@
       "provider",
       "provider=",
       "provider_for_action",
+      "psych_to_yaml",
       "public_method",
       "public_methods",
       "public_send",
@@ -5655,6 +5504,7 @@
       "to_s",
       "to_text",
       "to_yaml",
+      "to_yaml_properties",
       "trust",
       "untaint",
       "untrust",
@@ -5674,8 +5524,7 @@
       "version=",
       "with_os_architecture",
       "wow64_architecture_override_required?",
-      "wow64_directory",
-      "yield_self"
+      "wow64_directory"
     ],
     "dpkg_package": [
       "!",
@@ -5807,6 +5656,7 @@
       "provider",
       "provider=",
       "provider_for_action",
+      "psych_to_yaml",
       "public_method",
       "public_methods",
       "public_send",
@@ -5878,6 +5728,7 @@
       "to_s",
       "to_text",
       "to_yaml",
+      "to_yaml_properties",
       "trust",
       "untaint",
       "untrust",
@@ -5897,8 +5748,7 @@
       "version=",
       "with_os_architecture",
       "wow64_architecture_override_required?",
-      "wow64_directory",
-      "yield_self"
+      "wow64_directory"
     ],
     "dsc_resource": [
       "!",
@@ -6031,6 +5881,7 @@
       "provider=",
       "provider_for_action",
       "ps_credential",
+      "psych_to_yaml",
       "public_method",
       "public_methods",
       "public_send",
@@ -6097,6 +5948,7 @@
       "to_s",
       "to_text",
       "to_yaml",
+      "to_yaml_properties",
       "trust",
       "untaint",
       "untrust",
@@ -6114,8 +5966,7 @@
       "value_to_text",
       "with_os_architecture",
       "wow64_architecture_override_required?",
-      "wow64_directory",
-      "yield_self"
+      "wow64_directory"
     ],
     "dsc_script": [
       "!",
@@ -6253,6 +6104,7 @@
       "provider=",
       "provider_for_action",
       "ps_credential",
+      "psych_to_yaml",
       "public_method",
       "public_methods",
       "public_send",
@@ -6317,6 +6169,7 @@
       "to_s",
       "to_text",
       "to_yaml",
+      "to_yaml_properties",
       "trust",
       "untaint",
       "untrust",
@@ -6334,8 +6187,7 @@
       "value_to_text",
       "with_os_architecture",
       "wow64_architecture_override_required?",
-      "wow64_directory",
-      "yield_self"
+      "wow64_directory"
     ],
     "env": [
       "!",
@@ -6467,6 +6319,7 @@
       "provider",
       "provider=",
       "provider_for_action",
+      "psych_to_yaml",
       "public_method",
       "public_methods",
       "public_send",
@@ -6530,6 +6383,7 @@
       "to_s",
       "to_text",
       "to_yaml",
+      "to_yaml_properties",
       "trust",
       "untaint",
       "untrust",
@@ -6549,8 +6403,7 @@
       "value_to_text",
       "with_os_architecture",
       "wow64_architecture_override_required?",
-      "wow64_directory",
-      "yield_self"
+      "wow64_directory"
     ],
     "erl_call": [
       "!",
@@ -6683,6 +6536,7 @@
       "provider",
       "provider=",
       "provider_for_action",
+      "psych_to_yaml",
       "public_method",
       "public_methods",
       "public_send",
@@ -6746,6 +6600,7 @@
       "to_s",
       "to_text",
       "to_yaml",
+      "to_yaml_properties",
       "trust",
       "untaint",
       "untrust",
@@ -6763,8 +6618,7 @@
       "value_to_text",
       "with_os_architecture",
       "wow64_architecture_override_required?",
-      "wow64_directory",
-      "yield_self"
+      "wow64_directory"
     ],
     "execute": [
       "!",
@@ -6907,6 +6761,7 @@
       "provider",
       "provider=",
       "provider_for_action",
+      "psych_to_yaml",
       "public_method",
       "public_methods",
       "public_send",
@@ -6973,6 +6828,7 @@
       "to_s",
       "to_text",
       "to_yaml",
+      "to_yaml_properties",
       "trust",
       "umask",
       "untaint",
@@ -6994,8 +6850,7 @@
       "value_to_text",
       "with_os_architecture",
       "wow64_architecture_override_required?",
-      "wow64_directory",
-      "yield_self"
+      "wow64_directory"
     ],
     "file": [
       "!",
@@ -7144,6 +6999,7 @@
       "provider",
       "provider=",
       "provider_for_action",
+      "psych_to_yaml",
       "public_method",
       "public_methods",
       "public_send",
@@ -7208,6 +7064,7 @@
       "to_s",
       "to_text",
       "to_yaml",
+      "to_yaml_properties",
       "trust",
       "untaint",
       "untrust",
@@ -7229,8 +7086,7 @@
       "verify",
       "with_os_architecture",
       "wow64_architecture_override_required?",
-      "wow64_directory",
-      "yield_self"
+      "wow64_directory"
     ],
     "freebsd_package": [
       "!",
@@ -7362,6 +7218,7 @@
       "provider",
       "provider=",
       "provider_for_action",
+      "psych_to_yaml",
       "public_method",
       "public_methods",
       "public_send",
@@ -7434,6 +7291,7 @@
       "to_s",
       "to_text",
       "to_yaml",
+      "to_yaml_properties",
       "trust",
       "untaint",
       "untrust",
@@ -7453,8 +7311,7 @@
       "version=",
       "with_os_architecture",
       "wow64_architecture_override_required?",
-      "wow64_directory",
-      "yield_self"
+      "wow64_directory"
     ],
     "gem_package": [
       "!",
@@ -7592,6 +7449,7 @@
       "provider",
       "provider=",
       "provider_for_action",
+      "psych_to_yaml",
       "public_method",
       "public_methods",
       "public_send",
@@ -7663,6 +7521,7 @@
       "to_s",
       "to_text",
       "to_yaml",
+      "to_yaml_properties",
       "trust",
       "untaint",
       "untrust",
@@ -7682,8 +7541,7 @@
       "version=",
       "with_os_architecture",
       "wow64_architecture_override_required?",
-      "wow64_directory",
-      "yield_self"
+      "wow64_directory"
     ],
     "git": [
       "!",
@@ -7822,6 +7680,7 @@
       "provider",
       "provider=",
       "provider_for_action",
+      "psych_to_yaml",
       "public_method",
       "public_methods",
       "public_send",
@@ -7897,6 +7756,7 @@
       "to_s",
       "to_text",
       "to_yaml",
+      "to_yaml_properties",
       "trust",
       "untaint",
       "untrust",
@@ -7915,8 +7775,7 @@
       "value_to_text",
       "with_os_architecture",
       "wow64_architecture_override_required?",
-      "wow64_directory",
-      "yield_self"
+      "wow64_directory"
     ],
     "group": [
       "!",
@@ -8051,6 +7910,7 @@
       "provider",
       "provider=",
       "provider_for_action",
+      "psych_to_yaml",
       "public_method",
       "public_methods",
       "public_send",
@@ -8115,6 +7975,7 @@
       "to_s",
       "to_text",
       "to_yaml",
+      "to_yaml_properties",
       "trust",
       "untaint",
       "untrust",
@@ -8133,8 +7994,7 @@
       "value_to_text",
       "with_os_architecture",
       "wow64_architecture_override_required?",
-      "wow64_directory",
-      "yield_self"
+      "wow64_directory"
     ],
     "homebrew_package": [
       "!",
@@ -8268,6 +8128,7 @@
       "provider",
       "provider=",
       "provider_for_action",
+      "psych_to_yaml",
       "public_method",
       "public_methods",
       "public_send",
@@ -8339,6 +8200,7 @@
       "to_s",
       "to_text",
       "to_yaml",
+      "to_yaml_properties",
       "trust",
       "untaint",
       "untrust",
@@ -8358,8 +8220,7 @@
       "version=",
       "with_os_architecture",
       "wow64_architecture_override_required?",
-      "wow64_directory",
-      "yield_self"
+      "wow64_directory"
     ],
     "http_request": [
       "!",
@@ -8489,6 +8350,7 @@
       "provider",
       "provider=",
       "provider_for_action",
+      "psych_to_yaml",
       "public_method",
       "public_methods",
       "public_send",
@@ -8552,6 +8414,7 @@
       "to_s",
       "to_text",
       "to_yaml",
+      "to_yaml_properties",
       "trust",
       "untaint",
       "untrust",
@@ -8570,8 +8433,7 @@
       "value_to_text",
       "with_os_architecture",
       "wow64_architecture_override_required?",
-      "wow64_directory",
-      "yield_self"
+      "wow64_directory"
     ],
     "ifconfig": [
       "!",
@@ -8727,6 +8589,7 @@
       "provider",
       "provider=",
       "provider_for_action",
+      "psych_to_yaml",
       "public_method",
       "public_methods",
       "public_send",
@@ -8794,6 +8657,7 @@
       "to_s",
       "to_text",
       "to_yaml",
+      "to_yaml_properties",
       "trust",
       "untaint",
       "untrust",
@@ -8811,8 +8675,7 @@
       "value_to_text",
       "with_os_architecture",
       "wow64_architecture_override_required?",
-      "wow64_directory",
-      "yield_self"
+      "wow64_directory"
     ],
     "ips_package": [
       "!",
@@ -8946,6 +8809,7 @@
       "provider",
       "provider=",
       "provider_for_action",
+      "psych_to_yaml",
       "public_method",
       "public_methods",
       "public_send",
@@ -9017,6 +8881,7 @@
       "to_s",
       "to_text",
       "to_yaml",
+      "to_yaml_properties",
       "trust",
       "untaint",
       "untrust",
@@ -9036,8 +8901,7 @@
       "version=",
       "with_os_architecture",
       "wow64_architecture_override_required?",
-      "wow64_directory",
-      "yield_self"
+      "wow64_directory"
     ],
     "ksh": [
       "!",
@@ -9187,6 +9051,7 @@
       "provider",
       "provider=",
       "provider_for_action",
+      "psych_to_yaml",
       "public_method",
       "public_methods",
       "public_send",
@@ -9253,6 +9118,7 @@
       "to_s",
       "to_text",
       "to_yaml",
+      "to_yaml_properties",
       "trust",
       "umask",
       "untaint",
@@ -9274,8 +9140,7 @@
       "value_to_text",
       "with_os_architecture",
       "wow64_architecture_override_required?",
-      "wow64_directory",
-      "yield_self"
+      "wow64_directory"
     ],
     "launchd": [
       "!",
@@ -9465,6 +9330,7 @@
       "provider",
       "provider=",
       "provider_for_action",
+      "psych_to_yaml",
       "public_method",
       "public_methods",
       "public_send",
@@ -9558,6 +9424,7 @@
       "to_s",
       "to_text",
       "to_yaml",
+      "to_yaml_properties",
       "trust",
       "type",
       "type=",
@@ -9587,8 +9454,7 @@
       "working_directory",
       "working_directory=",
       "wow64_architecture_override_required?",
-      "wow64_directory",
-      "yield_self"
+      "wow64_directory"
     ],
     "link": [
       "!",
@@ -9721,6 +9587,7 @@
       "provider",
       "provider=",
       "provider_for_action",
+      "psych_to_yaml",
       "public_method",
       "public_methods",
       "public_send",
@@ -9787,6 +9654,7 @@
       "to_s",
       "to_text",
       "to_yaml",
+      "to_yaml_properties",
       "trust",
       "untaint",
       "untrust",
@@ -9805,8 +9673,7 @@
       "value_to_text",
       "with_os_architecture",
       "wow64_architecture_override_required?",
-      "wow64_directory",
-      "yield_self"
+      "wow64_directory"
     ],
     "log": [
       "!",
@@ -9938,6 +9805,7 @@
       "provider",
       "provider=",
       "provider_for_action",
+      "psych_to_yaml",
       "public_method",
       "public_methods",
       "public_send",
@@ -10001,6 +9869,7 @@
       "to_s",
       "to_text",
       "to_yaml",
+      "to_yaml_properties",
       "trust",
       "untaint",
       "untrust",
@@ -10018,8 +9887,7 @@
       "value_to_text",
       "with_os_architecture",
       "wow64_architecture_override_required?",
-      "wow64_directory",
-      "yield_self"
+      "wow64_directory"
     ],
     "macosx_service": [
       "!",
@@ -10155,6 +10023,7 @@
       "provider",
       "provider=",
       "provider_for_action",
+      "psych_to_yaml",
       "public_method",
       "public_methods",
       "public_send",
@@ -10231,6 +10100,7 @@
       "to_s",
       "to_text",
       "to_yaml",
+      "to_yaml_properties",
       "trust",
       "untaint",
       "untrust",
@@ -10249,8 +10119,7 @@
       "value_to_text",
       "with_os_architecture",
       "wow64_architecture_override_required?",
-      "wow64_directory",
-      "yield_self"
+      "wow64_directory"
     ],
     "macports_package": [
       "!",
@@ -10382,6 +10251,7 @@
       "provider",
       "provider=",
       "provider_for_action",
+      "psych_to_yaml",
       "public_method",
       "public_methods",
       "public_send",
@@ -10453,6 +10323,7 @@
       "to_s",
       "to_text",
       "to_yaml",
+      "to_yaml_properties",
       "trust",
       "untaint",
       "untrust",
@@ -10472,8 +10343,7 @@
       "version=",
       "with_os_architecture",
       "wow64_architecture_override_required?",
-      "wow64_directory",
-      "yield_self"
+      "wow64_directory"
     ],
     "mdadm": [
       "!",
@@ -10608,6 +10478,7 @@
       "provider",
       "provider=",
       "provider_for_action",
+      "psych_to_yaml",
       "public_method",
       "public_methods",
       "public_send",
@@ -10673,6 +10544,7 @@
       "to_s",
       "to_text",
       "to_yaml",
+      "to_yaml_properties",
       "trust",
       "untaint",
       "untrust",
@@ -10690,8 +10562,7 @@
       "value_to_text",
       "with_os_architecture",
       "wow64_architecture_override_required?",
-      "wow64_directory",
-      "yield_self"
+      "wow64_directory"
     ],
     "mount": [
       "!",
@@ -10833,6 +10704,7 @@
       "provider",
       "provider=",
       "provider_for_action",
+      "psych_to_yaml",
       "public_method",
       "public_methods",
       "public_send",
@@ -10898,6 +10770,7 @@
       "to_s",
       "to_text",
       "to_yaml",
+      "to_yaml_properties",
       "trust",
       "untaint",
       "untrust",
@@ -10916,8 +10789,7 @@
       "value_to_text",
       "with_os_architecture",
       "wow64_architecture_override_required?",
-      "wow64_directory",
-      "yield_self"
+      "wow64_directory"
     ],
     "msu_package": [
       "!",
@@ -11052,6 +10924,7 @@
       "provider",
       "provider=",
       "provider_for_action",
+      "psych_to_yaml",
       "public_method",
       "public_methods",
       "public_send",
@@ -11123,6 +10996,7 @@
       "to_s",
       "to_text",
       "to_yaml",
+      "to_yaml_properties",
       "trust",
       "untaint",
       "untrust",
@@ -11143,8 +11017,7 @@
       "version=",
       "with_os_architecture",
       "wow64_architecture_override_required?",
-      "wow64_directory",
-      "yield_self"
+      "wow64_directory"
     ],
     "ohai": [
       "!",
@@ -11276,6 +11149,7 @@
       "provider",
       "provider=",
       "provider_for_action",
+      "psych_to_yaml",
       "public_method",
       "public_methods",
       "public_send",
@@ -11339,6 +11213,7 @@
       "to_s",
       "to_text",
       "to_yaml",
+      "to_yaml_properties",
       "trust",
       "untaint",
       "untrust",
@@ -11356,8 +11231,7 @@
       "value_to_text",
       "with_os_architecture",
       "wow64_architecture_override_required?",
-      "wow64_directory",
-      "yield_self"
+      "wow64_directory"
     ],
     "openbsd_package": [
       "!",
@@ -11489,6 +11363,7 @@
       "provider",
       "provider=",
       "provider_for_action",
+      "psych_to_yaml",
       "public_method",
       "public_methods",
       "public_send",
@@ -11560,6 +11435,7 @@
       "to_s",
       "to_text",
       "to_yaml",
+      "to_yaml_properties",
       "trust",
       "untaint",
       "untrust",
@@ -11579,8 +11455,7 @@
       "version=",
       "with_os_architecture",
       "wow64_architecture_override_required?",
-      "wow64_directory",
-      "yield_self"
+      "wow64_directory"
     ],
     "osx_profile": [
       "!",
@@ -11716,6 +11591,7 @@
       "provider",
       "provider=",
       "provider_for_action",
+      "psych_to_yaml",
       "public_method",
       "public_methods",
       "public_send",
@@ -11779,6 +11655,7 @@
       "to_s",
       "to_text",
       "to_yaml",
+      "to_yaml_properties",
       "trust",
       "untaint",
       "untrust",
@@ -11796,8 +11673,7 @@
       "value_to_text",
       "with_os_architecture",
       "wow64_architecture_override_required?",
-      "wow64_directory",
-      "yield_self"
+      "wow64_directory"
     ],
     "package": [
       "!",
@@ -11929,6 +11805,7 @@
       "provider",
       "provider=",
       "provider_for_action",
+      "psych_to_yaml",
       "public_method",
       "public_methods",
       "public_send",
@@ -12000,6 +11877,7 @@
       "to_s",
       "to_text",
       "to_yaml",
+      "to_yaml_properties",
       "trust",
       "untaint",
       "untrust",
@@ -12019,8 +11897,7 @@
       "version=",
       "with_os_architecture",
       "wow64_architecture_override_required?",
-      "wow64_directory",
-      "yield_self"
+      "wow64_directory"
     ],
     "pacman_package": [
       "!",
@@ -12152,6 +12029,7 @@
       "provider",
       "provider=",
       "provider_for_action",
+      "psych_to_yaml",
       "public_method",
       "public_methods",
       "public_send",
@@ -12223,6 +12101,7 @@
       "to_s",
       "to_text",
       "to_yaml",
+      "to_yaml_properties",
       "trust",
       "untaint",
       "untrust",
@@ -12242,8 +12121,7 @@
       "version=",
       "with_os_architecture",
       "wow64_architecture_override_required?",
-      "wow64_directory",
-      "yield_self"
+      "wow64_directory"
     ],
     "paludis_package": [
       "!",
@@ -12375,6 +12253,7 @@
       "provider",
       "provider=",
       "provider_for_action",
+      "psych_to_yaml",
       "public_method",
       "public_methods",
       "public_send",
@@ -12446,6 +12325,7 @@
       "to_s",
       "to_text",
       "to_yaml",
+      "to_yaml_properties",
       "trust",
       "untaint",
       "untrust",
@@ -12465,8 +12345,7 @@
       "version=",
       "with_os_architecture",
       "wow64_architecture_override_required?",
-      "wow64_directory",
-      "yield_self"
+      "wow64_directory"
     ],
     "perl": [
       "!",
@@ -12616,6 +12495,7 @@
       "provider",
       "provider=",
       "provider_for_action",
+      "psych_to_yaml",
       "public_method",
       "public_methods",
       "public_send",
@@ -12682,6 +12562,7 @@
       "to_s",
       "to_text",
       "to_yaml",
+      "to_yaml_properties",
       "trust",
       "umask",
       "untaint",
@@ -12703,8 +12584,7 @@
       "value_to_text",
       "with_os_architecture",
       "wow64_architecture_override_required?",
-      "wow64_directory",
-      "yield_self"
+      "wow64_directory"
     ],
     "portage_package": [
       "!",
@@ -12836,6 +12716,7 @@
       "provider",
       "provider=",
       "provider_for_action",
+      "psych_to_yaml",
       "public_method",
       "public_methods",
       "public_send",
@@ -12907,6 +12788,7 @@
       "to_s",
       "to_text",
       "to_yaml",
+      "to_yaml_properties",
       "trust",
       "untaint",
       "untrust",
@@ -12926,8 +12808,7 @@
       "version=",
       "with_os_architecture",
       "wow64_architecture_override_required?",
-      "wow64_directory",
-      "yield_self"
+      "wow64_directory"
     ],
     "powershell_package": [
       "!",
@@ -13060,6 +12941,7 @@
       "provider",
       "provider=",
       "provider_for_action",
+      "psych_to_yaml",
       "public_method",
       "public_methods",
       "public_send",
@@ -13131,6 +13013,7 @@
       "to_s",
       "to_text",
       "to_yaml",
+      "to_yaml_properties",
       "trust",
       "untaint",
       "untrust",
@@ -13151,8 +13034,7 @@
       "version=",
       "with_os_architecture",
       "wow64_architecture_override_required?",
-      "wow64_directory",
-      "yield_self"
+      "wow64_directory"
     ],
     "powershell_script": [
       "!",
@@ -13304,6 +13186,7 @@
       "provider",
       "provider=",
       "provider_for_action",
+      "psych_to_yaml",
       "public_method",
       "public_methods",
       "public_send",
@@ -13370,6 +13253,7 @@
       "to_s",
       "to_text",
       "to_yaml",
+      "to_yaml_properties",
       "trust",
       "umask",
       "untaint",
@@ -13391,8 +13275,7 @@
       "value_to_text",
       "with_os_architecture",
       "wow64_architecture_override_required?",
-      "wow64_directory",
-      "yield_self"
+      "wow64_directory"
     ],
     "python": [
       "!",
@@ -13542,6 +13425,7 @@
       "provider",
       "provider=",
       "provider_for_action",
+      "psych_to_yaml",
       "public_method",
       "public_methods",
       "public_send",
@@ -13608,6 +13492,7 @@
       "to_s",
       "to_text",
       "to_yaml",
+      "to_yaml_properties",
       "trust",
       "umask",
       "untaint",
@@ -13629,8 +13514,7 @@
       "value_to_text",
       "with_os_architecture",
       "wow64_architecture_override_required?",
-      "wow64_directory",
-      "yield_self"
+      "wow64_directory"
     ],
     "reboot": [
       "!",
@@ -13760,6 +13644,7 @@
       "provider",
       "provider=",
       "provider_for_action",
+      "psych_to_yaml",
       "public_method",
       "public_methods",
       "public_send",
@@ -13825,6 +13710,7 @@
       "to_s",
       "to_text",
       "to_yaml",
+      "to_yaml_properties",
       "trust",
       "untaint",
       "untrust",
@@ -13842,8 +13728,7 @@
       "value_to_text",
       "with_os_architecture",
       "wow64_architecture_override_required?",
-      "wow64_directory",
-      "yield_self"
+      "wow64_directory"
     ],
     "registry_key": [
       "!",
@@ -13974,6 +13859,7 @@
       "provider",
       "provider=",
       "provider_for_action",
+      "psych_to_yaml",
       "public_method",
       "public_methods",
       "public_send",
@@ -14038,6 +13924,7 @@
       "to_s",
       "to_text",
       "to_yaml",
+      "to_yaml_properties",
       "trust",
       "unscrubbed_values",
       "untaint",
@@ -14057,8 +13944,7 @@
       "values",
       "with_os_architecture",
       "wow64_architecture_override_required?",
-      "wow64_directory",
-      "yield_self"
+      "wow64_directory"
     ],
     "remote_directory": [
       "!",
@@ -14198,6 +14084,7 @@
       "provider",
       "provider=",
       "provider_for_action",
+      "psych_to_yaml",
       "public_method",
       "public_methods",
       "public_send",
@@ -14265,6 +14152,7 @@
       "to_s",
       "to_text",
       "to_yaml",
+      "to_yaml_properties",
       "trust",
       "untaint",
       "untrust",
@@ -14283,8 +14171,7 @@
       "value_to_text",
       "with_os_architecture",
       "wow64_architecture_override_required?",
-      "wow64_directory",
-      "yield_self"
+      "wow64_directory"
     ],
     "remote_file": [
       "!",
@@ -14437,6 +14324,7 @@
       "provider",
       "provider=",
       "provider_for_action",
+      "psych_to_yaml",
       "public_method",
       "public_methods",
       "public_send",
@@ -14510,6 +14398,7 @@
       "to_s",
       "to_text",
       "to_yaml",
+      "to_yaml_properties",
       "trust",
       "untaint",
       "untrust",
@@ -14537,8 +14426,7 @@
       "verify",
       "with_os_architecture",
       "wow64_architecture_override_required?",
-      "wow64_directory",
-      "yield_self"
+      "wow64_directory"
     ],
     "route": [
       "!",
@@ -14684,6 +14572,7 @@
       "provider",
       "provider=",
       "provider_for_action",
+      "psych_to_yaml",
       "public_method",
       "public_methods",
       "public_send",
@@ -14751,6 +14640,7 @@
       "to_s",
       "to_text",
       "to_yaml",
+      "to_yaml_properties",
       "trust",
       "untaint",
       "untrust",
@@ -14768,8 +14658,7 @@
       "value_to_text",
       "with_os_architecture",
       "wow64_architecture_override_required?",
-      "wow64_directory",
-      "yield_self"
+      "wow64_directory"
     ],
     "rpm_package": [
       "!",
@@ -14903,6 +14792,7 @@
       "provider",
       "provider=",
       "provider_for_action",
+      "psych_to_yaml",
       "public_method",
       "public_methods",
       "public_send",
@@ -14974,6 +14864,7 @@
       "to_s",
       "to_text",
       "to_yaml",
+      "to_yaml_properties",
       "trust",
       "untaint",
       "untrust",
@@ -14993,8 +14884,7 @@
       "version=",
       "with_os_architecture",
       "wow64_architecture_override_required?",
-      "wow64_directory",
-      "yield_self"
+      "wow64_directory"
     ],
     "ruby": [
       "!",
@@ -15144,6 +15034,7 @@
       "provider",
       "provider=",
       "provider_for_action",
+      "psych_to_yaml",
       "public_method",
       "public_methods",
       "public_send",
@@ -15210,6 +15101,7 @@
       "to_s",
       "to_text",
       "to_yaml",
+      "to_yaml_properties",
       "trust",
       "umask",
       "untaint",
@@ -15231,8 +15123,7 @@
       "value_to_text",
       "with_os_architecture",
       "wow64_architecture_override_required?",
-      "wow64_directory",
-      "yield_self"
+      "wow64_directory"
     ],
     "ruby_block": [
       "!",
@@ -15362,6 +15253,7 @@
       "provider",
       "provider=",
       "provider_for_action",
+      "psych_to_yaml",
       "public_method",
       "public_methods",
       "public_send",
@@ -15425,6 +15317,7 @@
       "to_s",
       "to_text",
       "to_yaml",
+      "to_yaml_properties",
       "trust",
       "untaint",
       "untrust",
@@ -15442,8 +15335,7 @@
       "value_to_text",
       "with_os_architecture",
       "wow64_architecture_override_required?",
-      "wow64_directory",
-      "yield_self"
+      "wow64_directory"
     ],
     "scm": [
       "!",
@@ -15580,6 +15472,7 @@
       "provider",
       "provider=",
       "provider_for_action",
+      "psych_to_yaml",
       "public_method",
       "public_methods",
       "public_send",
@@ -15653,6 +15546,7 @@
       "to_s",
       "to_text",
       "to_yaml",
+      "to_yaml_properties",
       "trust",
       "untaint",
       "untrust",
@@ -15671,8 +15565,7 @@
       "value_to_text",
       "with_os_architecture",
       "wow64_architecture_override_required?",
-      "wow64_directory",
-      "yield_self"
+      "wow64_directory"
     ],
     "script": [
       "!",
@@ -15822,6 +15715,7 @@
       "provider",
       "provider=",
       "provider_for_action",
+      "psych_to_yaml",
       "public_method",
       "public_methods",
       "public_send",
@@ -15888,6 +15782,7 @@
       "to_s",
       "to_text",
       "to_yaml",
+      "to_yaml_properties",
       "trust",
       "umask",
       "untaint",
@@ -15909,8 +15804,7 @@
       "value_to_text",
       "with_os_architecture",
       "wow64_architecture_override_required?",
-      "wow64_directory",
-      "yield_self"
+      "wow64_directory"
     ],
     "service": [
       "!",
@@ -16045,6 +15939,7 @@
       "provider",
       "provider=",
       "provider_for_action",
+      "psych_to_yaml",
       "public_method",
       "public_methods",
       "public_send",
@@ -16120,6 +16015,7 @@
       "to_s",
       "to_text",
       "to_yaml",
+      "to_yaml_properties",
       "trust",
       "untaint",
       "untrust",
@@ -16138,8 +16034,7 @@
       "value_to_text",
       "with_os_architecture",
       "wow64_architecture_override_required?",
-      "wow64_directory",
-      "yield_self"
+      "wow64_directory"
     ],
     "smartos_package": [
       "!",
@@ -16271,6 +16166,7 @@
       "provider",
       "provider=",
       "provider_for_action",
+      "psych_to_yaml",
       "public_method",
       "public_methods",
       "public_send",
@@ -16342,6 +16238,7 @@
       "to_s",
       "to_text",
       "to_yaml",
+      "to_yaml_properties",
       "trust",
       "untaint",
       "untrust",
@@ -16361,8 +16258,7 @@
       "version=",
       "with_os_architecture",
       "wow64_architecture_override_required?",
-      "wow64_directory",
-      "yield_self"
+      "wow64_directory"
     ],
     "solaris_package": [
       "!",
@@ -16494,6 +16390,7 @@
       "provider",
       "provider=",
       "provider_for_action",
+      "psych_to_yaml",
       "public_method",
       "public_methods",
       "public_send",
@@ -16565,6 +16462,7 @@
       "to_s",
       "to_text",
       "to_yaml",
+      "to_yaml_properties",
       "trust",
       "untaint",
       "untrust",
@@ -16584,8 +16482,7 @@
       "version=",
       "with_os_architecture",
       "wow64_architecture_override_required?",
-      "wow64_directory",
-      "yield_self"
+      "wow64_directory"
     ],
     "subversion": [
       "!",
@@ -16722,6 +16619,7 @@
       "provider",
       "provider=",
       "provider_for_action",
+      "psych_to_yaml",
       "public_method",
       "public_methods",
       "public_send",
@@ -16796,6 +16694,7 @@
       "to_s",
       "to_text",
       "to_yaml",
+      "to_yaml_properties",
       "trust",
       "untaint",
       "untrust",
@@ -16814,8 +16713,7 @@
       "value_to_text",
       "with_os_architecture",
       "wow64_architecture_override_required?",
-      "wow64_directory",
-      "yield_self"
+      "wow64_directory"
     ],
     "systemd_unit": [
       "!",
@@ -16951,6 +16849,7 @@
       "provider",
       "provider=",
       "provider_for_action",
+      "psych_to_yaml",
       "public_method",
       "public_methods",
       "public_send",
@@ -17017,6 +16916,7 @@
       "to_s",
       "to_text",
       "to_yaml",
+      "to_yaml_properties",
       "triggers_reload",
       "triggers_reload=",
       "trust",
@@ -17042,8 +16942,7 @@
       "verify=",
       "with_os_architecture",
       "wow64_architecture_override_required?",
-      "wow64_directory",
-      "yield_self"
+      "wow64_directory"
     ],
     "template": [
       "!",
@@ -17199,6 +17098,7 @@
       "provider",
       "provider=",
       "provider_for_action",
+      "psych_to_yaml",
       "public_method",
       "public_methods",
       "public_send",
@@ -17264,6 +17164,7 @@
       "to_s",
       "to_text",
       "to_yaml",
+      "to_yaml_properties",
       "trust",
       "untaint",
       "untrust",
@@ -17286,8 +17187,7 @@
       "verify",
       "with_os_architecture",
       "wow64_architecture_override_required?",
-      "wow64_directory",
-      "yield_self"
+      "wow64_directory"
     ],
     "timestamped_deploy": [
       "!",
@@ -17436,6 +17336,7 @@
       "provider",
       "provider=",
       "provider_for_action",
+      "psych_to_yaml",
       "public_method",
       "public_methods",
       "public_send",
@@ -17522,6 +17423,7 @@
       "to_s",
       "to_text",
       "to_yaml",
+      "to_yaml_properties",
       "trust",
       "untaint",
       "untrust",
@@ -17540,8 +17442,7 @@
       "value_to_text",
       "with_os_architecture",
       "wow64_architecture_override_required?",
-      "wow64_directory",
-      "yield_self"
+      "wow64_directory"
     ],
     "user": [
       "!",
@@ -17678,6 +17579,7 @@
       "provider",
       "provider=",
       "provider_for_action",
+      "psych_to_yaml",
       "public_method",
       "public_methods",
       "public_send",
@@ -17744,6 +17646,7 @@
       "to_s",
       "to_text",
       "to_yaml",
+      "to_yaml_properties",
       "trust",
       "uid",
       "untaint",
@@ -17764,8 +17667,7 @@
       "value_to_text",
       "with_os_architecture",
       "wow64_architecture_override_required?",
-      "wow64_directory",
-      "yield_self"
+      "wow64_directory"
     ],
     "whyrun_safe_ruby_block": [
       "!",
@@ -17895,6 +17797,7 @@
       "provider",
       "provider=",
       "provider_for_action",
+      "psych_to_yaml",
       "public_method",
       "public_methods",
       "public_send",
@@ -17958,6 +17861,7 @@
       "to_s",
       "to_text",
       "to_yaml",
+      "to_yaml_properties",
       "trust",
       "untaint",
       "untrust",
@@ -17975,8 +17879,7 @@
       "value_to_text",
       "with_os_architecture",
       "wow64_architecture_override_required?",
-      "wow64_directory",
-      "yield_self"
+      "wow64_directory"
     ],
     "windows_package": [
       "!",
@@ -18113,6 +18016,7 @@
       "provider",
       "provider=",
       "provider_for_action",
+      "psych_to_yaml",
       "public_method",
       "public_methods",
       "public_send",
@@ -18188,6 +18092,7 @@
       "to_s",
       "to_text",
       "to_yaml",
+      "to_yaml_properties",
       "trust",
       "untaint",
       "untrust",
@@ -18208,8 +18113,7 @@
       "version=",
       "with_os_architecture",
       "wow64_architecture_override_required?",
-      "wow64_directory",
-      "yield_self"
+      "wow64_directory"
     ],
     "windows_path": [
       "!",
@@ -18339,6 +18243,7 @@
       "provider",
       "provider=",
       "provider_for_action",
+      "psych_to_yaml",
       "public_method",
       "public_methods",
       "public_send",
@@ -18402,6 +18307,7 @@
       "to_s",
       "to_text",
       "to_yaml",
+      "to_yaml_properties",
       "trust",
       "untaint",
       "untrust",
@@ -18419,8 +18325,7 @@
       "value_to_text",
       "with_os_architecture",
       "wow64_architecture_override_required?",
-      "wow64_directory",
-      "yield_self"
+      "wow64_directory"
     ],
     "windows_script": [
       "!",
@@ -18571,6 +18476,7 @@
       "provider",
       "provider=",
       "provider_for_action",
+      "psych_to_yaml",
       "public_method",
       "public_methods",
       "public_send",
@@ -18637,6 +18543,7 @@
       "to_s",
       "to_text",
       "to_yaml",
+      "to_yaml_properties",
       "trust",
       "umask",
       "untaint",
@@ -18658,8 +18565,7 @@
       "value_to_text",
       "with_os_architecture",
       "wow64_architecture_override_required?",
-      "wow64_directory",
-      "yield_self"
+      "wow64_directory"
     ],
     "windows_service": [
       "!",
@@ -18794,6 +18700,7 @@
       "provider",
       "provider=",
       "provider_for_action",
+      "psych_to_yaml",
       "public_method",
       "public_methods",
       "public_send",
@@ -18872,6 +18779,7 @@
       "to_s",
       "to_text",
       "to_yaml",
+      "to_yaml_properties",
       "trust",
       "untaint",
       "untrust",
@@ -18890,8 +18798,7 @@
       "value_to_text",
       "with_os_architecture",
       "wow64_architecture_override_required?",
-      "wow64_directory",
-      "yield_self"
+      "wow64_directory"
     ],
     "windows_task": [
       "!",
@@ -19045,6 +18952,7 @@
       "provider",
       "provider=",
       "provider_for_action",
+      "psych_to_yaml",
       "public_method",
       "public_methods",
       "public_send",
@@ -19120,6 +19028,7 @@
       "to_s",
       "to_text",
       "to_yaml",
+      "to_yaml_properties",
       "trust",
       "untaint",
       "untrust",
@@ -19139,8 +19048,7 @@
       "value_to_text",
       "with_os_architecture",
       "wow64_architecture_override_required?",
-      "wow64_directory",
-      "yield_self"
+      "wow64_directory"
     ],
     "yum_package": [
       "!",
@@ -19278,6 +19186,7 @@
       "provider",
       "provider=",
       "provider_for_action",
+      "psych_to_yaml",
       "public_method",
       "public_methods",
       "public_send",
@@ -19349,6 +19258,7 @@
       "to_s",
       "to_text",
       "to_yaml",
+      "to_yaml_properties",
       "trust",
       "untaint",
       "untrust",
@@ -19369,7 +19279,6 @@
       "with_os_architecture",
       "wow64_architecture_override_required?",
       "wow64_directory",
-      "yield_self",
       "yum_binary",
       "yum_binary="
     ],
@@ -19562,6 +19471,7 @@
       "proxy_password=",
       "proxy_username",
       "proxy_username=",
+      "psych_to_yaml",
       "public_method",
       "public_methods",
       "public_send",
@@ -19647,6 +19557,7 @@
       "to_s",
       "to_text",
       "to_yaml",
+      "to_yaml_properties",
       "trust",
       "untaint",
       "untrust",
@@ -19667,8 +19578,7 @@
       "value_to_text",
       "with_os_architecture",
       "wow64_architecture_override_required?",
-      "wow64_directory",
-      "yield_self"
+      "wow64_directory"
     ],
     "zypper_package": [
       "!",
@@ -19804,6 +19714,7 @@
       "provider",
       "provider=",
       "provider_for_action",
+      "psych_to_yaml",
       "public_method",
       "public_methods",
       "public_send",
@@ -19875,6 +19786,7 @@
       "to_s",
       "to_text",
       "to_yaml",
+      "to_yaml_properties",
       "trust",
       "untaint",
       "untrust",
@@ -19894,8 +19806,7 @@
       "version=",
       "with_os_architecture",
       "wow64_architecture_override_required?",
-      "wow64_directory",
-      "yield_self"
+      "wow64_directory"
     ],
     "zypper_repository": [
       "!",
@@ -20050,6 +19961,7 @@
       "provider",
       "provider=",
       "provider_for_action",
+      "psych_to_yaml",
       "public_method",
       "public_methods",
       "public_send",
@@ -20119,6 +20031,7 @@
       "to_s",
       "to_text",
       "to_yaml",
+      "to_yaml_properties",
       "trust",
       "type",
       "type=",
@@ -20139,8 +20052,7 @@
       "value_to_text",
       "with_os_architecture",
       "wow64_architecture_override_required?",
-      "wow64_directory",
-      "yield_self"
+      "wow64_directory"
     ]
   }
 }
