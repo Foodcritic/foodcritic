@@ -1,5 +1,4 @@
 chef_versions = [
-  "13.12.3",
   "14.10.9",
 ]
 chef_versions.each do |version|
