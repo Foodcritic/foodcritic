@@ -1,3 +1,4 @@
+require "open-uri"
 require "pathname"
 
 module FoodCritic
@@ -76,7 +77,9 @@ module FoodCritic
       paths.map do |path|
         File.directory?(path) ? Dir["#{path}/**/*.rb"].sort : path
       end.flatten.each do |path|
-        dsl.instance_eval(File.read(path), path)
+        rule_file = open(path)
+        dsl.instance_eval(rule_file.read, path)
+        rule_file.close
       end
       dsl.rules
     end
