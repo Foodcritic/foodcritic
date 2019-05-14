@@ -3,7 +3,7 @@ FC002: Avoid string interpolation where not required: ./libraries/registry_helpe
 FC002: Avoid string interpolation where not required: ./libraries/windows_privileged.rb:42
 FC002: Avoid string interpolation where not required: ./libraries/windows_privileged.rb:56
 FC018: LWRP uses deprecated notification syntax: ./providers/shortcut.rb:54
-FC048: Prefer Mixlib::ShellOut: ./providers/task.rb:106
+FC048: Prefer shell_out helper method to shelling out with Ruby: ./providers/task.rb:106
 FC064: Ensure issues_url is set in metadata: ./metadata.rb:1
 FC065: Ensure source_url is set in metadata: ./metadata.rb:1
 FC066: Ensure chef_version is set in metadata: ./metadata.rb:1

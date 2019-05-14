@@ -9,3 +9,4 @@ FC069: Ensure standardized license defined in metadata: ./metadata.rb:1
 FC072: Metadata should not contain "attribute" keyword: ./metadata.rb:1
 FC078: Ensure cookbook shared under an OSI-approved open source license: ./metadata.rb:1
 FC082: Deprecated node.set or node.set_unless used to set node attributes: ./recipes/default.rb:34
+FC120: Do not set the name property directly on a resource: ./recipes/default.rb:69

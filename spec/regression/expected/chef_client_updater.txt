@@ -1,1 +1,2 @@
 FC070: Ensure supports metadata defines valid platforms: ./metadata.rb:1
+FC116: Cookbook depends on the deprecated compat_resource cookbook: ./metadata.rb:1

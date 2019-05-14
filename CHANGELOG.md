@@ -1,5 +1,48 @@
 # Foodcritic Changelog:
 
+## [16.0.0](https://github.com/Foodcritic/foodcritic/tree/v15.0.0) (2019-05-14)
+
+- Removed Chef 13 metadata
+- Added metadata for Chef 14.12.9 and 15.0.293
+- Reenabled FC121 which detects the usage of cookbooks made obsolete by Chef 14
+
+## [15.1.0](https://github.com/Foodcritic/foodcritic/tree/v15.1.0) (2018-12-26)
+
+- Stripped test files from the gem artifact to slim the install size
+- Removed the legacy man page file that appears to be used
+- Updated chef metadata to 14.8 which provides information on the actions / properties of windows_task
+
+## [15.0.0](https://github.com/Foodcritic/foodcritic/tree/v15.0.0) (2018-12-03)
+
+With this release of Foodcritic we are now shipping only metadata for the latest versions of each supported Chef version. Chef metadata files are getting increasingly large and this is increasing the size of Chef DK/Workstation significantly. This release ships with Chef 14.7 and 13.12 metadata and future releases will update the metadata versions without a major version bump as this should not be considered a breaking change.
+
+## [14.3.0](https://github.com/Foodcritic/foodcritic/tree/v14.3.0) (2018-10-23)
+
+- Added Chef 13.11.3 metadata
+- Removed Chef 13.5, 13.6, 13.7 and 13.9 metadata
+- Disabled FC121 for now. This rule was causing a lot of confusion and resulting in authors dropping support for Chef 13 prematurely. This rule we get enabled again when Chef 13 goes EOL this coming April
+
+## [14.2.0](https://github.com/Foodcritic/foodcritic/tree/v14.2.0) (2018-09-30)
+
+- Add Chef 14.5 metadata with 14.4 being the new default
+- Removed Chef 13.4 metadata
+- Pin cucumber-core to prevent pulling in new breaking changes
+
+## [14.1.0](https://github.com/Foodcritic/foodcritic/tree/v14.1.0) (2018-08-30)
+
+- Add Chef 14.3 and 14.4 metadata with 14.4 being the new default
+
+## [14.0.0](https://github.com/Foodcritic/foodcritic/tree/v14.0.0) (2018-06-28)
+
+- Removed Chef 13.0, 13.1, and 13.3 metadata.
+- Added Chef 13.9, 14.1, and 14.2 metadata and made 14.2 the new default, which adds property checking for all new Chef 14 resources to Foodcritic.
+- Renamed FC048 from "Prefer Mixlib::ShellOut" to "Prefer shell_out helper method to shelling out with Ruby" since Chef includes a helpful shell_out helper that is the preferred way to shell out in resources or libraries.
+- Removed FC012, which looked for legacy README.rdoc files. These haven't existed since the very early days of Chef and our existing check for README.MD files will catch any cookbooks still missing the proper format.
+- Added the opensource tag to FC071: Missing LICENSE file. This lets you easily skip this by excluding any rules tagged with opensource.
+- Added a new rule FC121: Cookbook depends on cookbook made obsolete by Chef 14\. This rule detects cookbook which depend on build-essential, dmg, chef_handler, chef_hostname, mac_os_x, swap, or sysctl cookbooks. The resources from these cookbooks now ship in Chef 14 and depending on the cookbooks is no longer necessary. Note removing these dependencies does increase the minimum required chef-client for
+- The non-existent resource UnresolvedSubscribes has been removed from the metadata files slimming Foodcritic's install size by 1500 lines.
+- Updated the list of SPDX licenses in FC069 and FC078 to the current list.
+
 ## [13.1.1](https://github.com/Foodcritic/foodcritic/tree/v13.1.1) (2018-04-12)
 
 - Fixed an error in the detection of attributes.rb files when using root alias functionality

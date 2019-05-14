@@ -62,24 +62,24 @@ describe FoodCritic::Api do
   describe "#attribute_access" do
     let(:ast) { double() }
     it "returns empty if the provided ast does not support XPath" do
-      expect(api.attribute_access(nil, :type => :vivified)).to be_empty
+      expect(api.attribute_access(nil, type: :vivified)).to be_empty
     end
     it "returns empty if the provided ast has no matches" do
       expect(ast).to receive(:xpath).with(kind_of(String), kind_of(FoodCritic::Api::AttFilter)).and_return([]).exactly(3).times
       [:vivified, :string, :symbol].each do |access_type|
-        expect(api.attribute_access(ast, :type => access_type)).to be_empty
+        expect(api.attribute_access(ast, type: access_type)).to be_empty
       end
     end
     it "raises if the specified node type is not recognised" do
       allow(ast).to receive(:xpath)
-      expect { api.attribute_access(ast, :type => :cymbals) }.to raise_error ArgumentError
+      expect { api.attribute_access(ast, type: :cymbals) }.to raise_error ArgumentError
     end
     it "does not raise if the specified node type is valid" do
       expect(ast).to receive(:xpath).with(/field/, FoodCritic::Api::AttFilter).and_return([])
       expect(ast).to receive(:xpath).with(/symbol/, FoodCritic::Api::AttFilter).and_return([])
       expect(ast).to receive(:xpath).with(/tstring_content/, FoodCritic::Api::AttFilter).and_return([])
       [:vivified, :symbol, :string].each do |access_type|
-        api.attribute_access(ast, :type => access_type)
+        api.attribute_access(ast, type: access_type)
       end
     end
     it "returns vivified attributes access" do
@@ -88,11 +88,11 @@ describe FoodCritic::Api do
       expect(call).to receive(:xpath).with(/ident/).and_return(%w{node bar})
       expect(call).to receive(:xpath).with(/@value/).and_return("foo")
       expect(ast).to receive(:xpath).with(kind_of(String), kind_of(FoodCritic::Api::AttFilter)).and_return([call])
-      expect(api.attribute_access(ast, :type => :vivified)).to eq [call]
+      expect(api.attribute_access(ast, type: :vivified)).to eq [call]
     end
     it "doesn't flag searching for a node by name as symbol access" do
       ast = parse_ast(%q{baz = search(:node, "name:#{node['foo']['bar']}")[0]})
-      expect(api.attribute_access(ast, :type => :symbol)).to be_empty
+      expect(api.attribute_access(ast, type: :symbol)).to be_empty
     end
     describe :ignoring_attributes do
       it "doesn't ignore run_state by default for backwards compatibility" do
@@ -101,23 +101,23 @@ describe FoodCritic::Api do
       end
       it "allows run_state to be ignored" do
         ast = parse_ast("node.run_state['bar'] = 'baz'")
-        expect(api.attribute_access(ast, :ignore => ["run_state"])).to be_empty
+        expect(api.attribute_access(ast, ignore: ["run_state"])).to be_empty
       end
       it "allows run_state to be ignored (symbols access)" do
         ast = parse_ast("node.run_state[:bar] = 'baz'")
-        expect(api.attribute_access(ast, :ignore => ["run_state"])).to be_empty
+        expect(api.attribute_access(ast, ignore: ["run_state"])).to be_empty
       end
       it "allows any attribute to be ignored" do
         ast = parse_ast("node['bar'] = 'baz'")
-        expect(api.attribute_access(ast, :ignore => ["bar"])).to be_empty
+        expect(api.attribute_access(ast, ignore: ["bar"])).to be_empty
       end
       it "allows any attribute to be ignored (symbols access)" do
         ast = parse_ast("node[:bar] = 'baz'")
-        expect(api.attribute_access(ast, :ignore => ["bar"])).to be_empty
+        expect(api.attribute_access(ast, ignore: ["bar"])).to be_empty
       end
       it "allows any attribute to be ignored (dot access)" do
         ast = parse_ast("node.bar = 'baz'")
-        expect(api.attribute_access(ast, :ignore => ["bar"])).to be_empty
+        expect(api.attribute_access(ast, ignore: ["bar"])).to be_empty
       end
       it "includes the children of attributes" do
         ast = parse_ast("node['foo']['bar'] = 'baz'")
@@ -125,18 +125,18 @@ describe FoodCritic::Api do
       end
       it "does not include children of removed attributes" do
         ast = parse_ast("node['foo']['bar'] = 'baz'")
-        expect(api.attribute_access(ast, :ignore => ["foo"])).to be_empty
+        expect(api.attribute_access(ast, ignore: ["foo"])).to be_empty
       end
       it "coerces ignore values to enumerate them" do
         ast = parse_ast("node.run_state['bar'] = 'baz'")
-        expect(api.attribute_access(ast, :ignore => "run_state")).to be_empty
+        expect(api.attribute_access(ast, ignore: "run_state")).to be_empty
       end
       it "can ignore multiple attributes" do
         ast = parse_ast(%q{
           node['bar'] = 'baz'
           node.foo = 'baz'
         })
-        expect(api.attribute_access(ast, :ignore => %w{foo bar})).to be_empty
+        expect(api.attribute_access(ast, ignore: %w{foo bar})).to be_empty
       end
     end
   end
@@ -404,11 +404,11 @@ describe FoodCritic::Api do
     end
     it "restricts by resource type when provided an array" do
       expect(ast).to receive(:xpath).with("//method_add_block[command/ident[@value='file' or @value='template']][command/ident/@value != 'action']").and_return(["method_add_block"])
-      api.find_resources(ast, :type => %w{file template})
+      api.find_resources(ast, type: %w{file template})
     end
     it "restricts by resource type when provided a string" do
       expect(ast).to receive(:xpath).with("//method_add_block[command/ident[@value='file']][command/ident/@value != 'action']").and_return(["method_add_block"])
-      api.find_resources(ast, :type => "file")
+      api.find_resources(ast, type: "file")
     end
     it "does not restrict by resource type when not provided" do
       expect(ast).to receive(:xpath).with("//method_add_block[command/ident][command/ident/@value != 'action']").and_return(["method_add_block"])
@@ -416,7 +416,7 @@ describe FoodCritic::Api do
     end
     it "allows resource type to be specified as :any" do
       expect(ast).to receive(:xpath).with("//method_add_block[command/ident][command/ident/@value != 'action']").and_return(["method_add_block"])
-      api.find_resources(ast, :type => :any)
+      api.find_resources(ast, type: :any)
     end
     it "returns any matches" do
       expect(ast).to receive(:xpath).with(kind_of(String)).and_return(["method_add_block"])
@@ -460,10 +460,10 @@ describe FoodCritic::Api do
         expect(api.included_recipes(ast)["foo::"].first).to respond_to :xpath
       end
       it "returns empty if asked to exclude statements with embedded expressions" do
-        expect(api.included_recipes(ast, :with_partial_names => false)).to be_empty
+        expect(api.included_recipes(ast, with_partial_names: false)).to be_empty
       end
       it "returns the literals if asked to include statements with embedded expressions" do
-        expect(api.included_recipes(ast, :with_partial_names => true).keys).to eq ["foo::"]
+        expect(api.included_recipes(ast, with_partial_names: true).keys).to eq ["foo::"]
       end
     end
     describe "embedded expression - cookbook name" do
@@ -479,7 +479,7 @@ describe FoodCritic::Api do
         expect(api.included_recipes(ast)["::bar"].first).to respond_to :xpath
       end
       it "returns empty if asked to exclude statements with embedded expressions" do
-        expect(api.included_recipes(ast, :with_partial_names => false)).to be_empty
+        expect(api.included_recipes(ast, with_partial_names: false)).to be_empty
       end
     end
     describe "embedded expression - partial cookbook name" do
@@ -495,7 +495,7 @@ describe FoodCritic::Api do
         expect(api.included_recipes(ast)["_foo::bar"].first).to respond_to :xpath
       end
       it "returns empty if asked to exclude statements with embedded expressions" do
-        expect(api.included_recipes(ast, :with_partial_names => false)).to be_empty
+        expect(api.included_recipes(ast, with_partial_names: false)).to be_empty
       end
     end
   end
@@ -565,11 +565,11 @@ describe FoodCritic::Api do
       end
       it "includes the name of the node in the match" do
         expect(node).to receive(:name).and_return("command")
-        expect(api.match(node)).to eq({ :matched => "command", :line => 1,
-                                        :column => 10 })
+        expect(api.match(node)).to eq({ matched: "command", line: 1,
+                                        column: 10 })
       end
       it "sets the matched name to empty if the element does not have a name" do
-        expect(api.match(node)).to eq({ :matched => "", :line => 1, :column => 10 })
+        expect(api.match(node)).to eq({ matched: "", line: 1, column: 10 })
       end
     end
   end
@@ -804,12 +804,12 @@ describe FoodCritic::Api do
         end
       })
       expect(api.notifications(ast)).to eq [{
-          :type => :notifies,
-          :action => :restart,
-          :resource_type => :service,
-          :resource_name => "nscd",
-          :timing => :delayed,
-          :style => :old,
+          type: :notifies,
+          action: :restart,
+          resource_type: :service,
+          resource_name: "nscd",
+          timing: :delayed,
+          style: :old,
         }]
     end
     it "understands old-style notifications with :'symbol' literals as action" do
@@ -822,12 +822,12 @@ describe FoodCritic::Api do
         end
       })
       expect(api.notifications(ast)).to eq [{
-          :type => :notifies,
-          :action => :'soft-restart',
-          :resource_type => :service,
-          :resource_name => "nscd",
-          :timing => :delayed,
-          :style => :old,
+          type: :notifies,
+          action: :'soft-restart',
+          resource_type: :service,
+          resource_name: "nscd",
+          timing: :delayed,
+          style: :old,
         }]
     end
     it "understands old-style notifications with added parentheses" do
@@ -840,12 +840,12 @@ describe FoodCritic::Api do
         end
       })
       expect(api.notifications(ast)).to eq [{
-          :type => :notifies,
-          :action => :restart,
-          :resource_type => :service,
-          :resource_name => "nscd",
-          :timing => :delayed,
-          :style => :old,
+          type: :notifies,
+          action: :restart,
+          resource_type: :service,
+          resource_name: "nscd",
+          timing: :delayed,
+          style: :old,
         }]
     end
     it "understands old-style notifications with ruby 1.9 hash syntax" do
@@ -858,12 +858,12 @@ describe FoodCritic::Api do
         end
       })
       expect(api.notifications(ast)).to eq [{
-          :type => :notifies,
-          :action => :restart,
-          :resource_type => :service,
-          :resource_name => "nscd",
-          :timing => :delayed,
-          :style => :old,
+          type: :notifies,
+          action: :restart,
+          resource_type: :service,
+          resource_name: "nscd",
+          timing: :delayed,
+          style: :old,
         }]
     end
     it "understands the old-style subscriptions" do
@@ -876,12 +876,12 @@ describe FoodCritic::Api do
         end
       })
       expect(api.notifications(ast)).to eq [{
-          :type => :subscribes,
-          :action => :restart,
-          :resource_type => :service,
-          :resource_name => "nscd",
-          :timing => :delayed,
-          :style => :old,
+          type: :subscribes,
+          action: :restart,
+          resource_type: :service,
+          resource_name: "nscd",
+          timing: :delayed,
+          style: :old,
         }]
     end
     it "understands old-style subscriptions with added parentheses" do
@@ -894,12 +894,12 @@ describe FoodCritic::Api do
         end
       })
       expect(api.notifications(ast)).to eq [{
-          :type => :subscribes,
-          :action => :restart,
-          :resource_type => :service,
-          :resource_name => "nscd",
-          :timing => :delayed,
-          :style => :old,
+          type: :subscribes,
+          action: :restart,
+          resource_type: :service,
+          resource_name: "nscd",
+          timing: :delayed,
+          style: :old,
         }]
     end
     it "understands the new-style notifications" do
@@ -912,12 +912,12 @@ describe FoodCritic::Api do
         end
       })
       expect(api.notifications(ast)).to eq [{
-          :type => :notifies,
-          :action => :restart,
-          :resource_type => :service,
-          :resource_name => "nscd",
-          :timing => :delayed,
-          :style => :new,
+          type: :notifies,
+          action: :restart,
+          resource_type: :service,
+          resource_name: "nscd",
+          timing: :delayed,
+          style: :new,
         }]
     end
     it "understands new-style notifications with :'symbol' literals as action" do
@@ -930,12 +930,12 @@ describe FoodCritic::Api do
         end
       })
       expect(api.notifications(ast)).to eq [{
-          :type => :notifies,
-          :action => :'soft-restart',
-          :resource_type => :service,
-          :resource_name => "nscd",
-          :timing => :delayed,
-          :style => :new,
+          type: :notifies,
+          action: :'soft-restart',
+          resource_type: :service,
+          resource_name: "nscd",
+          timing: :delayed,
+          style: :new,
         }]
     end
     it "understands new-style notifications with added parentheses" do
@@ -948,12 +948,12 @@ describe FoodCritic::Api do
         end
       })
       expect(api.notifications(ast)).to eq [{
-          :type => :notifies,
-          :action => :restart,
-          :resource_type => :service,
-          :resource_name => "nscd",
-          :timing => :delayed,
-          :style => :new,
+          type: :notifies,
+          action: :restart,
+          resource_type: :service,
+          resource_name: "nscd",
+          timing: :delayed,
+          style: :new,
         }]
     end
     it "understands the new-style subscriptions" do
@@ -966,12 +966,12 @@ describe FoodCritic::Api do
         end
       })
       expect(api.notifications(ast)).to eq [{
-          :type => :subscribes,
-          :action => :restart,
-          :resource_type => :service,
-          :resource_name => "nscd",
-          :timing => :delayed,
-          :style => :new,
+          type: :subscribes,
+          action: :restart,
+          resource_type: :service,
+          resource_name: "nscd",
+          timing: :delayed,
+          style: :new,
         }]
     end
     it "understands new-style subscriptions with added parentheses" do
@@ -984,12 +984,12 @@ describe FoodCritic::Api do
         end
       })
       expect(api.notifications(ast)).to eq [{
-          :type => :subscribes,
-          :action => :restart,
-          :resource_type => :service,
-          :resource_name => "nscd",
-          :timing => :delayed,
-          :style => :new,
+          type: :subscribes,
+          action: :restart,
+          resource_type: :service,
+          resource_name: "nscd",
+          timing: :delayed,
+          style: :new,
         }]
     end
     describe "supports a resource both notifying and subscribing" do
@@ -1005,20 +1005,20 @@ describe FoodCritic::Api do
         })
         expect(api.notifications(ast)).to eq [
           {
-            :type => :notifies,
-            :action => :restart,
-            :resource_type => :service,
-            :resource_name => "nscd",
-            :timing => :delayed,
-            :style => :old,
+            type: :notifies,
+            action: :restart,
+            resource_type: :service,
+            resource_name: "nscd",
+            timing: :delayed,
+            style: :old,
           },
           {
-            :type => :subscribes,
-            :action => :create,
-            :resource_type => :template,
-            :resource_name => "/etc/nscd.conf",
-            :timing => :delayed,
-            :style => :old,
+            type: :subscribes,
+            action: :create,
+            resource_type: :template,
+            resource_name: "/etc/nscd.conf",
+            timing: :delayed,
+            style: :old,
           },
         ]
       end
@@ -1034,20 +1034,20 @@ describe FoodCritic::Api do
         })
         expect(api.notifications(ast)).to eq [
           {
-            :type => :notifies,
-            :action => :restart,
-            :resource_type => :service,
-            :resource_name => "nscd",
-            :timing => :delayed,
-            :style => :new,
+            type: :notifies,
+            action: :restart,
+            resource_type: :service,
+            resource_name: "nscd",
+            timing: :delayed,
+            style: :new,
           },
           {
-            :type => :subscribes,
-            :action => :create,
-            :resource_type => :template,
-            :resource_name => "/etc/nscd.conf",
-            :timing => :delayed,
-            :style => :new,
+            type: :subscribes,
+            action: :create,
+            resource_type: :template,
+            resource_name: "/etc/nscd.conf",
+            timing: :delayed,
+            style: :new,
           },
         ]
       end
@@ -1062,12 +1062,12 @@ describe FoodCritic::Api do
         end
       })
       expect(api.notifications(ast)).to eq [{
-          :type => :notifies,
-          :action => :restart,
-          :resource_type => :service,
-          :resource_name => "nscd",
-          :timing => :immediate,
-          :style => :old,
+          type: :notifies,
+          action: :restart,
+          resource_type: :service,
+          resource_name: "nscd",
+          timing: :immediate,
+          style: :old,
         }]
     end
     it "understands the old-style subscriptions with timing" do
@@ -1080,12 +1080,12 @@ describe FoodCritic::Api do
         end
       })
       expect(api.notifications(ast)).to eq [{
-          :type => :subscribes,
-          :action => :restart,
-          :resource_type => :service,
-          :resource_name => "nscd",
-          :timing => :immediate,
-          :style => :old,
+          type: :subscribes,
+          action: :restart,
+          resource_type: :service,
+          resource_name: "nscd",
+          timing: :immediate,
+          style: :old,
         }]
     end
     it "understands the new-style notifications with timing" do
@@ -1098,12 +1098,12 @@ describe FoodCritic::Api do
         end
       })
       expect(api.notifications(ast)).to eq [{
-          :type => :notifies,
-          :action => :restart,
-          :resource_type => :service,
-          :resource_name => "nscd",
-          :timing => :immediate,
-          :style => :new,
+          type: :notifies,
+          action: :restart,
+          resource_type: :service,
+          resource_name: "nscd",
+          timing: :immediate,
+          style: :new,
         }]
     end
     it "understands the new-style subscriptions with timing" do
@@ -1116,12 +1116,12 @@ describe FoodCritic::Api do
         end
       })
       expect(api.notifications(ast)).to eq [{
-          :type => :subscribes,
-          :action => :restart,
-          :resource_type => :service,
-          :resource_name => "nscd",
-          :timing => :immediate,
-          :style => :new,
+          type: :subscribes,
+          action: :restart,
+          resource_type: :service,
+          resource_name: "nscd",
+          timing: :immediate,
+          style: :new,
         }]
     end
     describe "can be passed an individual resource" do
@@ -1137,10 +1137,10 @@ describe FoodCritic::Api do
             notifies :restart, resources(:service => "nscd")
           end
         })
-        expect(api.notifications(api.find_resources(ast, :type => :template).first)).to eq [
-          { :type => :notifies, :action => :restart, :resource_type => :service,
-            :resource_name => "nscd", :timing => :delayed,
-            :style => :old },
+        expect(api.notifications(api.find_resources(ast, type: :template).first)).to eq [
+          { type: :notifies, action: :restart, resource_type: :service,
+            resource_name: "nscd", timing: :delayed,
+            style: :old },
         ]
       end
       it "old-style subscriptions" do
@@ -1155,10 +1155,10 @@ describe FoodCritic::Api do
             subscribes :restart, resources(:service => "nscd")
           end
         })
-        expect(api.notifications(api.find_resources(ast, :type => :template).first)).to eq [
-          { :type => :subscribes, :action => :restart, :resource_type => :service,
-            :resource_name => "nscd", :timing => :delayed,
-            :style => :old },
+        expect(api.notifications(api.find_resources(ast, type: :template).first)).to eq [
+          { type: :subscribes, action: :restart, resource_type: :service,
+            resource_name: "nscd", timing: :delayed,
+            style: :old },
         ]
       end
       it "new-style notifications" do
@@ -1173,10 +1173,10 @@ describe FoodCritic::Api do
             notifies :restart, "service[nscd]"
           end
         })
-        expect(api.notifications(api.find_resources(ast, :type => :template).first)).to eq [
-          { :type => :notifies, :action => :restart, :resource_type => :service,
-            :resource_name => "nscd", :timing => :delayed,
-            :style => :new },
+        expect(api.notifications(api.find_resources(ast, type: :template).first)).to eq [
+          { type: :notifies, action: :restart, resource_type: :service,
+            resource_name: "nscd", timing: :delayed,
+            style: :new },
         ]
       end
       it "new-style subscriptions" do
@@ -1191,10 +1191,10 @@ describe FoodCritic::Api do
             subscribes :restart, "service[nscd]"
           end
         })
-        expect(api.notifications(api.find_resources(ast, :type => :template).first)).to eq [
-          { :type => :subscribes, :action => :restart, :resource_type => :service,
-            :resource_name => "nscd", :timing => :delayed,
-            :style => :new },
+        expect(api.notifications(api.find_resources(ast, type: :template).first)).to eq [
+          { type: :subscribes, action: :restart, resource_type: :service,
+            resource_name: "nscd", timing: :delayed,
+            style: :new },
         ]
       end
     end
@@ -1210,12 +1210,12 @@ describe FoodCritic::Api do
           end
         })
         expect(api.notifications(ast)).to eq [
-            { :type => :notifies, :action => :stop, :resource_type => :service,
-              :resource_name => "nscd", :timing => :delayed,
-              :style => :old },
-            { :type => :notifies, :action => :start, :resource_type => :service,
-              :resource_name => "nscd", :timing => :delayed,
-              :style => :old },
+            { type: :notifies, action: :stop, resource_type: :service,
+              resource_name: "nscd", timing: :delayed,
+              style: :old },
+            { type: :notifies, action: :start, resource_type: :service,
+              resource_name: "nscd", timing: :delayed,
+              style: :old },
           ]
       end
       it "old-style subscriptions" do
@@ -1229,12 +1229,12 @@ describe FoodCritic::Api do
           end
         })
         expect(api.notifications(ast)).to eq [
-            { :type => :subscribes, :action => :stop, :resource_type => :service,
-              :resource_name => "nscd", :timing => :delayed,
-              :style => :old },
-            { :type => :subscribes, :action => :start, :resource_type => :service,
-              :resource_name => "nscd", :timing => :delayed,
-              :style => :old },
+            { type: :subscribes, action: :stop, resource_type: :service,
+              resource_name: "nscd", timing: :delayed,
+              style: :old },
+            { type: :subscribes, action: :start, resource_type: :service,
+              resource_name: "nscd", timing: :delayed,
+              style: :old },
           ]
       end
       it "new-style notifications" do
@@ -1248,12 +1248,12 @@ describe FoodCritic::Api do
           end
         })
         expect(api.notifications(ast)).to eq [
-            { :type => :notifies, :action => :stop, :resource_type => :service,
-              :resource_name => "nscd", :timing => :delayed,
-              :style => :new },
-            { :type => :notifies, :action => :start, :resource_type => :service,
-              :resource_name => "nscd", :timing => :delayed,
-              :style => :new },
+            { type: :notifies, action: :stop, resource_type: :service,
+              resource_name: "nscd", timing: :delayed,
+              style: :new },
+            { type: :notifies, action: :start, resource_type: :service,
+              resource_name: "nscd", timing: :delayed,
+              style: :new },
           ]
       end
       it "new-style subscriptions" do
@@ -1267,12 +1267,12 @@ describe FoodCritic::Api do
           end
         })
         expect(api.notifications(ast)).to eq [
-            { :type => :subscribes, :action => :stop, :resource_type => :service,
-              :resource_name => "nscd", :timing => :delayed,
-              :style => :new },
-            { :type => :subscribes, :action => :start, :resource_type => :service,
-              :resource_name => "nscd", :timing => :delayed,
-              :style => :new },
+            { type: :subscribes, action: :stop, resource_type: :service,
+              resource_name: "nscd", timing: :delayed,
+              style: :new },
+            { type: :subscribes, action: :start, resource_type: :service,
+              resource_name: "nscd", timing: :delayed,
+              style: :new },
           ]
       end
     end
@@ -1285,9 +1285,9 @@ describe FoodCritic::Api do
           end
         })
         expect(api.notifications(ast)).to eq [
-           { :type => :notifies, :action => :run, :resource_type => :execute,
-             :resource_name => "foo", :timing => :delayed,
-             :style => :old },
+           { type: :notifies, action: :run, resource_type: :execute,
+             resource_name: "foo", timing: :delayed,
+             style: :old },
           ]
       end
       it "old-style subscriptions" do
@@ -1298,9 +1298,9 @@ describe FoodCritic::Api do
           end
         })
         expect(api.notifications(ast)).to eq [
-           { :type => :subscribes, :action => :run, :resource_type => :execute,
-             :resource_name => "foo", :timing => :delayed,
-             :style => :old },
+           { type: :subscribes, action: :run, resource_type: :execute,
+             resource_name: "foo", timing: :delayed,
+             style: :old },
           ]
       end
       it "old-style notifications" do
@@ -1311,9 +1311,9 @@ describe FoodCritic::Api do
           end
         })
         expect(api.notifications(ast)).to eq [
-           { :type => :notifies, :action => :run, :resource_type => :execute,
-             :resource_name => "foo", :timing => :delayed,
-             :style => :new },
+           { type: :notifies, action: :run, resource_type: :execute,
+             resource_name: "foo", timing: :delayed,
+             style: :new },
           ]
       end
       it "old-style subscriptions" do
@@ -1324,9 +1324,9 @@ describe FoodCritic::Api do
           end
         })
         expect(api.notifications(ast)).to eq [
-           { :type => :subscribes, :action => :run, :resource_type => :execute,
-             :resource_name => "foo", :timing => :delayed,
-             :style => :new },
+           { type: :subscribes, action: :run, resource_type: :execute,
+             resource_name: "foo", timing: :delayed,
+             style: :new },
           ]
       end
     end

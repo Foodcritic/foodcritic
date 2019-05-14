@@ -1,8 +1,8 @@
 FC001: Use strings in preference to symbols to access node attributes: ./attributes/default.rb:19
 FC001: Use strings in preference to symbols to access node attributes: ./attributes/default.rb:20
-FC048: Prefer Mixlib::ShellOut: ./providers/package.rb:44
-FC048: Prefer Mixlib::ShellOut: ./providers/package.rb:47
-FC048: Prefer Mixlib::ShellOut: ./providers/package.rb:76
+FC048: Prefer shell_out helper method to shelling out with Ruby: ./providers/package.rb:44
+FC048: Prefer shell_out helper method to shelling out with Ruby: ./providers/package.rb:47
+FC048: Prefer shell_out helper method to shelling out with Ruby: ./providers/package.rb:76
 FC064: Ensure issues_url is set in metadata: ./metadata.rb:1
 FC065: Ensure source_url is set in metadata: ./metadata.rb:1
 FC066: Ensure chef_version is set in metadata: ./metadata.rb:1

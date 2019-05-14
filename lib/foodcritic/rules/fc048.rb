@@ -1,4 +1,4 @@
-rule "FC048", "Prefer Mixlib::ShellOut" do
+rule "FC048", "Prefer shell_out helper method to shelling out with Ruby" do
   tags %w{portability}
   recipe do |ast|
     xstring_literal = ast.xpath("//xstring_literal")

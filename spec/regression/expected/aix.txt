@@ -21,3 +21,7 @@ FC113: Resource declares deprecated use_inline_resources: ./providers/toolboxpac
 FC113: Resource declares deprecated use_inline_resources: ./providers/tunables.rb:23
 FC113: Resource declares deprecated use_inline_resources: ./providers/volume_group.rb:5
 FC113: Resource declares deprecated use_inline_resources: ./providers/wpar.rb:24
+FC120: Do not set the name property directly on a resource: ./recipes/wpar.rb:9
+FC120: Do not set the name property directly on a resource: ./recipes/wpar.rb:18
+FC120: Do not set the name property directly on a resource: ./recipes/wpar.rb:24
+FC120: Do not set the name property directly on a resource: ./recipes/wpar.rb:29

@@ -3,3 +3,4 @@ FC069: Ensure standardized license defined in metadata: ./metadata.rb:1
 FC078: Ensure cookbook shared under an OSI-approved open source license: ./metadata.rb:1
 FC109: Use platform-specific package resources instead of provider property: ./libraries/default_handler.rb:52
 FC113: Resource declares deprecated use_inline_resources: ./libraries/chef_ingredient_provider.rb:26
+FC116: Cookbook depends on the deprecated compat_resource cookbook: ./metadata.rb:1
