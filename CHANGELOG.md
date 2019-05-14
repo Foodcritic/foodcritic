@@ -1,5 +1,11 @@
 # Foodcritic Changelog:
 
+## [16.0.0](https://github.com/Foodcritic/foodcritic/tree/v15.0.0) (2019-05-14)
+
+- Removed Chef 13 metadata
+- Added metadata for Chef 14.12.9 and 15.0.293
+- Reenabled FC121 which detects the usage of cookbooks made obsolete by Chef 14
+
 ## [15.1.0](https://github.com/Foodcritic/foodcritic/tree/v15.1.0) (2018-12-26)
 
 - Stripped test files from the gem artifact to slim the install size
