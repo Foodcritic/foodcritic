@@ -511,8 +511,13 @@ module FoodCritic
       end.join
     end
 
+    # check to see if the passed method is a node method
+    # we generally look this up from the chef DSL data we have
+    # but we specifically check for 'set' and 'set_unless' since
+    # those exist in cookbooks, but are not longer part of chef 14+
+    # this prevents false positives in FC019 anytime node.set is found
     def node_method?(meth, cookbook_dir)
-      chef_dsl_methods.include?(meth) ||
+      chef_dsl_methods.include?(meth) || meth == :set || meth == :set_unless ||
         patched_node_method?(meth, cookbook_dir)
     end
 
@@ -555,7 +560,7 @@ module FoodCritic
       source = if file.to_s.split(File::SEPARATOR).include?("templates")
                  template_expressions_only(file)
                else
-                 File.read(file).encode("utf-8", "binary", :undef => :replace)
+                 File.read(file).encode("utf-8", "binary", undef: :replace)
                end
       begin
         build_xml(Ripper::SexpBuilder.new(source).parse)
@@ -620,7 +625,7 @@ module FoodCritic
 
     def template_expressions_only(file)
       exprs = Template::ExpressionExtractor.new.extract(
-        File.read(file).encode("utf-8", "binary", :undef => :replace)
+        File.read(file).encode("utf-8", "binary", undef: :replace)
       )
       lines = Array.new(exprs.map { |e| e[:line] }.max || 0, "")
       exprs.each do |e|

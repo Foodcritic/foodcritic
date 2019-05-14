@@ -1262,10 +1262,6 @@ Given /^a template that includes a (missing )?partial with a relative subdirecto
   end
 end
 
-Given "access to the man page documentation" do
-
-end
-
 Given "I have installed the lint tool" do
 
 end
@@ -1482,10 +1478,6 @@ When "I check the recipe" do
   run_lint(["--no-progress", "cookbooks/example/recipes/default.rb"])
 end
 
-When "I compare the man page options against the usage options" do
-
-end
-
 When "I check the role directory" do
   run_lint ["--no-progress", "-R", "roles"]
 end
@@ -1558,10 +1550,6 @@ end
 
 Then "a warning for the custom rule should be displayed" do
   expect_output("BAR001: Use symbols in preference to strings to access node attributes: cookbooks/example/recipes/default.rb:1")
-end
-
-Then "all options should be documented in the man page" do
-  man_page_options.must_equal usage_options_for_diff
 end
 
 Then /^an? '([^']+)' error should be displayed$/ do |expected_error|

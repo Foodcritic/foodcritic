@@ -1,21 +1,11 @@
-sudo: false
 language: ruby
 cache: bundler
 rvm:
-  - 2.3.7
-  - 2.4.4
-  - 2.5.1
+  - 2.3.8
+  - 2.4.5
+  - 2.5.5
 
 bundler_args: --jobs 3 --retry 3
 branches:
   only:
     - master
-
-# this avoids build issues with rainbow on old bundler/rubygems
-before_install:
-  - gem update --system
-  - gem --version
-  - rvm @global do gem uninstall bundler -a -x -I || true
-  - gem install bundler
-  - bundle --version
-  - rm -f .bundle/config

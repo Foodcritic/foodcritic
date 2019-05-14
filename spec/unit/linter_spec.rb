@@ -12,7 +12,7 @@ describe FoodCritic::Linter do
 
   describe "chef version" do
     it "should be the latest stable version of Chef" do
-      expect(FoodCritic::Linter::DEFAULT_CHEF_VERSION).to eq "13.9.1"
+      expect(FoodCritic::Linter::DEFAULT_CHEF_VERSION).to eq "15.0.293"
     end
   end
 
@@ -70,11 +70,11 @@ describe FoodCritic::Linter do
     end
 
     it "does not require cookbook_path, role_path or environment_path to be specified" do
-      linter.list(:list => true)
+      linter.list(list: true)
     end
 
     it "returns a rule listing" do
-      expect(linter.list(:list => true)).to respond_to :rules
+      expect(linter.list(list: true)).to respond_to :rules
     end
   end
 
@@ -94,14 +94,14 @@ describe FoodCritic::Linter do
       expected_rules = [*default_rule_files, *gem_rules]
       expect(FoodCritic::RuleDsl).to receive(:load).with(expected_rules, nil)
       expect(linter).to receive(:rule_files_in_gems).and_return(gem_rules)
-      linter.load_rules!(:search_gems => true)
+      linter.load_rules!(search_gems: true)
     end
 
     it "should include files found in :include_rules option" do
       include_rules = ["/path/to/rules1.rb", "/path/to/rules2.rb"]
       expected_rules = [*default_rule_files, *include_rules]
       expect(FoodCritic::RuleDsl).to receive(:load).with(expected_rules, nil)
-      linter.load_rules!(:include_rules => include_rules)
+      linter.load_rules!(include_rules: include_rules)
     end
   end
 end

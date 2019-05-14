@@ -51,8 +51,3 @@ Feature: Command line help
      Then the simple usage text should be displayed along with a non-zero exit code
      Then the style warning 002 should not be displayed
       And the current version should not be displayed
-
-  Scenario: Refer to the man page
-    Given access to the man page documentation
-     When I compare the man page options against the usage options
-     Then all options should be documented in the man page
