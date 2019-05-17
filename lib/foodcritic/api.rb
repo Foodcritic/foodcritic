@@ -254,14 +254,16 @@ module FoodCritic
         line: pos["line"].to_i, column: pos["column"].to_i }
     end
 
+    def ast_cache(size = nil)
+      @@ast_cache ||= Rufus::Lru::Hash.new(size)
+      if size && @@ast_cache.maxsize != size
+        @@ast_cache.maxsize = size
+      end
+      @@ast_cache
+    end
     # Read the AST for the given Ruby source file
     def read_ast(file)
-      @ast_cache ||= Rufus::Lru::Hash.new(5)
-      if @ast_cache.include?(file)
-        @ast_cache[file]
-      else
-        @ast_cache[file] = uncached_read_ast(file)
-      end
+      ast_cache[file] ||= uncached_read_ast(file)
     end
 
     # Retrieve a single-valued attribute from the specified resource.
