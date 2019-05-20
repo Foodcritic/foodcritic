@@ -254,6 +254,9 @@ module FoodCritic
         line: pos["line"].to_i, column: pos["column"].to_i }
     end
 
+    # Returns a global LRU cache holding the AST of a file
+    # @since 16.1
+    # @param size [Integer] the size of the cache (will be resized)
     def ast_cache(size = nil)
       @@ast_cache ||= Rufus::Lru::Hash.new(size)
       if size && @@ast_cache.maxsize != size
