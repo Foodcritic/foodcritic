@@ -51,7 +51,7 @@ module FoodCritic
                 "Specify file with rules to be used or ignored ") do |c|
           @options[:rule_file] = c
         end
-        opts.on("-s", "--ast-cache-size", Integer,
+        opts.on("-s", "--ast-cache-size NUM", Integer,
                 "Change the size of the AST cache.") do |s|
           @options[:ast_cache_size] = s
         end

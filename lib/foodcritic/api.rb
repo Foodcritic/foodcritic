@@ -258,7 +258,7 @@ module FoodCritic
     # @since 16.1
     # @param size [Integer] the size of the cache (will be resized)
     def ast_cache(size = nil)
-      @@ast_cache ||= Rufus::Lru::Hash.new(size)
+      @@ast_cache ||= Rufus::Lru::Hash.new(size || 5)
       if size && @@ast_cache.maxsize != size
         @@ast_cache.maxsize = size
       end
