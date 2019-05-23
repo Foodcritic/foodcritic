@@ -264,6 +264,7 @@ module FoodCritic
       end
       @@ast_cache
     end
+
     # Read the AST for the given Ruby source file
     def read_ast(file)
       ast_cache[file] ||= uncached_read_ast(file)

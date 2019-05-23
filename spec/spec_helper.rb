@@ -43,8 +43,8 @@ module FunctionalHelpers
       Dir.chdir(temp_path)
       $stderr = error
       # For tests, we need to disable the global AST cache (set it to size 0)
-      unless args.include?('-s') || args.include?('--ast-cache-size')
-        args.unshift('-s', '0')
+      unless args.include?("-s") || args.include?("--ast-cache-size")
+        args.unshift("-s", "0")
       end
       exitstatus = FoodCritic::CommandLine.main(args, output)
     ensure
