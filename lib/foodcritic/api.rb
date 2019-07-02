@@ -523,7 +523,7 @@ module FoodCritic
     # those exist in cookbooks, but are not longer part of chef 14+
     # this prevents false positives in FC019 anytime node.set is found
     def node_method?(meth, cookbook_dir)
-      chef_dsl_methods.include?(meth) || meth == :set || meth == :set_unless ||
+      chef_node_methods.include?(meth) || meth == :set || meth == :set_unless ||
         patched_node_method?(meth, cookbook_dir)
     end
 
