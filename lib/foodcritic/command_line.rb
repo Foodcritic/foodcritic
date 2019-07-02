@@ -24,6 +24,7 @@ module FoodCritic
         environment_paths: [],
         exclude_paths: ["test/**/*", "spec/**/*", "features/**/*"],
         progress: true,
+        ast_cache_size: 5,
       }
       @parser = OptionParser.new do |opts|
         opts.banner = "foodcritic [cookbook_paths]"
@@ -49,6 +50,10 @@ module FoodCritic
         opts.on("-r", "--rule-file PATH",
                 "Specify file with rules to be used or ignored ") do |c|
           @options[:rule_file] = c
+        end
+        opts.on("-s", "--ast-cache-size NUM", Integer,
+                "Change the size of the AST cache.") do |s|
+          @options[:ast_cache_size] = s
         end
         opts.on("-B", "--cookbook-path PATH",
                 "Cookbook path(s) to check.") do |b|

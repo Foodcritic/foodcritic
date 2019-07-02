@@ -68,6 +68,7 @@ module FoodCritic
       options = setup_defaults(options)
       @options = options
       @chef_version = options[:chef_version] || DEFAULT_CHEF_VERSION
+      ast_cache(options[:ast_cache_size])
 
       warnings = []; last_dir = nil; matched_rule_tags = Set.new
       load_rules

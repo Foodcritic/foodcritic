@@ -287,6 +287,11 @@ module FoodCritic
     def run_lint(cmd_args)
       cd "." do
         show_context = cmd_args.include?("-C")
+        # For tests, we need to disable the global AST cache (set it to size 0)
+        unless cmd_args.include?('-s') || cmd_args.include?('--ast-cache-size')
+          cmd_args.unshift('-s', '0')
+        end
+
         review, @status = FoodCritic::Linter.run(CommandLine.new(cmd_args))
         @review =
           if review.nil? || (review.respond_to?(:warnings) && review.warnings.empty?)

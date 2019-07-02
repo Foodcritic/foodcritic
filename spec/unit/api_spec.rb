@@ -18,6 +18,7 @@ describe FoodCritic::Api do
     end
     it "exposes the expected api to rule authors" do
       expect(api.public_methods.sort - ignorable_methods).to eq [
+        :ast_cache,
         :attribute_access,
         :chef_dsl_methods,
         :chef_node_methods,
