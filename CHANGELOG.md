@@ -1,13 +1,17 @@
 # Foodcritic Changelog:
 
-## [16.1.0](https://github.com/Foodcritic/foodcritic/tree/v15.1.0) (2019-07-02)
+## [16.1.1](https://github.com/Foodcritic/foodcritic/tree/v16.1.1) (2019-07-02)
+
+- Resolved failure in FC123 when a cookbook does not include a files directory
+
+## [16.1.0](https://github.com/Foodcritic/foodcritic/tree/v16.1.0) (2019-07-02)
 
 - Updated Chef Infra Client metadata for 15.1 to include the new chocolatey_feature resources as well as new properties in the launchd and chocolatey_source resources
-- Added new rule to detect large files shipped in a cookbook: FC123: Content of files/ is larger than 1MB. Thanks @mattray
+- Added new rule to detect large files shipped in a cookbook: FC123: Content of a cookbook file is larger than 1MB. Thanks @mattray
 - Allow configuring the size of the AST cache with a new `--ast-cache-size` command line option. Thanks @Babar
 - Fix false positives in FC019 by chaning the Chef internal methods we check against. Thanks @TravisWhitehead
 
-## [16.0.0](https://github.com/Foodcritic/foodcritic/tree/v15.0.0) (2019-05-14)
+## [16.0.0](https://github.com/Foodcritic/foodcritic/tree/v16.0.0) (2019-05-14)
 
 - Removed Chef 13 metadata
 - Added metadata for Chef 14.12.9 and 15.0.293
