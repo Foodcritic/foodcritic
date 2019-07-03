@@ -195,6 +195,9 @@ module FoodCritic
         { :short => "l", :long => "list",
           :description => "List all enabled rules and their descriptions." },
 
+        { :short => "s", :long => "ast-cache-size NUM",
+          :description => "Change the size of the AST cache." },
+
         { :short => "t", :long => "tags TAGS",
           :description => "Check against (or exclude ~) rules with the specified tags." },
 
