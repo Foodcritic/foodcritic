@@ -1,3 +1,4 @@
+require "open-uri"
 require "optparse"
 require "ripper"
 require "set"
@@ -217,7 +218,7 @@ module FoodCritic
 
       # if a rule file has been specified use that. Otherwise use the .foodcritic file in the CB
       tags = if @options[:rule_file]
-               raise "ERROR: Could not find the specified rule file at #{@options[:rule_file]}" unless File.exist?(@options[:rule_file])
+               raise "ERROR: Could not find the specified rule file at #{@options[:rule_file]}" if is_local_file?(@options[:rule_file]) && ! File.exist?(@options[:rule_file])
                parse_rule_file(@options[:rule_file])
              else
                File.exist?("#{cookbook}/.foodcritic") ? parse_rule_file("#{cookbook}/.foodcritic") : []
@@ -234,7 +235,9 @@ module FoodCritic
     def parse_rule_file(file)
       tags = []
       begin
-        tag_text = File.read file
+        rule_file = open(file)
+        tag_text = rule_file.read
+        rule_file.close
         tags = tag_text.split(/\s/)
       rescue
         raise "ERROR: Could not read or parse the specified rule file at #{file}"
@@ -337,6 +340,11 @@ module FoodCritic
           { filename: filename, path_type: path_type }
         end
       end.flatten
+    end
+
+    # Determine if the rule file name is a local file or a url
+    def is_local_file?(file_name)
+      ! /^(ftps*:|https*:|file:)/.match(file_name)
     end
 
     # Invoke the DSL method with the provided parameters.

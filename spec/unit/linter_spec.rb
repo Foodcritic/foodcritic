@@ -104,4 +104,15 @@ describe FoodCritic::Linter do
       linter.load_rules!(include_rules: include_rules)
     end
   end
+
+  describe "#is_local_file?" do
+    it "should identify a file name as a url" do
+      expect(linter.send(:is_local_file?, "http://myurl")).to be_falsey
+      expect(linter.send(:is_local_file?, "https://myurl")).to be_falsey
+      expect(linter.send(:is_local_file?, "ftp://myurl")).to be_falsey
+      expect(linter.send(:is_local_file?, "ftps://myurl")).to be_falsey
+      expect(linter.send(:is_local_file?, "http_myfile")).to be_truthy
+      expect(linter.send(:is_local_file?, "//local/http_myfile")).to be_truthy
+    end
+  end
 end
