@@ -88,6 +88,7 @@
     "locale",
     "log",
     "mac_os_x_userdefaults",
+    "mac_user",
     "macos_userdefaults",
     "macosx_service",
     "macports_package",
@@ -849,6 +850,7 @@
     ],
     "kernel_module": [
       "blacklist",
+      "disable",
       "install",
       "load",
       "nothing",
