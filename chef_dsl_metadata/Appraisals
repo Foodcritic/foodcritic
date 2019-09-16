@@ -1,6 +1,6 @@
 chef_versions = [
   "14.12.9",
-  "15.1.36",
+  "15.3.14",
 ]
 chef_versions.each do |version|
   appraise "chef_#{version}" do
