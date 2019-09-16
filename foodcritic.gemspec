@@ -17,7 +17,7 @@ Gem::Specification.new do |s|
     Dir["misc/**/*"]
   s.files += Dir["Gemfile", "foodcritic.gemspec", "LICENSE"]
 
-  s.add_dependency("cucumber-core", ">= 1.3", "< 4.0")
+  s.add_dependency("cucumber-core", ">= 1.3", "< 6.0")
   s.add_dependency("nokogiri", ">= 1.5", "< 2.0")
   s.add_dependency("rake")
   s.add_dependency("treetop", "~> 1.4")
