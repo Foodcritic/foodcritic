@@ -128,7 +128,7 @@ module FoodCritic
       fmt << 40 + colors.index(bg.to_s) if bg
       fmt << attrs.index(attr.to_s) if attr
       if fmt
-        puts "#{escape % fmt.join(';')}#{text}#{escape % 0}"
+        puts "#{escape % fmt.join(";")}#{text}#{escape % 0}"
       else
         puts text
       end

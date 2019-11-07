@@ -5,7 +5,7 @@ describe "FC081" do
     metadata_file <<-META
      name 'my_cookbook'
      depends 'partial_search'
-     META
+    META
     it { is_expected.to violate_rule }
   end
 
@@ -14,7 +14,7 @@ describe "FC081" do
      name 'my_cookbook'
      depends 'partial_search'
      depends 'windows'
-     META
+    META
     it { is_expected.to violate_rule }
   end
 

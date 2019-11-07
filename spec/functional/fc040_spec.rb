@@ -6,7 +6,7 @@ describe "FC040" do
   execute 'git pull' do
     action :run
   end
-  EOH
+    EOH
     it { is_expected.to violate_rule }
   end
 
@@ -15,7 +15,7 @@ describe "FC040" do
   execute 'git clone' do
     action :run
   end
-  EOH
+    EOH
     it { is_expected.to violate_rule }
   end
 
@@ -24,7 +24,7 @@ describe "FC040" do
   execute 'git fetch' do
     action :run
   end
-  EOH
+    EOH
     it { is_expected.to violate_rule }
   end
 
@@ -33,7 +33,7 @@ describe "FC040" do
   execute 'git checkout' do
     action :run
   end
-  EOH
+    EOH
     it { is_expected.to violate_rule }
   end
 
@@ -42,7 +42,7 @@ describe "FC040" do
   execute 'git reset --hard' do
     action :run
   end
-  EOH
+    EOH
     it { is_expected.to violate_rule }
   end
 
@@ -51,7 +51,7 @@ describe "FC040" do
   execute 'git show' do
     action :run
   end
-  EOH
+    EOH
     it { is_expected.to_not violate_rule }
   end
 
@@ -60,7 +60,7 @@ describe "FC040" do
   execute "echo 'bob' && git show" do
     action :run
   end
-  EOH
+    EOH
     it { is_expected.to_not violate_rule }
   end
 
@@ -70,7 +70,7 @@ describe "FC040" do
     command 'git clone https://github.com/git/git.git'
     action :run
   end
-  EOH
+    EOH
     it { is_expected.to violate_rule }
   end
 
@@ -80,7 +80,7 @@ describe "FC040" do
     command 'git clone --depth 10 https://github.com/git/git.git'
     action :run
   end
-  EOH
+    EOH
     it { is_expected.to violate_rule }
   end
 
@@ -90,7 +90,7 @@ describe "FC040" do
     command 'git checkout master'
     action :run
   end
-  EOH
+    EOH
     it { is_expected.to violate_rule }
   end
 
@@ -100,7 +100,7 @@ describe "FC040" do
     command 'git reset hard'
     action :run
   end
-  EOH
+    EOH
     it { is_expected.to violate_rule }
   end
 
@@ -110,7 +110,7 @@ describe "FC040" do
     command 'git pull'
     action :run
   end
-  EOH
+    EOH
     it { is_expected.to violate_rule }
   end
 
@@ -120,7 +120,7 @@ describe "FC040" do
     command 'git fetch origin'
     action :run
   end
-  EOH
+    EOH
     it { is_expected.to violate_rule }
   end
 
@@ -130,7 +130,7 @@ describe "FC040" do
     command 'git status && git pull'
     action :run
   end
-  EOH
+    EOH
     it { is_expected.to violate_rule }
   end
 
@@ -140,7 +140,7 @@ describe "FC040" do
     command 'git show'
     action :run
   end
-  EOH
+    EOH
     it { is_expected.to_not violate_rule }
   end
 
@@ -150,7 +150,7 @@ describe "FC040" do
     command 'curl http://github.com/  '
     action :run
   end
-  EOH
+    EOH
     it { is_expected.to_not violate_rule }
   end
 end

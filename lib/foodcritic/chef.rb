@@ -56,12 +56,12 @@ module FoodCritic
           metadata_path(ver)
         end.find { |m| File.exist?(m) }
       @dsl_metadata ||= FFI_Yajl::Parser.parse(IO.read(metadata_path),
-                                           symbolize_keys: true)
+        symbolize_keys: true)
     end
 
     def metadata_path(chef_version)
       File.join(File.dirname(__FILE__), "..", "..",
-                "chef_dsl_metadata/chef_#{chef_version}.json")
+        "chef_dsl_metadata/chef_#{chef_version}.json")
     end
 
     def resource_check?(key, resource_type, field)
@@ -94,9 +94,11 @@ module FoodCritic
           grammar_paths.inject(nil) do |parser, lucene_grammar|
             begin
               break parser unless parser.nil?
+
               # Don't instantiate custom nodes
               Treetop.load_from_string(
-                IO.read(lucene_grammar).gsub(/<[^>]+>/, ""))
+                IO.read(lucene_grammar).gsub(/<[^>]+>/, "")
+              )
               LuceneParser.new
             rescue
               # Silently swallow and try the next grammar

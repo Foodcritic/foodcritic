@@ -9,7 +9,7 @@ rule "FC033", "Missing template file" do
     end.map do |resource|
       # fetch the specified file to the template
       file = template_file(resource_attributes(resource,
-                                               return_expressions: true))
+        return_expressions: true))
       { resource: resource, file: file }
     end.reject do |resource|
       # skip the check if the file path is derived since
@@ -25,7 +25,7 @@ rule "FC033", "Missing template file" do
           # templates/ubuntu/something.erb down to something.erb, which breaks
           # legit nested dirs in the templates dir like templates/something/something.erb
           break if template_path.dirname.basename.to_s == "templates" ||
-              template_path.dirname.dirname.basename.to_s == "templates"
+            template_path.dirname.dirname.basename.to_s == "templates"
         end
         File.join(relative_path.reverse) == resource[:file]
       end

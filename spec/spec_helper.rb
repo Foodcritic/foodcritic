@@ -13,7 +13,7 @@ module FunctionalHelpers
   matcher :violate_rule do |rule_id = nil|
     match do |cmd|
       if location
-        cmd.stdout =~ /^#{expected}:.*: \.\/#{location}/
+        cmd.stdout =~ %r{^#{expected}:.*: \./#{location}}
       else
         cmd.stdout =~ /^#{expected}:/
       end

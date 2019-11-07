@@ -57,7 +57,7 @@ describe "FC037" do
         content 'content'
         notifies foo, 'service[httpd]', :delayed
       end
-      EOF
+    EOF
     it { is_expected.not_to violate_rule }
   end
 
@@ -69,7 +69,7 @@ describe "FC037" do
           notifies action, 'service[httpd]', :delayed
         end
       end
-      EOF
+    EOF
     it { is_expected.not_to violate_rule }
   end
 end

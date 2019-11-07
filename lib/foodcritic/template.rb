@@ -20,14 +20,11 @@ module FoodCritic
         end
       end
 
-      def add_text(src, text)
-      end
+      def add_text(src, text); end
 
-      def add_preamble(codebuf)
-      end
+      def add_preamble(codebuf); end
 
-      def add_postamble(codebuf)
-      end
+      def add_postamble(codebuf); end
 
       def add_stmt(src, code)
         @expressions << { type: :statement, code: code.strip }

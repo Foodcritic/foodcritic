@@ -20,6 +20,7 @@ module FoodCritic
       # The first item is the string output, the second is exit code.
       return [cmd_line.help, 0] if cmd_line.show_help?
       return [cmd_line.version, 0] if cmd_line.show_version?
+
       if !cmd_line.valid_grammar?
         [cmd_line.help, 4]
       elsif cmd_line.list_rules?
@@ -113,8 +114,8 @@ module FoodCritic
           # Convert the matches into warnings
           matches.each do |match|
             warnings << Warning.new(state[:rule],
-                                    { filename: state[:file] }.merge(match),
-                                    options)
+              { filename: state[:file] }.merge(match),
+              options)
             matched_rule_tags << state[:rule].tags
           end
         end
@@ -134,16 +135,19 @@ module FoodCritic
 
       if dsl_method_for_file(state[:file])
         cbk_matches += matches(state[:rule].send(
-          dsl_method_for_file(state[:file])), state[:ast], state[:file])
+          dsl_method_for_file(state[:file])
+        ), state[:ast], state[:file])
       end
 
       per_cookbook_rules(state[:last_dir], state[:file]) do
         if File.basename(state[:file]) == "metadata.rb"
           cbk_matches += matches(
-            state[:rule].metadata, state[:ast], state[:file])
+            state[:rule].metadata, state[:ast], state[:file]
+          )
         end
         cbk_matches += matches(
-          state[:rule].cookbook, cookbook_dir(state[:file]))
+          state[:rule].cookbook, cookbook_dir(state[:file])
+        )
       end
 
       cbk_matches
@@ -198,6 +202,7 @@ module FoodCritic
     # Some rules are version specific.
     def applies_to_version?(rule, version)
       return true unless version
+
       rule.applies_to.yield(Gem::Version.create(version))
     end
 
@@ -219,6 +224,7 @@ module FoodCritic
       # if a rule file has been specified use that. Otherwise use the .foodcritic file in the CB
       tags = if @options[:rule_file]
                raise "ERROR: Could not find the specified rule file at #{@options[:rule_file]}" if is_local_file?(@options[:rule_file]) && ! File.exist?(@options[:rule_file])
+
                parse_rule_file(@options[:rule_file])
              else
                File.exist?("#{cookbook}/.foodcritic") ? parse_rule_file("#{cookbook}/.foodcritic") : []
@@ -350,6 +356,7 @@ module FoodCritic
     # Invoke the DSL method with the provided parameters.
     def matches(match_method, *params)
       return [] unless match_method.respond_to?(:yield)
+
       matches = match_method.yield(*params)
       return [] unless matches.respond_to?(:each)
 

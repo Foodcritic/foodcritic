@@ -7,9 +7,9 @@ require "rspec/core/rake_task"
 RSpec::Core::RakeTask.new(:spec, :tag) do |t, args|
   t.rspec_opts = [].tap do |a|
     a << "--color"
-    a << "--format #{ENV['CI'] ? 'documentation' : 'Fuubar'}"
+    a << "--format #{ENV["CI"] ? "documentation" : "Fuubar"}"
     a << "--backtrace" if ENV["DEBUG"]
-    a << "--seed #{ENV['SEED']}" if ENV["SEED"]
+    a << "--seed #{ENV["SEED"]}" if ENV["SEED"]
     a << "--tag ~regression" unless ENV["CI"] || args[:tag].to_s =~ /regression/
     a << "--tag #{args[:tag]}" if args[:tag]
   end.join(" ")
@@ -34,10 +34,10 @@ RuboCop::RakeTask.new do |task|
   task.options << "--display-cop-names"
 end
 
-task default: [:test, :rubocop]
+task default: %i{test rubocop}
 
 desc "Run all tests"
-task test: [:spec, :features]
+task test: %i{spec features}
 
 desc "Regenerate regression test data"
 task :regen_regression do
