@@ -1,8 +1,8 @@
 require "spec_helper"
 
 describe "FC009" do
-  context "on chef 15.0.293 with a cookbook that uses windows_task start_when_available property introduced in 15.0" do
-    foodcritic_command("--chef-version", "15.0.293", "--no-progress", ".")
+  context "on chef 15.4.45 with a cookbook that uses windows_task start_when_available property introduced in 15.0" do
+    foodcritic_command("--chef-version", "15.4.45", "--no-progress", ".")
     recipe_file <<-EOH
       windows_task 'my_task' do
         start_when_available true
@@ -11,7 +11,7 @@ describe "FC009" do
     it { is_expected.not_to violate_rule }
   end
 
-  context "on chef 14.12.9 with a cookbook that uses windows_task start_when_available property introduced in 15.0" do
+  context "on chef 14.14.29 with a cookbook that uses windows_task start_when_available property introduced in 15.0" do
     foodcritic_command("--chef-version", "14.14.29", "--no-progress", ".")
     recipe_file <<-EOH
       windows_task 'my_task' do
