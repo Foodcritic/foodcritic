@@ -140,6 +140,7 @@ module FoodCritic
       # 3) return the string since we're positive that we're not a symbol or variable
       return nil if is_variable
       return symbol_val.value.to_sym unless symbol_val.nil?
+
       string_val.value
     end
 

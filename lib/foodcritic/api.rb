@@ -29,7 +29,7 @@ module FoodCritic
       options = { type: :any, ignore_calls: false }.merge!(options)
       return [] unless ast.respond_to?(:xpath)
 
-      unless [:any, :string, :symbol, :vivified].include?(options[:type])
+      unless %i{any string symbol vivified}.include?(options[:type])
         raise ArgumentError, "Node type not recognised"
       end
 
@@ -56,9 +56,7 @@ module FoodCritic
 
       # get list of items in the dir and intersect with metadata array.
       # until we get an interfact (we have a metadata) walk up the dir structure
-      until (Dir.entries(file) & %w{metadata.rb metadata.json}).any?
-        file = File.dirname(file)
-      end
+      file = File.dirname(file) until (Dir.entries(file) & %w{metadata.rb metadata.json}).any?
 
       file
     end
@@ -69,9 +67,7 @@ module FoodCritic
     # @since 7.0.0
     # @return [String] the value of the metadata field
     def metadata_field(file, field)
-      until (file.split(File::SEPARATOR) & standard_cookbook_subdirs).empty?
-        file = File.absolute_path(File.dirname(file.to_s))
-      end
+      file = File.absolute_path(File.dirname(file.to_s)) until (file.split(File::SEPARATOR) & standard_cookbook_subdirs).empty?
       file = File.dirname(file) unless File.extname(file).empty?
 
       md_path = File.join(file, "metadata.rb")
@@ -80,6 +76,7 @@ module FoodCritic
           command[ident/@value='#{field}']/
           descendant::tstring_content/@value").to_s
         raise "Cant read #{field} from #{md_path}" if value.to_s.empty?
+
         return value
       else
         raise "Cant find #{md_path}"
@@ -98,9 +95,7 @@ module FoodCritic
       begin
         metadata_field(file, "name")
       rescue RuntimeError
-        until (file.split(File::SEPARATOR) & standard_cookbook_subdirs).empty?
-          file = File.absolute_path(File.dirname(file.to_s))
-        end
+        file = File.absolute_path(File.dirname(file.to_s)) until (file.split(File::SEPARATOR) & standard_cookbook_subdirs).empty?
         file = File.dirname(file) unless File.extname(file).empty?
         File.basename(file)
       end
@@ -156,6 +151,7 @@ module FoodCritic
       if field_name.nil? || field_name.to_s.empty?
         raise ArgumentError, "Field name cannot be nil or empty"
       end
+
       ast.xpath("(.//command[ident/@value='#{field_name}']|.//fcall[ident/@value='#{field_name}']/..)")
     end
 
@@ -163,13 +159,14 @@ module FoodCritic
     def field_value(ast, field_name)
       field(ast, field_name).xpath('.//args_add_block//tstring_content
         [count(ancestor::args_add) = 1][count(ancestor::string_add) = 1]
-        /@value').map { |a| a.to_s }.last
+        /@value').map(&:to_s).last
     end
 
     # Create a match for a specified file. Use this if the presence of the file
     # triggers the warning rather than content.
     def file_match(file)
       raise ArgumentError, "Filename cannot be nil" if file.nil?
+
       { filename: file, matched: file, line: 1, column: 1 }
     end
 
@@ -189,10 +186,11 @@ module FoodCritic
     def find_resources(ast, options = {})
       options = { type: :any }.merge!(options)
       return [] unless ast.respond_to?(:xpath)
+
       scope_type = ""
       unless options[:type] == :any
-        type_array =  Array(options[:type]).map { |x| "@value='#{x}'" }
-        scope_type = "[#{type_array.join(' or ')}]"
+        type_array = Array(options[:type]).map { |x| "@value='#{x}'" }
+        scope_type = "[#{type_array.join(" or ")}]"
       end
 
       # TODO: Include nested resources (provider actions)
@@ -241,6 +239,7 @@ module FoodCritic
     # Searches with a query formed from a subexpression will be ignored.
     def literal_searches(ast)
       return [] unless ast.respond_to?(:xpath)
+
       ast.xpath("//method_add_arg[fcall/ident/@value = 'search' and
         count(descendant::string_embexpr) = 0]/descendant::tstring_content")
     end
@@ -250,6 +249,7 @@ module FoodCritic
       raise_unless_xpath!(node)
       pos = node.xpath("descendant::pos").first
       return nil if pos.nil?
+
       { matched: node.respond_to?(:name) ? node.name : "",
         line: pos["line"].to_i, column: pos["column"].to_i }
     end
@@ -273,6 +273,7 @@ module FoodCritic
     # Retrieve a single-valued attribute from the specified resource.
     def resource_attribute(resource, name)
       raise ArgumentError, "Attribute name cannot be empty" if name.empty?
+
       resource_attributes(resource)[name.to_s]
     end
 
@@ -306,7 +307,8 @@ module FoodCritic
         if name.xpath("descendant::string_add").size == 1 &&
             name.xpath("descendant::string_literal").size == 1 &&
             name.xpath(
-              "descendant::*[self::call or self::string_embexpr]").empty?
+              "descendant::*[self::call or self::string_embexpr]"
+            ).empty?
           name.xpath("descendant::tstring_content/@value").to_s
         else
           name
@@ -320,7 +322,7 @@ module FoodCritic
     # Resources in an AST, keyed by type.
     def resources_by_type(ast)
       raise_unless_xpath!(ast)
-      result = Hash.new { |hash, key| hash[key] = Array.new }
+      result = Hash.new { |hash, key| hash[key] = [] }
       find_resources(ast).each do |resource|
         result[resource_type(resource)] << resource
       end
@@ -334,6 +336,7 @@ module FoodCritic
       if type.empty?
         raise ArgumentError, "Provided AST node is not a resource"
       end
+
       type
     end
 
@@ -350,6 +353,7 @@ module FoodCritic
     # Searches performed by the provided AST.
     def searches(ast)
       return [] unless ast.respond_to?(:xpath)
+
       ast.xpath("//fcall/ident[@value = 'search']")
     end
 
@@ -398,9 +402,10 @@ module FoodCritic
 
     def templates_included(all_templates, template_path, depth = 1)
       raise RecursedTooFarError.new(template_path) if depth > 10
+
       partials = read_ast(template_path).xpath('//*[self::command or
         child::fcall][descendant::ident/@value="render"]//args_add/
-        string_literal//tstring_content/@value').map { |p| p.to_s }
+        string_literal//tstring_content/@value').map(&:to_s)
       Array(template_path) + partials.map do |included_partial|
         partial_path = Array(all_templates).find do |path|
           (Pathname.new(template_path).dirname + included_partial).to_s == path
@@ -416,10 +421,10 @@ module FoodCritic
     def template_paths(recipe_path)
       Dir.glob(Pathname.new(recipe_path).dirname.dirname + "templates" +
         "**/*", File::FNM_DOTMATCH).select do |path|
-        File.file?(path)
-      end.reject do |path|
-        File.basename(path) == ".DS_Store" || File.extname(path) == ".swp"
-      end
+          File.file?(path)
+        end.reject do |path|
+          File.basename(path) == ".DS_Store" || File.extname(path) == ".swp"
+        end
     end
 
     # Give a filename path it returns the hash of the JSON contents
@@ -447,11 +452,11 @@ module FoodCritic
       atts = {}
       resource.xpath("do_block/descendant::method_add_block[
         count(ancestor::do_block) = 1][brace_block | do_block]").each do |batt|
-        att_name = batt.xpath("string(method_add_arg/fcall/ident/@value)")
-        if att_name && !att_name.empty? && batt.children.length > 1
-          atts[att_name] = batt.children[1]
+          att_name = batt.xpath("string(method_add_arg/fcall/ident/@value)")
+          if att_name && !att_name.empty? && batt.children.length > 1
+            atts[att_name] = batt.children[1]
+          end
         end
-      end
       atts
     end
 
@@ -531,14 +536,15 @@ module FoodCritic
       atts = {}
       resource.xpath('do_block/descendant::*[self::command or
         self::method_add_arg][count(ancestor::do_block) >= 1]').each do |att|
-        blocks = att.xpath("ancestor::method_add_block/method_add_arg/fcall")
-        next if blocks.any? { |a| block_depth(a) > block_depth(resource) }
-        att_name = att.xpath('string(ident/@value |
-          fcall/ident[@value="variables"]/@value)')
-        unless att_name.empty?
-          atts[att_name] = extract_attribute_value(att, options)
+          blocks = att.xpath("ancestor::method_add_block/method_add_arg/fcall")
+          next if blocks.any? { |a| block_depth(a) > block_depth(resource) }
+
+          att_name = att.xpath('string(ident/@value |
+            fcall/ident[@value="variables"]/@value)')
+          unless att_name.empty?
+            atts[att_name] = extract_attribute_value(att, options)
+          end
         end
-      end
       atts
     end
 
@@ -579,6 +585,7 @@ module FoodCritic
     class AttFilter
       def is_att_type(value)
         return [] unless value.respond_to?(:select)
+
         value.select do |n|
           %w{
             automatic_attrs
@@ -605,7 +612,7 @@ module FoodCritic
 
     def standard_attribute_access(ast, options)
       if options[:type] == :any
-        [:string, :symbol].map do |type|
+        %i{string symbol}.map do |type|
           standard_attribute_access(ast, options.merge(type: type))
         end.inject(:+)
       else
@@ -650,13 +657,13 @@ module FoodCritic
         call.xpath("aref/args_add_block").size == 0 &&
           (call.xpath("descendant::ident").size > 1 &&
             !node_method?(call.xpath("ident/@value").to_s.to_sym,
-                          options[:cookbook_dir]))
+              options[:cookbook_dir]))
       end.sort
     end
 
     def word_list_values(ast, xpath = nil)
       # Find the node for the field argument variable. (e.g. given `foo d`, find `d`)
-      var_ref = ast.xpath("#{xpath ? xpath + '/' : ''}descendant::var_ref/ident")
+      var_ref = ast.xpath("#{xpath ? xpath + "/" : ""}descendant::var_ref/ident")
       if var_ref.empty?
         # The field is either a static value, or took no arguments, or something
         # more complex than we care to evaluate.
@@ -665,7 +672,7 @@ module FoodCritic
         # Look back out the tree for a method_add_block which contains a block
         # variable matching the field argument variable, and then drill down to
         # all the literal content nodes.
-        ast.xpath(%Q{ancestor::method_add_block[//block_var//ident/@value='#{var_ref.first['value']}']/call//tstring_content})
+        ast.xpath(%Q{ancestor::method_add_block[//block_var//ident/@value='#{var_ref.first["value"]}']/call//tstring_content})
       end
     end
   end

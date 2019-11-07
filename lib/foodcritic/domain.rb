@@ -34,7 +34,7 @@ module FoodCritic
 
     def to_s
       @rules.sort_by(&:code)
-        .map { |r| r.to_s }.join("\n")
+        .map(&:to_s).join("\n")
     end
 
   end
@@ -50,12 +50,12 @@ module FoodCritic
 
     # If any of the warnings in this review have failed or not.
     def failed?
-      warnings.any? { |w| w.failed? }
+      warnings.any?(&:failed?)
     end
 
     # Returns an array of warnings that are marked as failed.
     def failures
-      warnings.select { |w| w.failed? }
+      warnings.select(&:failed?)
     end
 
     # Returns a string representation of this review. This representation is
@@ -76,8 +76,8 @@ module FoodCritic
   # A rule to be matched against.
   class Rule
     attr_accessor :code, :name, :applies_to, :cookbook, :attributes, :recipe,
-                  :provider, :resource, :metadata, :library, :template, :role,
-                  :environment
+      :provider, :resource, :metadata, :library, :template, :role,
+      :environment
 
     attr_writer :tags
 

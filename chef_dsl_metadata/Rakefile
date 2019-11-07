@@ -19,9 +19,7 @@ def require_chef
 end
 
 def chef_dsl_methods
-  (chef_dsl_module.included_modules.map do |mixin|
-     mixin.public_instance_methods
-   end).flatten.sort.uniq
+  (chef_dsl_module.included_modules.map(&:public_instance_methods)).flatten.sort.uniq
 end
 
 def chef_node_methods
@@ -36,7 +34,7 @@ def chef_resource_actions
       ].include?(resource.to_s)
 
     instance = resource.new("dsl", nil)
-    actions = Array(instance.action).map { |a| a.to_sym }
+    actions = Array(instance.action).map(&:to_sym)
     if instance.respond_to?(:allowed_actions)
       actions += instance.allowed_actions
     end
@@ -57,7 +55,7 @@ end
 private
 
 def add_windows_securable_attributes(resource_name, attributes)
-  atts = [:rights, :deny_rights, :inherits] + attributes
+  atts = %i{rights deny_rights inherits} + attributes
   atts << :files_rights if resource_name == "remote_directory"
   atts
 end

@@ -6,7 +6,7 @@ describe "FC041" do
   execute 'curl "http://www.chef.io/"' do
     action :run
   end
-  EOH
+    EOH
     it { is_expected.to_not violate_rule }
   end
 
@@ -15,7 +15,7 @@ describe "FC041" do
   execute 'which curl' do
     action :run
   end
-  EOH
+    EOH
     it { is_expected.to_not violate_rule }
   end
 
@@ -24,7 +24,7 @@ describe "FC041" do
   execute 'wget "http://www.chef.io/"' do
     action :run
   end
-  EOH
+    EOH
     it { is_expected.to violate_rule }
   end
 
@@ -33,7 +33,7 @@ describe "FC041" do
   execute 'sudo wget "http://www.chef.io/"' do
     action :run
   end
-  EOH
+    EOH
     it { is_expected.to violate_rule }
   end
 
@@ -42,7 +42,7 @@ describe "FC041" do
   execute "curl 'http://example.org/' -o foo" do
     action :run
   end
-  EOH
+    EOH
     it { is_expected.to violate_rule }
   end
 
@@ -51,7 +51,7 @@ describe "FC041" do
   execute "curl -X POST 'http://example.org/'" do
     action :run
   end
-  EOH
+    EOH
     it { is_expected.to_not violate_rule }
   end
 
@@ -60,7 +60,7 @@ describe "FC041" do
   execute "curl 'http://example.org/' --output foo" do
     action :run
   end
-  EOH
+    EOH
     it { is_expected.to violate_rule }
   end
 
@@ -69,7 +69,7 @@ describe "FC041" do
   execute "curl 'http://example.org/' --output foo" do
     action :run
   end
-  EOH
+    EOH
     it { is_expected.to violate_rule }
   end
 
@@ -78,7 +78,7 @@ describe "FC041" do
   execute "curl 'http://example.org/' > foo" do
     action :run
   end
-  EOH
+    EOH
     it { is_expected.to violate_rule }
   end
 
@@ -87,7 +87,7 @@ describe "FC041" do
   execute "curl 'http://example.org/' &> foo" do
     action :run
   end
-  EOH
+    EOH
     it { is_expected.to violate_rule }
   end
 
@@ -96,7 +96,7 @@ describe "FC041" do
   execute "mkdir bob && wget 'http://example.org/'" do
     action :run
   end
-  EOH
+    EOH
     it { is_expected.to violate_rule }
   end
 
@@ -106,7 +106,7 @@ describe "FC041" do
     command 'sudo wget "http://www.chef.io/"'
     action :run
   end
-  EOH
+    EOH
     it { is_expected.to violate_rule }
   end
 
@@ -115,7 +115,7 @@ describe "FC041" do
   execute 'my command' do
     command 'which curl'
   end
-  EOH
+    EOH
     it { is_expected.to_not violate_rule }
   end
 end

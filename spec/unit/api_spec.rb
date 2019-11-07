@@ -14,60 +14,60 @@ describe FoodCritic::Api do
 
   describe :exposed_api do
     let(:ignorable_methods) do
-      api.class.ancestors.map { |a| a.public_methods }.flatten.sort.uniq
+      api.class.ancestors.map(&:public_methods).flatten.sort.uniq
     end
     it "exposes the expected api to rule authors" do
-      expect(api.public_methods.sort - ignorable_methods).to eq [
-        :ast_cache,
-        :attribute_access,
-        :chef_dsl_methods,
-        :chef_node_methods,
-        :cookbook_base_path,
-        :cookbook_maintainer,
-        :cookbook_maintainer_email,
-        :cookbook_name,
-        :declared_dependencies,
-        :ensure_file_exists,
-        :field,
-        :field_value,
-        :file_match,
-        :find_resources,
-        :gem_version,
-        :included_recipes,
-        :json_file_to_hash,
-        :literal_searches,
-        :match,
-        :metadata_field,
-        :notifications,
-        :read_ast,
-        :resource_action?,
-        :resource_attribute,
-        :resource_attribute?,
-        :resource_attributes,
-        :resource_attributes_by_type,
-        :resource_name,
-        :resource_type,
-        :resources_by_type,
-        :ruby_code?,
-        :searches,
-        :standard_cookbook_subdirs,
-        :supported_platforms,
-        :template_file,
-        :template_paths,
-        :templates_included,
-        :valid_query?,
-      ]
+      expect(api.public_methods.sort - ignorable_methods).to eq %i{
+        ast_cache
+        attribute_access
+        chef_dsl_methods
+        chef_node_methods
+        cookbook_base_path
+        cookbook_maintainer
+        cookbook_maintainer_email
+        cookbook_name
+        declared_dependencies
+        ensure_file_exists
+        field
+        field_value
+        file_match
+        find_resources
+        gem_version
+        included_recipes
+        json_file_to_hash
+        literal_searches
+        match
+        metadata_field
+        notifications
+        read_ast
+        resource_action?
+        resource_attribute
+        resource_attribute?
+        resource_attributes
+        resource_attributes_by_type
+        resource_name
+        resource_type
+        resources_by_type
+        ruby_code?
+        searches
+        standard_cookbook_subdirs
+        supported_platforms
+        template_file
+        template_paths
+        templates_included
+        valid_query?
+      }
     end
   end
 
   describe "#attribute_access" do
-    let(:ast) { double() }
+    let(:ast) { double }
     it "returns empty if the provided ast does not support XPath" do
       expect(api.attribute_access(nil, type: :vivified)).to be_empty
     end
     it "returns empty if the provided ast has no matches" do
       expect(ast).to receive(:xpath).with(kind_of(String), kind_of(FoodCritic::Api::AttFilter)).and_return([]).exactly(3).times
-      [:vivified, :string, :symbol].each do |access_type|
+      %i{vivified string symbol}.each do |access_type|
         expect(api.attribute_access(ast, type: access_type)).to be_empty
       end
     end
@@ -79,12 +79,12 @@ describe FoodCritic::Api do
       expect(ast).to receive(:xpath).with(/field/, FoodCritic::Api::AttFilter).and_return([])
       expect(ast).to receive(:xpath).with(/symbol/, FoodCritic::Api::AttFilter).and_return([])
       expect(ast).to receive(:xpath).with(/tstring_content/, FoodCritic::Api::AttFilter).and_return([])
-      [:vivified, :symbol, :string].each do |access_type|
+      %i{vivified symbol string}.each do |access_type|
         api.attribute_access(ast, type: access_type)
       end
     end
     it "returns vivified attributes access" do
-      call = double()
+      call = double
       expect(call).to receive(:xpath).with(/args_add_block/).and_return([])
       expect(call).to receive(:xpath).with(/ident/).and_return(%w{node bar})
       expect(call).to receive(:xpath).with(/@value/).and_return("foo")
@@ -399,7 +399,7 @@ describe FoodCritic::Api do
   end
 
   describe "#find_resources" do
-    let(:ast) { double() }
+    let(:ast) { double }
     it "returns empty unless the ast supports XPath" do
       expect(api.find_resources(nil)).to be_empty
     end
@@ -426,7 +426,7 @@ describe FoodCritic::Api do
   end
 
   describe "#included_recipes" do
-    let(:ast) { double() }
+    let(:ast) { double }
     it "raises if the ast does not support XPath" do
       expect { api.included_recipes(nil) }.to raise_error ArgumentError
     end
@@ -523,7 +523,7 @@ describe FoodCritic::Api do
   end
 
   describe "#literal_searches" do
-    let(:ast) { double() }
+    let(:ast) { double }
     it "returns empty if the AST does not support XPath expressions" do
       expect(api.literal_searches(nil)).to be_empty
     end
@@ -545,12 +545,12 @@ describe FoodCritic::Api do
       expect { api.match(Object.new) }.to raise_error ArgumentError
     end
     it "returns nil if there is no nested position node" do
-      node = double()
+      node = double
       expect(node).to receive(:xpath).with("descendant::pos").and_return([])
       expect(api.match(node)).to be nil
     end
     it "uses the position of the first position node if there are multiple" do
-      node = double()
+      node = double
       expect(node).to receive(:xpath).with("descendant::pos").and_return([
         { "name" => "pos", "line" => "1", "column" => "10" },
         { "name" => "pos", "line" => "3", "column" => "16" }])
@@ -560,7 +560,7 @@ describe FoodCritic::Api do
     end
     describe :matched_node_name do
       let(:node) do
-        node = double()
+        node = double
         expect(node).to receive(:xpath).with("descendant::pos").and_return([{ "name" => "pos", "line" => "1", "column" => "10" }])
         node
       end
@@ -1674,7 +1674,7 @@ describe FoodCritic::Api do
       expect { api.resource_attributes_by_type(nil) }.to raise_error ArgumentError
     end
     it "returns an empty hash if there are no resources" do
-      ast = double()
+      ast = double
       expect(ast).to receive(:xpath).with(kind_of(String)).and_return([])
       expect(api.resource_attributes_by_type(ast)).to be_empty
     end
@@ -1685,7 +1685,7 @@ describe FoodCritic::Api do
       expect { api.resource_name("foo") }.to raise_error ArgumentError
     end
     it "returns the resource name for a resource" do
-      ast = double()
+      ast = double
       expect(ast).to receive(:xpath).with(kind_of(String)).and_return("bob")
       expect(api.resource_name(ast)).to eq "bob"
     end
@@ -1696,7 +1696,7 @@ describe FoodCritic::Api do
       expect { api.resources_by_type(nil) }.to raise_error ArgumentError
     end
     it "returns an empty hash if there are no resources" do
-      ast = double()
+      ast = double
       expect(ast).to receive(:xpath).with(kind_of(String)).and_return([])
       expect(api.resources_by_type(ast)).to be_empty
     end
@@ -1707,12 +1707,12 @@ describe FoodCritic::Api do
       expect { api.resource_type(nil) }.to raise_error ArgumentError
     end
     it "raises if the resource type cannot be determined" do
-      ast = double()
+      ast = double
       expect(ast).to receive(:xpath).with(kind_of(String)).and_return("")
       expect { api.resource_type(ast) }.to raise_error ArgumentError
     end
     it "returns the resource type for a resource" do
-      ast = double()
+      ast = double
       expect(ast).to receive(:xpath).with(kind_of(String)).and_return("directory")
       expect(api.resource_type(ast)).to eq "directory"
     end
@@ -1737,7 +1737,7 @@ describe FoodCritic::Api do
   end
 
   describe "#searches" do
-    let(:ast) { double() }
+    let(:ast) { double }
     it "returns empty if the AST does not support XPath expressions" do
       expect(api.searches("not-an-ast")).to be_empty
     end
@@ -1761,8 +1761,8 @@ describe FoodCritic::Api do
     it "includes the directories generated by knife create cookbook" do
       %w{attributes definitions files libraries providers recipes resources
          templates}.each do |dir|
-        expect(api.standard_cookbook_subdirs).to include dir
-      end
+           expect(api.standard_cookbook_subdirs).to include dir
+         end
     end
     it "does not include the spec directory" do
       expect(api.standard_cookbook_subdirs).to_not include "spec"
@@ -1800,14 +1800,16 @@ describe FoodCritic::Api do
       it do
         is_expected.to eq [{ platform: "oracle", versions: [] },
                               { platform: "redhat", versions: [] },
-                              { platform: "scientific", versions: [] }] end
+                              { platform: "scientific", versions: [] }]
+      end
     end
     context "with multiple platforms not in alphabetical order" do
       ast "supports 'redhat'\nsupports 'scientific'\nsupports 'oracle'"
       it do
         is_expected.to eq [{ platform: "oracle", versions: [] },
                               { platform: "redhat", versions: [] },
-                              { platform: "scientific", versions: [] }] end
+                              { platform: "scientific", versions: [] }]
+      end
     end
     context "with a version constraint" do
       ast 'supports "redhat", ">= 6"'
@@ -1820,7 +1822,8 @@ describe FoodCritic::Api do
       }
       it do
         is_expected.to eq [{ platform: "redhat", versions: ["> 5.0", "< 7.0"] },
-                              { platform: "scientific", versions: ["> 5.0", "< 6.0"] }] end
+                              { platform: "scientific", versions: ["> 5.0", "< 6.0"] }]
+      end
     end
     context "with a symbol platform" do
       ast "supports :ubuntu"
@@ -1835,7 +1838,8 @@ describe FoodCritic::Api do
       it do
         is_expected.to eq [{ platform: "centos", versions: [] },
                               { platform: "fedora", versions: [] },
-                              { platform: "redhat", versions: [] }] end
+                              { platform: "redhat", versions: [] }]
+      end
     end
     context "with a multi-line word list" do
       ast %q{
@@ -1850,14 +1854,16 @@ describe FoodCritic::Api do
       it do
         is_expected.to eq [{ platform: "centos", versions: [] },
                               { platform: "fedora", versions: [] },
-                              { platform: "redhat", versions: [] }] end
+                              { platform: "redhat", versions: [] }]
+      end
     end
     context "with both a word list and a non-word list" do
       ast "supports 'redhat'\n%w{centos fedora}.each {|os| supports os }"
       it do
         is_expected.to eq [{ platform: "centos", versions: [] },
                               { platform: "fedora", versions: [] },
-                              { platform: "redhat", versions: [] }] end
+                              { platform: "redhat", versions: [] }]
+      end
     end
   end
 
@@ -1873,7 +1879,8 @@ describe FoodCritic::Api do
 
     def template_ast(content)
       parse_ast(FoodCritic::Template::ExpressionExtractor.new.extract(
-        content).map { |e| e[:code] }.join(";"))
+        content
+      ).map { |e| e[:code] }.join(";"))
     end
 
     it "returns the path of the containing template when there are no partials" do

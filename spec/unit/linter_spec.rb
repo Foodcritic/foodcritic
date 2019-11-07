@@ -43,7 +43,7 @@ describe FoodCritic::Linter do
       expect { linter.check({}) }.to raise_error ArgumentError
     end
 
-    [:cookbook, :role, :environment].each do |path_type|
+    %i{cookbook role environment}.each do |path_type|
       key = "#{path_type}_paths".to_sym
       it "requires a #{path_type}_path by itself not to be nil" do
         expect { linter.check(key => nil) }.to raise_error ArgumentError
