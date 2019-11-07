@@ -1,8 +1,9 @@
-# Foodcritic Changelog:
+# Foodcritic Changelog
 
-## [16.2.0](https://github.com/Foodcritic/foodcritic/tree/v16.2.0)
+## [16.2.0](https://github.com/Foodcritic/foodcritic/tree/v16.2.0) (2019-11-06)
 
 - Updated Chef Infra metadata to 15.4 and 14.14 to add new resource properties and actions
+- Fixed the detection of :'symbol' action in notifications on Ruby 2.6+
 
 ## [16.1.1](https://github.com/Foodcritic/foodcritic/tree/v16.1.1) (2019-07-02)
 
