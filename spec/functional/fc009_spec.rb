@@ -12,7 +12,7 @@ describe "FC009" do
   end
 
   context "on chef 14.12.9 with a cookbook that uses windows_task start_when_available property introduced in 15.0" do
-    foodcritic_command("--chef-version", "14.12.9", "--no-progress", ".")
+    foodcritic_command("--chef-version", "14.14.29", "--no-progress", ".")
     recipe_file <<-EOH
       windows_task 'my_task' do
         start_when_available true
