@@ -133,7 +133,8 @@ module FoodCritic
       is_variable = true unless notify.xpath("args_add_block/args_add//args_add[aref or vcall or call or var_ref]").empty?
       string_val = notify.xpath("descendant::args_add/string_literal/string_add/tstring_content/@value").first
       symbol_val = notify.xpath('descendant::args_add/args_add//symbol/ident/@value |
-        descendant::dyna_symbol[1]/xstring_add/tstring_content/@value').first
+        descendant::dyna_symbol[1]/xstring_add/tstring_content/@value |
+        descendant::args_add/args_add//dyna_symbol/string_add/tstring_content/@value').first
 
       # 1) return a nil if the action is a variable like node['foo']['bar']
       # 2) return the symbol if it exists
