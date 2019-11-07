@@ -1,5 +1,9 @@
 # Foodcritic Changelog:
 
+## [16.2.0](https://github.com/Foodcritic/foodcritic/tree/v16.2.0)
+
+- Updated Chef Infra metadata to 15.4 and 14.14 to add new resource properties and actions
+
 ## [16.1.1](https://github.com/Foodcritic/foodcritic/tree/v16.1.1) (2019-07-02)
 
 - Resolved failure in FC123 when a cookbook does not include a files directory

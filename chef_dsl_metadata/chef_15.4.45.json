@@ -1259,6 +1259,7 @@
     ],
     "windows_ad_join": [
       "join",
+      "leave",
       "nothing"
     ],
     "windows_autorun": [
@@ -4991,6 +4992,8 @@
       "itself",
       "kind_of?",
       "lazy",
+      "list_options",
+      "list_options=",
       "load_from",
       "logger",
       "lookup_provider_constant",
@@ -5018,6 +5021,8 @@
       "package_name=",
       "params",
       "params=",
+      "password",
+      "password=",
       "platform?",
       "platform_family?",
       "powershell_exec",
@@ -5109,6 +5114,8 @@
       "updated?",
       "updated_by_last_action",
       "updated_by_last_action?",
+      "user",
+      "user=",
       "valid_windows_architecture?",
       "validate",
       "validate_action",
@@ -11140,6 +11147,8 @@
       "object_id",
       "older_than_win_2012_or_8?",
       "only_if",
+      "options",
+      "options=",
       "params",
       "params=",
       "platform?",
@@ -26073,6 +26082,8 @@
       "value_to_text",
       "with_os_architecture",
       "with_run_context",
+      "workgroup_name",
+      "workgroup_name=",
       "wow64_architecture_override_required?",
       "wow64_directory",
       "yield_self"
