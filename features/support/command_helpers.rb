@@ -195,6 +195,9 @@ module FoodCritic
         { :short => "l", :long => "list",
           :description => "List all enabled rules and their descriptions." },
 
+        { :short => "s", :long => "ast-cache-size NUM",
+          :description => "Change the size of the AST cache." },
+
         { :short => "t", :long => "tags TAGS",
           :description => "Check against (or exclude ~) rules with the specified tags." },
 
@@ -288,7 +291,7 @@ module FoodCritic
       cd "." do
         show_context = cmd_args.include?("-C")
         # For tests, we need to disable the global AST cache (set it to size 0)
-        unless cmd_args.include?('-s') || cmd_args.include?('--ast-cache-size')
+        unless cmd_args.include?('-s') || cmd_args.include?('--ast-cache-size')|| cmd_args.include?('--help')
           cmd_args.unshift('-s', '0')
         end
 
