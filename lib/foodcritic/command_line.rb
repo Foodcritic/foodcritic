@@ -117,7 +117,7 @@ module FoodCritic
     def show_end_of_life_msg
       "
     *******************************************************************************
-    WARNING: Foodcritic will end of life in April 2020
+    WARNING: Foodcritic will be end of life in April 2020
     *******************************************************************************
     Please use Cookstyle to ensure all of your Chef Infra code meets the latest
     best practices.
