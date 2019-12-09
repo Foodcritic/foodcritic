@@ -111,6 +111,26 @@ module FoodCritic
       end
     end
 
+    # The end of life message.
+    #
+    # @return [String] A text to warn end users about foodcritic's end of life
+    def show_end_of_life_msg
+      "
+    *******************************************************************************
+    WARNING: Foodcritic will be end of life in April 2020
+    *******************************************************************************
+    Please use Cookstyle to ensure all of your Chef Infra code meets the latest
+    best practices.
+
+    Cookstyle is a code linting tool that helps you to write better Chef Infra
+    Cookbooks by detecting and automatically correct cookbook code.
+
+    For more information, use the command:
+
+    cookstyle -h
+      "
+    end
+
     # Show the command help to the end user?
     #
     # @return [Boolean] True if help should be shown.
@@ -118,11 +138,11 @@ module FoodCritic
       @args.length == 1 && @args.first == "--help"
     end
 
-    # The help text.
+    # The help text plus the end of life message.
     #
     # @return [String] Help text describing the command-line options available.
     def help
-      @parser.help
+      @parser.help + show_end_of_life_msg
     end
 
     # Show the current version to the end user?

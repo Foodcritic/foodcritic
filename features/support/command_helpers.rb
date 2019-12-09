@@ -172,6 +172,7 @@ module FoodCritic
     # @param [Boolean] is_exit_zero The exit code to check for.
     def usage_displayed(is_exit_zero)
       expect_output "foodcritic [cookbook_paths]"
+      expect_output "WARNING: Foodcritic will end of life in April 2020"
 
       usage_options.each do |option|
         expect_usage_option(option[:short], option[:long], option[:description])
