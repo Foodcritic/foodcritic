@@ -1,5 +1,14 @@
 # Foodcritic
 
+
+**⚠️⚠️⚠️ All good things come to an end, and now is the time [to say goodbye to Foodcritic.](https://blog.chef.io/goodbye-foodcritic/) ⚠️⚠️⚠️**
+
+**At this point we consider the Foodcritic project sunsetted and suggest all users move cookbook linting to [Cookstyle](https://github.com/chef/cookstyle/).**
+
+**Cookstyle with Chef cookbook support ships in Chef Workstation 0.9+ and ChefDK 4.4+. If you’d like to checkout the project or request new cops visit [github.com/chef/cookstyle](https://github.com/chef/cookstyle/)**
+
+<hr/>
+
 [![Build Status](https://travis-ci.org/Foodcritic/foodcritic.svg?branch=master)](https://travis-ci.org/Foodcritic/foodcritic) [![Gem Version](https://badge.fury.io/rb/foodcritic.svg)](http://badge.fury.io/rb/foodcritic)
 
 Foodcritic is a code linting tool for writing better and safer Chef cookbooks that runs both as a command line tool and as a Rake task. Out of the box Foodcritic contains over 70 cookbook rules, and plugin system for writing your own rules.
