@@ -1,5 +1,3 @@
-require "cucumber/core/gherkin/tag_expression"
-
 module FoodCritic
   # A warning of a possible issue
   class Warning
@@ -95,8 +93,8 @@ module FoodCritic
 
     # Checks the rule tags to see if they match a Gherkin (Cucumber) expression
     def matches_tags?(tag_expr)
-      Cucumber::Core::Gherkin::TagExpression.new(tag_expr).evaluate(
-        tags.map { |tag| Cucumber::Core::Ast::Tag.new(nil, tag) }
+      ::Foodcritic::Gherkin::TagExpression.new(tag_expr).evaluate(
+        tags.map { |tag| ::Foodcritic::Gherkin::Tag.new(nil, tag) }
       )
     end
 

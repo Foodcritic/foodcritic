@@ -2,7 +2,6 @@ Encoding.default_external = Encoding::UTF_8
 Encoding.default_internal = Encoding::UTF_8
 
 require "pathname"
-require "cucumber/core"
 require "treetop"
 require "ripper"
 require "ffi_yajl"
@@ -22,3 +21,5 @@ require_relative "foodcritic/output"
 require_relative "foodcritic/rake_task"
 require_relative "foodcritic/template"
 require_relative "foodcritic/version"
+require_relative "foodcritic/gerkin/tag"
+require_relative "foodcritic/gerkin/tag_expression"

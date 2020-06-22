@@ -4,7 +4,7 @@ require "foodcritic/version"
 Gem::Specification.new do |s|
   s.name = "foodcritic"
   s.version = FoodCritic::VERSION
-  s.description = "Lint tool for Chef cookbooks."
+  s.description = "A code linting tool for Chef Infra cookbooks."
   s.summary = "foodcritic-#{s.version}"
   s.authors = ["Andrew Crump"]
   s.homepage = "http://foodcritic.io"
@@ -17,7 +17,6 @@ Gem::Specification.new do |s|
     Dir["misc/**/*"]
   s.files += Dir["Gemfile", "foodcritic.gemspec", "LICENSE"]
 
-  s.add_dependency("cucumber-core", ">= 1.3", "< 4.0")
   s.add_dependency("nokogiri", ">= 1.5", "< 2.0")
   s.add_dependency("rake")
   s.add_dependency("treetop", "~> 1.4")
@@ -25,6 +24,8 @@ Gem::Specification.new do |s|
   s.add_dependency("erubis")
   s.add_dependency("rufus-lru", "~> 1.0")
 
+  s.add_development_dependency "cucumber-core", ">= 1.3", "< 4.0"
+  s.add_development_dependency "minitest", "~> 5.13.0" # 5.14 breaks various CLI tests
   s.add_development_dependency "rspec", "~> 3.5"
   s.add_development_dependency "fuubar", "~> 2.0"
   s.add_development_dependency "rspec-command", "~> 1.0"
