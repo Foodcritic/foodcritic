@@ -1,5 +1,12 @@
 # Foodcritic Changelog
 
+## [16.3.0](https://github.com/Foodcritic/foodcritic/tree/v16.3.0) (2020-06-22)
+
+Please keep in mind that Foodcritic is considered EOL. This release is being made to reduce the side of dependencies in Chef Workstation. Users of Foodcritic should migrate to Cookstyle which ships with nearly 200 Chef cookbook cops and autocorrects code.
+
+- Removed the dependency on cucumber-core and its many dependencies by vendoring the gherkin tag processing logic from cucumber-core 3.x
+- Fix FC123 to properly look for files in subdirectories within the /files directory
+
 ## [16.2.0](https://github.com/Foodcritic/foodcritic/tree/v16.2.0) (2019-11-06)
 
 - Updated Chef Infra metadata to 15.4 and 14.14 to add new resource properties and actions
