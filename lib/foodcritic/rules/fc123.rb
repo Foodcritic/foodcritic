@@ -4,12 +4,10 @@ rule "FC123", "Content of a cookbook file is larger than 1MB" do
     values = []
     files_path = File.join(path, "files")
     if File.exist?(files_path)
-      Dir.foreach(files_path) do |file|
-        next if [".", ".."].member?(file)
-
-        size = File.size(File.join(files_path, file))
+      Dir.glob("#{files_path}/**/*").each do |file|
+        size = File.size(file)
         if size > 1024 * 1024 # 1 megabyte
-          values += [file_match(File.join(files_path, file))]
+          values += [file_match(file)]
         end
       end
     end
