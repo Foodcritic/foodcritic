@@ -25,7 +25,6 @@ Gem::Specification.new do |s|
   s.add_dependency("rufus-lru", "~> 1.0")
 
   s.add_development_dependency "cucumber-core", ">= 1.3", "< 4.0"
-  s.add_development_dependency "minitest", "~> 5.13.0" # 5.14 breaks various CLI tests
   s.add_development_dependency "rspec", "~> 3.5"
   s.add_development_dependency "fuubar", "~> 2.0"
   s.add_development_dependency "rspec-command", "~> 1.0"
