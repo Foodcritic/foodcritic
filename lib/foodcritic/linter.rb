@@ -1,7 +1,7 @@
-require "open-uri"
-require "optparse"
+require "open-uri" unless defined?(OpenURI)
+require "optparse" unless defined?(OptionParser)
 require "ripper"
-require "set"
+require "set" unless defined?(Set)
 
 module FoodCritic
   # The main entry point for linting your Chef cookbooks.

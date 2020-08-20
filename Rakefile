@@ -1,5 +1,5 @@
 require "bundler/setup"
-require "mixlib/shellout"
+require "mixlib/shellout" unless defined?(Mixlib::ShellOut)
 
 require "bundler/gem_tasks"
 

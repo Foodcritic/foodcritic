@@ -1,5 +1,5 @@
-require "open-uri"
-require "pathname"
+require "open-uri" unless defined?(OpenURI)
+require "pathname" unless defined?(Pathname)
 
 module FoodCritic
   # The DSL methods exposed for defining rules. A minimal example rule:

@@ -1,4 +1,4 @@
-require "shellwords"
+require "shellwords" unless defined?(Shellwords)
 
 require "rspec_command"
 require "simplecov"

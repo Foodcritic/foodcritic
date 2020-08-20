@@ -1,4 +1,4 @@
-require "nokogiri"
+require "nokogiri" unless defined?(Nokogiri)
 require "rufus-lru"
 
 module FoodCritic

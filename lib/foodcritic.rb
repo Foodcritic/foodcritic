@@ -1,11 +1,11 @@
 Encoding.default_external = Encoding::UTF_8
 Encoding.default_internal = Encoding::UTF_8
 
-require "pathname"
+require "pathname" unless defined?(Pathname)
 require "treetop"
 require "ripper"
-require "ffi_yajl"
-require "erubis"
+require "ffi_yajl" unless defined?(FFI_Yajl)
+require "erubis" unless defined?(Erubis)
 
 require_relative "foodcritic/chef"
 require_relative "foodcritic/command_line"
