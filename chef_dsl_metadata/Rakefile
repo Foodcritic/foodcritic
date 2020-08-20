@@ -1,6 +1,6 @@
 require "appraisal"
-require "fileutils"
-require "ffi_yajl"
+require "fileutils" unless defined?(FileUtils)
+require "ffi_yajl" unless defined?(FFI_Yajl)
 
 task :generate_chef_metadata do
   require_chef

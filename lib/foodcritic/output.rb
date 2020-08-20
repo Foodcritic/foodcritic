@@ -1,4 +1,4 @@
-require "set"
+require "set" unless defined?(Set)
 
 module FoodCritic
   class Output
